@@ -5,6 +5,10 @@ services:
   php:
     build:
       context: ./docker/php
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_SECRET=31522eb5950e8832b5c219fe456205bb
     volumes:
       - .:/var/www:delegated
       - ./docker/php/log:/var/log:delegated

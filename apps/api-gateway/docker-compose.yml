@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www:cached
+      - ./docker/php/log:/var/log:delegated
+
+  nginx:
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - php
+    volumes:
+      - .:/var/www:cached
+      - ./docker/nginx/log:/var/log/nginx:delegated
+    ports:
+      - 443:443

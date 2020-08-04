@@ -11,6 +11,19 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheDir()
+    {
+        // for docker performance
+        if ('test' === $this->getEnvironment() || 'local' === $this->getEnvironment()) {
+            return '/tmp/'.$this->environment;
+        }
+
+        return $this->getProjectDir().'/var/cache/'.$this->environment;
+    }
+
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../config/{packages}/*.yaml');

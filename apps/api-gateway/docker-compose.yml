@@ -6,7 +6,7 @@ services:
     build:
       context: ./docker/php
     environment:
-      - APP_ENV=local
+      - APP_ENV=dev
       - APP_DEBUG=true
       - APP_SECRET=31522eb5950e8832b5c219fe456205bb
     volumes:

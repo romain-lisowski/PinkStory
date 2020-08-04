@@ -17,7 +17,7 @@ class Kernel extends BaseKernel
     public function getCacheDir()
     {
         // for docker performance
-        if ('test' === $this->getEnvironment() || 'local' === $this->getEnvironment()) {
+        if ('test' === $this->getEnvironment() || 'dev' === $this->getEnvironment()) {
             return '/tmp/'.$this->environment;
         }
 

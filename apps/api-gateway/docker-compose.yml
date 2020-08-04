@@ -6,7 +6,7 @@ services:
     build:
       context: ./docker/php
     volumes:
-      - .:/var/www:cached
+      - .:/var/www:delegated
       - ./docker/php/log:/var/log:delegated
 
   nginx:
@@ -15,7 +15,7 @@ services:
     depends_on:
       - php
     volumes:
-      - .:/var/www:cached
+      - .:/var/www:delegated
       - ./docker/nginx/log:/var/log/nginx:delegated
     ports:
       - 443:443

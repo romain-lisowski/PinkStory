@@ -2,13 +2,27 @@ version: '3.8'
 
 services:
 
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: symfony_usr
+      POSTGRES_PASSWORD: symfony_pwd
+      POSTGRES_DB: symfony_db
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data:delegated
+    ports:
+      - 5432:5432
+
   php:
     build:
       context: ./docker/php
+    depends_on:
+      - postgres
     environment:
       - APP_ENV=dev
       - APP_DEBUG=true
       - APP_SECRET=31522eb5950e8832b5c219fe456205bb
+      - DATABASE_URL=postgres://symfony_usr:symfony_pwd@postgres:5432/symfony_db
     volumes:
       - .:/var/www:delegated
       - ./docker/php/log:/var/log:delegated

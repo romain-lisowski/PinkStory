@@ -1,0 +1,9 @@
+exception:
+    invalid_form: The form is invalid.
+    not_submitted_form: The form has not been submitted.
+    validator: The validator reports errors.
+
+user:
+    validator:
+        invalid_email: The email address is invalid.
+        password_strenght: The password is not complex enough.

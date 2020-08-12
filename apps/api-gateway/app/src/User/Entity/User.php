@@ -39,6 +39,23 @@ final class User extends AbstractEntity implements UserInterface
      */
     private string $password;
 
+    /**
+     * @ORM\Column(name="secret", type="string", length=255)
+     */
+    private string $secret;
+
+    /**
+     * @ORM\Column(name="role", type="string", length=255)
+     */
+    private string $role = UserRole::ROLE_USER;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->renewSecret();
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -75,6 +92,30 @@ final class User extends AbstractEntity implements UserInterface
         return $this;
     }
 
+    public function getSecret()
+    {
+        return $this->secret;
+    }
+
+    public function renewSecret()
+    {
+        $this->secret = bin2hex(random_bytes(16));
+
+        return $this;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     public function getUsername(): string
     {
         return $this->email;
@@ -82,7 +123,7 @@ final class User extends AbstractEntity implements UserInterface
 
     public function getRoles(): array
     {
-        return ['USER'];
+        return [$this->role];
     }
 
     public function getSalt(): ?string

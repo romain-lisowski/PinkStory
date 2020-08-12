@@ -4,6 +4,9 @@ exception:
     validator: The validator reports errors.
 
 user:
+    exception:
+        invalid_token: The token is invalid.
+        no_token_provided: No token provided.
     validator:
         invalid_email: The email address is invalid.
         password_strenght: The password is not complex enough.

@@ -1,4 +1,5 @@
 exception:
+    error: An error occured.
     invalid_form: The form is invalid.
     not_submitted_form: The form has not been submitted.
     validator: The validator reports errors.

@@ -41,7 +41,10 @@ final class HttpExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $data = [];
+        $data = [
+            'type' => 'exception',
+            'message' => $this->translator->trans('exception.error'),
+        ];
 
         $previous = $exception->getPrevious();
 

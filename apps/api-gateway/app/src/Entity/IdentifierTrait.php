@@ -6,10 +6,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 trait IdentifierTrait
 {
     /**
+     * @Assert\NotBlank
      * @ORM\Id()
      * @ORM\Column(name="id", type="guid", unique=true)
      */

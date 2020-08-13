@@ -61,6 +61,7 @@ final class User implements UserInterface
     private string $secret;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(name="role", type="string", length=255)
      */
     private string $role;

@@ -10,12 +10,12 @@ use App\Responder\ResponderInterface;
 use App\User\Command\UserLoginCommand;
 use App\User\Command\UserLoginCommandFormType;
 use App\User\Command\UserLoginCommandHandler;
-use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 /**
  * @Route("/users/login", name="user_login", methods={"POST"})
@@ -54,7 +54,7 @@ final class UserLoginAction
             return $this->responder->render([
                 'token' => $token,
             ]);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new BadRequestHttpException(null, $e);
         }
     }

@@ -10,12 +10,12 @@ use App\Responder\ResponderInterface;
 use App\User\Command\UserSignupCommand;
 use App\User\Command\UserSignupCommandFormType;
 use App\User\Command\UserSignupCommandHandler;
-use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 /**
  * @Route("/users/signup", name="user_signup", methods={"POST"})
@@ -52,7 +52,7 @@ final class UserSignupAction
             $this->handler->handle($command);
 
             return $this->responder->render();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new BadRequestHttpException(null, $e);
         }
     }

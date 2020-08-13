@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\User\Entity;
 
-use App\Entity\AbstractEntity;
+use App\Entity\ActivatedTrait;
+use App\Entity\IdentifierTrait;
+use App\Entity\TimestampTrait;
 use App\User\Validator\Constraints as AppUserAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,8 +20,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-final class User extends AbstractEntity implements UserInterface
+final class User implements UserInterface
 {
+    use IdentifierTrait;
+    use ActivatedTrait;
+    use TimestampTrait;
+
     /**
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
@@ -47,13 +53,17 @@ final class User extends AbstractEntity implements UserInterface
     /**
      * @ORM\Column(name="role", type="string", length=255)
      */
-    private string $role = UserRole::ROLE_USER;
+    private string $role;
 
     public function __construct()
     {
-        parent::__construct();
-
-        $this->renewSecret();
+        $this->generateUuid()
+            ->setActivated(true)
+            ->initCreatedAt()
+            ->updateLastUpdatedAt()
+            ->renewSecret()
+            ->setRole(UserRole::ROLE_USER)
+        ;
     }
 
     public function getName(): string

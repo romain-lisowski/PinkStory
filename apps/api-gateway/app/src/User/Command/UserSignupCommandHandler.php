@@ -9,7 +9,6 @@ use App\User\Entity\User;
 use App\User\Validator\Constraints\PasswordStrenght;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserSignupCommandHandler
@@ -34,8 +33,7 @@ final class UserSignupCommandHandler
         }
 
         $user = new User();
-        $user->setUuid(Uuid::v4()->toRfc4122())
-            ->setName($command->name)
+        $user->setName($command->name)
             ->setEmail($command->email)
             ->setPassword($this->passwordEncoder->encodePassword($user, $command->password))
         ;

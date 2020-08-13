@@ -47,7 +47,6 @@ class JWTAuthenticator extends AbstractAuthenticator
     public function authenticate(Request $request): PassportInterface
     {
         try {
-            throw new InvalidTokenException();
             $header = $request->headers->get('Authorization');
             $token = substr($header, 7);
 
@@ -73,7 +72,7 @@ class JWTAuthenticator extends AbstractAuthenticator
 
             return new SelfValidatingPassport($user);
         } catch (Exception $e) {
-            throw new AuthenticationException('', 0, $e);
+            throw new AuthenticationException('', 0, new InvalidTokenException());
         }
     }
 

@@ -7,7 +7,7 @@ namespace App\Exception;
 use Exception;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-final class ValidatorException extends Exception
+final class ValidatorException extends Exception implements HasErrorsExceptionInterface
 {
     protected $message = 'exception.validator';
     private array $errors = [];
@@ -19,6 +19,11 @@ final class ValidatorException extends Exception
         }
 
         parent::__construct($this->message);
+    }
+
+    public function hasErrors(): bool
+    {
+        return count($this->errors) > 0;
     }
 
     public function getErrors(): array

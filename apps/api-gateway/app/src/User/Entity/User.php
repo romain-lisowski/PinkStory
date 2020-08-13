@@ -11,6 +11,8 @@ use App\User\Validator\Constraints as AppUserAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\String\ByteString;
+use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -85,7 +87,7 @@ final class User implements UserInterface
 
     public function setEmail(string $email): self
     {
-        $this->email = mb_strtolower($email);
+        $this->email = (new UnicodeString($email))->lower()->toString();
 
         return $this;
     }
@@ -109,7 +111,7 @@ final class User implements UserInterface
 
     public function renewSecret()
     {
-        $this->secret = bin2hex(random_bytes(16));
+        $this->secret = ByteString::fromRandom(32)->toString();
 
         return $this;
     }

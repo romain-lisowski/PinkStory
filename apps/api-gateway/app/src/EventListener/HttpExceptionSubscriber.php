@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class HttpExceptionSubscriber implements EventSubscriberInterface
@@ -42,18 +42,17 @@ final class HttpExceptionSubscriber implements EventSubscriberInterface
         }
 
         $data = [];
-        $nameConverter = new CamelCaseToSnakeCaseNameConverter();
 
         $previous = $exception->getPrevious();
 
         if ($previous instanceof HasErrorsExceptionInterface) {
-            $data['type'] = $nameConverter->normalize((new ReflectionClass($previous))->getShortName());
+            $data['type'] = (new UnicodeString((new ReflectionClass($previous))->getShortName()))->snake()->toString();
             $data['message'] = $this->translator->trans($previous->getMessage());
             $data['errors'] = array_map([$this->translator, 'trans'], $previous->getErrors());
         }
 
         if ($previous instanceof AuthenticationException) {
-            $data['type'] = $nameConverter->normalize((new ReflectionClass($previous->getPrevious()))->getShortName());
+            $data['type'] = (new UnicodeString((new ReflectionClass($previous->getPrevious()))->getShortName()))->snake()->toString();
             $data['message'] = $this->translator->trans($previous->getPrevious()->getMessage());
         }
 

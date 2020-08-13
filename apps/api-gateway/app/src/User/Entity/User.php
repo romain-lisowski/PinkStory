@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\String\ByteString;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,6 +37,12 @@ final class User implements UserInterface
 
     /**
      * @Assert\NotBlank
+     * @ORM\Column(name="name_slug", type="string", length=255)
+     */
+    private string $nameSlug;
+
+    /**
+     * @Assert\NotBlank
      * @AppUserAssert\Email
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      */
@@ -48,6 +55,7 @@ final class User implements UserInterface
     private string $password;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(name="secret", type="string", length=255)
      */
     private string $secret;
@@ -77,7 +85,15 @@ final class User implements UserInterface
     {
         $this->name = $name;
 
+        $slugger = new AsciiSlugger();
+        $this->nameSlug = $slugger->slug($name)->lower()->toString();
+
         return $this;
+    }
+
+    public function getNameSlug(): string
+    {
+        return $this->nameSlug;
     }
 
     public function getEmail(): string

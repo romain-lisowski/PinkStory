@@ -71,7 +71,7 @@ final class User implements UserInterface
             ->setActivated(true)
             ->initCreatedAt()
             ->updateLastUpdatedAt()
-            ->renewSecret()
+            ->regenerateSecret()
             ->setRole(UserRole::ROLE_USER)
         ;
     }
@@ -125,7 +125,7 @@ final class User implements UserInterface
         return $this->secret;
     }
 
-    public function renewSecret()
+    public function regenerateSecret()
     {
         $this->secret = ByteString::fromRandom(32)->toString();
 

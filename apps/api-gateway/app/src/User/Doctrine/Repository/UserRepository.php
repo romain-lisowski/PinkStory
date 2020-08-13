@@ -8,7 +8,6 @@ use App\User\Entity\User;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Uid\Uuid;
 
 final class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
@@ -17,12 +16,12 @@ final class UserRepository extends ServiceEntityRepository implements UserReposi
         parent::__construct($registry, User::class);
     }
 
-    public function findOne(Uuid $uuid): User
+    public function findOne(string $id): User
     {
         $qb = $this->createQueryBuilder('user');
 
-        $qb->where($qb->expr()->eq('user.uuid', ':user_uuid'))
-            ->setParameter('user_uuid', $uuid->toRfc4122())
+        $qb->where($qb->expr()->eq('user.id', ':user_id'))
+            ->setParameter('user_id', $id)
         ;
 
         return $qb->getQuery()->getSingleResult();

@@ -37,7 +37,7 @@ final class UserLoginCommandHandler
             }
 
             $payload = [
-                'user_uuid' => $user->getUuid(),
+                'user_id' => $user->getId(),
                 'user_secret' => $user->getSecret(),
                 'app_secret' => $this->params->get('app_secret'),
                 'iss' => $this->params->get('app_name'),

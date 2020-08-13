@@ -11,25 +11,25 @@ trait IdentifierTrait
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(name="uuid", type="string", length=255, unique=true)
+     * @ORM\Column(name="id", type="guid", unique=true)
      */
-    private string $uuid;
+    private string $id;
 
-    public function getUuid(): string
+    public function getId(): string
     {
-        return $this->uuid;
+        return $this->id;
     }
 
-    public function setUuid(string $uuid): self
+    public function setId(string $id): self
     {
-        $this->uuid = $uuid;
+        $this->id = $id;
 
         return $this;
     }
 
-    public function generateUuid(): self
+    public function generateId(): self
     {
-        $this->uuid = Uuid::v4()->toRfc4122();
+        $this->id = Uuid::v4()->toRfc4122();
 
         return $this;
     }

@@ -19,7 +19,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Uid\Uuid;
 
 class JWTAuthenticator extends AbstractAuthenticator
 {
@@ -62,7 +61,7 @@ class JWTAuthenticator extends AbstractAuthenticator
                 throw new InvalidTokenException();
             }
 
-            $user = $this->userRepository->findOne(Uuid::fromString($payload->user_uuid));
+            $user = $this->userRepository->findOne($payload->user_id);
 
             if (null === $user
                 || $user->getEmail() !== $payload->sub

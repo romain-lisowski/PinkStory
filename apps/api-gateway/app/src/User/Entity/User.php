@@ -67,7 +67,7 @@ final class User implements UserInterface
 
     public function __construct()
     {
-        $this->generateUuid()
+        $this->generateId()
             ->setActivated(true)
             ->initCreatedAt()
             ->updateLastUpdatedAt()

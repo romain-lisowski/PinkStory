@@ -6,12 +6,12 @@ namespace App\User\Action;
 
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
+use App\Responder\ResponderInterface;
 use App\User\Command\UserLoginCommand;
 use App\User\Command\UserLoginCommandFormType;
 use App\User\Command\UserLoginCommandHandler;
 use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -23,11 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class UserLoginAction
 {
     private FormFactoryInterface $formFactory;
+    private ResponderInterface $responder;
     private UserLoginCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, UserLoginCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserLoginCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
+        $this->responder = $responder;
         $this->handler = $handler;
     }
 
@@ -49,7 +51,9 @@ final class UserLoginAction
 
             $token = $this->handler->handle($command);
 
-            return new JsonResponse($token);
+            return $this->responder->render([
+                'token' => $token,
+            ]);
         } catch (Exception $e) {
             throw new BadRequestHttpException(null, $e);
         }

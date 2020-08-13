@@ -6,12 +6,12 @@ namespace App\User\Action;
 
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
+use App\Responder\ResponderInterface;
 use App\User\Command\UserSignupCommand;
 use App\User\Command\UserSignupCommandFormType;
 use App\User\Command\UserSignupCommandHandler;
 use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -23,11 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class UserSignupAction
 {
     private FormFactoryInterface $formFactory;
+    private ResponderInterface $responder;
     private UserSignupCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, UserSignupCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSignupCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
+        $this->responder = $responder;
         $this->handler = $handler;
     }
 
@@ -49,7 +51,7 @@ final class UserSignupAction
 
             $this->handler->handle($command);
 
-            return new JsonResponse($command);
+            return $this->responder->render();
         } catch (Exception $e) {
             throw new BadRequestHttpException(null, $e);
         }

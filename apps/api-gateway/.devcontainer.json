@@ -5,7 +5,6 @@
     "workspaceFolder": "/var/www",
     "shutdownAction": "none",
     "extensions": [
-        "felixfbecker.php-pack",
         "bmewburn.vscode-intelephense-client",
         "mehedidracula.php-namespace-resolver",
         "phproberto.vscode-php-getters-setters",

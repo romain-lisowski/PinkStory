@@ -20,7 +20,7 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class JWTAuthenticator extends AbstractAuthenticator
+final class UserAuthenticator extends AbstractAuthenticator
 {
     private ParameterBagInterface $params;
     private UserRepositoryInterface $userRepository;

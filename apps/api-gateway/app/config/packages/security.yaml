@@ -9,7 +9,7 @@ security:
             security: false
         main:
             custom_authenticators:
-                - App\User\Security\JWTAuthenticator
+                - App\User\Security\UserAuthenticator
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Exception\InvalidSSLKeyException;
 use App\User\Repository\UserRepositoryInterface;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
@@ -49,7 +50,13 @@ final class UserLoginCommandHandler
                 'jti' => Uuid::v4()->toRfc4122(),
             ];
 
-            return JWT::encode($payload, openssl_pkey_get_private(file_get_contents($this->params->get('jwt_private_key')), $this->params->get('jwt_pass_phrase')), 'RS256');
+            $privateKey = openssl_pkey_get_private(file_get_contents($this->params->get('jwt_private_key')), $this->params->get('jwt_pass_phrase'));
+
+            if (false === $privateKey) {
+                throw new InvalidSSLKeyException();
+            }
+
+            return JWT::encode($payload, $privateKey, 'RS256');
         } catch (NonUniqueResultException | NoResultException $e) {
             throw new BadCredentialsException();
         }

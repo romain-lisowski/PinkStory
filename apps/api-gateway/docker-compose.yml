@@ -18,15 +18,6 @@ services:
       context: ./docker/php
     depends_on:
       - postgres
-    environment:
-      - APP_NAME=sporthub
-      - APP_ENV=dev
-      - APP_DEBUG=true
-      - APP_SECRET=31522eb5950e8832b5c219fe456205bb
-      - DATABASE_URL=postgres://symfony_usr:symfony_pwd@postgres:5432/symfony_db
-      - JWT_PRIVATE_KEY=%kernel.project_dir%/../docker/php/certificate/jwt.pem
-      - JWT_PUBLIC_KEY=%kernel.project_dir%/../docker/php/certificate/jwt_pub.pem
-      - JWT_PASS_PHRASE=sporthubisnotaboutporno
     volumes:
       - .:/var/www:delegated
       - ./docker/php/log:/var/log:delegated

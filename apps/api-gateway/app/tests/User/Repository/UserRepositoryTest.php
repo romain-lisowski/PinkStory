@@ -71,4 +71,27 @@ final class UserRepositoryTest extends KernelTestCase
 
         $user = $this->userRepository->findOneByEmail('john2@gmail.com');
     }
+
+    public function testFindOneByEmailValidationSecretSucess(): void
+    {
+        $newUser = new User();
+        $newUser->setName('Test')
+            ->setEmail('test@gmail.com')
+            ->setPassword('non_encoded_password')
+        ;
+        $this->entityManager->persist($newUser);
+        $this->entityManager->flush();
+
+        $user = $this->userRepository->findOneByEmailValidationSecret($newUser->getEmailValidationSecret());
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($user->getId(), $newUser->getId());
+    }
+
+    public function testFindOneByEmailValidationSecretFail(): void
+    {
+        $this->expectException(NoResultException::class);
+
+        $user = $this->userRepository->findOneByEmailValidationSecret(Uuid::v4()->toRfc4122());
+    }
 }

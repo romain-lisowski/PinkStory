@@ -50,6 +50,18 @@ final class User implements UserInterface
 
     /**
      * @Assert\NotBlank
+     * @ORM\Column(name="email_validation_secret", type="guid", unique=true)
+     */
+    private string $emailValidationSecret;
+
+    /**
+     * @Assert\NotNull
+     * @ORM\Column(name="email_validated", type="boolean")
+     */
+    private bool $emailValidated;
+
+    /**
+     * @Assert\NotBlank
      * @ORM\Column(name="password", type="string", length=255)
      */
     private string $password;
@@ -72,6 +84,8 @@ final class User implements UserInterface
             ->setActivated(true)
             ->initCreatedAt()
             ->updateLastUpdatedAt()
+            ->regenerateEmailValidationSecret()
+            ->setEmailValidated(false)
             ->regenerateSecret()
             ->setRole(UserRole::ROLE_USER)
         ;
@@ -105,6 +119,30 @@ final class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = (new UnicodeString($email))->lower()->toString();
+
+        return $this;
+    }
+
+    public function getEmailValidationSecret(): string
+    {
+        return $this->emailValidationSecret;
+    }
+
+    public function regenerateEmailValidationSecret(): self
+    {
+        $this->emailValidationSecret = Uuid::v4()->toRfc4122();
+
+        return $this;
+    }
+
+    public function isEmailValidated(): bool
+    {
+        return $this->emailValidated;
+    }
+
+    public function setEmailValidated(bool $emailValidated): self
+    {
+        $this->emailValidated = $emailValidated;
 
         return $this;
     }

@@ -35,8 +35,12 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
+    App\Home\Action\:
+        resource: '../src/Home/Action'
+        tags: ['controller.service_arguments']
+        
     App\User\Action\:
-        resource: '../src/User/Action/'
+        resource: '../src/User/Action'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User\Fixture;
+namespace App\Fixture\User;
 
 use App\User\Entity\User;
 use App\User\Entity\UserRole;
@@ -8,7 +8,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixture extends Fixture
+final class UserFixture extends Fixture
 {
     private UserPasswordEncoderInterface $passwordEncoder;
 

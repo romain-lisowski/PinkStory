@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="usr_user")
- * @ORM\Entity(repositoryClass="App\User\Doctrine\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\User\Repository\UserRepository")
  * @UniqueEntity(
  *      fields = {"email"}
  * )

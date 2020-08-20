@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\User\Doctrine\Repository;
+namespace App\User\Repository;
 
 use App\User\Entity\User;
-use App\User\Repository\UserRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

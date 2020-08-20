@@ -121,24 +121,24 @@ final class User implements UserInterface
         return $this;
     }
 
-    public function getSecret()
+    public function getSecret(): string
     {
         return $this->secret;
     }
 
-    public function regenerateSecret()
+    public function regenerateSecret(): self
     {
         $this->secret = Uuid::v4()->toRfc4122();
 
         return $this;
     }
 
-    public function getRole()
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    public function setRole($role)
+    public function setRole($role): self
     {
         $this->role = $role;
 

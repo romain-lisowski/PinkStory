@@ -11,9 +11,9 @@ use App\User\Validator\Constraints as AppUserAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\String\ByteString;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -56,7 +56,7 @@ final class User implements UserInterface
 
     /**
      * @Assert\NotBlank
-     * @ORM\Column(name="secret", type="string", length=255)
+     * @ORM\Column(name="secret", type="guid")
      */
     private string $secret;
 
@@ -128,7 +128,7 @@ final class User implements UserInterface
 
     public function regenerateSecret()
     {
-        $this->secret = ByteString::fromRandom(32)->toString();
+        $this->secret = Uuid::v4()->toRfc4122();
 
         return $this;
     }

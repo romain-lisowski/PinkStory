@@ -145,6 +145,7 @@ final class User implements UserInterface
     public function changeEmail(string $email): self
     {
         $this->setEmail((new UnicodeString($email))->lower()->toString());
+        $this->regenerateEmailValidationSecret();
 
         return $this;
     }

@@ -43,14 +43,14 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
         $this->prophet = new Prophet();
 
-        $this->command = new UserLoginCommand();
-        $this->command->email = 'auth@yannissgarra.com';
-        $this->command->password = '@Password2!';
-
         $this->user = (new User())
             ->rename('Yannis')
             ->updateEmail('auth@yannissgarra.com')
         ;
+
+        $this->command = new UserLoginCommand();
+        $this->command->email = $this->user->getEmail();
+        $this->command->password = '@Password2!';
 
         $this->params = $this->prophet->prophesize(ParameterBagInterface::class);
 

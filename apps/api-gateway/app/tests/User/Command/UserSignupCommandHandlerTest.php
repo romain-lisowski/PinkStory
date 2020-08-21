@@ -57,7 +57,7 @@ final class UserSignupCommandHandlerTest extends TestCase
     {
         $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
-        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn('encodedPassword');
+        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn($this->command->password);
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
@@ -89,7 +89,7 @@ final class UserSignupCommandHandlerTest extends TestCase
     {
         $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
-        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn('encodedPassword');
+        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn($this->command->password);
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'field', null, null, null, null)]));
 

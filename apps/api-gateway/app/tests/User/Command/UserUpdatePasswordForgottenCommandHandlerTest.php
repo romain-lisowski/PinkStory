@@ -74,7 +74,7 @@ final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
 
         $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
 
-        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn('encodedPassword');
+        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn($this->command->password);
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
@@ -127,7 +127,7 @@ final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
 
         $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
 
-        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn('encodedPassword');
+        $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn($this->command->password);
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'email', null, null, null, null)]));
 

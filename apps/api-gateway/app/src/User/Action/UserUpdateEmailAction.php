@@ -8,7 +8,6 @@ use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdateEmailCommand;
-use App\User\Command\UserUpdateEmailCommandFormType;
 use App\User\Command\UserUpdateEmailCommandHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;

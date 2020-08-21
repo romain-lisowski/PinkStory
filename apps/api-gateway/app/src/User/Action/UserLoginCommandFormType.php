@@ -2,30 +2,29 @@
 
 declare(strict_types=1);
 
-namespace App\User\Command;
+namespace App\User\Action;
 
+use App\User\Command\UserLoginCommand;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class UserUpdatePasswordForgottenCommandFormType extends AbstractType
+final class UserLoginCommandFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'user.validator.password_match',
-            ])
+            ->add('email', EmailType::class)
+            ->add('password', PasswordType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserUpdatePasswordForgottenCommand::class,
+            'data_class' => UserLoginCommand::class,
         ]);
     }
 

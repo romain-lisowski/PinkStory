@@ -8,7 +8,6 @@ use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRegeneratePasswordForgottenSecretCommand;
-use App\User\Command\UserRegeneratePasswordForgottenSecretCommandFormType;
 use App\User\Command\UserRegeneratePasswordForgottenSecretCommandHandler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

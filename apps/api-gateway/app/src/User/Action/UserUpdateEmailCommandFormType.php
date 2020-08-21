@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\User\Command;
+namespace App\User\Action;
 
+use App\User\Command\UserUpdateEmailCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class UserRegeneratePasswordForgottenSecretCommandFormType extends AbstractType
+final class UserUpdateEmailCommandFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -21,7 +22,7 @@ final class UserRegeneratePasswordForgottenSecretCommandFormType extends Abstrac
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserRegeneratePasswordForgottenSecretCommand::class,
+            'data_class' => UserUpdateEmailCommand::class,
         ]);
     }
 

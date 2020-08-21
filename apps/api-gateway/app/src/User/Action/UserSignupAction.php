@@ -8,7 +8,6 @@ use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserSignupCommand;
-use App\User\Command\UserSignupCommandFormType;
 use App\User\Command\UserSignupCommandHandler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

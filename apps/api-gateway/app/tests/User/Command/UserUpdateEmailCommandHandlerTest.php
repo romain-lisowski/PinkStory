@@ -79,7 +79,6 @@ final class UserUpdateEmailCommandHandlerTest extends TestCase
         $this->assertFalse($this->user->isEmailValidated());
         $this->assertNotEquals($this->user->getEmailValidationSecret(), $secret);
         $this->assertFalse($this->user->isEmailValidationSecretUsed());
-        $this->assertTrue($this->user->isPasswordForgottenSecretUsed());
         $this->assertNotEquals($this->user->getLastUpdatedAt(), $lastUpdatedAt);
     }
 

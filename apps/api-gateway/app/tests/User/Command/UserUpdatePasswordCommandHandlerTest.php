@@ -82,6 +82,7 @@ final class UserUpdatePasswordCommandHandlerTest extends TestCase
         $this->handler->handle($this->command);
 
         $this->assertEquals($this->user->getPassword(), $this->command->password);
+        $this->assertTrue($this->user->isPasswordForgottenSecretUsed());
         $this->assertNotEquals($this->user->getLastUpdatedAt(), $lastUpdatedAt);
     }
 

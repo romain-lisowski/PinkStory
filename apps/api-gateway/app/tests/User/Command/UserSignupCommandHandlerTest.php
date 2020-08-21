@@ -56,12 +56,13 @@ final class UserSignupCommandHandlerTest extends TestCase
 
     public function testHandleSucess(): void
     {
+        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn('encodedPassword');
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
-        $this->entityManager->persist(Argument::type(User::class))->shouldBeCalled();
+        $this->entityManager->persist(Argument::type(User::class))->shouldBeCalledOnce();
         $this->entityManager->flush()->shouldBeCalledOnce();
 
         $this->handler->handle($this->command);
@@ -71,10 +72,14 @@ final class UserSignupCommandHandlerTest extends TestCase
 
     public function testHandleFailPasswordStrenght(): void
     {
+        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'password', null, null, null, null)]));
+
         $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldNotBeCalled();
 
         $this->validator->validate(Argument::type(User::class))->shouldNotBeCalled();
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'password', null, null, null, null)]));
+
+        $this->entityManager->persist(Argument::type(User::class))->shouldNotBeCalled();
+        $this->entityManager->flush()->shouldNotBeCalled();
 
         $this->expectException(ValidatorException::class);
 
@@ -83,10 +88,14 @@ final class UserSignupCommandHandlerTest extends TestCase
 
     public function testHandleFailValidateUser(): void
     {
+        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->passwordEncoder->encodePassword(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn('encodedPassword');
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'email', null, null, null, null)]));
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
+        $this->entityManager->persist(Argument::type(User::class))->shouldNotBeCalled();
+        $this->entityManager->flush()->shouldNotBeCalled();
 
         $this->expectException(ValidatorException::class);
 

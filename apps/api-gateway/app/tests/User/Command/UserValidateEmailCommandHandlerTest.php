@@ -35,6 +35,7 @@ final class UserValidateEmailCommandHandlerTest extends TestCase
         $this->user = (new User())
             ->rename('Yannis')
             ->changeEmail('auth@yannissgarra.com')
+            ->regenerateEmailValidationSecret()
         ;
 
         $this->command = new UserValidateEmailCommand();

@@ -21,7 +21,7 @@ final class UserValidateEmailCommandHandler
 
     public function handle(UserValidateEmailCommand $command): void
     {
-        $user = $this->userRepository->findOneByNotUsedEmailValidationSecret($command->secret);
+        $user = $this->userRepository->findOneByActiveEmailValidationSecret($command->secret);
 
         if ($user->getId() !== $command->id) {
             throw new AccessDeniedException();

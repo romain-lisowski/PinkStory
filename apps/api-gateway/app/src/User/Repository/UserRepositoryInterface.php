@@ -12,5 +12,5 @@ interface UserRepositoryInterface
 
     public function findOneByEmail(string $email): User;
 
-    public function findOneByNotUsedEmailValidationSecret(string $secret): User;
+    public function findOneByActiveEmailValidationSecret(string $secret): User;
 }

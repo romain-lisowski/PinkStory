@@ -57,7 +57,7 @@ final class UserValidateEmailCommandHandlerTest extends TestCase
     {
         $lastUpdatedAt = $this->user->getLastUpdatedAt();
 
-        $this->userRepository->findOneByNotUsedEmailValidationSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
+        $this->userRepository->findOneByActiveEmailValidationSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
 
         $this->entityManager->flush()->shouldBeCalledOnce();
 
@@ -70,7 +70,7 @@ final class UserValidateEmailCommandHandlerTest extends TestCase
 
     public function testHandleFailWrongSecret(): void
     {
-        $this->userRepository->findOneByNotUsedEmailValidationSecret($this->command->secret)->shouldBeCalledOnce()->willThrow(new NoResultException());
+        $this->userRepository->findOneByActiveEmailValidationSecret($this->command->secret)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
         $this->entityManager->flush()->shouldNotBeCalled();
 
@@ -83,7 +83,7 @@ final class UserValidateEmailCommandHandlerTest extends TestCase
     {
         $this->command->id = Uuid::v4()->toRfc4122();
 
-        $this->userRepository->findOneByNotUsedEmailValidationSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
+        $this->userRepository->findOneByActiveEmailValidationSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
 
         $this->entityManager->flush()->shouldNotBeCalled();
 

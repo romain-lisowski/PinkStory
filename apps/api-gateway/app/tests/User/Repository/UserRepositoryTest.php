@@ -72,7 +72,7 @@ final class UserRepositoryTest extends KernelTestCase
         $user = $this->userRepository->findOneByEmail('john2@gmail.com');
     }
 
-    public function testFindOneByNotUsedEmailValidationSecretSucess(): void
+    public function testfindOneByActiveEmailValidationSecretSucess(): void
     {
         $newUser = new User();
         $newUser->setName('Test')
@@ -82,20 +82,20 @@ final class UserRepositoryTest extends KernelTestCase
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
 
-        $user = $this->userRepository->findOneByNotUsedEmailValidationSecret($newUser->getEmailValidationSecret());
+        $user = $this->userRepository->findOneByActiveEmailValidationSecret($newUser->getEmailValidationSecret());
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($user->getId(), $newUser->getId());
     }
 
-    public function testFindOneByNotUsedEmailValidationSecretFailWrongSecret(): void
+    public function testfindOneByActiveEmailValidationSecretFailWrongSecret(): void
     {
         $this->expectException(NoResultException::class);
 
-        $user = $this->userRepository->findOneByNotUsedEmailValidationSecret(Uuid::v4()->toRfc4122());
+        $user = $this->userRepository->findOneByActiveEmailValidationSecret(Uuid::v4()->toRfc4122());
     }
 
-    public function testFindOneByNotUsedEmailValidationSecretFailUsedSecret(): void
+    public function testfindOneByActiveEmailValidationSecretFailUsedSecret(): void
     {
         $newUser = new User();
         $newUser->setName('Test')
@@ -108,6 +108,6 @@ final class UserRepositoryTest extends KernelTestCase
 
         $this->expectException(NoResultException::class);
 
-        $user = $this->userRepository->findOneByNotUsedEmailValidationSecret($newUser->getEmailValidationSecret());
+        $user = $this->userRepository->findOneByActiveEmailValidationSecret($newUser->getEmailValidationSecret());
     }
 }

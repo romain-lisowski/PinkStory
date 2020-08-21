@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait IdentifierTrait
 {
     /**
+     * @Groups({"detail", "list"})
      * @Assert\NotBlank
      * @ORM\Id()
      * @ORM\Column(name="id", type="guid", unique=true)

@@ -6,17 +6,20 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait TimestampTrait
 {
     /**
+     * @Groups({"detail", "list"})
      * @Assert\NotBlank
      * @ORM\Column(name="created_at", type="datetime")
      */
     private DateTime $createdAt;
 
     /**
+     * @Groups({"detail", "list"})
      * @Assert\NotBlank
      * @ORM\Column(name="last_updated_at", type="datetime")
      */

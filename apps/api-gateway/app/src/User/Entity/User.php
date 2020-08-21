@@ -12,6 +12,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
@@ -31,18 +32,21 @@ final class User implements UserInterface
     use TimestampTrait;
 
     /**
+     * @Groups({"detail", "list"})
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
      */
     private string $name;
 
     /**
+     * @Groups({"detail", "list"})
      * @Assert\NotBlank
      * @ORM\Column(name="name_slug", type="string", length=255)
      */
     private string $nameSlug;
 
     /**
+     * @Groups({"detail", "list"})
      * @Assert\NotBlank
      * @AppUserAssert\Email
      * @ORM\Column(name="email", type="string", length=255, unique=true)

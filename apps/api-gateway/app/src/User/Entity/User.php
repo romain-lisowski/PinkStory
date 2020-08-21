@@ -49,6 +49,12 @@ final class User implements UserInterface
     private string $email;
 
     /**
+     * @Assert\NotNull
+     * @ORM\Column(name="email_validated", type="boolean")
+     */
+    private bool $emailValidated;
+
+    /**
      * @Assert\NotBlank
      * @ORM\Column(name="email_validation_secret", type="guid", unique=true)
      */
@@ -56,9 +62,9 @@ final class User implements UserInterface
 
     /**
      * @Assert\NotNull
-     * @ORM\Column(name="email_validated", type="boolean")
+     * @ORM\Column(name="email_validation_secret_used", type="boolean")
      */
-    private bool $emailValidated;
+    private bool $emailValidationSecretUsed;
 
     /**
      * @Assert\NotBlank
@@ -85,7 +91,6 @@ final class User implements UserInterface
             ->initCreatedAt()
             ->updateLastUpdatedAt()
             ->regenerateEmailValidationSecret()
-            ->setEmailValidated(false)
             ->regenerateSecret()
             ->setRole(UserRole::ROLE_USER)
         ;
@@ -123,6 +128,18 @@ final class User implements UserInterface
         return $this;
     }
 
+    public function isEmailValidated(): bool
+    {
+        return $this->emailValidated;
+    }
+
+    public function setEmailValidated(bool $validated): self
+    {
+        $this->emailValidated = $validated;
+
+        return $this;
+    }
+
     public function getEmailValidationSecret(): string
     {
         return $this->emailValidationSecret;
@@ -131,18 +148,20 @@ final class User implements UserInterface
     public function regenerateEmailValidationSecret(): self
     {
         $this->emailValidationSecret = Uuid::v4()->toRfc4122();
+        $this->setEmailValidationSecretUsed(false);
+        $this->setEmailValidated(false);
 
         return $this;
     }
 
-    public function isEmailValidated(): bool
+    public function isEmailValidationSecretUsed(): bool
     {
-        return $this->emailValidated;
+        return $this->emailValidationSecretUsed;
     }
 
-    public function setEmailValidated(bool $emailValidated): self
+    public function setEmailValidationSecretUsed(bool $used): self
     {
-        $this->emailValidated = $emailValidated;
+        $this->emailValidationSecretUsed = $used;
 
         return $this;
     }

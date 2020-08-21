@@ -23,6 +23,7 @@ final class UserRegenerateEmailValidationSecretCommandHandler
         $user = $this->userRepository->findOne($command->id);
 
         $user->regenerateEmailValidationSecret();
+        $user->updateLastUpdatedAt();
 
         $this->entityManager->flush();
     }

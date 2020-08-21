@@ -53,6 +53,7 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
     public function testHandleSucess(): void
     {
         $secret = $this->user->getEmailValidationSecret();
+        $lastUpdatedAt = $this->user->getLastUpdatedAt();
 
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willReturn($this->user);
 
@@ -60,7 +61,10 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
 
         $this->handler->handle($this->command);
 
+        $this->assertFalse($this->user->isEmailValidated());
         $this->assertNotEquals($this->user->getEmailValidationSecret(), $secret);
+        $this->assertFalse($this->user->isEmailValidationSecretUsed());
+        $this->assertNotEquals($this->user->getLastUpdatedAt(), $lastUpdatedAt);
     }
 
     public function testHandleFailWrongId(): void

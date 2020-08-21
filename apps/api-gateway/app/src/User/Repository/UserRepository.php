@@ -37,13 +37,17 @@ final class UserRepository extends ServiceEntityRepository implements UserReposi
         return $qb->getQuery()->getSingleResult();
     }
 
-    public function findOneByEmailValidationSecret(string $secret): User
+    public function findOneByNotUsedEmailValidationSecret(string $secret): User
     {
         $qb = $this->createQueryBuilder('user');
 
-        $qb->where($qb->expr()->eq('user.emailValidationSecret', ':user_secret'))
-            ->setParameter('user_secret', $secret)
-        ;
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('user.emailValidationSecret', ':user_secret'),
+            $qb->expr()->eq('user.emailValidationSecretUsed', ':user_secret_used')
+        ))->setParameters([
+            'user_secret' => $secret,
+            'user_secret_used' => false,
+        ]);
 
         return $qb->getQuery()->getSingleResult();
     }

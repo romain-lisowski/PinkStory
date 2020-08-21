@@ -34,8 +34,8 @@ final class UserSignupCommandHandler
 
         $user = new User();
         $user->rename($command->name)
-            ->changeEmail($command->email)
-            ->changePassword($this->passwordEncoder->encodePassword($user, $command->password))
+            ->updateEmail($command->email)
+            ->updatePassword($this->passwordEncoder->encodePassword($user, $command->password))
         ;
 
         $errors = $this->validator->validate($user);

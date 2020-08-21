@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class UserChangePasswordForgottenCommandFormType extends AbstractType
+final class UserUpdatePasswordForgottenCommandFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,7 +25,7 @@ final class UserChangePasswordForgottenCommandFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserChangePasswordForgottenCommand::class,
+            'data_class' => UserUpdatePasswordForgottenCommand::class,
         ]);
     }
 

@@ -9,7 +9,7 @@ use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserChangeEmailCommandHandler
+final class UserUpdateEmailCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private ValidatorInterface $validator;
@@ -22,11 +22,11 @@ final class UserChangeEmailCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserChangeEmailCommand $command): void
+    public function handle(UserUpdateEmailCommand $command): void
     {
         $user = $this->userRepository->findOne($command->id);
 
-        $user->changeEmail($command->email);
+        $user->updateEmail($command->email);
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);

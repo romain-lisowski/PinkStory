@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Test\User\Command;
 
 use App\Exception\ValidatorException;
-use App\User\Command\UserChangeEmailCommand;
-use App\User\Command\UserChangeEmailCommandHandler;
+use App\User\Command\UserUpdateEmailCommand;
+use App\User\Command\UserUpdateEmailCommandHandler;
 use App\User\Entity\User;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,11 +22,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @internal
  * @coversNothing
  */
-final class UserChangeEmailCommandHandlerTest extends TestCase
+final class UserUpdateEmailCommandHandlerTest extends TestCase
 {
     private Prophet $prophet;
-    private UserChangeEmailCommand $command;
-    private UserChangeEmailCommandHandler $handler;
+    private UserUpdateEmailCommand $command;
+    private UserUpdateEmailCommandHandler $handler;
     private User $user;
     private $entityManager;
     private $validator;
@@ -38,10 +38,10 @@ final class UserChangeEmailCommandHandlerTest extends TestCase
 
         $this->user = (new User())
             ->rename('Yannis')
-            ->changeEmail('auth@yannissgarra.com')
+            ->updateEmail('auth@yannissgarra.com')
         ;
 
-        $this->command = new UserChangeEmailCommand();
+        $this->command = new UserUpdateEmailCommand();
         $this->command->id = $this->user->getId();
         $this->command->email = 'auth+2@yannissgarra.com';
 
@@ -51,7 +51,7 @@ final class UserChangeEmailCommandHandlerTest extends TestCase
 
         $this->userRepository = $this->prophet->prophesize(UserRepositoryInterface::class);
 
-        $this->handler = new UserChangeEmailCommandHandler($this->entityManager->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
+        $this->handler = new UserUpdateEmailCommandHandler($this->entityManager->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
     }
 
     public function tearDown(): void

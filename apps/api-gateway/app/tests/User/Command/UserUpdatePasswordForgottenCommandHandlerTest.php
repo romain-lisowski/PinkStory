@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Test\User\Command;
 
 use App\Exception\ValidatorException;
-use App\User\Command\UserChangePasswordForgottenCommand;
-use App\User\Command\UserChangePasswordForgottenCommandHandler;
+use App\User\Command\UserUpdatePasswordForgottenCommand;
+use App\User\Command\UserUpdatePasswordForgottenCommandHandler;
 use App\User\Entity\User;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Validator\Constraints\PasswordStrenght;
@@ -24,11 +24,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @internal
  * @coversNothing
  */
-final class UserChangePasswordForgottenCommandHandlerTest extends TestCase
+final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
 {
     private Prophet $prophet;
-    private UserChangePasswordForgottenCommand $command;
-    private UserChangePasswordForgottenCommandHandler $handler;
+    private UserUpdatePasswordForgottenCommand $command;
+    private UserUpdatePasswordForgottenCommandHandler $handler;
     private User $user;
     private $entityManager;
     private $passwordEncoder;
@@ -41,12 +41,12 @@ final class UserChangePasswordForgottenCommandHandlerTest extends TestCase
 
         $this->user = (new User())
             ->rename('Yannis')
-            ->changeEmail('auth@yannissgarra.com')
-            ->changePassword('password')
+            ->updateEmail('auth@yannissgarra.com')
+            ->updatePassword('password')
             ->regeneratePasswordForgottenSecret()
         ;
 
-        $this->command = new UserChangePasswordForgottenCommand();
+        $this->command = new UserUpdatePasswordForgottenCommand();
         $this->command->secret = $this->user->getPasswordForgottenSecret();
         $this->command->password = '@Password2!';
 
@@ -58,7 +58,7 @@ final class UserChangePasswordForgottenCommandHandlerTest extends TestCase
 
         $this->userRepository = $this->prophet->prophesize(UserRepositoryInterface::class);
 
-        $this->handler = new UserChangePasswordForgottenCommandHandler($this->entityManager->reveal(), $this->passwordEncoder->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
+        $this->handler = new UserUpdatePasswordForgottenCommandHandler($this->entityManager->reveal(), $this->passwordEncoder->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
     }
 
     public function tearDown(): void

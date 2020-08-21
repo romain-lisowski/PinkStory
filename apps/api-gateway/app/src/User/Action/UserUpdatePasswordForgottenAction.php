@@ -7,44 +7,39 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserChangeEmailCommand;
-use App\User\Command\UserChangeEmailCommandFormType;
-use App\User\Command\UserChangeEmailCommandHandler;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\User\Command\UserUpdatePasswordForgottenCommand;
+use App\User\Command\UserUpdatePasswordForgottenCommandFormType;
+use App\User\Command\UserUpdatePasswordForgottenCommandHandler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 /**
- * @IsGranted("ROLE_USER")
- * @Route("/users/change-email", name="user_change_email", methods={"POST"})
+ * @Route("/users/update-password-forgotten/{secret<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="user_update_password_forgotten", methods={"POST"})
  */
-final class UserChangeEmailAction
+final class UserUpdatePasswordForgottenAction
 {
     private FormFactoryInterface $formFactory;
-    private Security $security;
     private ResponderInterface $responder;
-    private UserChangeEmailCommandHandler $handler;
+    private UserUpdatePasswordForgottenCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, Security $security, ResponderInterface $responder, UserChangeEmailCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserUpdatePasswordForgottenCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
-        $this->security = $security;
         $this->responder = $responder;
         $this->handler = $handler;
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, string $secret): Response
     {
         try {
-            $command = new UserChangeEmailCommand();
-            $command->id = $this->security->getUser()->getId();
+            $command = new UserUpdatePasswordForgottenCommand();
+            $command->secret = $secret;
 
-            $form = $this->formFactory->create(UserChangeEmailCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserUpdatePasswordForgottenCommandFormType::class, $command);
 
             $form->handleRequest($request);
 

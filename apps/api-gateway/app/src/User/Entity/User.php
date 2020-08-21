@@ -163,7 +163,7 @@ final class User implements UserInterface
         return $this;
     }
 
-    public function changeEmail(string $email): self
+    public function updateEmail(string $email): self
     {
         $this->setEmail((new UnicodeString($email))->lower()->toString());
         $this->regenerateEmailValidationSecret();
@@ -236,7 +236,7 @@ final class User implements UserInterface
         return $this;
     }
 
-    public function changePassword(string $password): self
+    public function updatePassword(string $password): self
     {
         $this->setPassword($password);
         $this->setPasswordForgottenSecretUsed(true);

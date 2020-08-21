@@ -37,8 +37,8 @@ final class UserRepositoryTest extends KernelTestCase
         $newUser = new User();
         $newUser->setId($uuid->toRfc4122())
             ->rename('Test')
-            ->changeEmail('test@gmail.com')
-            ->changePassword('non_encoded_password')
+            ->updateEmail('test@gmail.com')
+            ->updatePassword('non_encoded_password')
         ;
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
@@ -77,8 +77,8 @@ final class UserRepositoryTest extends KernelTestCase
     {
         $newUser = new User();
         $newUser->rename('Test')
-            ->changeEmail('test@gmail.com')
-            ->changePassword('non_encoded_password')
+            ->updateEmail('test@gmail.com')
+            ->updatePassword('non_encoded_password')
         ;
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
@@ -100,8 +100,8 @@ final class UserRepositoryTest extends KernelTestCase
     {
         $newUser = new User();
         $newUser->rename('Test')
-            ->changeEmail('test@gmail.com')
-            ->changePassword('non_encoded_password')
+            ->updateEmail('test@gmail.com')
+            ->updatePassword('non_encoded_password')
             ->setEmailValidationSecretUsed(true)
         ;
         $this->entityManager->persist($newUser);
@@ -116,8 +116,8 @@ final class UserRepositoryTest extends KernelTestCase
     {
         $newUser = new User();
         $newUser->rename('Test')
-            ->changeEmail('test@gmail.com')
-            ->changePassword('non_encoded_password')
+            ->updateEmail('test@gmail.com')
+            ->updatePassword('non_encoded_password')
             ->regeneratePasswordForgottenSecret()
         ;
         $this->entityManager->persist($newUser);
@@ -140,8 +140,8 @@ final class UserRepositoryTest extends KernelTestCase
     {
         $newUser = new User();
         $newUser->rename('Test')
-            ->changeEmail('test@gmail.com')
-            ->changePassword('non_encoded_password')
+            ->updateEmail('test@gmail.com')
+            ->updatePassword('non_encoded_password')
             ->setPasswordForgottenSecretUsed(true)
         ;
         $this->entityManager->persist($newUser);
@@ -156,8 +156,8 @@ final class UserRepositoryTest extends KernelTestCase
     {
         $newUser = new User();
         $newUser->rename('Test')
-            ->changeEmail('test@gmail.com')
-            ->changePassword('non_encoded_password')
+            ->updateEmail('test@gmail.com')
+            ->updatePassword('non_encoded_password')
             ->setPasswordForgottenSecretCreatedAt((new DateTime())->modify('-1 hour'))
         ;
         $this->entityManager->persist($newUser);

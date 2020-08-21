@@ -32,7 +32,7 @@ final class UserRegeneratePasswordForgottenSecretCommandHandlerTest extends Test
 
         $this->user = (new User())
             ->rename('Yannis')
-            ->changeEmail('auth@yannissgarra.com')
+            ->updateEmail('auth@yannissgarra.com')
         ;
 
         $this->command = new UserRegeneratePasswordForgottenSecretCommand();

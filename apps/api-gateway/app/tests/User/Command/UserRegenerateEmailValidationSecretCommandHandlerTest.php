@@ -32,7 +32,7 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
 
         $this->user = (new User())
             ->rename('Yannis')
-            ->changeEmail('auth@yannissgarra.com')
+            ->updateEmail('auth@yannissgarra.com')
         ;
 
         $this->command = new UserRegenerateEmailValidationSecretCommand();

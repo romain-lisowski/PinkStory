@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserChangePasswordForgottenCommandHandler
+final class UserUpdatePasswordForgottenCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private UserPasswordEncoderInterface $passwordEncoder;
@@ -26,7 +26,7 @@ final class UserChangePasswordForgottenCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserChangePasswordForgottenCommand $command): void
+    public function handle(UserUpdatePasswordForgottenCommand $command): void
     {
         $errors = $this->validator->validate($command->password, new PasswordStrenght());
 
@@ -36,7 +36,7 @@ final class UserChangePasswordForgottenCommandHandler
 
         $user = $this->userRepository->findOneByActivePasswordForgottenSecret($command->secret);
 
-        $user->changePassword($this->passwordEncoder->encodePassword($user, $command->password));
+        $user->updatePassword($this->passwordEncoder->encodePassword($user, $command->password));
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);

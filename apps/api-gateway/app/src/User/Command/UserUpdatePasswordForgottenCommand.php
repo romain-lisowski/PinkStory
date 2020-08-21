@@ -7,7 +7,7 @@ namespace App\User\Command;
 use App\User\Validator\Constraints as AppUserAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserChangePasswordForgottenCommand
+final class UserUpdatePasswordForgottenCommand
 {
     /**
      * @Assert\NotBlank

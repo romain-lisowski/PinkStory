@@ -21,23 +21,23 @@ final class UserFixture extends Fixture
     {
         $user = new User();
         $user->rename('Yannis')
-            ->changeEmail('auth@yannissgarra.com')
-            ->changePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+            ->updateEmail('auth@yannissgarra.com')
+            ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
             ->setRole(UserRole::ROLE_GOD)
         ;
         $manager->persist($user);
 
         $user = new User();
         $user->rename('John')
-            ->changeEmail('john@gmail.com')
-            ->changePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+            ->updateEmail('john@gmail.com')
+            ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
         ;
         $manager->persist($user);
 
         $user = new User();
         $user->rename('Jane')
-            ->changeEmail('jane@gmail.com')
-            ->changePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+            ->updateEmail('jane@gmail.com')
+            ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
         ;
         $manager->persist($user);
 

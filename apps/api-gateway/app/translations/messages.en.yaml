@@ -12,4 +12,5 @@ user:
         no_token_provided: No token provided.
     validator:
         invalid_email: The email address is not valid.
+        password_match: The passwords must match.
         password_strenght: The password is not complex enough.

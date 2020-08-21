@@ -65,6 +65,8 @@ final class UserUpdateEmailCommandHandlerTest extends TestCase
         $email = $this->user->getEmail();
         $secret = $this->user->getEmailValidationSecret();
 
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willReturn($this->user);
 
         $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
@@ -81,8 +83,25 @@ final class UserUpdateEmailCommandHandlerTest extends TestCase
         $this->assertNotEquals($this->user->getLastUpdatedAt(), $lastUpdatedAt);
     }
 
-    public function testHandleFailWrongUser(): void
+    public function testHandleFailInvalidCommand(): void
     {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'field', null, null, null, null)]));
+
+        $this->userRepository->findOne($this->command->id)->shouldNotBeCalled();
+
+        $this->validator->validate(Argument::type(User::class))->shouldNotBeCalled();
+
+        $this->entityManager->flush()->shouldNotBeCalled();
+
+        $this->expectException(ValidatorException::class);
+
+        $this->handler->handle($this->command);
+    }
+
+    public function testHandleFailUserNotFound(): void
+    {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
         $this->validator->validate(Argument::type(User::class))->shouldNotBeCalled();
@@ -94,11 +113,13 @@ final class UserUpdateEmailCommandHandlerTest extends TestCase
         $this->handler->handle($this->command);
     }
 
-    public function testHandleFailValidateUser(): void
+    public function testHandleFailInvalidUser(): void
     {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willReturn($this->user);
 
-        $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'email', null, null, null, null)]));
+        $this->validator->validate(Argument::type(User::class))->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'field', null, null, null, null)]));
 
         $this->entityManager->flush()->shouldNotBeCalled();
 

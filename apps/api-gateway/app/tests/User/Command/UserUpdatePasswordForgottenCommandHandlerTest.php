@@ -9,7 +9,6 @@ use App\User\Command\UserUpdatePasswordForgottenCommand;
 use App\User\Command\UserUpdatePasswordForgottenCommandHandler;
 use App\User\Entity\User;
 use App\User\Repository\UserRepositoryInterface;
-use App\User\Validator\Constraints\PasswordStrenght;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
@@ -71,7 +70,7 @@ final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
         $lastUpdatedAt = $this->user->getLastUpdatedAt();
         $password = $this->user->getPassword();
 
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
 
@@ -88,9 +87,9 @@ final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
         $this->assertNotEquals($this->user->getLastUpdatedAt(), $lastUpdatedAt);
     }
 
-    public function testHandleFailPasswordStrenght(): void
+    public function testHandleFailInvalidCommand(): void
     {
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'password', null, null, null, null)]));
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'field', null, null, null, null)]));
 
         $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret)->shouldNotBeCalled();
 
@@ -105,9 +104,9 @@ final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
         $this->handler->handle($this->command);
     }
 
-    public function testHandleFailInactiveSecret(): void
+    public function testHandleFailActiveSecretNotFound(): void
     {
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
@@ -122,9 +121,9 @@ final class UserUpdatePasswordForgottenCommandHandlerTest extends TestCase
         $this->handler->handle($this->command);
     }
 
-    public function testHandleFailValidateUser(): void
+    public function testHandleFailInvalidUser(): void
     {
-        $this->validator->validate($this->command->password, new PasswordStrenght())->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret)->shouldBeCalledOnce()->willReturn($this->user);
 

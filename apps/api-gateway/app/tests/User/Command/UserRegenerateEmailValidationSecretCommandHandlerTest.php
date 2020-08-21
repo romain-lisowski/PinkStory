@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\User\Command;
 
+use App\Exception\ValidatorException;
 use App\User\Command\UserRegenerateEmailValidationSecretCommand;
 use App\User\Command\UserRegenerateEmailValidationSecretCommandHandler;
 use App\User\Entity\User;
@@ -12,6 +13,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophet;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal
@@ -24,6 +28,7 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
     private UserRegenerateEmailValidationSecretCommandHandler $handler;
     private User $user;
     private $entityManager;
+    private $validator;
     private $userRepository;
 
     public function setUp(): void
@@ -40,9 +45,11 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
 
         $this->entityManager = $this->prophet->prophesize(EntityManagerInterface::class);
 
+        $this->validator = $this->prophet->prophesize(ValidatorInterface::class);
+
         $this->userRepository = $this->prophet->prophesize(UserRepositoryInterface::class);
 
-        $this->handler = new UserRegenerateEmailValidationSecretCommandHandler($this->entityManager->reveal(), $this->userRepository->reveal());
+        $this->handler = new UserRegenerateEmailValidationSecretCommandHandler($this->entityManager->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
     }
 
     public function tearDown(): void
@@ -54,6 +61,8 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
     {
         $secret = $this->user->getEmailValidationSecret();
         $lastUpdatedAt = $this->user->getLastUpdatedAt();
+
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willReturn($this->user);
 
@@ -67,8 +76,23 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
         $this->assertNotEquals($this->user->getLastUpdatedAt(), $lastUpdatedAt);
     }
 
+    public function testHandleFailInvalidCommand(): void
+    {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'field', null, null, null, null)]));
+
+        $this->userRepository->findOne($this->command->id)->shouldNotBeCalled();
+
+        $this->entityManager->flush()->shouldNotBeCalled();
+
+        $this->expectException(ValidatorException::class);
+
+        $this->handler->handle($this->command);
+    }
+
     public function testHandleFailWrongId(): void
     {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
         $this->entityManager->flush()->shouldNotBeCalled();

@@ -24,6 +24,12 @@ final class UserUpdateEmailCommandHandler
 
     public function handle(UserUpdateEmailCommand $command): void
     {
+        $errors = $this->validator->validate($command);
+
+        if (count($errors) > 0) {
+            throw new ValidatorException($errors);
+        }
+
         $user = $this->userRepository->findOne($command->id);
 
         $user->updateEmail($command->email);

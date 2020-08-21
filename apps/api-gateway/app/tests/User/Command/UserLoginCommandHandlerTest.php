@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Test\User\Command;
 
 use App\Exception\InvalidSSLKeyException;
+use App\Exception\ValidatorException;
 use App\User\Command\UserLoginCommand;
 use App\User\Command\UserLoginCommandHandler;
 use App\User\Entity\User;
@@ -17,6 +18,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal
@@ -30,6 +34,7 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
     private User $user;
     private $params;
     private $passwordEncoder;
+    private $validator;
     private $userRepository;
 
     public function setUp(): void
@@ -51,9 +56,11 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
         $this->passwordEncoder = $this->prophet->prophesize(UserPasswordEncoderInterface::class);
 
+        $this->validator = $this->prophet->prophesize(ValidatorInterface::class);
+
         $this->userRepository = $this->prophet->prophesize(UserRepositoryInterface::class);
 
-        $this->handler = new UserLoginCommandHandler($this->params->reveal(), $this->passwordEncoder->reveal(), $this->userRepository->reveal());
+        $this->handler = new UserLoginCommandHandler($this->params->reveal(), $this->passwordEncoder->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
     }
 
     public function tearDown(): void
@@ -63,14 +70,16 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
     public function testHandleSucess(): void
     {
-        $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
-        $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
-        $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_pass_phrase'));
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOneByEmail($this->command->email)->shouldBeCalledOnce()->willReturn($this->user);
 
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn(true);
+
+        $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
+        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
+        $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
+        $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_pass_phrase'));
 
         $token = $this->handler->handle($this->command);
 
@@ -84,16 +93,36 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->assertEquals($payload->aud, self::$container->getParameter('app_name'));
     }
 
-    public function testHandleFailNoUserFound(): void
+    public function testHandleFailInvalidCommand(): void
     {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList([new ConstraintViolation('error', null, [], false, 'field', null, null, null, null)]));
+
+        $this->userRepository->findOneByEmail($this->command->email)->shouldNotBeCalled();
+
+        $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldNotBeCalled();
+
         $this->params->get('app_secret')->shouldNotBeCalled();
         $this->params->get('app_name')->shouldNotBeCalled();
         $this->params->get('jwt_private_key')->shouldNotBeCalled();
         $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
 
+        $this->expectException(ValidatorException::class);
+
+        $token = $this->handler->handle($this->command);
+    }
+
+    public function testHandleFailNoUserFound(): void
+    {
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
+
         $this->userRepository->findOneByEmail($this->command->email)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldNotBeCalled();
+
+        $this->params->get('app_secret')->shouldNotBeCalled();
+        $this->params->get('app_name')->shouldNotBeCalled();
+        $this->params->get('jwt_private_key')->shouldNotBeCalled();
+        $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
 
         $this->expectException(BadCredentialsException::class);
 
@@ -102,14 +131,16 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
     public function testHandleFailPasswordCheck(): void
     {
-        $this->params->get('app_secret')->shouldNotBeCalled();
-        $this->params->get('app_name')->shouldNotBeCalled();
-        $this->params->get('jwt_private_key')->shouldNotBeCalled();
-        $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOneByEmail($this->command->email)->shouldBeCalledOnce()->willReturn($this->user);
 
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn(false);
+
+        $this->params->get('app_secret')->shouldNotBeCalled();
+        $this->params->get('app_name')->shouldNotBeCalled();
+        $this->params->get('jwt_private_key')->shouldNotBeCalled();
+        $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
 
         $this->expectException(BadCredentialsException::class);
 
@@ -118,14 +149,16 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
     public function testHandleFailJWTEncode(): void
     {
-        $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
-        $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
-        $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn('wrong_passphrase');
+        $this->validator->validate($this->command)->shouldBeCalledOnce()->willReturn(new ConstraintViolationList());
 
         $this->userRepository->findOneByEmail($this->command->email)->shouldBeCalledOnce()->willReturn($this->user);
 
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn(true);
+
+        $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
+        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
+        $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
+        $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn('wrong_passphrase');
 
         $this->expectException(InvalidSSLKeyException::class);
 

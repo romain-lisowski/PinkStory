@@ -6,7 +6,6 @@ namespace App\User\Command;
 
 use App\Exception\ValidatorException;
 use App\User\Entity\User;
-use App\User\Validator\Constraints\PasswordStrenght;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -26,7 +25,7 @@ final class UserSignupCommandHandler
 
     public function handle(UserSignupCommand $command): void
     {
-        $errors = $this->validator->validate($command->password, new PasswordStrenght());
+        $errors = $this->validator->validate($command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);

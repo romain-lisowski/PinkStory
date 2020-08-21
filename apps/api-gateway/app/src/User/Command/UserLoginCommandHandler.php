@@ -42,7 +42,7 @@ final class UserLoginCommandHandler
                 'user_secret' => $user->getSecret(),
                 'app_secret' => $this->params->get('app_secret'),
                 'iss' => $this->params->get('app_name'),
-                'sub' => $user->getEmail(),
+                'sub' => $user->getId(),
                 'aud' => $this->params->get('app_name'),
                 'exp' => (new DateTime())->modify('+1 month')->getTimestamp(),
                 'nbf' => (new DateTime())->getTimestamp(),

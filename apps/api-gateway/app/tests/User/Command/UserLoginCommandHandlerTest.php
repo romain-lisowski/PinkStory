@@ -80,7 +80,7 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->assertEquals($payload->user_secret, $this->user->getSecret());
         $this->assertEquals($payload->app_secret, self::$container->getParameter('app_secret'));
         $this->assertEquals($payload->iss, self::$container->getParameter('app_name'));
-        $this->assertEquals($payload->sub, $this->user->getEmail());
+        $this->assertEquals($payload->sub, $this->user->getId());
         $this->assertEquals($payload->aud, self::$container->getParameter('app_name'));
     }
 

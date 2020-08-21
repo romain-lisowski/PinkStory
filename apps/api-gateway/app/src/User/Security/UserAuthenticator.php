@@ -64,7 +64,7 @@ final class UserAuthenticator extends AbstractAuthenticator
             $user = $this->userRepository->findOne($payload->user_id);
 
             if (null === $user
-                || $user->getEmail() !== $payload->sub
+                || $user->getId() !== $payload->sub
                 || $user->getSecret() !== $payload->user_secret) {
                 throw new UsernameNotFoundException();
             }

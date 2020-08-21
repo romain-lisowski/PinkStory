@@ -106,7 +106,14 @@ final class User implements UserInterface
         $this->name = $name;
 
         $slugger = new AsciiSlugger();
-        $this->nameSlug = $slugger->slug($name)->lower()->toString();
+        $this->setNameSlug($slugger->slug($name)->lower()->toString());
+
+        return $this;
+    }
+
+    public function setNameSlug(string $slug): self
+    {
+        $this->nameSlug = $slug;
 
         return $this;
     }
@@ -140,14 +147,29 @@ final class User implements UserInterface
         return $this;
     }
 
+    public function validateEmail(): self
+    {
+        $this->setEmailValidated(true);
+        $this->setEmailValidationSecretUsed(true);
+
+        return $this;
+    }
+
     public function getEmailValidationSecret(): string
     {
         return $this->emailValidationSecret;
     }
 
+    public function setEmailValidationSecret(string $secret): self
+    {
+        $this->emailValidationSecret = $secret;
+
+        return $this;
+    }
+
     public function regenerateEmailValidationSecret(): self
     {
-        $this->emailValidationSecret = Uuid::v4()->toRfc4122();
+        $this->setEmailValidationSecret(Uuid::v4()->toRfc4122());
         $this->setEmailValidationSecretUsed(false);
         $this->setEmailValidated(false);
 
@@ -183,9 +205,16 @@ final class User implements UserInterface
         return $this->secret;
     }
 
+    public function setSecret(string $secret): self
+    {
+        $this->secret = $secret;
+
+        return $this;
+    }
+
     public function regenerateSecret(): self
     {
-        $this->secret = Uuid::v4()->toRfc4122();
+        $this->setSecret(Uuid::v4()->toRfc4122());
 
         return $this;
     }

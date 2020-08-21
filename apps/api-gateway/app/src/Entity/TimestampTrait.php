@@ -36,7 +36,7 @@ trait TimestampTrait
 
     public function initCreatedAt(): self
     {
-        $this->createdAt = new DateTime();
+        $this->setCreatedAt(new DateTime());
 
         return $this;
     }
@@ -55,7 +55,7 @@ trait TimestampTrait
 
     public function updateLastUpdatedAt(): self
     {
-        $this->lastUpdatedAt = new DateTime();
+        $this->setLastUpdatedAt(new DateTime());
 
         return $this;
     }

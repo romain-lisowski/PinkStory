@@ -27,8 +27,7 @@ final class UserValidateEmailCommandHandler
             throw new AccessDeniedException();
         }
 
-        $user->setEmailValidated(true);
-        $user->setEmailValidationSecretUsed(true);
+        $user->validateEmail();
         $user->updateLastUpdatedAt();
 
         $this->entityManager->flush();

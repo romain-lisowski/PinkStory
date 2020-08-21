@@ -31,7 +31,7 @@ trait IdentifierTrait
 
     public function generateId(): self
     {
-        $this->id = Uuid::v4()->toRfc4122();
+        $this->setId(Uuid::v4()->toRfc4122());
 
         return $this;
     }

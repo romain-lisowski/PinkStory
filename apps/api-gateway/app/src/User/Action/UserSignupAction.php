@@ -37,6 +37,7 @@ final class UserSignupAction
     {
         try {
             $command = new UserSignupCommand();
+
             $form = $this->formFactory->create(UserSignupCommandFormType::class, $command);
 
             $form->handleRequest($request);

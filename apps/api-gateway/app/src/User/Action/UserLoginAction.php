@@ -37,6 +37,7 @@ final class UserLoginAction
     {
         try {
             $command = new UserLoginCommand();
+
             $form = $this->formFactory->create(UserLoginCommandFormType::class, $command);
 
             $form->handleRequest($request);

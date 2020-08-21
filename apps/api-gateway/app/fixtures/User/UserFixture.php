@@ -20,24 +20,24 @@ final class UserFixture extends Fixture
     public function load(ObjectManager $manager)
     {
         $user = new User();
-        $user->setName('Yannis')
-            ->setEmail('auth@yannissgarra.com')
-            ->setPassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+        $user->rename('Yannis')
+            ->changeEmail('auth@yannissgarra.com')
+            ->changePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
             ->setRole(UserRole::ROLE_GOD)
         ;
         $manager->persist($user);
 
         $user = new User();
-        $user->setName('John')
-            ->setEmail('john@gmail.com')
-            ->setPassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+        $user->rename('John')
+            ->changeEmail('john@gmail.com')
+            ->changePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
         ;
         $manager->persist($user);
 
         $user = new User();
-        $user->setName('Jane')
-            ->setEmail('jane@gmail.com')
-            ->setPassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+        $user->rename('Jane')
+            ->changeEmail('jane@gmail.com')
+            ->changePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
         ;
         $manager->persist($user);
 

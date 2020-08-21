@@ -33,8 +33,8 @@ final class UserValidateEmailCommandHandlerTest extends TestCase
         $this->prophet = new Prophet();
 
         $this->user = (new User())
-            ->setName('Yannis')
-            ->setEmail('auth@yannissgarra.com')
+            ->rename('Yannis')
+            ->changeEmail('auth@yannissgarra.com')
         ;
 
         $this->command = new UserValidateEmailCommand();

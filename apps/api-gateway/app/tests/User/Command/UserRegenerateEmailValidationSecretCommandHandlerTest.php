@@ -31,8 +31,8 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
         $this->prophet = new Prophet();
 
         $this->user = (new User())
-            ->setName('Yannis')
-            ->setEmail('auth@yannissgarra.com')
+            ->rename('Yannis')
+            ->changeEmail('auth@yannissgarra.com')
         ;
 
         $this->command = new UserRegenerateEmailValidationSecretCommand();

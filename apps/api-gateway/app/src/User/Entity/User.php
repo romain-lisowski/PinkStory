@@ -105,6 +105,13 @@ final class User implements UserInterface
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function rename(string $name): self
+    {
+        $this->setName($name);
+
         $slugger = new AsciiSlugger();
         $this->setNameSlug($slugger->slug($name)->lower()->toString());
 
@@ -130,7 +137,14 @@ final class User implements UserInterface
 
     public function setEmail(string $email): self
     {
-        $this->email = (new UnicodeString($email))->lower()->toString();
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function changeEmail(string $email): self
+    {
+        $this->setEmail((new UnicodeString($email))->lower()->toString());
 
         return $this;
     }
@@ -196,6 +210,13 @@ final class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function changePassword(string $password): self
+    {
+        $this->setPassword($password);
 
         return $this;
     }

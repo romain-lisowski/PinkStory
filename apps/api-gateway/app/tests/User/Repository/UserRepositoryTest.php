@@ -35,9 +35,9 @@ final class UserRepositoryTest extends KernelTestCase
         $uuid = Uuid::v4();
         $newUser = new User();
         $newUser->setId($uuid->toRfc4122())
-            ->setName('Test')
-            ->setEmail('test@gmail.com')
-            ->setPassword('non_encoded_password')
+            ->rename('Test')
+            ->changeEmail('test@gmail.com')
+            ->changePassword('non_encoded_password')
         ;
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
@@ -75,9 +75,9 @@ final class UserRepositoryTest extends KernelTestCase
     public function testfindOneByActiveEmailValidationSecretSucess(): void
     {
         $newUser = new User();
-        $newUser->setName('Test')
-            ->setEmail('test@gmail.com')
-            ->setPassword('non_encoded_password')
+        $newUser->rename('Test')
+            ->changeEmail('test@gmail.com')
+            ->changePassword('non_encoded_password')
         ;
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
@@ -98,9 +98,9 @@ final class UserRepositoryTest extends KernelTestCase
     public function testfindOneByActiveEmailValidationSecretFailUsedSecret(): void
     {
         $newUser = new User();
-        $newUser->setName('Test')
-            ->setEmail('test@gmail.com')
-            ->setPassword('non_encoded_password')
+        $newUser->rename('Test')
+            ->changeEmail('test@gmail.com')
+            ->changePassword('non_encoded_password')
             ->setEmailValidationSecretUsed(true)
         ;
         $this->entityManager->persist($newUser);

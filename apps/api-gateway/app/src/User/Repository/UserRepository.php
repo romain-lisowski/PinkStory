@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Repository;
 
 use App\User\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,6 +48,23 @@ final class UserRepository extends ServiceEntityRepository implements UserReposi
         ))->setParameters([
             'user_secret' => $secret,
             'user_secret_used' => false,
+        ]);
+
+        return $qb->getQuery()->getSingleResult();
+    }
+
+    public function findOneByActivePasswordForgottenSecret(string $secret): User
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('user.passwordForgottenSecret', ':user_secret'),
+            $qb->expr()->eq('user.passwordForgottenSecretUsed', ':user_secret_used'),
+            $qb->expr()->gt('user.passwordForgottenSecretCreatedAt', ':user_secret_created_at')
+        ))->setParameters([
+            'user_secret' => $secret,
+            'user_secret_used' => false,
+            'user_secret_created_at' => (new DateTime())->modify('-1 hour'),
         ]);
 
         return $qb->getQuery()->getSingleResult();

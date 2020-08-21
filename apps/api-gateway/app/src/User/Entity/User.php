@@ -8,6 +8,7 @@ use App\Entity\ActivatedTrait;
 use App\Entity\IdentifierTrait;
 use App\Entity\TimestampTrait;
 use App\User\Validator\Constraints as AppUserAssert;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -74,6 +75,24 @@ final class User implements UserInterface
 
     /**
      * @Assert\NotBlank
+     * @ORM\Column(name="password_forgotten_secret", type="guid", unique=true)
+     */
+    private string $passwordForgottenSecret;
+
+    /**
+     * @Assert\NotNull
+     * @ORM\Column(name="password_forgotten_secret_used", type="boolean")
+     */
+    private bool $passwordForgottenSecretUsed;
+
+    /**
+     * @Assert\NotBlank
+     * @ORM\Column(name="password_forgotten_secret_created_at", type="datetime")
+     */
+    private DateTime $passwordForgottenSecretCreatedAt;
+
+    /**
+     * @Assert\NotBlank
      * @ORM\Column(name="secret", type="guid")
      */
     private string $secret;
@@ -91,6 +110,8 @@ final class User implements UserInterface
             ->initCreatedAt()
             ->updateLastUpdatedAt()
             ->regenerateEmailValidationSecret()
+            ->regeneratePasswordForgottenSecret()
+            ->setPasswordForgottenSecretUsed(true) // not claimed by user at account creation, so block it until new claim
             ->regenerateSecret()
             ->setRole(UserRole::ROLE_USER)
         ;
@@ -218,6 +239,59 @@ final class User implements UserInterface
     public function changePassword(string $password): self
     {
         $this->setPassword($password);
+        $this->setPasswordForgottenSecretUsed(true);
+
+        return $this;
+    }
+
+    public function getPasswordForgottenSecret(): string
+    {
+        return $this->passwordForgottenSecret;
+    }
+
+    public function setPasswordForgottenSecret(string $secret): self
+    {
+        $this->passwordForgottenSecret = $secret;
+
+        return $this;
+    }
+
+    public function regeneratePasswordForgottenSecret(): self
+    {
+        $this->setPasswordForgottenSecret(Uuid::v4()->toRfc4122());
+        $this->setPasswordForgottenSecretUsed(false);
+        $this->initPasswordForgottenSecretCreatedAt();
+
+        return $this;
+    }
+
+    public function isPasswordForgottenSecretUsed(): bool
+    {
+        return $this->passwordForgottenSecretUsed;
+    }
+
+    public function setPasswordForgottenSecretUsed(bool $used): self
+    {
+        $this->passwordForgottenSecretUsed = $used;
+
+        return $this;
+    }
+
+    public function getPasswordForgottenSecretCreatedAt(): DateTime
+    {
+        return $this->passwordForgottenSecretCreatedAt;
+    }
+
+    public function setPasswordForgottenSecretCreatedAt(DateTime $date): self
+    {
+        $this->passwordForgottenSecretCreatedAt = $date;
+
+        return $this;
+    }
+
+    public function initPasswordForgottenSecretCreatedAt(): self
+    {
+        $this->setPasswordForgottenSecretCreatedAt(new DateTime());
 
         return $this;
     }

@@ -6,6 +6,7 @@ namespace App\Test\User\Repository;
 
 use App\User\Entity\User;
 use App\User\Repository\UserRepositoryInterface;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -109,5 +110,61 @@ final class UserRepositoryTest extends KernelTestCase
         $this->expectException(NoResultException::class);
 
         $user = $this->userRepository->findOneByActiveEmailValidationSecret($newUser->getEmailValidationSecret());
+    }
+
+    public function testFindOneByActivePasswordForgottenSecretSucess(): void
+    {
+        $newUser = new User();
+        $newUser->rename('Test')
+            ->changeEmail('test@gmail.com')
+            ->changePassword('non_encoded_password')
+            ->regeneratePasswordForgottenSecret()
+        ;
+        $this->entityManager->persist($newUser);
+        $this->entityManager->flush();
+
+        $user = $this->userRepository->findOneByActivePasswordForgottenSecret($newUser->getPasswordForgottenSecret());
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($user->getId(), $newUser->getId());
+    }
+
+    public function testFindOneByActivePasswordForgottenSecretFailWrongSecret(): void
+    {
+        $this->expectException(NoResultException::class);
+
+        $user = $this->userRepository->findOneByActivePasswordForgottenSecret(Uuid::v4()->toRfc4122());
+    }
+
+    public function testFindOneByActivePasswordForgottenSecretFailUsedSecret(): void
+    {
+        $newUser = new User();
+        $newUser->rename('Test')
+            ->changeEmail('test@gmail.com')
+            ->changePassword('non_encoded_password')
+            ->setPasswordForgottenSecretUsed(true)
+        ;
+        $this->entityManager->persist($newUser);
+        $this->entityManager->flush();
+
+        $this->expectException(NoResultException::class);
+
+        $user = $this->userRepository->findOneByActivePasswordForgottenSecret($newUser->getPasswordForgottenSecret());
+    }
+
+    public function testFindOneByActivePasswordForgottenSecretFailExpiredSecret(): void
+    {
+        $newUser = new User();
+        $newUser->rename('Test')
+            ->changeEmail('test@gmail.com')
+            ->changePassword('non_encoded_password')
+            ->setPasswordForgottenSecretCreatedAt((new DateTime())->modify('-1 hour'))
+        ;
+        $this->entityManager->persist($newUser);
+        $this->entityManager->flush();
+
+        $this->expectException(NoResultException::class);
+
+        $user = $this->userRepository->findOneByActivePasswordForgottenSecret($newUser->getPasswordForgottenSecret());
     }
 }

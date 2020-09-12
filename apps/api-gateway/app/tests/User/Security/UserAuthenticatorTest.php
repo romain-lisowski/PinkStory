@@ -97,7 +97,7 @@ final class UserAuthenticatorTest extends KernelTestCase
             'jti' => Uuid::v4()->toRfc4122(),
         ];
 
-        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS256');
+        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS512');
 
         $request = new Request();
         $request->headers->set('Authorization', 'Bearer '.$token);
@@ -128,7 +128,7 @@ final class UserAuthenticatorTest extends KernelTestCase
             'jti' => Uuid::v4()->toRfc4122(),
         ];
 
-        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS256');
+        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS512');
 
         $request = new Request();
         $request->headers->set('Authorization', 'Bearer '.$token);
@@ -159,7 +159,7 @@ final class UserAuthenticatorTest extends KernelTestCase
             'jti' => Uuid::v4()->toRfc4122(),
         ];
 
-        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS256');
+        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS512');
 
         $request = new Request();
         $request->headers->set('Authorization', 'Bearer '.$token);

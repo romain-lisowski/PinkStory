@@ -66,7 +66,7 @@ final class UserLoginCommandHandler
                 throw new InvalidSSLKeyException();
             }
 
-            return JWT::encode($payload, $privateKey, 'RS256');
+            return JWT::encode($payload, $privateKey, 'RS512');
         } catch (NonUniqueResultException | NoResultException $e) {
             throw new BadCredentialsException();
         }

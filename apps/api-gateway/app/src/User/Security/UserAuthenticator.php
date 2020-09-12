@@ -53,7 +53,7 @@ final class UserAuthenticator extends AbstractAuthenticator
                 throw new NoTokenProvidedException();
             }
 
-            $payload = JWT::decode($token, file_get_contents($this->params->get('jwt_public_key')), ['RS256']);
+            $payload = JWT::decode($token, file_get_contents($this->params->get('jwt_public_key')), ['RS512']);
 
             if ($payload->app_secret !== $this->params->get('app_secret')
                 || $payload->iss !== $this->params->get('app_name')

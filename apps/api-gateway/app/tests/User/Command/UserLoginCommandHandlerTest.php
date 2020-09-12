@@ -83,7 +83,7 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
         $token = $this->handler->handle($this->command);
 
-        $payload = JWT::decode($token, file_get_contents(self::$container->getParameter('jwt_public_key')), ['RS256']);
+        $payload = JWT::decode($token, file_get_contents(self::$container->getParameter('jwt_public_key')), ['RS512']);
 
         $this->assertEquals($payload->user_id, $this->user->getId());
         $this->assertEquals($payload->user_secret, $this->user->getSecret());

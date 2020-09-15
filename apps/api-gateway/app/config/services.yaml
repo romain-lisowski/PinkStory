@@ -34,10 +34,19 @@ services:
             - '../src/User/Event/'
             - '../src/User/Exception/'
 
+    App\Mercure\:
+        resource: '../src/Mercure'
+        exclude:
+            - '../src/Mercure/Command/*Command.php'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\User\Action\:
         resource: '../src/User/Action'
+        tags: ['controller.service_arguments']
+        
+    App\Mercure\Action\:
+        resource: '../src/Mercure/Action'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed

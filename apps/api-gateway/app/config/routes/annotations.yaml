@@ -5,3 +5,7 @@ kernel:
 user_action:
     resource: ../../src/User/Action/
     type: annotation
+
+mercure_action:
+    resource: ../../src/Mercure/Action/
+    type: annotation

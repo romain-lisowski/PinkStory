@@ -32,3 +32,15 @@ services:
       - ./docker/nginx/log:/var/log/nginx:delegated
     ports:
       - 443:443
+
+  mercure:
+    image: dunglas/mercure
+    environment:
+      JWT_KEY: sporthubisnotaboutporno
+      DEMO: 1
+      ALLOW_ANONYMOUS: 1
+      CORS_ALLOWED_ORIGINS: '*'
+      PUBLISH_ALLOWED_ORIGINS: '*'
+    ports:
+      - 3080:80
+      - 3443:443

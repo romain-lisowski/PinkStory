@@ -6,6 +6,8 @@
 parameters:
     app_name: '%env(resolve:APP_NAME)%'
     app_secret: '%env(resolve:APP_SECRET)%'
+    app_host_api_gateway: '%env(resolve:APP_HOST_API_GATEWAY)%'
+    app_host_front_web: '%env(resolve:APP_HOST_FRONT_WEB)%'
     jwt_key: '%env(resolve:JWT_KEY)%'
     jwt_algorithm: '%env(resolve:JWT_ALGORITHM)%'
 

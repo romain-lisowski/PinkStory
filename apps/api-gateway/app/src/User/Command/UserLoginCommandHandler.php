@@ -57,6 +57,11 @@ final class UserLoginCommandHandler
                 'nbf' => (new DateTime())->getTimestamp(),
                 'iat' => (new DateTime())->getTimestamp(),
                 'jti' => Uuid::v4()->toRfc4122(),
+                'mercure' => [
+                    'subscribe' => [
+                        'https://'.$this->params->get('app_host_front_web').'/users/'.$user->getId(), // mercure "target"
+                    ],
+                ],
             ];
 
             return JWT::encode($payload, $this->params->get('jwt_key'), $this->params->get('jwt_algorithm'));

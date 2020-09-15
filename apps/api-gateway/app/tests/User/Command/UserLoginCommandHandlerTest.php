@@ -91,6 +91,7 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->assertEquals($payload->iss, self::$container->getParameter('app_name'));
         $this->assertEquals($payload->sub, $this->user->getId());
         $this->assertEquals($payload->aud, self::$container->getParameter('app_name'));
+        $this->assertEquals($payload->mercure->subscribe[0], 'https://'.self::$container->getParameter('app_host_front_web').'/users/'.$this->user->getId());
     }
 
     public function testHandleFailInvalidCommand(): void
@@ -103,6 +104,7 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
 
         $this->params->get('app_secret')->shouldNotBeCalled();
         $this->params->get('app_name')->shouldNotBeCalled();
+        $this->params->get('app_host_front_web')->shouldNotBeCalled();
         $this->params->get('jwt_key')->shouldNotBeCalled();
         $this->params->get('jwt_algorithm')->shouldNotBeCalled();
 

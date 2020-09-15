@@ -37,8 +37,8 @@ services:
     image: dunglas/mercure
     environment:
       JWT_KEY: sporthubisnotaboutporno
+      JWT_ALGORITHM: HS256
       DEMO: 1
-      ALLOW_ANONYMOUS: 1
       CORS_ALLOWED_ORIGINS: '*'
       PUBLISH_ALLOWED_ORIGINS: '*'
     ports:

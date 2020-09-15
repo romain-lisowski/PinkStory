@@ -6,9 +6,8 @@
 parameters:
     app_name: '%env(resolve:APP_NAME)%'
     app_secret: '%env(resolve:APP_SECRET)%'
-    jwt_private_key: '%env(resolve:JWT_PRIVATE_KEY)%'
-    jwt_public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
-    jwt_pass_phrase: '%env(resolve:JWT_PASS_PHRASE)%'
+    jwt_key: '%env(resolve:JWT_KEY)%'
+    jwt_algorithm: '%env(resolve:JWT_ALGORITHM)%'
 
 services:
     # default configuration for services in *this* file

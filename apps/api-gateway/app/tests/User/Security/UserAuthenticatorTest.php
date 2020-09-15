@@ -80,7 +80,8 @@ final class UserAuthenticatorTest extends KernelTestCase
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
         $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
-        $this->params->get('jwt_public_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_public_key'));
+        $this->params->get('jwt_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_key'));
+        $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
 
         $this->userRepository->findOne($this->user->getId())->shouldBeCalledOnce()->willReturn($this->user);
 
@@ -97,7 +98,7 @@ final class UserAuthenticatorTest extends KernelTestCase
             'jti' => Uuid::v4()->toRfc4122(),
         ];
 
-        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS512');
+        $token = JWT::encode($payload, self::$container->getParameter('jwt_key'), self::$container->getParameter('jwt_algorithm'));
 
         $request = new Request();
         $request->headers->set('Authorization', 'Bearer '.$token);
@@ -111,7 +112,8 @@ final class UserAuthenticatorTest extends KernelTestCase
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
         $this->params->get('app_name')->shouldNotBeCalled();
-        $this->params->get('jwt_public_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_public_key'));
+        $this->params->get('jwt_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_key'));
+        $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
 
         $this->userRepository->findOne($this->user->getId())->shouldNotBeCalled();
 
@@ -128,7 +130,7 @@ final class UserAuthenticatorTest extends KernelTestCase
             'jti' => Uuid::v4()->toRfc4122(),
         ];
 
-        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS512');
+        $token = JWT::encode($payload, self::$container->getParameter('jwt_key'), self::$container->getParameter('jwt_algorithm'));
 
         $request = new Request();
         $request->headers->set('Authorization', 'Bearer '.$token);
@@ -142,7 +144,8 @@ final class UserAuthenticatorTest extends KernelTestCase
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
         $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
-        $this->params->get('jwt_public_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_public_key'));
+        $this->params->get('jwt_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_key'));
+        $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
 
         $this->userRepository->findOne($this->user->getId())->shouldBeCalledOnce()->willReturn($this->user);
 
@@ -159,7 +162,7 @@ final class UserAuthenticatorTest extends KernelTestCase
             'jti' => Uuid::v4()->toRfc4122(),
         ];
 
-        $token = JWT::encode($payload, openssl_pkey_get_private(file_get_contents(self::$container->getParameter('jwt_private_key')), self::$container->getParameter('jwt_pass_phrase')), 'RS512');
+        $token = JWT::encode($payload, self::$container->getParameter('jwt_key'), self::$container->getParameter('jwt_algorithm'));
 
         $request = new Request();
         $request->headers->set('Authorization', 'Bearer '.$token);

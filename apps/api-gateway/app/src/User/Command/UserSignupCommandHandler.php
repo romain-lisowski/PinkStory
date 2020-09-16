@@ -6,19 +6,23 @@ namespace App\User\Command;
 
 use App\Exception\ValidatorException;
 use App\User\Entity\User;
+use App\User\Message\UserSignupMessage;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserSignupCommandHandler
 {
     private EntityManagerInterface $entityManager;
+    private MessageBusInterface $bus;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
     {
         $this->entityManager = $entityManager;
+        $this->bus = $bus;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
     }
@@ -45,5 +49,7 @@ final class UserSignupCommandHandler
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        $this->bus->dispatch(new UserSignupMessage($user->getId()));
     }
 }

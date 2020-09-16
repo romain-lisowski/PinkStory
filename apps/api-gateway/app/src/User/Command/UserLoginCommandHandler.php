@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Exception\InvalidSSLKeyException;
 use App\Exception\ValidatorException;
 use App\User\Repository\UserRepositoryInterface;
 use DateTime;
@@ -64,7 +65,13 @@ final class UserLoginCommandHandler
                 ],
             ];
 
-            return JWT::encode($payload, $this->params->get('jwt_key'), $this->params->get('jwt_algorithm'));
+            $privateKey = openssl_pkey_get_private(file_get_contents($this->params->get('jwt_private_key')), $this->params->get('jwt_pass_phrase'));
+
+            if (false === $privateKey) {
+                throw new InvalidSSLKeyException();
+            }
+
+            return JWT::encode($payload, $privateKey, $this->params->get('jwt_algorithm'));
         } catch (NonUniqueResultException | NoResultException $e) {
             throw new BadCredentialsException();
         }

@@ -1,4 +1,4 @@
-# front-web
+# app
 
 ## Project setup
 ```

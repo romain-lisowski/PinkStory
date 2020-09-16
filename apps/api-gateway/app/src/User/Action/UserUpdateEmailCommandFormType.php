@@ -7,6 +7,7 @@ namespace App\User\Action;
 use App\User\Command\UserUpdateEmailCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,7 +16,10 @@ final class UserUpdateEmailCommandFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class)
+            ->add('email', RepeatedType::class, [
+                'type' => EmailType::class,
+                'invalid_message' => 'user.validator.email_match',
+            ])
         ;
     }
 

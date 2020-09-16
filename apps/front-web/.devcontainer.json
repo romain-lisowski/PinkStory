@@ -1,0 +1,14 @@
+{
+	"name": "PinkStory front-web",
+	"dockerComposeFile": "./docker-compose.yml",
+	"service": "node",
+	"workspaceFolder": "/var/www",
+	"shutdownAction": "none",
+	"extensions": [
+		"octref.vetur",
+		"esbenp.prettier-vscode",
+		"dbaeumer.vscode-eslint",
+		"eg2.vscode-npm-script",
+		"nucllear.vscode-extension-auto-import"
+	]
+}

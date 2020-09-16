@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @Route("/users/update-password-forgotten/{secret<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="user_update_password_forgotten", methods={"POST"})
+ * @Route("/users/update-password-forgotten/{secret<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="user_update_password_forgotten", methods={"PATCH"})
  */
 final class UserUpdatePasswordForgottenAction
 {
@@ -40,7 +40,7 @@ final class UserUpdatePasswordForgottenAction
 
             $form = $this->formFactory->create(UserUpdatePasswordForgottenCommandFormType::class, $command);
 
-            $form->handleRequest($request);
+            $form->submit(json_decode($request->getContent(), true));
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

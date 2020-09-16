@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @Route("/users/regenerate-password-forgotten-secret", name="user_regenerate_password_forgotten_secret", methods={"POST"})
+ * @Route("/users/regenerate-password-forgotten-secret", name="user_regenerate_password_forgotten_secret", methods={"PATCH"})
  */
 final class UserRegeneratePasswordForgottenSecretAction
 {
@@ -39,7 +39,7 @@ final class UserRegeneratePasswordForgottenSecretAction
 
             $form = $this->formFactory->create(UserRegeneratePasswordForgottenSecretCommandFormType::class, $command);
 
-            $form->handleRequest($request);
+            $form->submit(json_decode($request->getContent(), true));
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

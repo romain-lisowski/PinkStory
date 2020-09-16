@@ -20,7 +20,7 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/update-email", name="user_update_email", methods={"POST"})
+ * @Route("/users/update-email", name="user_update_email", methods={"PATCH"})
  */
 final class UserUpdateEmailAction
 {
@@ -45,7 +45,7 @@ final class UserUpdateEmailAction
 
             $form = $this->formFactory->create(UserUpdateEmailCommandFormType::class, $command);
 
-            $form->handleRequest($request);
+            $form->submit(json_decode($request->getContent(), true));
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

@@ -20,7 +20,7 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/update-information", name="user_update_information", methods={"POST"})
+ * @Route("/users/update-information", name="user_update_information", methods={"PATCH"})
  */
 final class UserUpdateInformationAction
 {
@@ -45,7 +45,7 @@ final class UserUpdateInformationAction
 
             $form = $this->formFactory->create(UserUpdateInformationCommandFormType::class, $command);
 
-            $form->handleRequest($request);
+            $form->submit(json_decode($request->getContent(), true));
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();
@@ -59,6 +59,9 @@ final class UserUpdateInformationAction
 
             return $this->responder->render();
         } catch (Throwable $e) {
+            dump($e);
+            exit;
+
             throw new BadRequestHttpException(null, $e);
         }
     }

@@ -20,7 +20,7 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/update-password", name="user_update_password", methods={"POST"})
+ * @Route("/users/update-password", name="user_update_password", methods={"PATCH"})
  */
 final class UserUpdatePasswordAction
 {
@@ -45,7 +45,7 @@ final class UserUpdatePasswordAction
 
             $form = $this->formFactory->create(UserUpdatePasswordCommandFormType::class, $command);
 
-            $form->handleRequest($request);
+            $form->submit(json_decode($request->getContent(), true));
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

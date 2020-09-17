@@ -8,11 +8,15 @@ use App\Exception\ValidatorException;
 use App\User\Command\UserRegeneratePasswordForgottenSecretCommand;
 use App\User\Command\UserRegeneratePasswordForgottenSecretCommandHandler;
 use App\User\Entity\User;
+use App\User\Message\UserRegeneratePasswordForgottenSecretMessage;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophet;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -28,6 +32,7 @@ final class UserRegeneratePasswordForgottenSecretCommandHandlerTest extends Test
     private UserRegeneratePasswordForgottenSecretCommandHandler $handler;
     private User $user;
     private $entityManager;
+    private $bus;
     private $validator;
     private $userRepository;
 
@@ -45,11 +50,13 @@ final class UserRegeneratePasswordForgottenSecretCommandHandlerTest extends Test
 
         $this->entityManager = $this->prophet->prophesize(EntityManagerInterface::class);
 
+        $this->bus = $this->prophet->prophesize(MessageBusInterface::class);
+
         $this->validator = $this->prophet->prophesize(ValidatorInterface::class);
 
         $this->userRepository = $this->prophet->prophesize(UserRepositoryInterface::class);
 
-        $this->handler = new UserRegeneratePasswordForgottenSecretCommandHandler($this->entityManager->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
+        $this->handler = new UserRegeneratePasswordForgottenSecretCommandHandler($this->entityManager->reveal(), $this->bus->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
     }
 
     public function tearDown(): void
@@ -69,6 +76,8 @@ final class UserRegeneratePasswordForgottenSecretCommandHandlerTest extends Test
 
         $this->entityManager->flush()->shouldBeCalledOnce();
 
+        $this->bus->dispatch(Argument::type(UserRegeneratePasswordForgottenSecretMessage::class))->shouldBeCalledOnce()->willReturn(new Envelope(new UserRegeneratePasswordForgottenSecretMessage($this->user->getId())));
+
         $this->handler->handle($this->command);
 
         $this->assertNotEquals($this->user->getPasswordForgottenSecret(), $secret);
@@ -85,6 +94,8 @@ final class UserRegeneratePasswordForgottenSecretCommandHandlerTest extends Test
 
         $this->entityManager->flush()->shouldNotBeCalled();
 
+        $this->bus->dispatch(Argument::type(UserRegeneratePasswordForgottenSecretMessage::class))->shouldNotBeCalled();
+
         $this->expectException(ValidatorException::class);
 
         $this->handler->handle($this->command);
@@ -97,6 +108,8 @@ final class UserRegeneratePasswordForgottenSecretCommandHandlerTest extends Test
         $this->userRepository->findOneByEmail($this->command->email)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
         $this->entityManager->flush()->shouldNotBeCalled();
+
+        $this->bus->dispatch(Argument::type(UserRegeneratePasswordForgottenSecretMessage::class))->shouldNotBeCalled();
 
         $this->expectException(NoResultException::class);
 

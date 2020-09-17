@@ -8,11 +8,15 @@ use App\Exception\ValidatorException;
 use App\User\Command\UserRegenerateEmailValidationSecretCommand;
 use App\User\Command\UserRegenerateEmailValidationSecretCommandHandler;
 use App\User\Entity\User;
+use App\User\Message\UserRegenerateEmailValidationSecretMessage;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophet;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -28,6 +32,7 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
     private UserRegenerateEmailValidationSecretCommandHandler $handler;
     private User $user;
     private $entityManager;
+    private $bus;
     private $validator;
     private $userRepository;
 
@@ -45,11 +50,13 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
 
         $this->entityManager = $this->prophet->prophesize(EntityManagerInterface::class);
 
+        $this->bus = $this->prophet->prophesize(MessageBusInterface::class);
+
         $this->validator = $this->prophet->prophesize(ValidatorInterface::class);
 
         $this->userRepository = $this->prophet->prophesize(UserRepositoryInterface::class);
 
-        $this->handler = new UserRegenerateEmailValidationSecretCommandHandler($this->entityManager->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
+        $this->handler = new UserRegenerateEmailValidationSecretCommandHandler($this->entityManager->reveal(), $this->bus->reveal(), $this->validator->reveal(), $this->userRepository->reveal());
     }
 
     public function tearDown(): void
@@ -68,6 +75,8 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
 
         $this->entityManager->flush()->shouldBeCalledOnce();
 
+        $this->bus->dispatch(Argument::type(UserRegenerateEmailValidationSecretMessage::class))->shouldBeCalledOnce()->willReturn(new Envelope(new UserRegenerateEmailValidationSecretMessage($this->user->getId())));
+
         $this->handler->handle($this->command);
 
         $this->assertFalse($this->user->isEmailValidated());
@@ -84,6 +93,8 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
 
         $this->entityManager->flush()->shouldNotBeCalled();
 
+        $this->bus->dispatch(Argument::type(UserRegenerateEmailValidationSecretMessage::class))->shouldNotBeCalled();
+
         $this->expectException(ValidatorException::class);
 
         $this->handler->handle($this->command);
@@ -96,6 +107,8 @@ final class UserRegenerateEmailValidationSecretCommandHandlerTest extends TestCa
         $this->userRepository->findOne($this->command->id)->shouldBeCalledOnce()->willThrow(new NoResultException());
 
         $this->entityManager->flush()->shouldNotBeCalled();
+
+        $this->bus->dispatch(Argument::type(UserRegenerateEmailValidationSecretMessage::class))->shouldNotBeCalled();
 
         $this->expectException(NoResultException::class);
 

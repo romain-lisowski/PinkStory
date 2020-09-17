@@ -8,10 +8,13 @@ use App\Exception\ValidatorException;
 use App\User\Command\UserSignupCommand;
 use App\User\Command\UserSignupCommandHandler;
 use App\User\Entity\User;
+use App\User\Message\UserSignupMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophet;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -27,6 +30,7 @@ final class UserSignupCommandHandlerTest extends TestCase
     private UserSignupCommand $command;
     private UserSignupCommandHandler $handler;
     private $entityManager;
+    private $bus;
     private $passwordEncoder;
     private $validator;
 
@@ -41,11 +45,13 @@ final class UserSignupCommandHandlerTest extends TestCase
 
         $this->entityManager = $this->prophet->prophesize(EntityManagerInterface::class);
 
+        $this->bus = $this->prophet->prophesize(MessageBusInterface::class);
+
         $this->passwordEncoder = $this->prophet->prophesize(UserPasswordEncoderInterface::class);
 
         $this->validator = $this->prophet->prophesize(ValidatorInterface::class);
 
-        $this->handler = new UserSignupCommandHandler($this->entityManager->reveal(), $this->passwordEncoder->reveal(), $this->validator->reveal());
+        $this->handler = new UserSignupCommandHandler($this->entityManager->reveal(), $this->bus->reveal(), $this->passwordEncoder->reveal(), $this->validator->reveal());
     }
 
     public function tearDown(): void
@@ -64,6 +70,8 @@ final class UserSignupCommandHandlerTest extends TestCase
         $this->entityManager->persist(Argument::type(User::class))->shouldBeCalledOnce();
         $this->entityManager->flush()->shouldBeCalledOnce();
 
+        $this->bus->dispatch(Argument::type(UserSignupMessage::class))->shouldBeCalledOnce()->willReturn(new Envelope(new UserSignupMessage('uuid')));
+
         $this->handler->handle($this->command);
 
         $this->expectNotToPerformAssertions();
@@ -80,6 +88,8 @@ final class UserSignupCommandHandlerTest extends TestCase
         $this->entityManager->persist(Argument::type(User::class))->shouldNotBeCalled();
         $this->entityManager->flush()->shouldNotBeCalled();
 
+        $this->bus->dispatch(Argument::type(UserSignupMessage::class))->shouldNotBeCalled();
+
         $this->expectException(ValidatorException::class);
 
         $this->handler->handle($this->command);
@@ -95,6 +105,8 @@ final class UserSignupCommandHandlerTest extends TestCase
 
         $this->entityManager->persist(Argument::type(User::class))->shouldNotBeCalled();
         $this->entityManager->flush()->shouldNotBeCalled();
+
+        $this->bus->dispatch(Argument::type(UserSignupMessage::class))->shouldNotBeCalled();
 
         $this->expectException(ValidatorException::class);
 

@@ -12,3 +12,7 @@ tests:
 	APP_ENV=test ./bin/console doctrine:fixtures:load -n
 	APP_ENV=test ./bin/phpunit
 .PHONY: tests
+
+test:
+	APP_ENV=test ./bin/phpunit --filter $(CLASS)
+.PHONY: test

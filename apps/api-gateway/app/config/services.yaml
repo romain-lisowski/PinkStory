@@ -4,10 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    app_name: '%env(resolve:APP_NAME)%'
+    project_name: '%env(resolve:PROJECT_NAME)%'
     app_secret: '%env(resolve:APP_SECRET)%'
-    app_host_api_gateway: '%env(resolve:APP_HOST_API_GATEWAY)%'
-    app_host_front_web: '%env(resolve:APP_HOST_FRONT_WEB)%'
+    project_api_gateway_dsn: '%env(resolve:PROJECT_API_GATEWAY_DSN)%'
+    project_front_web_dsn: '%env(resolve:PROJECT_FRONT_WEB_DSN)%'
     jwt_private_key: '%env(resolve:JWT_PRIVATE_KEY)%'
     jwt_public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
     jwt_pass_phrase: '%env(resolve:JWT_PASS_PHRASE)%'

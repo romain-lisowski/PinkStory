@@ -23,9 +23,9 @@ final class JwtProvider
     {
         $payload = [
             'app_secret' => $this->params->get('app_secret'),
-            'iss' => $this->params->get('app_name'),
-            'sub' => $this->params->get('app_name'),
-            'aud' => $this->params->get('app_name'),
+            'iss' => $this->params->get('project_name'),
+            'sub' => $this->params->get('project_name'),
+            'aud' => $this->params->get('project_name'),
             'exp' => (new DateTime())->modify('+1 day')->getTimestamp(),
             'nbf' => (new DateTime())->getTimestamp(),
             'iat' => (new DateTime())->getTimestamp(),

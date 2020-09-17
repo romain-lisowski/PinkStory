@@ -31,11 +31,11 @@ final class MercureCommandHandler
             throw new ValidatorException($errors);
         }
 
-        $topics = ['https://'.$this->params->get('app_host_front_web').'/mercure'];
+        $topics = [$this->params->get('project_front_web_dsn').'/mercure'];
         $private = false;
 
         if (null !== $command->userId) {
-            $topics[] = 'https://'.$this->params->get('app_host_front_web').'/users/'.$command->userId;
+            $topics[] = $this->params->get('project_front_web_dsn').'/users/'.$command->userId;
             $private = true;
         }
 

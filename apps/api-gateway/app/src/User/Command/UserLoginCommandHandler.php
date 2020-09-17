@@ -51,16 +51,16 @@ final class UserLoginCommandHandler
                 'user_id' => $user->getId(),
                 'user_secret' => $user->getSecret(),
                 'app_secret' => $this->params->get('app_secret'),
-                'iss' => $this->params->get('app_name'),
+                'iss' => $this->params->get('project_name'),
                 'sub' => $user->getId(),
-                'aud' => $this->params->get('app_name'),
+                'aud' => $this->params->get('project_name'),
                 'exp' => (new DateTime())->modify('+1 month')->getTimestamp(),
                 'nbf' => (new DateTime())->getTimestamp(),
                 'iat' => (new DateTime())->getTimestamp(),
                 'jti' => Uuid::v4()->toRfc4122(),
                 'mercure' => [
                     'subscribe' => [
-                        'https://'.$this->params->get('app_host_front_web').'/users/'.$user->getId(), // mercure "target"
+                        $this->params->get('project_front_web_dsn').'/users/'.$user->getId(), // mercure "target"
                     ],
                 ],
             ];

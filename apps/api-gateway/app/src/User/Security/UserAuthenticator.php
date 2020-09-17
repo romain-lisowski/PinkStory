@@ -56,8 +56,8 @@ final class UserAuthenticator extends AbstractAuthenticator
             $payload = JWT::decode($token, file_get_contents($this->params->get('jwt_public_key')), [$this->params->get('jwt_algorithm')]);
 
             if ($payload->app_secret !== $this->params->get('app_secret')
-                || $payload->iss !== $this->params->get('app_name')
-                || $payload->aud !== $this->params->get('app_name')) {
+                || $payload->iss !== $this->params->get('project_name')
+                || $payload->aud !== $this->params->get('project_name')) {
                 throw new InvalidTokenException();
             }
 

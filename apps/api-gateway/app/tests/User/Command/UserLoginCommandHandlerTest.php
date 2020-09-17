@@ -77,8 +77,8 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn(true);
 
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
-        $this->params->get('app_host_front_web')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_host_front_web'));
+        $this->params->get('project_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('project_name'));
+        $this->params->get('project_front_web_dsn')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('project_front_web_dsn'));
         $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
         $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_pass_phrase'));
         $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
@@ -90,10 +90,10 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->assertEquals($payload->user_id, $this->user->getId());
         $this->assertEquals($payload->user_secret, $this->user->getSecret());
         $this->assertEquals($payload->app_secret, self::$container->getParameter('app_secret'));
-        $this->assertEquals($payload->iss, self::$container->getParameter('app_name'));
+        $this->assertEquals($payload->iss, self::$container->getParameter('project_name'));
         $this->assertEquals($payload->sub, $this->user->getId());
-        $this->assertEquals($payload->aud, self::$container->getParameter('app_name'));
-        $this->assertEquals($payload->mercure->subscribe[0], 'https://'.self::$container->getParameter('app_host_front_web').'/users/'.$this->user->getId());
+        $this->assertEquals($payload->aud, self::$container->getParameter('project_name'));
+        $this->assertEquals($payload->mercure->subscribe[0], self::$container->getParameter('project_front_web_dsn').'/users/'.$this->user->getId());
     }
 
     public function testHandleFailInvalidCommand(): void
@@ -105,8 +105,8 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldNotBeCalled();
 
         $this->params->get('app_secret')->shouldNotBeCalled();
-        $this->params->get('app_name')->shouldNotBeCalled();
-        $this->params->get('app_host_front_web')->shouldNotBeCalled();
+        $this->params->get('project_name')->shouldNotBeCalled();
+        $this->params->get('project_front_web_dsn')->shouldNotBeCalled();
         $this->params->get('jwt_private_key')->shouldNotBeCalled();
         $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
         $this->params->get('jwt_algorithm')->shouldNotBeCalled();
@@ -125,8 +125,8 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldNotBeCalled();
 
         $this->params->get('app_secret')->shouldNotBeCalled();
-        $this->params->get('app_name')->shouldNotBeCalled();
-        $this->params->get('app_host_front_web')->shouldNotBeCalled();
+        $this->params->get('project_name')->shouldNotBeCalled();
+        $this->params->get('project_front_web_dsn')->shouldNotBeCalled();
         $this->params->get('jwt_private_key')->shouldNotBeCalled();
         $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
         $this->params->get('jwt_algorithm')->shouldNotBeCalled();
@@ -145,8 +145,8 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn(false);
 
         $this->params->get('app_secret')->shouldNotBeCalled();
-        $this->params->get('app_name')->shouldNotBeCalled();
-        $this->params->get('app_host_front_web')->shouldNotBeCalled();
+        $this->params->get('project_name')->shouldNotBeCalled();
+        $this->params->get('project_front_web_dsn')->shouldNotBeCalled();
         $this->params->get('jwt_private_key')->shouldNotBeCalled();
         $this->params->get('jwt_pass_phrase')->shouldNotBeCalled();
         $this->params->get('jwt_algorithm')->shouldNotBeCalled();
@@ -165,8 +165,8 @@ final class UserLoginCommandHandlerTest extends KernelTestCase
         $this->passwordEncoder->isPasswordValid(Argument::type(User::class), $this->command->password)->shouldBeCalledOnce()->willReturn(true);
 
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
-        $this->params->get('app_host_front_web')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_host_front_web'));
+        $this->params->get('project_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('project_name'));
+        $this->params->get('project_front_web_dsn')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('project_front_web_dsn'));
         $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
         $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn('wrong_passphrase');
         $this->params->get('jwt_algorithm')->shouldNotBeCalled();

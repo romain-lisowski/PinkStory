@@ -40,7 +40,7 @@ final class JwtProviderTest extends KernelTestCase
     public function testInvokeSucess(): void
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(3)->willReturn(self::$container->getParameter('app_name'));
+        $this->params->get('project_name')->shouldBeCalledTimes(3)->willReturn(self::$container->getParameter('project_name'));
         $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
         $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_pass_phrase'));
         $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
@@ -50,16 +50,16 @@ final class JwtProviderTest extends KernelTestCase
         $payload = JWT::decode($token, file_get_contents(self::$container->getParameter('jwt_public_key')), [self::$container->getParameter('jwt_algorithm')]);
 
         $this->assertEquals($payload->app_secret, self::$container->getParameter('app_secret'));
-        $this->assertEquals($payload->iss, self::$container->getParameter('app_name'));
-        $this->assertEquals($payload->sub, self::$container->getParameter('app_name'));
-        $this->assertEquals($payload->aud, self::$container->getParameter('app_name'));
+        $this->assertEquals($payload->iss, self::$container->getParameter('project_name'));
+        $this->assertEquals($payload->sub, self::$container->getParameter('project_name'));
+        $this->assertEquals($payload->aud, self::$container->getParameter('project_name'));
         $this->assertEquals($payload->mercure->publish[0], '*');
     }
 
     public function testInvokeFailJWTEncode(): void
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(3)->willReturn(self::$container->getParameter('app_name'));
+        $this->params->get('project_name')->shouldBeCalledTimes(3)->willReturn(self::$container->getParameter('project_name'));
         $this->params->get('jwt_private_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_private_key'));
         $this->params->get('jwt_pass_phrase')->shouldBeCalledOnce()->willReturn('wrong_passphrase');
         $this->params->get('jwt_algorithm')->shouldNotBeCalled();

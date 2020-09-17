@@ -79,7 +79,7 @@ final class UserAuthenticatorTest extends KernelTestCase
     public function testAuthenticateSuccess(): void
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
+        $this->params->get('project_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('project_name'));
         $this->params->get('jwt_public_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_public_key'));
         $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
 
@@ -89,9 +89,9 @@ final class UserAuthenticatorTest extends KernelTestCase
             'user_id' => $this->user->getId(),
             'user_secret' => $this->user->getSecret(),
             'app_secret' => self::$container->getParameter('app_secret'),
-            'iss' => self::$container->getParameter('app_name'),
+            'iss' => self::$container->getParameter('project_name'),
             'sub' => $this->user->getId(),
-            'aud' => self::$container->getParameter('app_name'),
+            'aud' => self::$container->getParameter('project_name'),
             'exp' => (new DateTime())->modify('+1 month')->getTimestamp(),
             'nbf' => (new DateTime())->getTimestamp(),
             'iat' => (new DateTime())->getTimestamp(),
@@ -111,7 +111,7 @@ final class UserAuthenticatorTest extends KernelTestCase
     public function testAuthenticateFailInvalidToken(): void
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldNotBeCalled();
+        $this->params->get('project_name')->shouldNotBeCalled();
         $this->params->get('jwt_public_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_public_key'));
         $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
 
@@ -121,9 +121,9 @@ final class UserAuthenticatorTest extends KernelTestCase
             'user_id' => $this->user->getId(),
             'user_secret' => $this->user->getSecret(),
             'app_secret' => 'wrong_app_secret',
-            'iss' => self::$container->getParameter('app_name'),
+            'iss' => self::$container->getParameter('project_name'),
             'sub' => $this->user->getId(),
-            'aud' => self::$container->getParameter('app_name'),
+            'aud' => self::$container->getParameter('project_name'),
             'exp' => (new DateTime())->modify('+1 month')->getTimestamp(),
             'nbf' => (new DateTime())->getTimestamp(),
             'iat' => (new DateTime())->getTimestamp(),
@@ -143,7 +143,7 @@ final class UserAuthenticatorTest extends KernelTestCase
     public function testAuthenticateFailUsernameNotFound(): void
     {
         $this->params->get('app_secret')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('app_secret'));
-        $this->params->get('app_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('app_name'));
+        $this->params->get('project_name')->shouldBeCalledTimes(2)->willReturn(self::$container->getParameter('project_name'));
         $this->params->get('jwt_public_key')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_public_key'));
         $this->params->get('jwt_algorithm')->shouldBeCalledOnce()->willReturn(self::$container->getParameter('jwt_algorithm'));
 
@@ -153,9 +153,9 @@ final class UserAuthenticatorTest extends KernelTestCase
             'user_id' => $this->user->getId(),
             'user_secret' => 'wrong_user_secret',
             'app_secret' => self::$container->getParameter('app_secret'),
-            'iss' => self::$container->getParameter('app_name'),
+            'iss' => self::$container->getParameter('project_name'),
             'sub' => $this->user->getId(),
-            'aud' => self::$container->getParameter('app_name'),
+            'aud' => self::$container->getParameter('project_name'),
             'exp' => (new DateTime())->modify('+1 month')->getTimestamp(),
             'nbf' => (new DateTime())->getTimestamp(),
             'iat' => (new DateTime())->getTimestamp(),

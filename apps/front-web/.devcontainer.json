@@ -11,5 +11,12 @@
 		"nucllear.vscode-extension-auto-import",
 		"visualstudioexptteam.vscodeintellicode",
 		"editorconfig.editorconfig"
-	]
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{
+				"mode": "auto"
+			}
+		],
+	}
 }

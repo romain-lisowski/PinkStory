@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     processForm() {
-      ApiUsers.updateEmail(this.email)
+      ApiUsers.updateEmail(this.$store.state.jwt, this.email)
       this.$store.dispatch('logout')
       this.$router.push({ name: 'Auth' })
     },

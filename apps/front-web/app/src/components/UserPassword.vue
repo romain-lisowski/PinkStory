@@ -40,6 +40,7 @@ export default {
   methods: {
     processForm() {
       ApiUsers.updatePassword(
+        this.$store.state.jwt,
         this.passwordOld,
         this.passwordNew,
         this.passwordNewConfirm,

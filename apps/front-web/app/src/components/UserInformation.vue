@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     processForm() {
-      ApiUsers.updateInformation(this.name)
+      ApiUsers.updateInformation(this.$store.state.jwt, this.name)
     },
   },
 }

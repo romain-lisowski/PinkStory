@@ -12,7 +12,8 @@ export default {
       headers: dataHeaders,
     })
 
-    return response.json()
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
   async signUp(name, email, password, passwordConfirm) {
@@ -29,15 +30,20 @@ export default {
       headers: dataHeaders,
     })
 
-    return response.json()
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async current() {
-    const response = await fetch(`${baseUrl}/users/current`)
-    return response.json()
+  async current(jwt) {
+    const response = await fetch(`${baseUrl}/users/current`, {
+      headers: { ...dataHeaders, Authorization: `Bearer ${jwt}` },
+    })
+
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async updateEmail(email) {
+  async updateEmail(jwt, email) {
     const response = await fetch(`${baseUrl}/users/update-email`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -46,13 +52,14 @@ export default {
           second: email,
         },
       }),
-      headers: dataHeaders,
+      headers: { ...dataHeaders, Authorization: `Bearer ${jwt}` },
     })
 
-    return response.json()
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async updatePassword(passwordOld, passwordNew, passwordNewConfirm) {
+  async updatePassword(jwt, passwordOld, passwordNew, passwordNewConfirm) {
     const response = await fetch(`${baseUrl}/users/update-password`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -62,21 +69,23 @@ export default {
           second: passwordNewConfirm,
         },
       }),
-      headers: dataHeaders,
+      headers: { ...dataHeaders, Authorization: `Bearer ${jwt}` },
     })
 
-    return response.json()
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async updateInformation(name) {
+  async updateInformation(jwt, name) {
     const response = await fetch(`${baseUrl}/users/update-information`, {
       method: 'PATCH',
       body: JSON.stringify({
         name,
       }),
-      headers: dataHeaders,
+      headers: { ...dataHeaders, Authorization: `Bearer ${jwt}` },
     })
 
-    return response.json()
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
   },
 }

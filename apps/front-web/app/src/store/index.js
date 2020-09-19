@@ -14,12 +14,16 @@ export default new Vuex.Store({
   },
   actions: {
     async login({ commit }, { email, password }) {
-      const response = await ApiUsers.login(email, password)
-      if (response) {
-        const jwt = response.token
-        localStorage.setItem('user', JSON.stringify({ email, password }))
+      // get jwt
+      const responseLogin = await ApiUsers.login(email, password)
+      if (responseLogin.ok) {
+        const jwt = responseLogin.token
+        // get user
+        const responseCurrent = await ApiUsers.current(jwt)
+        const { name } = responseCurrent.user
+        localStorage.setItem('user', JSON.stringify({ email, name }))
         localStorage.setItem('jwt', JSON.stringify(jwt))
-        commit('loginSuccess', { email, password, jwt })
+        commit('loginSuccess', { email, name, jwt })
       } else {
         commit('loginFailure')
       }
@@ -31,8 +35,8 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    loginSuccess(state, { email, password, jwt }) {
-      state.user = { email, password }
+    loginSuccess(state, { email, name, jwt }) {
+      state.user = { email, name }
       state.jwt = jwt
     },
     loginFailure(state) {

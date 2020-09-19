@@ -5,19 +5,34 @@
       <div>
         <label>
           Current password :
-          <input type="password" name="password-old" v-model="passwordOld" />
-        </label>
+          <input
+            type="password"
+            name="password-old"
+            v-model="passwordOld"
+            :autocomplete="'current-password'"
+          />
+       </label>
       </div>
       <div>
         <label>
           New password :
-          <input type="password" name="password-new" v-model="passwordNew" />
+          <input
+            type="password"
+            name="password-new"
+            v-model="passwordNew"
+            :autocomplete="'new-password'"
+          />
         </label>
       </div>
       <div>
         <label>
           Confirm new password :
-          <input type="password" name="password-new-confirm" v-model="passwordNewConfirm" />
+          <input
+            type="password"
+            name="password-new-confirm"
+            v-model="passwordNewConfirm"
+            :autocomplete="'new-password'"
+          />
         </label>
       </div>
       <button type="submit">Update</button>

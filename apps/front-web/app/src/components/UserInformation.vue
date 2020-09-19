@@ -5,7 +5,7 @@
       <div>
         <label>
           Pseudo :
-          <input type="text" name="name" v-model="name" />
+          <input type="text" name="name" v-model="name" :autocomplete="'nickname'" />
         </label>
       </div>
       <button type="submit">Update</button>

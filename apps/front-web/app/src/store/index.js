@@ -15,7 +15,6 @@ export default new Vuex.Store({
   actions: {
     async login({ commit }, { email, password }) {
       const response = await ApiUsers.login(email, password)
-      console.log(response)
       if (response) {
         const jwt = response.token
         localStorage.setItem('user', JSON.stringify({ email, password }))

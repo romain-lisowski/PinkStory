@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="loggedIn">
-      Logged as : {{ userLoggedIn.email }}
+      Logged as : {{ userLoggedIn.email }}({{ userLoggedIn.name }})
       <button type="button" @click="logout">Logout</button>
       <nav>
         Nav :

@@ -6,9 +6,10 @@
 	"shutdownAction": "none",
 	"extensions": [
 		"octref.vetur",
-		"esbenp.prettier-vscode",
 		"dbaeumer.vscode-eslint",
 		"eg2.vscode-npm-script",
-		"nucllear.vscode-extension-auto-import"
+		"nucllear.vscode-extension-auto-import",
+		"visualstudioexptteam.vscodeintellicode",
+		"editorconfig.editorconfig"
 	]
 }

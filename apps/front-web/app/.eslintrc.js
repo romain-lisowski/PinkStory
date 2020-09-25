@@ -17,6 +17,6 @@ module.exports = {
     'no-shadow': 'off',
     "semi": ["error", "never"],
     "indent": ["error", 2],
-    "max-len": ["error", 120, 2]
+    "max-len": ["error", 240, 2]
   },
 };

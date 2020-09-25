@@ -1,33 +1,59 @@
 <template>
   <form @submit.prevent="processForm">
     <div>
-      <h2>Sign up :</h2>
-      <div>
-        <label>
-          Pseudo :
-          <input type="text" name="name" v-model="name" />
+      <h3 class="text-gray-700 font-semibold text-2xl mt-2">
+        Sign up
+      </h3>
+      <div class="m-5 flex justify-end">
+        <label class="flex flex-1 text-gray-700 font-normal">
+          <input
+            placeholder="Pseudo"
+            type="text"
+            name="name"
+            v-model="name"
+            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
+          />
         </label>
       </div>
-      <div>
-        <label>
-          Email :
-          <input type="email" name="email" v-model="email" />
+      <div class="m-5 flex justify-end">
+        <label class="flex flex-1 text-gray-700 font-normal">
+          <input
+            placeholder="Email"
+            type="email"
+            name="email"
+            v-model="email"
+            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
+          />
         </label>
       </div>
-      <div>
-        <label>
-          Password :
-          <input type="password" name="password" v-model="password" :autocomplete="'autocomplete'"/>
+      <div class="m-5 flex justify-end">
+        <label class="flex flex-1 text-gray-700 font-normal">
+          <input
+            placeholder="Password"
+            type="password"
+            name="password"
+            v-model="password" autocomplete="'autocomplete'"
+            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
+          />
         </label>
       </div>
-      <div>
-        <label>
-          Confirm password :
-          <input type="password" name="passwordConfirm" v-model="passwordConfirm" :autocomplete="'autocomplete'"/>
+      <div class="m-5 flex justify-end">
+        <label class="flex flex-1 text-gray-700 font-normal">
+          <input
+            placeholder="Confirm password"
+            type="password"
+            name="passwordConfirm"
+            v-model="passwordConfirm" autocomplete="'autocomplete'"
+            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
+          />
         </label>
       </div>
     </div>
-    <button type="submit">Submit</button>
+    <button
+     type="submit"
+     class="mt-2 mb-4 bg-transparent text-gray-700 hover:text-white py-2 px-4 border border-pink-400 hover:border-transparent hover:bg-pink-400 rounded-md"
+    >
+      Submit</button>
   </form>
 </template>
 

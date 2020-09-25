@@ -1,9 +1,13 @@
 <template>
   <div class="auth">
-    <h2>Authentification</h2>
+    <h2 class="text-gray-700 my-5 font-bold text-3xl">
+      Authentification
+    </h2>
     <Header />
-    <Login />
-    <SignUp />
+    <div class="flex flex-row justify-center ">
+      <Login class="w-1/3 shadow-xs border rounded-md border-gray-400 mr-4 p-2" />
+      <SignUp class="w-1/3 shadow-xs border rounded-md border-gray-400 ml-4 p-2"/>
+    </div>
   </div>
 </template>
 

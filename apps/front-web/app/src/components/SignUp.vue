@@ -1,57 +1,58 @@
 <template>
   <form @submit.prevent="processForm">
     <div>
-      <h3 class="text-gray-700 font-semibold text-2xl mt-2">
+      <h3 class="text-psblack font-semibold text-2xl mt-2">
         {{ $t('sign-up') }}
       </h3>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700 font-normal">
+        <label class="flex flex-1 text-psblack font-normal">
           <input
-            v-bind:placeholder="$t('pseudo')"
+            v-model="name"
+            :placeholder="$t('pseudo')"
             type="text"
             name="name"
-            v-model="name"
-            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
-          />
+            class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
+          >
         </label>
       </div>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700 font-normal">
+        <label class="flex flex-1 text-psblack font-normal">
           <input
-            v-bind:placeholder="$t('email')"
+            v-model="email"
+            :placeholder="$t('email')"
             type="email"
             name="email"
-            v-model="email"
-            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
-          />
+            class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
+          >
         </label>
       </div>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700 font-normal">
+        <label class="flex flex-1 text-psblack font-normal">
           <input
-            v-bind:placeholder="$t('password')"
+            v-model="password"
+            :placeholder="$t('password')"
             type="password"
             name="password"
-            v-model="password" autocomplete="'autocomplete'"
-            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
-          />
+            autocomplete="'autocomplete'"
+            class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
+          >
         </label>
       </div>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700 font-normal">
+        <label class="flex flex-1 text-psblack font-normal">
           <input
-            v-bind:placeholder="$t('confirm')"
+            v-model="passwordConfirm"
+            :placeholder="$t('confirm')"
             type="password"
             name="passwordConfirm"
-            v-model="passwordConfirm" autocomplete="'autocomplete'"
-            class="flex-1 border rounded-md placeholder-gray-600 border-gray-400 p-2"
-          />
+            autocomplete="'autocomplete'"
+            class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
+          >
         </label>
       </div>
     </div>
     <button
-     type="submit"
-     class="mt-2 mb-4 bg-transparent text-gray-700 hover:text-white py-2 px-4 border border-pink-400 hover:border-transparent hover:bg-pink-400 rounded-md"
+      type="submit"
     >
       {{ $t('submit') }}
     </button>

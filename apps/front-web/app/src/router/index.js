@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
+import Home from '@/views/Home.vue'
 import Auth from '@/views/Auth.vue'
 import User from '@/views/User.vue'
 
@@ -9,6 +10,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'Home',
+    component: Home,
+  },
+  {
+    path: '/authentification',
     name: 'Auth',
     component: Auth,
   },

@@ -1,50 +1,49 @@
 <template>
   <div>
-    <h3 class="text-gray-700 font-semibold text-2xl mt-2">
-      {{ $t('password')}}
+    <h3 class="text-psblack font-semibold text-2xl mt-2">
+      {{ $t('password') }}
     </h3>
     <form @submit.prevent="processForm">
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700">
+        <label class="flex flex-1 text-psblack">
           <input
-            v-bind:placeholder="$t('current-password')"
+            v-model="passwordOld"
+            :placeholder="$t('current-password')"
             type="password"
             name="password-old"
-            v-model="passwordOld"
             :autocomplete="'current-password'"
-            class="flex-1 border rounded-md border-gray-400 placeholder-gray-600 p-2"
-          />
-       </label>
-      </div>
-      <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700">
-          <input
-            v-bind:placeholder="$t('new-password')"
-            type="password"
-            name="password-new"
-            v-model="passwordNew"
-            :autocomplete="'new-password'"
-            class="flex-1 border rounded-md border-gray-400 placeholder-gray-600 p-2"
-          />
+            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+          >
         </label>
       </div>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700">
+        <label class="flex flex-1 text-psblack">
           <input
-            v-bind:placeholder="$t('confirm-new-password')"
+            v-model="passwordNew"
+            :placeholder="$t('new-password')"
+            type="password"
+            name="password-new"
+            :autocomplete="'new-password'"
+            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+          >
+        </label>
+      </div>
+      <div class="m-5 flex justify-end">
+        <label class="flex flex-1 text-psblack">
+          <input
+            v-model="passwordNewConfirm"
+            :placeholder="$t('confirm-new-password')"
             type="password"
             name="password-new-confirm"
-            v-model="passwordNewConfirm"
             :autocomplete="'new-password'"
-            class="flex-1 border rounded-md border-gray-400 placeholder-gray-600 p-2"
-          />
+            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+          >
         </label>
       </div>
       <button
         type="submit"
-        class="m-5 bg-transparent hover:bg-pink-400 text-gray-700 hover:text-white py-2 px-4 border border-pink-400 hover:border-transparent rounded-md"
       >
-        {{ $t('update')}}
+        {{ $t('update') }}
       </button>
     </form>
   </div>

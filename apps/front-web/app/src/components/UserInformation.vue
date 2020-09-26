@@ -1,26 +1,25 @@
 <template>
   <div>
-    <h3 class="text-gray-700 font-semibold text-2xl mt-2">
-      {{ $t('Informations')}}
+    <h3 class="text-psblack font-semibold text-2xl mt-2">
+      {{ $t('Informations') }}
     </h3>
     <form @submit.prevent="processForm">
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-gray-700">
+        <label class="flex flex-1 text-psblack">
           <input
+            v-model="name"
             placeholder="Pseudo"
             type="text"
             name="name"
-            v-model="name"
             :autocomplete="'nickname'"
-            class="flex-1 border rounded-md border-gray-400 placeholder-gray-600 p-2"
-          />
+            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+          >
         </label>
       </div>
       <button
         type="submit"
-        class="m-5 bg-transparent hover:bg-pink-400 text-gray-700 hover:text-white py-2 px-4 border border-pink-400 hover:border-transparent rounded-md"
       >
-        {{ $t('update')}}
+        {{ $t('update') }}
       </button>
     </form>
   </div>

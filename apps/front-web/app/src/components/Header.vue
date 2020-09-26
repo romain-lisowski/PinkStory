@@ -16,28 +16,28 @@
       <div class="text-lg lg:flex-grow">
         <div v-if="loggedIn">
           <div class="p-3 cursor-pointer hover:underline block mt-4 lg:inline-block lg:mt-0 text-gray-700 mr-4 line-through">
-            Top rated
+            {{ $t('top-rated') }}
           </div>
           <div class="p-3 cursor-pointer hover:underline block mt-4 lg:inline-block lg:mt-0 text-gray-700 mr-4 line-through">
-            Last stories
+            {{ $t('last-stories') }}
           </div>
           <div class="p-3 cursor-pointer hover:underline block mt-4 lg:inline-block lg:mt-0 text-gray-700 mr-4 line-through">
-            Categories
+            {{ $t('categories') }}
           </div>
           <div class="p-3 cursor-pointer hover:underline block mt-4 lg:inline-block lg:mt-0 text-gray-700 mr-4 line-through">
-            Author
+            {{ $t('authors') }}
           </div>
           <router-link
             :to="{ name: 'Auth' }"
             class="p-3 cursor-pointer hover:underline block mt-4 lg:inline-block lg:mt-0 text-gray-700 mr-4"
           >
-            Authentification
+            {{ $t('authentification') }}
           </router-link>
           <router-link
             :to="{ name: 'User' }"
             class="p-3 cursor-pointer hover:underline block mt-4 lg:inline-block lg:mt-0 text-gray-700 mr-4"
           >
-            Profile
+            {{ $t('profile') }}
           </router-link>
         </div>
       </div>
@@ -50,7 +50,9 @@
             type="button"
             @click="logout"
             class="flex items-center justify-center text-sm px-4 py-3 leading-none border rounded-md text-gray-700 border-pink-400 hover:border-transparent hover:text-white hover:bg-pink-400 mt-4 lg:mt-0"
-          >Logout</button>
+          >
+            {{ $t('logout') }}
+          </button>
       </div>
     </div>
   </nav>
@@ -75,3 +77,17 @@ export default {
   },
 }
 </script>
+
+<i18n>
+{
+  "fr": {
+    "top-rated": "Mieux notées",
+    "last-stories": "Dernières histoires",
+    "categories": "Catégories",
+    "authors": "Auteurs",
+    "authentification": "Authentification",
+    "profile": "Profile",
+    "logout": "Deconnexion"
+  }
+}
+</i18n>

@@ -2,12 +2,12 @@
   <form @submit.prevent="processForm">
     <div>
       <h3 class="text-gray-700 font-semibold text-2xl mt-2">
-        Login
+        {{ $t('login') }}
       </h3>
       <div class="m-5 flex justify-end">
         <label class="flex flex-1 text-gray-700">
           <input
-            placeholder="Email"
+            v-bind:placeholder="$t('email')"
             type="email"
             name="email"
             v-model="email"
@@ -18,7 +18,7 @@
       <div class="m-5 flex justify-end">
         <label class="flex flex-1 text-gray-700">
           <input
-            placeholder="Password"
+            v-bind:placeholder="$t('password')"
             type="password"
             name="password"
             v-model="password"
@@ -32,7 +32,7 @@
       type="submit"
       class="m-5 bg-transparent hover:bg-pink-400 text-gray-700 hover:text-white py-2 px-4 border border-pink-400 hover:border-transparent rounded-md"
     >
-      Connexion
+      {{ $t('connexion') }}
     </button>
   </form>
 </template>
@@ -53,3 +53,14 @@ export default {
   },
 }
 </script>
+
+<i18n>
+{
+  "fr": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Mot de passe",
+    "connexion": "Connexion"
+  }
+}
+</i18n>

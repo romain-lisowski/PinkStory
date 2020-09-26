@@ -1,7 +1,7 @@
 <template>
   <div class="auth">
     <h2 class="text-gray-700 my-5 font-bold text-3xl">
-      Authentification
+      {{ $t('authentification') }}
     </h2>
     <Header />
     <div class="flex flex-row justify-center ">
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-
 import Login from '@/components/Login.vue'
 import SignUp from '@/components/SignUp.vue'
 
@@ -24,3 +23,11 @@ export default {
   },
 }
 </script>
+
+<i18n>
+{
+  "fr": {
+    "authentification": "Authentification"
+  }
+}
+</i18n>

@@ -1,13 +1,13 @@
 <template>
   <div>
     <h3 class="text-gray-700 font-semibold text-2xl mt-2">
-      Update email
+      {{ $t('Email')}}
     </h3>
     <form @submit.prevent="processForm">
       <div class="m-5 flex justify-end">
         <label class="flex flex-1 text-gray-700">
           <input
-            placeholder="New email"
+            v-bind:placeholder="$t('new-email')"
             type="email"
             name="email"
             v-model="email"
@@ -19,7 +19,7 @@
         type="submit"
         class="m-5 bg-transparent hover:bg-pink-400 text-gray-700 hover:text-white py-2 px-4 border border-pink-400 hover:border-transparent rounded-md"
       >
-        Update
+        {{ $t('update') }}
       </button>
     </form>
   </div>
@@ -44,3 +44,13 @@ export default {
   },
 }
 </script>
+
+<i18n>
+{
+  "fr": {
+    "email": "Email",
+    "new-email": "Nouvel email",
+    "update": "Modifier"
+  }
+}
+</i18n>

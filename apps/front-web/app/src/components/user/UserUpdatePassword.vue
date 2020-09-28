@@ -53,7 +53,7 @@
 import ApiUsers from '@/api/ApiUsers'
 
 export default {
-  name: 'UserPassword',
+  name: 'UserUpdatePassword',
   data() {
     return {
       passwordOld: '',

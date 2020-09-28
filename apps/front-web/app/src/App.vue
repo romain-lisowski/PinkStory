@@ -3,21 +3,21 @@
     id="app"
     class="text-center flex flex-col min-h-screen"
   >
-    <Header />
+    <LayoutHeader />
     <router-view class="font-ps flex-grow" />
-    <Footer />
+    <LayoutFooter />
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+import LayoutHeader from '@/components/layout/LayoutHeader.vue'
+import LayoutFooter from '@/components/layout/LayoutFooter.vue'
 
 export default {
   name: 'App',
   components: {
-    Header,
-    Footer,
+    LayoutHeader,
+    LayoutFooter,
   },
 }
 </script>

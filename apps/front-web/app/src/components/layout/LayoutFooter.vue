@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'LayoutFooter',
   computed: {
     userLoggedIn() {
       return this.$store.state.user

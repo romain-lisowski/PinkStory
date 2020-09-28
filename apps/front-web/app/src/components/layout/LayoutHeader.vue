@@ -1,6 +1,16 @@
 <template>
-  <header class="flex shadow-sm items-center justify-between flex-wrap bg-white p-4">
-    <div class="flex items-center flex-shrink-0 mr-6 font-extrabold text-4xl">
+  <header
+    class="flex  items-center shadow-md justify-between flex-wrap bg-white p-4 bg-opacity-75 sticky top-0"
+  >
+    <div
+      class="
+    flex
+    items-center
+    flex-shrink-0
+    mr-6
+    font-extrabold
+    text-4xl"
+    >
       <router-link
         :to="{ name: 'Home' }"
         class="text-psred tracking-tight pl-8"
@@ -67,7 +77,7 @@
 
 <script>
 export default {
-  name: 'Header',
+  name: 'LayoutHeader',
   computed: {
     userLoggedIn() {
       return this.$store.state.user

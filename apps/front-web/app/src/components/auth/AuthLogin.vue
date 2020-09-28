@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'AuthLogin',
   data() {
     return {
       email: '',

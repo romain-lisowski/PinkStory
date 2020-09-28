@@ -4,21 +4,21 @@
       {{ $t('authentification') }}
     </h2>
     <div class="flex flex-row justify-center ">
-      <Login class="w-1/3 shadow-xs border rounded-md border-gray-400 mr-4 p-2" />
-      <SignUp class="w-1/3 shadow-xs border rounded-md border-gray-400 ml-4 p-2" />
+      <AuthLogin class="w-1/3 shadow-xs border rounded-md border-gray-400 mr-4 p-2" />
+      <AuthSignUp class="w-1/3 shadow-xs border rounded-md border-gray-400 ml-4 p-2" />
     </div>
   </div>
 </template>
 
 <script>
-import Login from '@/components/Login.vue'
-import SignUp from '@/components/SignUp.vue'
+import AuthLogin from '@/components/auth/AuthLogin.vue'
+import AuthSignUp from '@/components/auth/AuthSignUp.vue'
 
 export default {
   name: 'Auth',
   components: {
-    Login,
-    SignUp,
+    AuthLogin,
+    AuthSignUp,
   },
 }
 </script>

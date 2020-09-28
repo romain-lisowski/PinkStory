@@ -1,17 +1,16 @@
 <template>
   <div>
     <h3 class="text-psblack font-semibold text-2xl mt-2">
-      {{ $t('Informations') }}
+      {{ $t('Email') }}
     </h3>
     <form @submit.prevent="processForm">
       <div class="m-5 flex justify-end">
         <label class="flex flex-1 text-psblack">
           <input
-            v-model="name"
-            placeholder="Pseudo"
-            type="text"
-            name="name"
-            :autocomplete="'nickname'"
+            v-model="email"
+            :placeholder="$t('new-email')"
+            type="email"
+            name="email"
             class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
           >
         </label>
@@ -29,15 +28,17 @@
 import ApiUsers from '@/api/ApiUsers'
 
 export default {
-  name: 'UserInformation',
+  name: 'UserUpdateEmail',
   data() {
     return {
-      name: this.$store.state.user.name,
+      email: this.$store.state.user.email,
     }
   },
   methods: {
     processForm() {
-      ApiUsers.updateInformation(this.$store.state.jwt, this.name)
+      ApiUsers.updateEmail(this.$store.state.jwt, this.email)
+      this.$store.dispatch('logout')
+      this.$router.push({ name: 'Auth' })
     },
   },
 }
@@ -46,8 +47,8 @@ export default {
 <i18n>
 {
   "fr": {
-    "informations": "Informations",
-    "pseudo": "Pseudo",
+    "email": "Email",
+    "new-email": "Nouvel email",
     "update": "Modifier"
   }
 }

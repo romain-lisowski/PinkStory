@@ -1,6 +1,7 @@
 <template>
   <header
-    class="flex  items-center shadow-md justify-between flex-wrap bg-white p-4 bg-opacity-75 sticky top-0"
+    :class="openMenu ? 'bg-opacity-100': 'bg-opacity-75'"
+    class="flex  items-center shadow-md justify-between flex-wrap bg-white p-4 sticky top-0"
   >
     <div
       class="
@@ -20,7 +21,10 @@
     </div>
 
     <div class="block lg:hidden">
-      <button class="flex items-center">
+      <button
+        class="flex items-center"
+        @click="toggleMenu"
+      >
         <svg
           class="fill-current h-3 w-3"
           viewBox="0 0 20 20"
@@ -29,7 +33,10 @@
       </button>
     </div>
 
-    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+    <div
+      :class="openMenu ? 'block': 'hidden'"
+      class="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
+    >
       <div class="text-2xl text-psred lg:flex-grow tracking-wide">
         <nav v-if="loggedIn">
           <router-link
@@ -78,6 +85,11 @@
 <script>
 export default {
   name: 'LayoutHeader',
+  data() {
+    return {
+      openMenu: false,
+    }
+  },
   computed: {
     userLoggedIn() {
       return this.$store.state.user
@@ -90,6 +102,9 @@ export default {
     logout() {
       this.$store.dispatch('logout')
       this.$router.push({ name: 'Auth' })
+    },
+    toggleMenu() {
+      this.openMenu = !this.openMenu
     },
   },
 }

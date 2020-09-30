@@ -6,8 +6,8 @@ module.exports = {
   },
 
   extends: [
-    'plugin:vue/essential',
-    '@vue/airbnb',
+    'plugin:vue/recommended',
+    '@vue/airbnb'
   ],
 
   parserOptions: {
@@ -23,9 +23,4 @@ module.exports = {
     indent: ['error', 2],
     'max-len': ['error', 240, 2],
   },
-
-  'extends': [
-    'plugin:vue/recommended',
-    '@vue/airbnb'
-  ]
 }

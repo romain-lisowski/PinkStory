@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gradient-to-r bg-no-repeat bg-color-white -mt-32"
+    class="bg-gradient-to-r bg-no-repeat bg-color-white -mt-32 mb-20"
     :style="{
       'background-position-x': '35rem',
       'background-size': '70%',
@@ -14,27 +14,31 @@
   >
     <div class="mx-12 pt-48">
       <h1 class="text-left text-psblack font-extrabold leading-none text-9xl w-3/5 font-psbold">
-        Chantage et soumission
+        {{ story.title }}
       </h1>
       <div class="text-left text-psblack font-extrabold text-4xl">
         18+
         <span class="font-normal mx-2">|</span>
-        26/09/2020
+        {{ story.date }}
         <span class="font-normal mx-2">|</span>
-        Hélène78
+        {{ story.author }}
+        <span
+          v-if="story.gender === 'female'"
+          class="font-medium"
+        >&#9792;</span><span
+          v-else
+          class="font-medium"
+        >&#9794;</span>
       </div>
       <div class="text-left text-psred-lighter text-4xl tracking-wide">
-        Hétéro, Triolisme, Hard et 4 autres
+        {{ story.categories }}
       </div>
       <div class="text-left mt-10 text-2xl tracking-wide text-psblack w-2/3 leading-10">
-        Cette histoire s'est passée l'an dernier et dure depuis.
-        Je me présente Estelle, 48 ans, mariée avec deux grandes filles de 26 et 23 ans.
-        Mon mari Marc et moi vivons dans un petit lotissement en région parisienne.
-        Ma grande fille Cathy est marié depuis deux ans avec Laurent, bel homme qu'elle a rencontré sur les bancs de la fac.
+        {{ story.abstract }}
       </div>
 
       <button class="block mt-8 mx-0">
-        Lire maintenant
+        {{ $t('read-now') }}
       </button>
     </div>
   </div>
@@ -44,5 +48,19 @@
 
 export default {
   name: 'StoryMain',
+  props: {
+    story: {
+      type: Object,
+      required: true,
+    },
+  },
 }
 </script>
+
+<i18n>
+{
+  "fr": {
+    "read-now": "Lire maintenant"
+  }
+}
+</i18n>

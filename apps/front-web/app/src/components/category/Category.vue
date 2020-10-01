@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-psgray mt-12 pb-4">
+  <div class="bg-psgray mt-16 pb-4">
     <div class="mx-12">
       <div class="flex justify-between mb-8 pt-8">
         <h3 class="text-5xl text-psblack font-psbold text-left ">
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import CategoryList from '@/components/story/CategoryList.vue'
+import CategoryList from '@/components/category/CategoryList.vue'
 
 export default {
   name: 'Category',

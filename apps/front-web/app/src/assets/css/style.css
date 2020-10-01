@@ -14,9 +14,14 @@
   src: url('../fonts/Poppins-Bold.ttf') format("truetype");
 }
 
+@font-face {
+  font-family: "Poppins-semibold";
+  src: url('../fonts/Poppins-SemiBold.ttf') format("truetype");
+}
+
 @layer base {
   button {
-    @apply text-white bg-psred rounded-lg m-1 py-5 px-8 text-xl font-light tracking-wide;
+    @apply text-white bg-psred rounded-lg m-1 py-5 px-6 text-xl font-light tracking-wide;
   }
 }
 

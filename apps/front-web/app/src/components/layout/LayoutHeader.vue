@@ -1,7 +1,7 @@
 <template>
   <header
-    :class="openMenu ? 'bg-opacity-100': 'bg-opacity-75'"
-    class="flex  items-center shadow-md justify-between flex-wrap bg-white p-4 sticky top-0"
+    :class="openMenu ? 'bg-opacity-100': 'bg-opacity-90'"
+    class="flex  items-center shadow-md justify-between flex-wrap bg-white p-4 sticky top-0 z-20"
   >
     <div
       class="
@@ -14,7 +14,7 @@
     >
       <router-link
         :to="{ name: 'Home' }"
-        class="text-psred tracking-tight pl-8"
+        class="text-psred tracking-tight pl-10"
       >
         PinkStory
       </router-link>
@@ -37,11 +37,11 @@
       :class="openMenu ? 'block': 'hidden'"
       class="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
     >
-      <div class="text-2xl text-psred lg:flex-grow tracking-wide">
+      <div class="text-xl text-psred lg:flex-grow tracking-wide font-ps">
         <nav v-if="loggedIn">
           <router-link
             :to="{ name: 'Home' }"
-            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 text-psblack bg-psgray rounded-lg"
+            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 rounded-lg border border-psred"
           >
             {{ $t('discover') }}
           </router-link>
@@ -52,17 +52,17 @@
             {{ $t('write') }}
           </div>
           <router-link
-            :to="{ name: 'Auth' }"
-            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4"
-          >
-            {{ $t('authentification') }}
-          </router-link>
-          <router-link
             :to="{ name: 'User' }"
-            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4"
+            class="p-3 cursor-pointer mt-4 block lg:mt-0 mr-4 lg:hidden"
           >
-            {{ $t('profile') }}
+            {{ $t('settings') }}
           </router-link>
+          <div
+            class="p-3 cursor-pointer mt-4 block lg:mt-0 mr-4 lg:hidden"
+            @click="logout"
+          >
+            {{ $t('logout') }}
+          </div>
         </nav>
       </div>
 
@@ -70,13 +70,39 @@
         v-if="loggedIn"
         class="flex flex-row"
       >
-        <button
-          type="button"
-          class="flex items-center justify-center"
-          @click="logout"
+        <div
+          class="bg-psred rounded-full h-16 w-16 items-center justify-center text-xl text-white
+         font-pssemibold cursor-pointer mr-8 hidden lg:flex"
+          @click="toggleUserMenu"
         >
-          {{ $t('logout') }}
-        </button>
+          {{ userLoggedIn.name[0] }}
+        </div>
+
+        <div
+          :class="openUserMenu ? 'block': 'hidden'"
+          class="absolute top-0 right-0 mt-24 px-8 py-4 bg-white opacity-90 rounded-md shadow-xl text-psred text-lg"
+        >
+          <router-link
+            :to="{ name: 'User' }"
+            class="cursor-pointer hover:underline pt-6"
+          >
+            {{ $t('settings') }}
+          </router-link>
+          <div
+            class="cursor-pointer hover:underline pt-6"
+            @click="logout"
+          >
+            {{ $t('logout') }}
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <router-link
+          :to="{ name: 'Auth' }"
+          class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 border border-psred rounded-lg text-psred"
+        >
+          {{ $t('connection') }}
+        </router-link>
       </div>
     </div>
   </header>
@@ -88,6 +114,7 @@ export default {
   data() {
     return {
       openMenu: false,
+      openUserMenu: false,
     }
   },
   computed: {
@@ -101,10 +128,13 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logout')
-      this.$router.push({ name: 'Auth' })
+      this.$router.push({ name: 'Home' })
     },
     toggleMenu() {
       this.openMenu = !this.openMenu
+    },
+    toggleUserMenu() {
+      this.openUserMenu = !this.openUserMenu
     },
   },
 }
@@ -116,8 +146,8 @@ export default {
     "discover": "Découvrir",
     "categories": "Catégories",
     "write": "Ecrire une histoire",
-    "authentification": "Authentification",
-    "profile": "Profile",
+    "connection": "Connexion",
+    "settings": "Préférences",
     "logout": "Deconnexion"
   }
 }

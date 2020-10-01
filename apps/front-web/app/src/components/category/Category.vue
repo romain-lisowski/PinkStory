@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-psgray mt-16 pb-4">
+  <div class="bg-psgray mt-16 pb-12 shadow-lg">
     <div class="mx-12">
-      <div class="flex justify-between mb-8 pt-8">
+      <div class="flex justify-between mb-8 pt-12">
         <h3 class="text-5xl text-psblack font-psbold text-left ">
-          Catégories
+          {{ $t('categories') }}
         </h3>
-        <a class="text-psred text-2xl pt-8 cursor-pointer">Trouver une histoire</a>
+        <a class="text-psred text-2xl pt-8 cursor-pointer">{{ $t('search-story') }} ></a>
       </div>
       <CategoryList :categories="category1" />
       <CategoryList :categories="category2" />
@@ -33,3 +33,12 @@ export default {
   },
 }
 </script>
+
+<i18n>
+{
+  "fr": {
+    "categories": "Catégories",
+    "search-story": "Rechercher des histoires"
+  }
+}
+</i18n>

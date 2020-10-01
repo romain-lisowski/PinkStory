@@ -19,6 +19,10 @@ module.exports = {
       fontFamily: {
         ps: ['Poppins', 'sans-serif'],
         psbold: ['Poppins-bold', 'sans-serif'],
+        pssemibold: ['Poppins-semibold'],
+      },
+      opacity: {
+        90: '0.90',
       },
     },
   },

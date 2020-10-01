@@ -3,7 +3,7 @@
     <div class="text-white font-extrabold text-xl pl-12">
       PinkStory
     </div>
-    <div class="text-white text-xs font-light pr-12">
+    <div class="text-white text-sm font-light pr-12">
       <span class="mx-1 text-sm font-normal">Thème : </span>
       <span class="mx-1 text-psred rounded-md bg-white px-2 py-1 font-normal">Auto</span>
       /

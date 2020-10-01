@@ -7,19 +7,19 @@
     >
       <span
         v-if="index == 0"
-        class="rounded-l-full rounded-r-full py-3 px-6 border bg-white border-gray-400 text-xl text-gray-500"
+        class="py-3 px-6 text-2xl text-psred font-pssemibold"
       >
-        {{ category }}
+        {{ category }} :
       </span>
       <span
         v-else-if="index == 1"
-        class="rounded-l-full rounded-r-full py-3 px-6 border bg-psred text-xl text-white"
+        class="rounded-lg py-3 px-6 border bg-psred text-xl text-white"
       >
         {{ category }}
       </span>
       <span
         v-else
-        class="rounded-l-full rounded-r-full py-3 px-6 border border-gray-400 text-xl text-psblack"
+        class="rounded-lg py-3 px-6 border bg-white text-xl text-gray-600"
       >
         {{ category }}
       </span>

@@ -10,7 +10,7 @@
     <div
       class="absolute top-0 right-0 bottom-0 left-0 ps-gradient"
     />
-    <div class="mx-12 pt-12 sm:pt-20 relative">
+    <div class="mx-12 pt-12 sm:pt-16 xl:pt-20 relative">
       <h1
         class="
         text-left
@@ -20,13 +20,14 @@
         leading-tight
         sm:leading-none
         text-5xl
-        sm:text-8xl
+        sm:text-7xl
+        xl:text-8xl
         xl:w-3/5
         font-psbold"
       >
         {{ story.title }}
       </h1>
-      <div class="text-left text-psblack dark:text-pswhite font-extrabold text-xl sm:text-3xl mt-2">
+      <div class="text-left text-psblack dark:text-pswhite font-extrabold text-xl sm:text-2xl xl:text-3xl mt-2">
         18+
         <span class="font-normal mx-2">|</span>
         {{ story.date }}
@@ -40,7 +41,7 @@
           class="font-medium"
         >&#9794;</span>
       </div>
-      <div class="text-left text-psred-lighter mt-2 text-2xl sm:text-4xl tracking-wide">
+      <div class="text-left text-psred-lighter mt-2 text-2xl sm:text-3xl xl:text-4xl tracking-wide">
         {{ story.categories }}
       </div>
       <RatingStars
@@ -53,14 +54,17 @@
       sm:text-left
       mt-8
       text-lg
-      sm:text-2xl
+      sm:text-xl
+      xl:text-2xl
       tracking-wide
       text-psblack
       dark:text-pswhite
       w-full
-      sm:w-2/3
+      sm:w-4/5
+      xl:w-2/3
       leading-6
-      sm:leading-10"
+      sm:leading-8
+      xl:leading-10"
       >
         {{ story.abstract }}
       </div>

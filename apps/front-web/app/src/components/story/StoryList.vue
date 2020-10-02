@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap text-left mt-4 sm:mt-8 -mx-6 pt-2 pl-2">
+  <div class="flex flex-wrap text-left mt-4 sm:mt-6 xl:mt-8 -mx-6 pt-2 pl-2">
     <StoryListItem
       v-for="(story, index) in stories"
       :key="index"

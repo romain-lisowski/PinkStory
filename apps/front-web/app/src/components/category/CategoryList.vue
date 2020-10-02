@@ -7,13 +7,13 @@
     >
       <span
         v-if="index == 0"
-        class="py-3 px-6 text-base sm:text-2xl text-psred font-pssemibold"
+        class="py-3 px-6 text-base sm:text-xl xl:text-2xl text-psred font-pssemibold"
       >
         {{ category }} :
       </span>
       <span
         v-else-if="index == 1"
-        class="rounded-xl py-2 px-5 sm:py-3 sm:px-6 bg-psred text-base sm:text-xl text-white"
+        class="rounded-xl py-2 px-5 sm:py-3 sm:px-6 bg-psred text-base sm:text-lg xl:text-xl text-white"
       >
         {{ category }}
       </span>
@@ -29,7 +29,8 @@
         dark:bg-pswhite
         dark:text-psblack-lighter
         text-base
-        sm:text-xl
+        sm:text-lg
+        xl:text-xl
         text-gray-600"
       >
         {{ category }}

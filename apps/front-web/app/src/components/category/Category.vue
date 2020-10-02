@@ -5,10 +5,12 @@
   >
     <div class="mx-12">
       <div class="flex justify-between mb-8 pt-12">
-        <h3 class="text-2xl sm:text-5xl text-psblack dark:text-pswhite font-psbold text-left ">
+        <h3 class="text-3xl sm:text-4xl xl:text-5xl text-psblack dark:text-pswhite font-psbold text-left ">
           {{ $t('categories') }}
         </h3>
-        <a class="text-psred text-sm sm:text-2xl pt-3 sm:pt-8 cursor-pointer">{{ $t('search-story') }} ></a>
+        <a class="text-psred text-lg sm:text-xl xl:text-2xl pt-2 sm:pt-4 xl:pt-6 cursor-pointer text-left sm:text-right">
+          {{ $t('search-story') }} >
+        </a>
       </div>
       <CategoryList :categories="category1" />
       <CategoryList :categories="category2" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-4">
+  <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4">
     <img
       class="rounded-2xl opacity-90 object-cover object-top h-48 sm:h-64 w-full"
       :src="require(`@/assets/images/${story.imagePath}`)"
@@ -27,7 +27,7 @@
     <div class="text-justify mt-4 tracking-wide text-psblack dark:text-pswhite">
       {{ story.abstract }}
     </div>
-    <div class="text-psred text-base sm:text-xl mt-2 sm:mt-4 pr-2 text-right">
+    <div class="text-psred text-base sm:text-lg xl:text-xl mt-2 sm:mt-3 xl:mt-4 pr-2 text-right">
       {{ $t('read-more') }} >
     </div>
   </div>

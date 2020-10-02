@@ -1,22 +1,14 @@
 <template>
   <div
+    id="main"
     class="mb-12 sm:mb-20 w-full relative"
   >
     <div
-      class="absolute top-0 right-0 bottom-0 w-2/3 lg:w-3/4 bg-center bg-cover opacity-50"
+      class="absolute top-0 right-0 bottom-0 w-2/3 lg:w-3/4 bg-center bg-cover opacity-75"
       :style="{'background-image': `url(${require('@/assets/images/1.jpg')})`}"
     />
     <div
-      class="absolute top-0 right-0 bottom-0 left-0"
-      :style="{
-        'background-image':
-          `radial-gradient(
-          ellipse farthest-side at 100% 20%,
-          rgba(34, 35, 35, 0) 0,
-          rgba(34, 35, 35, 0.4) 50%,
-          rgba(34, 35, 35, 1) 75%,
-          rgba(34, 35, 35, 1) 100%)`
-      }"
+      class="absolute top-0 right-0 bottom-0 left-0 ps-gradient"
     />
     <div class="mx-12 pt-12 sm:pt-20 relative">
       <h1
@@ -51,10 +43,9 @@
       <div class="text-left text-psred-lighter mt-2 text-2xl sm:text-4xl tracking-wide">
         {{ story.categories }}
       </div>
-
       <RatingStars
         :rating="story.rating"
-        class="w-3/5 sm:w-1/4 sm:-ml-2 mt-2"
+        class=" mt-2"
       />
 
       <div
@@ -73,7 +64,7 @@
       >
         {{ story.abstract }}
       </div>
-      <button class="block mt-8 mx-0 sm:py-5 sm:text-xl dark:text-pswhite">
+      <button class="block mt-8 mx-0 sm:py-5 sm:text-xl">
         {{ $t('read-now') }}
       </button>
     </div>
@@ -107,6 +98,31 @@ export default {
   },
 }
 </script>
+
+<style>
+  @media (prefers-color-scheme: light) {
+    .ps-gradient {
+      background-image: radial-gradient(
+        ellipse farthest-side at 100% 20%,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 1) 75%,
+        rgba(255, 255, 255, 1) 100%
+      )
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .ps-gradient {
+      background-image: radial-gradient(
+        ellipse farthest-side at 100% 20%,
+        rgba(34, 35, 35, 0) 0,
+        rgba(34, 35, 35, 0.4) 50%,
+        rgba(34, 35, 35, 1) 75%,
+        rgba(34, 35, 35, 1) 100%
+      )
+    }
+  }
+</style>
 
 <i18n>
 {

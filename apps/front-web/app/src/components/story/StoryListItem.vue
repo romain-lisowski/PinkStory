@@ -17,7 +17,6 @@
       <div class="flex-1">
         <RatingStars
           :rating="story.rating"
-          class="w-2/3 sm:w-full"
         />
       </div>
       <div class="text-base sm:text-lg mr-2">

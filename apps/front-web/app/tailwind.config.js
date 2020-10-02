@@ -4,6 +4,7 @@ module.exports = {
     extend: {
       colors: {
         psred: {
+          extralighter: '#f6dadc',
           lighter: '#e59197',
           default: '#dd6d74',
         },

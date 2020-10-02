@@ -1,10 +1,10 @@
 <template>
   <div class="mx-12">
-    <div class="flex flex-row justify-between mt-12">
-      <h3 class="text-5xl text-psblack font-psbold text-left ">
-        &#x2764; {{ $t('best-stories') }}
+    <div class="flex flex-col sm:flex-row justify-between mt-16">
+      <h3 class="text-3xl sm:text-5xl text-psblack dark:text-pswhite font-psbold text-left ">
+        {{ $t('best-stories') }}
       </h3>
-      <a class="text-psred text-2xl pt-4 cursor-pointer">
+      <a class="text-psred text-lg sm:text-2xl pt-2 sm:pt-4 cursor-pointer text-left sm:text-right">
         {{ $t('see-best-stories') }} ></a>
     </div>
     <StoryList />

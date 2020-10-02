@@ -21,7 +21,6 @@
 
 @layer base {
   button {
-    @apply text-white bg-psred rounded-lg m-1 py-5 px-6 text-xl font-light tracking-wide;
+    @apply text-white bg-psred rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide;
   }
 }
-

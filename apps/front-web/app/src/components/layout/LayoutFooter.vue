@@ -1,15 +1,15 @@
 <template>
-  <footer class="bg-psred h-10 py-10 flex flex-row items-center justify-between">
-    <div class="text-white font-extrabold text-xl pl-12">
+  <footer class="bg-psred h-10 py-8 sm:py-10 flex flex-row items-center justify-between">
+    <div class="text-white dark:text-psblack-lighter font-extrabold text-xl pl-12">
       PinkStory
     </div>
-    <div class="text-white text-sm font-light pr-12">
-      <span class="mx-1 text-sm font-normal">Thème : </span>
-      <span class="mx-1 text-psred rounded-md bg-white px-2 py-1 font-normal">Auto</span>
+    <div class="text-white dark:text-psblack-lighter text-sm font-light pr-12">
+      <span class="mx-1 text-sm font-normal">{{ $t('theme') }} : </span>
+      <span class="mx-1 text-psred rounded-md bg-white dark:bg-psblack-lighter px-2 py-1 font-normal">{{ $t('auto') }}</span>
       /
-      <span class="mx-1">Light</span>
+      <span class="mx-1">{{ $t('light') }}</span>
       /
-      <span class="mx-1">Dark</span>
+      <span class="mx-1">{{ $t('sombre') }}</span>
     </div>
   </footer>
 </template>
@@ -42,7 +42,10 @@ export default {
     "write": "Ecrire une histoire",
     "authentification": "Authentification",
     "profile": "Profile",
-    "logout": "Deconnexion"
+    "logout": "Deconnexion",
+    "theme": "Thème",
+    "light": "Claire",
+    "dark": "Sombre"
   }
 }
 </i18n>

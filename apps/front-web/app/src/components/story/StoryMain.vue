@@ -1,22 +1,40 @@
 <template>
   <div
-    class="bg-gradient-to-r bg-no-repeat bg-color-white -mt-32 mb-20"
-    :style="{
-      'background-position-x': '35rem',
-      'background-size': '70%',
-      'background-image':
-        `radial-gradient(
-          70% 50% at 70% 40%,
-          rgba(255, 255, 255, 0) 25%,
-          rgba(255, 255, 255, 1) 100%),
-        url(${require('@/assets/images/1.jpg')})`
-    }"
+    class="mb-12 sm:mb-20 w-full relative"
   >
-    <div class="mx-12 pt-48">
-      <h1 class="text-left text-psblack font-extrabold leading-none text-8xl w-3/5 font-psbold">
+    <div
+      class="absolute top-0 right-0 bottom-0 w-2/3 lg:w-3/4 bg-center bg-cover opacity-50"
+      :style="{'background-image': `url(${require('@/assets/images/1.jpg')})`}"
+    />
+    <div
+      class="absolute top-0 right-0 bottom-0 left-0"
+      :style="{
+        'background-image':
+          `radial-gradient(
+          ellipse farthest-side at 100% 20%,
+          rgba(34, 35, 35, 0) 0,
+          rgba(34, 35, 35, 0.4) 50%,
+          rgba(34, 35, 35, 1) 75%,
+          rgba(34, 35, 35, 1) 100%)`
+      }"
+    />
+    <div class="mx-12 pt-12 sm:pt-20 relative">
+      <h1
+        class="
+        text-left
+        text-psblack
+        dark:text-pswhite
+        font-extrabold
+        leading-tight
+        sm:leading-none
+        text-5xl
+        sm:text-8xl
+        xl:w-3/5
+        font-psbold"
+      >
         {{ story.title }}
       </h1>
-      <div class="text-left text-psblack font-extrabold text-3xl mt-2">
+      <div class="text-left text-psblack dark:text-pswhite font-extrabold text-xl sm:text-3xl mt-2">
         18+
         <span class="font-normal mx-2">|</span>
         {{ story.date }}
@@ -30,19 +48,32 @@
           class="font-medium"
         >&#9794;</span>
       </div>
-      <div class="text-left text-psred-lighter mt-2 text-4xl tracking-wide">
+      <div class="text-left text-psred-lighter mt-2 text-2xl sm:text-4xl tracking-wide">
         {{ story.categories }}
       </div>
 
       <RatingStars
         :rating="story.rating"
-        class="w-1/4 -ml-2 mt-2"
+        class="w-3/5 sm:w-1/4 sm:-ml-2 mt-2"
       />
 
-      <div class="text-left mt-8 text-2xl tracking-wide text-psblack w-2/3 leading-10">
+      <div
+        class="text-justify
+      sm:text-left
+      mt-8
+      text-lg
+      sm:text-2xl
+      tracking-wide
+      text-psblack
+      dark:text-pswhite
+      w-full
+      sm:w-2/3
+      leading-6
+      sm:leading-10"
+      >
         {{ story.abstract }}
       </div>
-      <button class="block mt-8 mx-0">
+      <button class="block mt-8 mx-0 sm:py-5 sm:text-xl dark:text-pswhite">
         {{ $t('read-now') }}
       </button>
     </div>

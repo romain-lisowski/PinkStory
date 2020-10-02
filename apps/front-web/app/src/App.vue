@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="text-center flex flex-col min-h-screen"
+    class="text-center flex flex-col min-h-screen bg-white dark:bg-psblack"
   >
     <LayoutHeader />
     <router-view class="font-ps flex-grow" />

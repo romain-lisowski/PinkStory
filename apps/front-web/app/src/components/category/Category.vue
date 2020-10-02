@@ -1,11 +1,14 @@
 <template>
-  <div class="bg-psgray mt-16 pb-12 shadow-lg">
+  <div
+    id="category"
+    class="bg-psgray dark:bg-psblack-lighter mt-4 sm:mt-16 pb-4 sm:pb-12"
+  >
     <div class="mx-12">
       <div class="flex justify-between mb-8 pt-12">
-        <h3 class="text-5xl text-psblack font-psbold text-left ">
+        <h3 class="text-2xl sm:text-5xl text-psblack dark:text-pswhite font-psbold text-left ">
           {{ $t('categories') }}
         </h3>
-        <a class="text-psred text-2xl pt-8 cursor-pointer">{{ $t('search-story') }} ></a>
+        <a class="text-psred text-sm sm:text-2xl pt-3 sm:pt-8 cursor-pointer">{{ $t('search-story') }} ></a>
       </div>
       <CategoryList :categories="category1" />
       <CategoryList :categories="category2" />

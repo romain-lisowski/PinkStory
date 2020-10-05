@@ -1,5 +1,5 @@
 {
-    "name": "Sporthub API Gateway",
+    "name": "PinkStory API Gateway",
     "dockerComposeFile": "./docker-compose.yml",
     "service": "php",
     "workspaceFolder": "/var/www",

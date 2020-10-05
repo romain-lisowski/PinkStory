@@ -2,18 +2,21 @@
   <div class="text-left sm:text-2xl">
     <span
       v-for="index in Math.floor(rating)"
-      :key="index"
+      :key="`empty-${index}`"
       class="text-psred"
-    >&#x2605;</span>
+      >&#x2605;</span
+    >
     <span
       v-if="rating % 1 > 0"
-      class="text-transparent bg-gradient-to-r from-psred  to-psred-extralighter bg-clip-text "
-    >&#x2605;</span>
+      class="text-transparent bg-gradient-to-r from-psred to-psred-extralighter bg-clip-text"
+      >&#x2605;</span
+    >
     <span
       v-for="index in 5 - Math.round(rating)"
-      :key="index"
+      :key="`full-${index}`"
       class="text-psred-extralighter"
-    >&#x2605;</span>
+      >&#x2605;</span
+    >
   </div>
 </template>
 

@@ -1,26 +1,48 @@
 @tailwind base;
 
-@tailwind components;
-
-@tailwind utilities;
-
 @font-face {
-  font-family: "Poppins";
-  src: url('../fonts/Poppins-Regular.ttf') format("truetype");
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "Poppins-bold";
-  src: url('../fonts/Poppins-Bold.ttf') format("truetype");
+  font-family: 'Poppins-bold';
+  src: url('../fonts/Poppins-Bold.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "Poppins-semibold";
-  src: url('../fonts/Poppins-SemiBold.ttf') format("truetype");
+  font-family: 'Poppins-semibold';
+  src: url('../fonts/Poppins-SemiBold.ttf') format('truetype');
 }
 
 @layer base {
   button {
-    @apply text-white bg-psred rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide;
+    @apply text-primary bg-psred rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide;
   }
 }
+
+:root {
+  --color-text-primary: rgb(2, 82, 204);
+  --color-text-secondary: rgb(221, 109, 116);
+  --color-text-default: #c4ff02;
+
+  --color-bg-primary: #0252cc;
+  --color-bg-primary-lighter: rgb(247, 247, 247);
+  --color-bg-secondary: rgb(221, 109, 116);
+  --color-bg-default: #c4ff02;
+}
+
+.theme-dark {
+  --color-text-primary: 34, 35, 35;
+  --color-text-secondary: rgb(221, 109, 116);
+  --color-text-default: rgb(229, 226, 226);
+
+  --color-bg-primary: rgb(34, 35, 35);
+  --color-bg-primary-lighter: rgb(40, 40, 40);
+  --color-bg-secondary: rgb(221, 109, 116);
+  --color-bg-default: rgb(229, 226, 226);
+}
+
+@tailwind components;
+
+@tailwind utilities;

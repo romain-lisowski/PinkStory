@@ -8,9 +8,12 @@ docker:symfony:build:latest:
       - master
     changes:
       - ./docker/symfony/*
+  variables:
+      IMAGE_NAME: $CI_REGISTRY_IMAGE/symfony
+      IMAGE_VERSION: latest
   script:
     - docker info
-    - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
-    - docker build -t ${CI_REGISTRY_IMAGE}-symfony:latest ./docker/symfony/
-    - docker push ${CI_REGISTRY_IMAGE}-symfony:latest
-    - docker logout ${CI_REGISTRY}
+    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t $IMAGE_NAME:$IMAGE_VERSION ./docker/symfony/
+    - docker push $IMAGE_NAME:$IMAGE_VERSION
+    - docker logout $CI_REGISTRY

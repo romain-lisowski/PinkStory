@@ -4,9 +4,15 @@
       {{ $t('update-profile') }}
     </h2>
     <div class="flex flex-col items-center justify-center">
-      <UserUpdateEmail class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2" />
-      <UserUpdatePassword class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2" />
-      <UserUpdateInformation class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2" />
+      <UserUpdateEmail
+        class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2"
+      />
+      <UserUpdatePassword
+        class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2"
+      />
+      <UserUpdateInformation
+        class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2"
+      />
     </div>
   </div>
 </template>

@@ -53,7 +53,7 @@ export default {
         story3: {
           author: 'Annizette',
           gender: 'female',
-          title: 'L\'initiation',
+          title: "L'initiation",
           categories: 'Soumission, Hard et 5 autres',
           rating: 4,
           nbComments: 2304,

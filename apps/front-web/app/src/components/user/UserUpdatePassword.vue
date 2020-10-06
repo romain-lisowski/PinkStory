@@ -13,7 +13,7 @@
             name="password-old"
             :autocomplete="'current-password'"
             class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
-          >
+          />
         </label>
       </div>
       <div class="m-5 flex justify-end">
@@ -25,7 +25,7 @@
             name="password-new"
             :autocomplete="'new-password'"
             class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
-          >
+          />
         </label>
       </div>
       <div class="m-5 flex justify-end">
@@ -37,12 +37,10 @@
             name="password-new-confirm"
             :autocomplete="'new-password'"
             class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
-          >
+          />
         </label>
       </div>
-      <button
-        type="submit"
-      >
+      <button type="submit">
         {{ $t('update') }}
       </button>
     </form>
@@ -67,7 +65,7 @@ export default {
         this.$store.state.jwt,
         this.passwordOld,
         this.passwordNew,
-        this.passwordNewConfirm,
+        this.passwordNewConfirm
       )
     },
   },

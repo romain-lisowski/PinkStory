@@ -13,12 +13,10 @@
             name="name"
             :autocomplete="'nickname'"
             class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
-          >
+          />
         </label>
       </div>
-      <button
-        type="submit"
-      >
+      <button type="submit">
         {{ $t('update') }}
       </button>
     </form>

@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="app"
-    class="text-center flex flex-col min-h-screen bg-primary"
-  >
+  <div id="app" class="text-center flex flex-col min-h-screen bg-primary">
     <LayoutHeader />
     <router-view class="font-ps flex-grow" />
     <LayoutFooter />
@@ -24,7 +21,10 @@ export default {
   },
   methods: {
     setTheme() {
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      if (
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      ) {
         console.log('dark')
         document.documentElement.classList.add('theme-dark')
       } else {

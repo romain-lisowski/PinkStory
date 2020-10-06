@@ -12,7 +12,7 @@
             type="text"
             name="name"
             class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
-          >
+          />
         </label>
       </div>
       <div class="m-5 flex justify-end">
@@ -23,7 +23,7 @@
             type="email"
             name="email"
             class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
-          >
+          />
         </label>
       </div>
       <div class="m-5 flex justify-end">
@@ -35,7 +35,7 @@
             name="password"
             autocomplete="'autocomplete'"
             class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
-          >
+          />
         </label>
       </div>
       <div class="m-5 flex justify-end">
@@ -47,13 +47,11 @@
             name="passwordConfirm"
             autocomplete="'autocomplete'"
             class="flex-1 border rounded-md placeholder-psblack border-gray-400 p-2"
-          >
+          />
         </label>
       </div>
     </div>
-    <button
-      type="submit"
-    >
+    <button type="submit">
       {{ $t('submit') }}
     </button>
   </form>
@@ -74,7 +72,12 @@ export default {
   },
   methods: {
     processForm() {
-      ApiUsers.signUp(this.name, this.email, this.password, this.passwordConfirm)
+      ApiUsers.signUp(
+        this.name,
+        this.email,
+        this.password,
+        this.passwordConfirm
+      )
     },
   },
 }

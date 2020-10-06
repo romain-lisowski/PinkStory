@@ -8,7 +8,6 @@
 </template>
 
 <script>
-
 import StoryMain from '@/components/story/StoryMain.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 import StoryLatest from '@/components/story/StoryLatest.vue'

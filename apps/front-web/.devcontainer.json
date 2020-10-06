@@ -1,23 +1,27 @@
 {
-	"name": "PinkStory front-web",
-	"dockerComposeFile": "./docker-compose.yml",
-	"service": "node",
-	"workspaceFolder": "/var/www",
-	"shutdownAction": "none",
-	"extensions": [
-		"octref.vetur",
-		"dbaeumer.vscode-eslint",
-		"eg2.vscode-npm-script",
-		"nucllear.vscode-extension-auto-import",
-		"visualstudioexptteam.vscodeintellicode",
-		"editorconfig.editorconfig",
-		"bradlc.vscode-tailwindcss"
-	],
-	"settings": {
-		"eslint.workingDirectories": [
-			{
-				"mode": "auto"
-			}
-		],
-	}
+  "name": "PinkStory front-web",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "node",
+  "workspaceFolder": "/var/www",
+  "shutdownAction": "none",
+  "extensions": [
+    "octref.vetur",
+    "dbaeumer.vscode-eslint",
+    "eg2.vscode-npm-script",
+    "nucllear.vscode-extension-auto-import",
+    "visualstudioexptteam.vscodeintellicode",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss"
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    },
+
+    "prettier.configPath": "./app/.prettierrc.json",
+    "prettier.prettierPath": "./app/node_modules/prettier",
+    "eslint.workingDirectories": ["./app"]
+  }
 }

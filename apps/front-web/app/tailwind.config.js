@@ -1,7 +1,32 @@
 module.exports = {
+  future: {
+    // removeDeprecatedGapUtilities: true,
+    // purgeLayersByDefault: true,
+  },
   purge: [],
   theme: {
     extend: {
+      textColor: {
+        primary: 'var(--color-text-primary)',
+        secondary: {
+          extralighter: 'var(--color-text-secondary-extralighter)',
+          lighter: 'var(--color-text-secondary-lighter)',
+          default: 'var(--color-text-secondary)',
+        },
+        default: 'var(--color-text-default)',
+      },
+      backgroundColor: {
+        primary: {
+          default: 'var(--color-bg-primary)',
+          lighter: 'var(--color-bg-primary-lighter)',
+        },
+        secondary: {
+          extralighter: 'var(--color-bg-secondary-extralighter)',
+          lighter: 'var(--color-bg-secondary-lighter)',
+          default: 'var(--color-bg-secondary)',
+        },
+        default: 'var(--color-bg-default)',
+      },
       colors: {
         psred: {
           extralighter: '#f6dadc',
@@ -34,9 +59,6 @@ module.exports = {
         xl: '0.8rem',
         '2xl': '2rem',
         '3xl': '3rem',
-      },
-      screens: {
-        dark: { raw: '(prefers-color-scheme: dark)' },
       },
       fill: (theme) => ({
         psblack: theme('colors.psblack'),

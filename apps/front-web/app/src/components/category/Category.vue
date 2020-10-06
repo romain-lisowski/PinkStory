@@ -1,14 +1,15 @@
 <template>
-  <div
-    id="category"
-    class="bg-psgray dark:bg-psblack-lighter mt-4 sm:mt-16 pb-4 sm:pb-12"
-  >
+  <div id="category" class="bg-primary-lighter mt-4 sm:mt-16 pb-4 sm:pb-12">
     <div class="mx-12">
       <div class="flex justify-between mb-8 pt-12">
-        <h3 class="text-3xl sm:text-4xl xl:text-5xl text-psblack dark:text-pswhite font-psbold text-left ">
+        <h3
+          class="text-3xl sm:text-4xl xl:text-5xl text-default font-psbold text-left"
+        >
           {{ $t('categories') }}
         </h3>
-        <a class="text-psred text-lg sm:text-xl xl:text-2xl pt-2 sm:pt-4 xl:pt-6 cursor-pointer text-left sm:text-right">
+        <a
+          class="text-psred text-lg sm:text-xl xl:text-2xl pt-2 sm:pt-4 xl:pt-6 cursor-pointer text-left sm:text-right"
+        >
           {{ $t('search-story') }} >
         </a>
       </div>
@@ -29,10 +30,36 @@ export default {
   },
   data() {
     return {
-      category1: ['Orientation', 'Hétéro', 'Gay', 'Lesbien', 'Bisexuel', 'Transexuel'],
-      category2: ['Type', 'Soft', 'Hard', 'Réel', 'Fictif', 'Fantasme', 'Romantique'],
-      category3: ['Pratique', 'Sextoy', 'Jeu érotique', 'Fellation', 'Cunnilingus', 'Anulingus',
-        'Sodomie', 'Uro', 'Fist', 'Double pénétration', 'Squirt', 'Prostate',
+      category1: [
+        'Orientation',
+        'Hétéro',
+        'Gay',
+        'Lesbien',
+        'Bisexuel',
+        'Transexuel',
+      ],
+      category2: [
+        'Type',
+        'Soft',
+        'Hard',
+        'Réel',
+        'Fictif',
+        'Fantasme',
+        'Romantique',
+      ],
+      category3: [
+        'Pratique',
+        'Sextoy',
+        'Jeu érotique',
+        'Fellation',
+        'Cunnilingus',
+        'Anulingus',
+        'Sodomie',
+        'Uro',
+        'Fist',
+        'Double pénétration',
+        'Squirt',
+        'Prostate',
       ],
     }
   },

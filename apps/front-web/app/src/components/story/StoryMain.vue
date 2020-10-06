@@ -1,70 +1,38 @@
 <template>
-  <div
-    id="main"
-    class="mb-12 sm:mb-20 w-full relative"
-  >
+  <div id="main" class="mb-12 sm:mb-20 w-full relative">
     <div
       class="absolute top-0 right-0 bottom-0 w-2/3 lg:w-3/4 bg-center bg-cover opacity-75"
-      :style="{'background-image': `url(${require('@/assets/images/1.jpg')})`}"
+      :style="{
+        'background-image': `url(${require('@/assets/images/1.jpg')})`,
+      }"
     />
-    <div
-      class="absolute top-0 right-0 bottom-0 left-0 ps-gradient"
-    />
+    <div class="absolute top-0 right-0 bottom-0 left-0 ps-gradient" />
     <div class="mx-12 pt-12 sm:pt-16 xl:pt-20 relative">
       <h1
-        class="
-        text-left
-        text-psblack
-        dark:text-pswhite
-        font-extrabold
-        leading-tight
-        sm:leading-none
-        text-5xl
-        sm:text-7xl
-        xl:text-8xl
-        xl:w-3/5
-        font-psbold"
+        class="text-left text-default font-extrabold leading-tight sm:leading-none text-5xl sm:text-7xl xl:text-8xl xl:w-3/5 font-psbold"
       >
         {{ story.title }}
       </h1>
-      <div class="text-left text-psblack dark:text-pswhite font-extrabold text-xl sm:text-2xl xl:text-3xl mt-2">
+      <div
+        class="text-left text-default font-extrabold text-xl sm:text-2xl xl:text-3xl mt-2"
+      >
         18+
         <span class="font-normal mx-2">|</span>
         {{ story.date }}
         <span class="font-normal mx-2">|</span>
         {{ story.author }}
-        <span
-          v-if="story.gender === 'female'"
-          class="font-medium"
-        >&#9792;</span><span
-          v-else
-          class="font-medium"
-        >&#9794;</span>
+        <span v-if="story.gender === 'female'" class="font-medium">&#9792;</span
+        ><span v-else class="font-medium">&#9794;</span>
       </div>
-      <div class="text-left text-psred-lighter mt-2 text-2xl sm:text-3xl xl:text-4xl tracking-wide">
+      <div
+        class="text-left text-psred-lighter mt-2 text-2xl sm:text-3xl xl:text-4xl tracking-wide"
+      >
         {{ story.categories }}
       </div>
-      <RatingStars
-        :rating="story.rating"
-        class=" mt-2"
-      />
+      <RatingStars :rating="story.rating" class="mt-2" />
 
       <div
-        class="text-justify
-      sm:text-left
-      mt-8
-      text-lg
-      sm:text-xl
-      xl:text-2xl
-      tracking-wide
-      text-psblack
-      dark:text-pswhite
-      w-full
-      sm:w-4/5
-      xl:w-2/3
-      leading-6
-      sm:leading-8
-      xl:leading-10"
+        class="text-justify sm:text-left mt-8 text-lg sm:text-xl xl:text-2xl tracking-wide text-default w-full sm:w-4/5 xl:w-2/3 leading-6 sm:leading-8 xl:leading-10"
       >
         {{ story.abstract }}
       </div>
@@ -104,28 +72,15 @@ export default {
 </script>
 
 <style>
-  @media (prefers-color-scheme: light) {
-    .ps-gradient {
-      background-image: radial-gradient(
-        ellipse farthest-side at 100% 20%,
-        rgba(255, 255, 255, 0) 0,
-        rgba(255, 255, 255, 0.4) 50%,
-        rgba(255, 255, 255, 1) 75%,
-        rgba(255, 255, 255, 1) 100%
-      )
-    }
-  }
-  @media (prefers-color-scheme: dark) {
-    .ps-gradient {
-      background-image: radial-gradient(
-        ellipse farthest-side at 100% 20%,
-        rgba(34, 35, 35, 0) 0,
-        rgba(34, 35, 35, 0.4) 50%,
-        rgba(34, 35, 35, 1) 75%,
-        rgba(34, 35, 35, 1) 100%
-      )
-    }
-  }
+.ps-gradient {
+  background-image: radial-gradient(
+    ellipse farthest-side at 100% 20%,
+    rgba(var(--color-bg-primary), 0) 0,
+    rgba(var(--color-bg-primary), 0.4) 50%,
+    rgba(var(--color-bg-primary), 1) 75%,
+    rgba(var(--color-bg-primary), 1) 100%
+  );
+}
 </style>
 
 <i18n>

@@ -10,7 +10,7 @@ docker:symfony:build:latest:
       - ./docker/symfony/*
   script:
     - docker info
-    - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
-    - docker build -t ${CI_REGISTRY_IMAGE}:latest ./docker/symfony/
-    - docker push ${CI_REGISTRY_IMAGE}:latest
+    - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+    - docker build -t ${CI_REGISTRY_IMAGE}-symfony:latest ./docker/symfony/
+    - docker push ${CI_REGISTRY_IMAGE}-symfony:latest
     - docker logout ${CI_REGISTRY}

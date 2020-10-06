@@ -14,8 +14,7 @@ services:
       - 5432:5432
 
   php:
-    build:
-      context: ./docker/php
+    image: registry.gitlab.com/pinkstory/pinkstory/symfony:latest
     depends_on:
       - postgres
     volumes:

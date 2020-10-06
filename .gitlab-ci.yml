@@ -1,0 +1,5 @@
+stages:
+  - build
+
+include:
+  - local: ./docker/symfony/.gitlab-ci.yml

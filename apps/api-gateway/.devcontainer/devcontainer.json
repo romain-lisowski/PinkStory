@@ -2,7 +2,7 @@
   "name": "PinkStory - API Gateway",
   "dockerComposeFile": "../../../docker-compose.yml",
   "service": "api-gateway-symfony",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/www/api-gateway",
   "shutdownAction": "none",
   "extensions": [
     "bmewburn.vscode-intelephense-client",

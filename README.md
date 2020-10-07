@@ -1,3 +1,9 @@
+# Start server
+
+```
+docker-compose up --build
+```
+
 # Generate a new JWT public and private key
 
 ```

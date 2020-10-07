@@ -1,38 +1,37 @@
 version: '3.8'
 
 services:
-
-  postgres:
-    image: postgres:12
-    environment:
-      POSTGRES_USER: symfony_usr
-      POSTGRES_PASSWORD: symfony_pwd
-      POSTGRES_DB: symfony_db
-    volumes:
-      - ./docker/postgres/data:/var/lib/postgresql/data:delegated
-    ports:
-      - 5432:5432
-
-  php:
-    image: registry.gitlab.com/pinkstory/pinkstory/symfony:latest
-    depends_on:
-      - postgres
-    volumes:
-      - .:/var/www:delegated
-      - ./docker/php/log:/var/log:delegated
-
   nginx:
     build:
       context: ./docker/nginx
     depends_on:
-      - php
+      - api-gateway-symfony
     volumes:
-      - .:/var/www:delegated
+      - ./apps/api-gateway/app:/www/api-gateway:delegated
       - ./docker/nginx/log:/var/log/nginx:delegated
     ports:
       - 443:443
 
-  mercure:
+  api-gateway-symfony:
+    image: registry.gitlab.com/pinkstory/pinkstory/symfony:latest
+    depends_on:
+      - api-gateway-postgres
+    volumes:
+      - ./apps/api-gateway/app:/app:delegated
+      - ./apps/api-gateway/docker/symfony/log:/var/log:delegated
+
+  api-gateway-postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: api_gateway_user
+      POSTGRES_PASSWORD: api_gateway_password
+      POSTGRES_DB: api_gateway_db
+    volumes:
+      - ./apps/api-gateway/docker/postgres/data:/var/lib/postgresql/data:delegated
+    ports:
+      - 5432:5432
+
+  api-gateway-mercure:
     image: dunglas/mercure
     environment:
       JWT_KEY: |-

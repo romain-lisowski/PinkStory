@@ -23,5 +23,5 @@ COPY ./conf.d/php.ini /usr/local/etc/php/conf.d/docker-php.ini
 # install composer from docker hub
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/app
+WORKDIR /app
 EXPOSE 9000

@@ -13,11 +13,12 @@ services:
       - 443:443
 
   api-gateway-symfony:
-    image: registry.gitlab.com/pinkstory/pinkstory/symfony:latest
+    image: registry.gitlab.com/pinkstory/pinkstory/api-gateway-symfony:latest
     depends_on:
       - api-gateway-postgres
     volumes:
-      - ./apps/api-gateway/app:/app:delegated
+      - ./apps/api-gateway/app:/www/api-gateway:delegated
+      - ./apps/api-gateway/jwt:/jwt:delegated
       - ./apps/api-gateway/docker/symfony/log:/var/log:delegated
 
   api-gateway-postgres:

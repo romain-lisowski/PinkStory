@@ -1,13 +1,11 @@
 <template>
   <div class="mx-12">
     <div class="flex flex-col sm:flex-row justify-between mt-16">
-      <h3
-        class="text-3xl sm:text-4xl xl:text-5xl text-default font-psbold text-left"
-      >
+      <h3 class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
         {{ $t('best-stories') }}
       </h3>
       <a
-        class="text-secondary text-lg sm:text-xl xl:text-2xl pt-2 sm:pt-4 xl:pt-6 cursor-pointer text-left sm:text-right"
+        class="text-accent text-lg sm:text-xl xl:text-2xl pt-2 sm:pt-4 xl:pt-6 cursor-pointer text-left sm:text-right"
       >
         {{ $t('see-best-stories') }} ></a
       >

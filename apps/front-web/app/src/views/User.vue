@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-psblack my-5 font-bold text-3xl">
+    <h2 class="my-5 font-bold text-3xl">
       {{ $t('update-profile') }}
     </h2>
     <div class="flex flex-col items-center justify-center">

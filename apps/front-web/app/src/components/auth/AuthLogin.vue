@@ -1,34 +1,37 @@
 <template>
   <form @submit.prevent="processForm">
     <div>
-      <h3 class="text-psblack font-semibold text-2xl mt-2">
+      <h3 class="font-semibold text-2xl mt-2">
         {{ $t('login') }}
       </h3>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-psblack">
+        <label class="flex flex-1">
           <input
             v-model="email"
             :placeholder="$t('email')"
             type="email"
             name="email"
-            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+            class="flex-1 border rounded-md border-gray-400 p-2"
           />
         </label>
       </div>
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-psblack">
+        <label class="flex flex-1">
           <input
             v-model="password"
             :placeholder="$t('password')"
             type="password"
             name="password"
             :autocomplete="'off'"
-            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+            class="flex-1 border rounded-md border-gray-400 p-2"
           />
         </label>
       </div>
     </div>
-    <button type="submit">
+    <button
+      class="bg-accent text-primary rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide"
+      type="submit"
+    >
       {{ $t('connexion') }}
     </button>
   </form>

@@ -1,103 +1,128 @@
 <template>
-  <header
-    :class="openMenu ? 'bg-opacity-100' : 'bg-opacity-90'"
-    class="flex items-center shadow-md justify-start flex-wrap bg-primary px-4 py-2 sm:py-4 sticky top-0 z-20"
-  >
-    <div class="block lg:hidden">
-      <button class="flex items-center px-5 py-4" @click="toggleMenu">
-        <svg
-          class="fill-white dark:fill-psblack h-3 w-3"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <title>Menu</title>
-          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-        </svg>
-      </button>
-    </div>
+  <div>
+    <nav
+      class="main-menu transform transition-transform duration-300 ease-in-out z-20 lg:hidden absolute top-0 right-100 h-screen w-full overflow-y-scroll bg-primary text-xl"
+      :class="!openMenu ? 'translate-x-full' : ''"
+    >
+      <a
+        class="main-menu-close p-4 block text-right"
+        href="#"
+        @click="toggleMenu"
+        ><font-awesome-icon icon="times"
+      /></a>
 
-    <div class="flex items-center flex-shrink-0 mr-6 font-extrabold text-4xl">
+      <ul class="text-center font-bold">
+        <li>
+          <span class="p-4 block bg-primary-inverse bg-opacity-5">{{
+            $t('discover')
+          }}</span>
+        </li>
+        <li>
+          <a
+            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
+            href="#"
+            >{{ $t('categories') }}</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
+            href="#"
+            >{{ $t('write') }}</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <header
+      class="z-10 fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5"
+    >
+      <a
+        class="main-menu-toggle lg:hidden text-2xl"
+        href="#"
+        @click="toggleMenu"
+      >
+        <font-awesome-icon icon="bars"
+      /></a>
+
       <router-link
         :to="{ name: 'Home' }"
-        class="text-psred tracking-tight pl-6 sm:pl-10 text-3xl sm:text-4xl"
+        class="mx-auto lg:ml-0 flex-shrink-0 text-2xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tightest"
+        href="#"
       >
         PinkStory
       </router-link>
-    </div>
 
-    <div
-      v-closable="{ handler: 'onCloseMenu' }"
-      :class="openMenu ? 'block' : 'hidden'"
-      class="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
-    >
-      <div class="text-xl text-psred lg:flex-grow tracking-wide font-ps">
-        <nav v-if="loggedIn">
-          <router-link
-            :to="{ name: 'Home', hash: '#main' }"
-            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 border-b-2 border-psred"
-          >
-            {{ $t('discover') }}
-          </router-link>
-          <a
-            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4"
-            href="#category"
-          >
-            {{ $t('categories') }}
-          </a>
-          <div
-            class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4"
-          >
-            {{ $t('write') }}
-          </div>
-          <router-link
-            :to="{ name: 'User' }"
-            class="p-3 cursor-pointer mt-4 block lg:mt-0 mr-4 lg:hidden"
-          >
-            {{ $t('settings') }}
-          </router-link>
-          <div
-            class="p-3 cursor-pointer mt-4 block lg:mt-0 mr-4 lg:hidden"
-            @click="logout"
-          >
-            {{ $t('logout') }}
-          </div>
-        </nav>
-      </div>
+      <nav v-if="loggedIn" class="hidden lg:block">
+        <ul class="flex items-center justify-center tracking-wide">
+          <li>
+            <span
+              class="p-2 px-4 block text-primary font-bold bg-opacity-5 rounded-lg bg-primary-inverse cursor-pointer"
+              >{{ $t('discover') }}</span
+            >
+          </li>
+          <li class="pl-2">
+            <a
+              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              href="#category"
+              >{{ $t('categories') }}</a
+            >
+          </li>
+          <li class="pl-2">
+            <a
+              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              href="#"
+              >{{ $t('write') }}</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <button
+        v-if="loggedIn"
+        class="relative group ml-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
+        @click="toggleUserMenu"
+      >
+        <span
+          class="absolute top-0 left-0 px-1 md:px-2 bg-accent group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"
+          >12</span
+        >
+        <span
+          class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
+        >
+          <img
+            class="w-8 md:w-10 h-8 md:h-10 rounded-xl md:rounded-2xl"
+            :src="require('@/assets/images/profil.jpg')"
+          />
+        </span>
+      </button>
 
       <div v-if="loggedIn" class="flex flex-row">
         <div
-          v-closable="{ handler: 'onCloseUserMenu' }"
-          class="bg-psred rounded-full h-16 w-16 items-center justify-center text-xl text-primary font-pssemibold cursor-pointer mr-8 hidden lg:flex"
-          @click="toggleUserMenu"
-        >
-          {{ userLoggedIn.name[0] }}
-        </div>
-
-        <div
           :class="openUserMenu ? 'block' : 'hidden'"
-          class="absolute top-0 right-0 mt-24 px-12 py-6 bg-default tracking-wide shadow-xl text-psred text-lg"
+          class="absolute top-0 right-0 mt-20 px-10 py-4 tracking-wide text-sm bg-primary rounded-b-md"
         >
           <router-link
             :to="{ name: 'User' }"
-            class="cursor-pointer hover:underline pt-6"
+            class="cursor-pointer pt-6 hover:underline"
           >
             {{ $t('settings') }}
           </router-link>
-          <div class="cursor-pointer hover:underline pt-6" @click="logout">
+          <div class="cursor-pointer pt-6 hover:underline" @click="logout">
             {{ $t('logout') }}
           </div>
         </div>
       </div>
-      <div v-else>
-        <router-link
-          :to="{ name: 'Auth' }"
-          class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 border border-psred rounded-lg text-psred"
-        >
-          {{ $t('connection') }}
-        </router-link>
-      </div>
-    </div>
-  </header>
+
+      <router-link
+        v-else
+        :to="{ name: 'Auth' }"
+        class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 bg-accent rounded-lg"
+      >
+        {{ $t('connection') }}
+      </router-link>
+    </header>
+  </div>
 </template>
 
 <script>
@@ -129,6 +154,7 @@ export default {
     },
     toggleMenu() {
       this.openMenu = !this.openMenu
+      console.log('toggl')
     },
     toggleUserMenu() {
       this.openUserMenu = !this.openUserMenu

@@ -1,21 +1,24 @@
 <template>
   <div>
-    <h3 class="text-psblack font-semibold text-2xl mt-2">
+    <h3 class="font-semibold text-2xl mt-2">
       {{ $t('Email') }}
     </h3>
     <form @submit.prevent="processForm">
       <div class="m-5 flex justify-end">
-        <label class="flex flex-1 text-psblack">
+        <label class="flex flex-1">
           <input
             v-model="email"
             :placeholder="$t('new-email')"
             type="email"
             name="email"
-            class="flex-1 border rounded-md border-gray-400 placeholder-psblack p-2"
+            class="flex-1 border rounded-md border-gray-400 p-2"
           />
         </label>
       </div>
-      <button type="submit">
+      <button
+        class="bg-accent text-primary rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide"
+        type="submit"
+      >
         {{ $t('update') }}
       </button>
     </form>

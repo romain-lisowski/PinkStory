@@ -28,13 +28,8 @@ export default {
           nbComments: 1454,
           imagePath: '4.png',
           abstract: `Je m'appelle Nathalie, j'ai quarante-trois ans.
-          Je suis mère de famille, d'un fils unique, Daniel, âgé de dix-neuf ans.
-          Mon fils Daniel avait pour meilleur ami un garçon de son âge appelé Thomas.
-          Tous deux étaient inséparables, de vrais larrons en foire.
-          Je connaissais Thomas depuis qu'il avait dix ou onze ans.
-          Toujours ensembles, Thomas et Dan partageaient leurs week-ends ensembles.
-          Dormant alternativement chez les parents de l'un et chez les parents de l'autre,
-          Thomas finit par devenir au fil des ans comme le second enfant de la famille.`,
+          Je suis mère de famille, d'un fils unique, Daniel, âgé de dix-neuf ans. 
+          Mon fils Daniel avait pour meilleur ami un garçon de son âge appelé Thomas.`,
         },
         story2: {
           author: 'Gypsie',
@@ -44,11 +39,8 @@ export default {
           rating: 3.5,
           nbComments: 432,
           imagePath: '7.png',
-          abstract: `Cela fait déjà quelques années que ma femme Karen travaille comme assistante
-            dans la même boîte avec sa collègue Annie sur la capitale.
-            Ma femme est une belle blonde aux yeux verts de quarante ans d’un mètre soixante-cinq pour soixante kilos
-            et possède des formes que les hommes aiment, c’est-à-dire un 95C bien ferme et un cul bien rond et musclé après
-            plus d’une vingtaine d’années de la pratique de l’équitation. « elle aime monter » comme elle répète à le dire !`,
+          abstract: `Ma femme est une belle blonde aux yeux verts de quarante ans d’un mètre soixante-cinq pour soixante kilos
+            et possède des formes que les hommes aiment, c’est-à-dire un 95C bien ferme et un cul bien rond.`,
         },
         story3: {
           author: 'Annizette',
@@ -71,7 +63,6 @@ export default {
           nbComments: 5659,
           imagePath: '2.png',
           abstract: `Ma femme Nathaly est plutôt jolie. Pas un visage top modèle, mais un corps à faire tourner les têtes de bien des mecs.
-          Nous avons un terrain en campagne avec une petite roulotte et nous allons souvent passer le week-end.
           Mon voisin Jean, un homme dans la trentaine, aux allures rocker, cheveux longs, trouve ma femme superbe et m’a avouer bander
           quand il la voit.`,
         },

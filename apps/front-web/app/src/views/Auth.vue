@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-psblack my-5 font-bold text-3xl">
+    <h2 class="my-5 font-bold text-3xl">
       {{ $t('authentification') }}
     </h2>
     <div class="flex flex-row justify-center">

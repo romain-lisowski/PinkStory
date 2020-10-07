@@ -1,20 +1,21 @@
 <template>
   <div id="main" class="mb-12 sm:mb-20 w-full relative">
     <div
-      class="absolute top-0 right-0 bottom-0 w-2/3 lg:w-3/4 bg-center bg-cover opacity-75"
+      class="absolute inset-0 left-auto w-full md:w-4/5 lg:w-3/4 bg-center bg-cover opacity-50"
       :style="{
         'background-image': `url(${require('@/assets/images/1.jpg')})`,
       }"
-    />
-    <div class="absolute top-0 right-0 bottom-0 left-0 ps-gradient" />
-    <div class="mx-12 pt-12 sm:pt-16 xl:pt-20 relative">
+    >
+      <div class="absolute inset-0 bg-radial-gradient"></div>
+    </div>
+    <div class="mx-12 pt-32 sm:pt-40 xl:pt-40 relative">
       <h1
-        class="text-left text-default font-extrabold leading-tight sm:leading-none text-5xl sm:text-7xl xl:text-8xl xl:w-3/5 font-psbold"
+        class="text-left font-extrabold leading-tight sm:leading-none text-5xl sm:text-7xl xl:text-8xl xl:w-3/5"
       >
         {{ story.title }}
       </h1>
       <div
-        class="text-left text-default font-extrabold text-xl sm:text-2xl xl:text-3xl mt-2"
+        class="text-left font-extrabold text-xl sm:text-2xl xl:text-3xl mt-2"
       >
         18+
         <span class="font-normal mx-2">|</span>
@@ -25,18 +26,20 @@
         ><span v-else class="font-medium">&#9794;</span>
       </div>
       <div
-        class="text-left text-psred-lighter mt-2 text-2xl sm:text-3xl xl:text-4xl tracking-wide"
+        class="text-left text-accent-lighter mt-2 text-2xl sm:text-3xl xl:text-4xl tracking-wide"
       >
         {{ story.categories }}
       </div>
       <RatingStars :rating="story.rating" class="mt-2" />
 
       <div
-        class="text-justify sm:text-left mt-8 text-lg sm:text-xl xl:text-2xl tracking-wide text-default w-full sm:w-4/5 xl:w-2/3 leading-6 sm:leading-8 xl:leading-10"
+        class="text-justify sm:text-left mt-8 text-lg sm:text-xl xl:text-2xl tracking-wide w-full sm:w-4/5 xl:w-2/3 leading-6 sm:leading-8 xl:leading-10"
       >
         {{ story.abstract }}
       </div>
-      <button class="block mt-8 mx-0 sm:py-5 sm:text-xl">
+      <button
+        class="bg-accent text-primary rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide block mt-8 mx-0 sm:py-5 sm:text-xl"
+      >
         {{ $t('read-now') }}
       </button>
     </div>

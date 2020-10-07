@@ -1,7 +1,10 @@
 <template>
-  <div id="app" class="text-center flex flex-col min-h-screen bg-primary">
+  <div
+    id="app"
+    class="text-center flex flex-col min-h-screen bg-primary text-primary"
+  >
     <LayoutHeader />
-    <router-view class="font-ps flex-grow" />
+    <router-view class="flex-grow" />
     <LayoutFooter />
   </div>
 </template>
@@ -25,10 +28,10 @@ export default {
         window.matchMedia &&
         window.matchMedia('(prefers-color-scheme: dark)').matches
       ) {
-        console.log('dark')
         document.documentElement.classList.add('theme-dark')
+        document.documentElement.classList.remove('theme-light')
       } else {
-        console.log('light')
+        document.documentElement.classList.add('theme-light')
         document.documentElement.classList.remove('theme-dark')
       }
     },

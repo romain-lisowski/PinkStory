@@ -1,27 +1,30 @@
 <template>
   <footer
-    class="bg-secondary h-10 py-8 sm:py-10 flex flex-row items-center justify-between"
+    class="bg-accent h-10 py-8 sm:py-10 flex flex-row items-center justify-between"
   >
-    <div
-      class="text-primary dark:text-psblack-lighter font-extrabold text-xl pl-12"
-    >
-      PinkStory
-    </div>
+    <div class="text-primary font-extrabold text-2xl pl-12">PinkStory</div>
     <div class="text-primary text-sm font-light pr-12">
       <span class="mx-1 text-sm font-normal">{{ $t('theme') }} : </span>
       <span
-        class="mx-1 text-secondary rounded-md bg-primary px-2 py-1 font-normal cursor-pointer"
+        class="mx-1 cursor-pointer"
+        :class="activeTheme === 'auto' ? activeThemeClasses : ''"
         @click="setThemeAuto"
         >{{ $t('auto') }}</span
       >
       /
-      <span class="mx-1 cursor-pointer" @click="setThemeLight">{{
-        $t('light')
-      }}</span>
+      <span
+        class="mx-1 cursor-pointer"
+        :class="activeTheme === 'light' ? activeThemeClasses : ''"
+        @click="setThemeLight"
+        >{{ $t('light') }}</span
+      >
       /
-      <span class="mx-1 cursor-pointer" @click="setThemeDark">{{
-        $t('dark')
-      }}</span>
+      <span
+        class="mx-1 cursor-pointer"
+        :class="activeTheme === 'dark' ? activeThemeClasses : ''"
+        @click="setThemeDark"
+        >{{ $t('dark') }}</span
+      >
     </div>
   </footer>
 </template>
@@ -29,6 +32,18 @@
 <script>
 export default {
   name: 'LayoutFooter',
+  data() {
+    return {
+      activeTheme: 'auto',
+      activeThemeClasses: [
+        'text-accent',
+        'rounded-md',
+        'bg-primary',
+        'px-2',
+        'py-1',
+      ],
+    }
+  },
   computed: {
     userLoggedIn() {
       return this.$store.state.user
@@ -43,10 +58,14 @@ export default {
       this.$router.push({ name: 'Auth' })
     },
     setThemeLight() {
+      this.activeTheme = 'light'
+      document.documentElement.classList.add('theme-light')
       document.documentElement.classList.remove('theme-dark')
     },
     setThemeDark() {
+      this.activeTheme = 'dark'
       document.documentElement.classList.add('theme-dark')
+      document.documentElement.classList.remove('theme-light')
     },
     setThemeAuto() {
       if (
@@ -57,6 +76,7 @@ export default {
       } else {
         this.setThemeLight()
       }
+      this.activeTheme = 'auto'
     },
   },
 }

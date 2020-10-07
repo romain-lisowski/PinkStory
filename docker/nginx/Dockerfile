@@ -7,5 +7,5 @@ COPY ./certificate/localhost.key /etc/ssl/private/
 # php ini configuration
 COPY ./conf.d/default.conf /etc/nginx/conf.d/default.conf
 
-WORKDIR /var/www/app
+WORKDIR /www
 EXPOSE 443

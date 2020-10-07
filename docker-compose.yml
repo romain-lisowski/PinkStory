@@ -18,6 +18,7 @@ services:
       - api-gateway-postgres
     volumes:
       - ./apps/api-gateway/app:/www/api-gateway:delegated
+      - ./apps/api-gateway/jwt:/jwt:delegated
       - ./apps/api-gateway/docker/symfony/log:/var/log:delegated
 
   api-gateway-postgres:

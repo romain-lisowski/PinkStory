@@ -5,7 +5,7 @@
         {{ $t('best-stories') }}
       </h3>
       <a
-        class="text-accent text-lg sm:text-xl xl:text-2xl pt-2 sm:pt-4 xl:pt-6 cursor-pointer text-left sm:text-right"
+        class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
       >
         {{ $t('see-best-stories') }} ></a
       >

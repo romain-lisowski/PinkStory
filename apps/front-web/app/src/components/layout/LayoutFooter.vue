@@ -2,7 +2,12 @@
   <footer
     class="bg-accent h-10 py-8 sm:py-10 flex flex-row items-center justify-between"
   >
-    <div class="text-primary font-extrabold text-2xl pl-12">PinkStory</div>
+    <router-link
+      :to="{ name: 'Home' }"
+      class="text-primary font-extrabold text-2xl pl-12"
+      >PinkStory</router-link
+    >
+
     <div class="text-primary text-sm font-light pr-12">
       <span class="mx-1 text-sm font-normal">{{ $t('theme') }} : </span>
       <span

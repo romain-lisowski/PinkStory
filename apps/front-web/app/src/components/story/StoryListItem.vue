@@ -1,38 +1,40 @@
 <template>
-  <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4">
+  <li class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4">
     <img
-      class="rounded-2xl opacity-90 object-cover object-top h-48 sm:h-64 w-full"
+      class="w-full h-48 sm:h-64 object-cover object-top rounded-2xl opacity-90"
       :src="require(`@/assets/images/${story.imagePath}`)"
     />
-    <div class="font-semibold text-xl sm:text-2xl leading-tight mt-4">
+
+    <h2 class="font-semibold text-xl sm:text-2xl leading-tight mt-4">
       {{ story.title }}
-    </div>
-    <div class="mt-1 text-sm sm:text-base">
+    </h2>
+
+    <p class="mt-1 text-sm sm:text-base">
       {{ $t('write-by') }} {{ story.author
       }}<span v-if="story.gender === 'female'">&#9792;</span
       ><span v-else>&#9794;</span>
-    </div>
-    <div class="text-accent text-lg sm:text-xl mt-1">
+    </p>
+    <p class="mt-1 text-lg sm:text-xl text-accent">
       {{ story.categories }}
-    </div>
-    <div class="flex justify-between mt-1">
-      <div class="flex-1">
-        <RatingStars :rating="story.rating" />
-      </div>
-      <div class="text-base sm:text-lg mr-2 sm:mt-2">
+    </p>
+    <p class="flex justify-between mt-1">
+      <RatingStars :rating="story.rating" class="flex-1" />
+      <span class="text-base sm:text-lg mr-2 sm:mt-2">
         {{ story.nbComments }} {{ $t('comments') }}
-      </div>
-    </div>
+      </span>
+    </p>
 
-    <div class="text-justify mt-4 tracking-wide">
+    <p class="mt-4 tracking-wide text-justify">
       {{ story.abstract }}
-    </div>
-    <div
-      class="text-accent text-base sm:text-lg xl:text-xl mt-2 sm:mt-3 xl:mt-4 pr-2 text-right"
+    </p>
+
+    <a
+      class="mt-2 sm:mt-3 xl:mt-4 pr-2 sm:text-lg xl:text-xl text-base text-right text-accent"
+      href="#"
     >
       {{ $t('read-more') }} >
-    </div>
-  </div>
+    </a>
+  </li>
 </template>
 
 <script>

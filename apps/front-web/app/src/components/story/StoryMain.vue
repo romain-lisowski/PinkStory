@@ -8,6 +8,7 @@
     >
       <div class="absolute inset-0 bg-radial-gradient"></div>
     </div>
+
     <div class="relative mx-12 pt-32 sm:pt-40 xl:pt-40">
       <h1
         class="text-5xl sm:text-7xl xl:text-8xl xl:w-3/5 font-extrabold text-left leading-tight sm:leading-none"

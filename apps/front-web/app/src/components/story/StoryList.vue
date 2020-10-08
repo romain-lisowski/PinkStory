@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-wrap text-left mt-4 sm:mt-6 xl:mt-8 -mx-6 pt-2 pl-2">
+  <ul class="flex flex-wrap -mx-6 mt-4 sm:mt-6 xl:mt-8 pt-2 pl-2 text-left">
     <StoryListItem
       v-for="(story, index) in stories"
       :key="index"
       :story="story"
     />
-  </div>
+  </ul>
 </template>
 
 <script>

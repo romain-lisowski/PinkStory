@@ -1,5 +1,5 @@
 <template>
-  <div class="text-left sm:text-2xl">
+  <div class="sm:text-2xl text-left">
     <span
       v-for="index in Math.floor(rating)"
       :key="`empty-${index}`"
@@ -8,7 +8,7 @@
     >
     <span
       v-if="rating % 1 > 0"
-      class="text-opacity-0 bg-stars-gradient-to-r bg-clip-text"
+      class="bg-stars-gradient-to-r bg-clip-text text-opacity-0"
       style="-webkit-text-fill-color: transparent"
       >&#x2605;</span
     >

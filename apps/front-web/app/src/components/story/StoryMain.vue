@@ -74,18 +74,6 @@ export default {
 }
 </script>
 
-<style>
-.ps-gradient {
-  background-image: radial-gradient(
-    ellipse farthest-side at 100% 20%,
-    rgba(var(--color-bg-primary), 0) 0,
-    rgba(var(--color-bg-primary), 0.4) 50%,
-    rgba(var(--color-bg-primary), 1) 75%,
-    rgba(var(--color-bg-primary), 1) 100%
-  );
-}
-</style>
-
 <i18n>
 {
   "fr": {

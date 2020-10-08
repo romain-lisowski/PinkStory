@@ -13,9 +13,11 @@
 
       <ul class="text-center font-bold">
         <li>
-          <span class="p-4 block bg-primary-inverse bg-opacity-5">{{
-            $t('discover')
-          }}</span>
+          <router-link
+            :to="{ name: 'Home' }"
+            class="p-4 block bg-primary-inverse bg-opacity-5"
+            >{{ $t('discover') }}</router-link
+          >
         </li>
         <li>
           <a
@@ -56,9 +58,10 @@
       <nav v-if="loggedIn" class="hidden lg:block">
         <ul class="flex items-center justify-center tracking-wide">
           <li>
-            <span
+            <router-link
+              :to="{ name: 'Home' }"
               class="p-2 px-4 block text-primary font-bold bg-opacity-5 rounded-lg bg-primary-inverse cursor-pointer"
-              >{{ $t('discover') }}</span
+              >{{ $t('discover') }}</router-link
             >
           </li>
           <li class="pl-2">
@@ -80,6 +83,7 @@
 
       <button
         v-if="loggedIn"
+        v-closable="{ handler: 'onCloseUserMenu' }"
         class="relative group ml-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
         @click="toggleUserMenu"
       >
@@ -154,7 +158,6 @@ export default {
     },
     toggleMenu() {
       this.openMenu = !this.openMenu
-      console.log('toggl')
     },
     toggleUserMenu() {
       this.openUserMenu = !this.openUserMenu

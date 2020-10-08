@@ -8,7 +8,8 @@
     >
     <span
       v-if="rating % 1 > 0"
-      class="text-transparent bg-gradient-to-r from-accent via-accent to-accent-highlight bg-clip-text"
+      class="text-opacity-0 bg-stars-gradient-to-r bg-clip-text"
+      style="-webkit-text-fill-color: transparent"
       >&#x2605;</span
     >
     <span

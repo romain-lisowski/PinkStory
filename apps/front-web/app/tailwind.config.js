@@ -36,16 +36,6 @@ module.exports = {
       'primary-inverse':
         'rgba(var(--color-bg-primary-inverse), var(--border-opacity, 1))',
     },
-    gradientColorStops: {
-      primary: 'rgba(var(--color-bg-primary), var(--border-opacity, 1))',
-      accent: {
-        default: 'rgba(var(--color-bg-accent), var(--border-opacity, 1))',
-        highlight:
-          'rgba(var(--color-bg-accent-highlight), var(--border-opacity, 1))',
-      },
-      'primary-inverse':
-        'rgba(var(--color-bg-primary-inverse), var(--border-opacity, 1))',
-    },
     extend: {
       fontFamily: {
         sans: [
@@ -84,6 +74,8 @@ module.exports = {
       backgroundImage: {
         'radial-gradient':
           'radial-gradient(ellipse farthest-side at 100% 0%, rgba(var(--color-bg-primary), 0) 0, rgba(var(--color-bg-primary), 0) 50%, rgba(var(--color-bg-primary), 1) 100%)',
+        'stars-gradient-to-r':
+          'linear-gradient(90deg, rgba(var(--color-bg-accent), 1) 0%, rgba(var(--color-bg-accent), 1) 30%, rgba(var(--color-bg-primary-inverse), 1) 100%)',
       },
     },
     variants: {

@@ -1,13 +1,10 @@
 <template>
   <div>
     <nav
-      class="main-menu transform transition-transform duration-300 ease-in-out z-20 lg:hidden absolute top-0 right-100 h-screen w-full overflow-y-scroll bg-primary text-xl"
+      class="lg:hidden absolute h-screen w-full text-xl bg-primary overflow-y-scroll z-20 transform transition-transform duration-300 ease-in-out"
       :class="!openMenu ? 'translate-x-full' : ''"
     >
-      <a
-        class="main-menu-close p-4 block text-right"
-        href="#"
-        @click="toggleMenu"
+      <a class="block p-4 text-right" @click="toggleMenu"
         ><font-awesome-icon icon="times"
       /></a>
 
@@ -22,16 +19,30 @@
         <li>
           <a
             class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
-            href="#"
             >{{ $t('categories') }}</a
           >
         </li>
         <li>
           <a
             class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
-            href="#"
             >{{ $t('write') }}</a
           >
+        </li>
+        <li v-if="loggedIn">
+          <router-link
+            :to="{ name: 'User' }"
+            class="p-4 w-full block hover:bg-accent text-primary hover:text-primary-inverse"
+          >
+            {{ $t('settings') }}
+          </router-link>
+        </li>
+        <li v-if="loggedIn">
+          <a
+            class="p-4 w-full block hover:bg-accent text-primary hover:text-primary-inverse"
+            @click="logout"
+          >
+            {{ $t('logout') }}
+          </a>
         </li>
       </ul>
     </nav>
@@ -39,18 +50,13 @@
     <header
       class="z-10 fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5"
     >
-      <a
-        class="main-menu-toggle lg:hidden text-2xl"
-        href="#"
-        @click="toggleMenu"
-      >
+      <a class="main-menu-toggle lg:hidden text-2xl" @click="toggleMenu">
         <font-awesome-icon icon="bars"
       /></a>
 
       <router-link
         :to="{ name: 'Home' }"
         class="mx-auto lg:ml-0 flex-shrink-0 text-2xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tightest"
-        href="#"
       >
         PinkStory
       </router-link>
@@ -74,18 +80,31 @@
           <li class="pl-2">
             <a
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
-              href="#"
               >{{ $t('write') }}</a
             >
+          </li>
+          <li v-if="loggedIn">
+            <router-link
+              :to="{ name: 'User' }"
+              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+            >
+              {{ $t('settings') }}
+            </router-link>
+          </li>
+          <li v-if="loggedIn">
+            <a
+              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              @click="logout"
+            >
+              {{ $t('logout') }}
+            </a>
           </li>
         </ul>
       </nav>
 
       <button
         v-if="loggedIn"
-        v-closable="{ handler: 'onCloseUserMenu' }"
         class="relative group ml-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
-        @click="toggleUserMenu"
       >
         <span
           class="absolute top-0 left-0 px-1 md:px-2 bg-accent group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"
@@ -101,48 +120,43 @@
         </span>
       </button>
 
-      <div v-if="loggedIn" class="flex flex-row">
-        <div
-          :class="openUserMenu ? 'block' : 'hidden'"
-          class="absolute top-0 right-0 mt-20 px-10 py-4 tracking-wide text-sm bg-primary rounded-b-md"
-        >
-          <router-link
-            :to="{ name: 'User' }"
-            class="cursor-pointer pt-6 hover:underline"
-          >
-            {{ $t('settings') }}
-          </router-link>
-          <div class="cursor-pointer pt-6 hover:underline" @click="logout">
-            {{ $t('logout') }}
-          </div>
-        </div>
-      </div>
-
-      <router-link
+      <a
         v-else
-        :to="{ name: 'Auth' }"
-        class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 mr-4 bg-accent rounded-lg"
+        class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 rounded-lg"
+        @click="onOpenCloseAuth"
       >
-        {{ $t('connection') }}
-      </router-link>
+        <font-awesome-icon
+          icon="venus-mars"
+          class="text-4xl text-accent rounded-full"
+        />
+      </a>
+      <Auth
+        :open-auth-panel="openAuthPanel"
+        @onCloseAuthPanel="onCloseAuthPanel"
+      />
     </header>
   </div>
 </template>
 
 <script>
+import Auth from '@/components/auth/Auth.vue'
 import { Closable } from '../../directives/Closable'
 
 export default {
   name: 'LayoutHeader',
+  components: {
+    Auth,
+  },
   directives: {
     Closable,
   },
   data() {
     return {
       openMenu: false,
-      openUserMenu: false,
+      openAuthPanel: false,
     }
   },
+
   computed: {
     userLoggedIn() {
       return this.$store.state.user
@@ -151,22 +165,29 @@ export default {
       return this.userLoggedIn && this.$store.state.jwt
     },
   },
+  watch: {
+    loggedIn(loggedIn) {
+      if (loggedIn && this.openAuthPanel === true) {
+        this.onCloseAuthPanel()
+      }
+    },
+  },
   methods: {
     logout() {
+      this.openAuthPanel = false
       this.$store.dispatch('logout')
-      this.$router.push({ name: 'Home' })
+      if (this.$route.path !== '/') {
+        this.$router.push({ name: 'Home' })
+      }
     },
     toggleMenu() {
       this.openMenu = !this.openMenu
     },
-    toggleUserMenu() {
-      this.openUserMenu = !this.openUserMenu
+    onOpenCloseAuth() {
+      this.openAuthPanel = true
     },
-    onCloseMenu() {
-      this.openUserMenu = false
-    },
-    onCloseUserMenu() {
-      this.openUserMenu = false
+    onCloseAuthPanel() {
+      this.openAuthPanel = false
     },
   },
 }
@@ -178,7 +199,6 @@ export default {
     "discover": "Découvrir",
     "categories": "Catégories",
     "write": "Ecrire une histoire",
-    "connection": "Connexion",
     "settings": "Préférences",
     "logout": "Déconnexion"
   }

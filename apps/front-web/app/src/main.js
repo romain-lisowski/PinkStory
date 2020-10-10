@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faBars, faVenusMars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue from 'vue'
 import App from './App.vue'
@@ -10,6 +10,7 @@ import i18n from './i18n'
 
 library.add(faTimes)
 library.add(faBars)
+library.add(faVenusMars)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

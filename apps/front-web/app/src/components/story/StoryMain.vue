@@ -6,7 +6,7 @@
         'background-image': `url(${require('@/assets/images/1.jpg')})`,
       }"
     >
-      <div class="absolute inset-0 bg-radial-gradient"></div>
+      <div class="absolute inset-0 bg-radial-gradient-left"></div>
     </div>
 
     <div class="relative mx-12 pt-32 sm:pt-40 xl:pt-40">

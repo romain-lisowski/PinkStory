@@ -72,8 +72,10 @@ module.exports = {
         '3xl': '3rem',
       },
       backgroundImage: {
-        'radial-gradient':
+        'radial-gradient-left':
           'radial-gradient(ellipse farthest-side at 100% 0%, rgba(var(--color-bg-primary), 0) 0, rgba(var(--color-bg-primary), 0) 50%, rgba(var(--color-bg-primary), 1) 100%)',
+        'radial-gradient-center':
+          'radial-gradient(circle farthest-side at 50% 20%, rgba(var(--color-bg-primary), 0) 0, rgba(var(--color-bg-primary), 0) 50%, rgba(var(--color-bg-primary), 1) 100%)',
         'stars-gradient-to-r':
           'linear-gradient(90deg, rgba(var(--color-bg-accent), 1) 0%, rgba(var(--color-bg-accent), 1) 30%, rgba(var(--color-bg-primary-inverse), 1) 100%)',
       },

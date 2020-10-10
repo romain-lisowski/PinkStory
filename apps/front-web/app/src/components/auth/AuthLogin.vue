@@ -1,35 +1,33 @@
 <template>
   <form @submit.prevent="processForm">
-    <div>
-      <h3 class="font-semibold text-2xl mt-2">
-        {{ $t('login') }}
-      </h3>
-      <div class="m-5 flex justify-end">
-        <label class="flex flex-1">
-          <input
-            v-model="email"
-            :placeholder="$t('email')"
-            type="email"
-            name="email"
-            class="flex-1 border rounded-md border-gray-400 p-2"
-          />
-        </label>
-      </div>
-      <div class="m-5 flex justify-end">
-        <label class="flex flex-1">
-          <input
-            v-model="password"
-            :placeholder="$t('password')"
-            type="password"
-            name="password"
-            :autocomplete="'off'"
-            class="flex-1 border rounded-md border-gray-400 p-2"
-          />
-        </label>
-      </div>
+    <h3 class="font-semibold text-2xl">
+      {{ $t('login') }}
+    </h3>
+    <div class="flex justify-end m-5">
+      <label class="flex flex-1">
+        <input
+          v-model="email"
+          :placeholder="$t('email')"
+          type="email"
+          name="email"
+          class="flex-1 p-2 border border-gray-400 rounded-md text-accent"
+        />
+      </label>
+    </div>
+    <div class="flex justify-end m-5">
+      <label class="flex flex-1">
+        <input
+          v-model="password"
+          :placeholder="$t('password')"
+          type="password"
+          name="password"
+          :autocomplete="'off'"
+          class="flex-1 p-2 border border-gray-400 rounded-md text-accent"
+        />
+      </label>
     </div>
     <button
-      class="bg-accent text-primary rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide"
+      class="m-1 py-4 px-8 text-primary text-lg font-light bg-accent tracking-wide rounded-lg"
       type="submit"
     >
       {{ $t('connexion') }}

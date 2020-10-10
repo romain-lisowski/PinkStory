@@ -30,7 +30,6 @@
 
     <a
       class="mt-2 sm:mt-3 xl:mt-4 pr-2 sm:text-lg xl:text-xl text-base text-right text-accent"
-      href="#"
     >
       {{ $t('read-more') }} >
     </a>

@@ -39,7 +39,7 @@ export default {
   name: 'LayoutFooter',
   data() {
     return {
-      activeTheme: 'auto',
+      activeTheme: this.$store.state.theme ? this.$store.state.theme : 'auto',
       activeThemeClasses: [
         'text-accent',
         'rounded-md',
@@ -56,6 +56,21 @@ export default {
     loggedIn() {
       return this.userLoggedIn && this.$store.state.jwt
     },
+  },
+  watch: {
+    activeTheme(theme) {
+      console.log(theme)
+      this.$store.dispatch('changeTheme', { theme })
+    },
+  },
+  created() {
+    if (this.activeTheme === 'light') {
+      this.setThemeLight()
+    } else if (this.activeTheme === 'dark') {
+      this.setThemeDark()
+    } else {
+      this.setThemeAuto()
+    }
   },
   methods: {
     logout() {

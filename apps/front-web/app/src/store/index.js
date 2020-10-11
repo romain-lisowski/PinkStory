@@ -5,12 +5,14 @@ import ApiUsers from '@/api/ApiUsers'
 Vue.use(Vuex)
 
 const user = JSON.parse(localStorage.getItem('user'))
+const theme = JSON.parse(localStorage.getItem('theme'))
 const jwt = JSON.parse(localStorage.getItem('jwt'))
 
 export default new Vuex.Store({
   state: {
     user,
     jwt,
+    theme,
   },
   actions: {
     async login({ commit }, { email, password }) {
@@ -33,6 +35,10 @@ export default new Vuex.Store({
       localStorage.removeItem('jwt')
       commit('logout')
     },
+    changeTheme({ commit }, { theme }) {
+      commit('setTheme', theme)
+      localStorage.setItem('theme', JSON.stringify(theme))
+    },
   },
   mutations: {
     loginSuccess(state, { email, name, jwt }) {
@@ -46,6 +52,9 @@ export default new Vuex.Store({
     logout(state) {
       state.user = null
       state.jwt = null
+    },
+    setTheme(state, theme) {
+      state.theme = theme
     },
   },
 })

@@ -1,48 +1,42 @@
 <template>
-  <form @submit.prevent="processForm">
+  <form class="flex flex-col" @submit.prevent="processForm">
     <h3 class="font-bold text-4xl sm:text-5xl lg:text-6xl text-accent">
       {{ $t('sign-up') }}
     </h3>
-    <label class="flex flex-1 justify-end m-5">
-      <input
-        v-model="name"
-        :placeholder="$t('pseudo')"
-        type="text"
-        name="name"
-        class="flex-1 p-2 text-primary-inverse border border-gray-400 rounded-md"
-      />
-    </label>
-    <label class="flex flex-1 justify-end m-5">
-      <input
-        v-model="email"
-        :placeholder="$t('email')"
-        type="email"
-        name="email"
-        class="flex-1 p-2 text-primary-inverse border border-gray-400 rounded-md"
-      />
-    </label>
-    <label class="flex flex-1 justify-end m-5">
-      <input
-        v-model="password"
-        :placeholder="$t('password')"
-        type="password"
-        name="password"
-        autocomplete="'autocomplete'"
-        class="flex-1 p-2 text-primary-inverse border border-gray-400 rounded-md"
-      />
-    </label>
-    <label class="flex flex-1 justify-end m-5">
-      <input
-        v-model="passwordConfirm"
-        :placeholder="$t('confirm')"
-        type="password"
-        name="passwordConfirm"
-        autocomplete="'autocomplete'"
-        class="flex-1 p-2 text-primary-inverse border border-gray-400 rounded-md"
-      />
-    </label>
+
+    <input
+      v-model="name"
+      :placeholder="$t('pseudo')"
+      type="text"
+      name="name"
+      class="mt-5 p-2 text-primary-inverse rounded-md"
+    />
+    <input
+      v-model="email"
+      :placeholder="$t('email')"
+      type="email"
+      name="email"
+      class="mt-5 p-2 text-primary-inverse rounded-md"
+    />
+    <input
+      v-model="password"
+      :placeholder="$t('password')"
+      type="password"
+      name="password"
+      autocomplete="'autocomplete'"
+      class="mt-5 p-2 text-primary-inverse rounded-md"
+    />
+    <input
+      v-model="passwordConfirm"
+      :placeholder="$t('confirm')"
+      type="password"
+      name="passwordConfirm"
+      autocomplete="'autocomplete'"
+      class="mt-5 p-2 text-primary-inverse rounded-md"
+    />
+
     <button
-      class="m-1 py-4 px-8 text-lg text-primary font-light tracking-wide bg-accent rounded-lg"
+      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent rounded-lg"
       type="submit"
     >
       {{ $t('submit') }}

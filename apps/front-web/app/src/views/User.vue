@@ -1,18 +1,25 @@
 <template>
-  <div>
-    <h2 class="my-5 font-bold text-3xl">
-      {{ $t('update-profile') }}
-    </h2>
-    <div class="flex flex-col items-center justify-center">
-      <UserUpdateEmail
-        class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2"
-      />
-      <UserUpdatePassword
-        class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2"
-      />
-      <UserUpdateInformation
-        class="w-1/3 shadow-xs border rounded-md border-gray-400 mb-4 p-2"
-      />
+  <div
+    class="flex flex-col justify-center items-center bg-cover"
+    :style="{
+      'background-image': `url(${require('@/assets/images/book.jpg')})`,
+    }"
+  >
+    <h3 class="mt-32 font-bold text-4xl sm:text-5xl lg:text-5xl">
+      {{ $t('update-profil') }}
+    </h3>
+    <div class="w-3/4 sm:w-1/2 lg:w-1/3 xl:w-1/4 my-10">
+      <div class="flex flex-col gap-8 items-center justify-center">
+        <UserUpdateEmail
+          class="mb-4 p-10 bg-primary rounded-xl opacity-75 w-full"
+        />
+        <UserUpdatePassword
+          class="mb-4 p-10 bg-primary rounded-xl opacity-75 w-full"
+        />
+        <UserUpdateInformation
+          class="mb-4 p-10 bg-primary rounded-xl opacity-75 w-full"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -35,7 +42,7 @@ export default {
 <i18n>
 {
   "fr": {
-    "update-profile": "Modifier mon profil"
+    "update-profil": "Modification du profil"
   }
 }
 </i18n>

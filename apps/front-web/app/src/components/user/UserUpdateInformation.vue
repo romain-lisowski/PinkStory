@@ -1,23 +1,19 @@
 <template>
   <div>
-    <h3 class="font-semibold text-2xl mt-2">
-      {{ $t('Informations') }}
+    <h3 class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
+      {{ $t('update-informations') }}
     </h3>
-    <form @submit.prevent="processForm">
-      <div class="m-5 flex justify-end">
-        <label class="flex flex-1">
-          <input
-            v-model="name"
-            placeholder="Pseudo"
-            type="text"
-            name="name"
-            :autocomplete="'nickname'"
-            class="flex-1 border rounded-md border-gray-400 p-2"
-          />
-        </label>
-      </div>
+    <form class="flex flex-col" @submit.prevent="processForm">
+      <input
+        v-model="name"
+        placeholder="Pseudo"
+        type="text"
+        name="name"
+        :autocomplete="'nickname'"
+        class="my-5 p-3 text-primary-inverse rounded-md"
+      />
       <button
-        class="bg-accent text-primary rounded-lg m-1 py-4 px-8 text-lg font-light tracking-wide"
+        class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent rounded-lg"
         type="submit"
       >
         {{ $t('update') }}
@@ -47,7 +43,7 @@ export default {
 <i18n>
 {
   "fr": {
-    "informations": "Informations",
+    "update-informations": "Informations",
     "pseudo": "Pseudo",
     "update": "Modifier"
   }

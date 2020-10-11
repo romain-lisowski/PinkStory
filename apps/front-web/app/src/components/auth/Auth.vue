@@ -1,10 +1,12 @@
 <template>
   <div
+    ref="auth"
     :class="!openAuthPanel ? '-translate-y-full' : ''"
     class="flex flex-row absolute justify-center items-center inset-0 w-full h-screen p-10 bg-fixed bg-primary bg-cover bg-opacity-75 transform transition-transform duration-300 ease-in-out z-20"
     :style="{
       'background-image': `url(${require('@/assets/images/auth2.jpg')})`,
     }"
+    tabindex="0"
     @keyup.esc="onCloseAuthPanel"
   >
     <a
@@ -12,25 +14,20 @@
       @click="onCloseAuthPanel"
       ><font-awesome-icon icon="times"
     /></a>
+
     <div class="bg-radial-gradient-center absolute inset-0"></div>
-    <div :class="!displaySignUp ? 'block' : 'hidden'" class="w-1/4 z-20">
-      <AuthLogin class="-mt-48" />
-      <a
-        class="block mt-8 hover:underline cursor-pointer"
-        @click="toggleSignUp"
-      >
-        {{ $t('sign-up') }}
-      </a>
-    </div>
-    <div :class="displaySignUp ? 'block' : 'hidden'" class="w-1/4 z-20">
-      <AuthSignUp class="-mt-48" />
-      <a
-        class="block mt-8 hover:underline cursor-pointer"
-        @click="toggleSignUp"
-      >
-        {{ $t('sign-in') }}
-      </a>
-    </div>
+
+    <AuthLogin
+      :class="!displaySignUp ? 'block' : 'hidden'"
+      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 z-20 bg-primary rounded-xl"
+      @onDisplaySignUp="onDisplaySignUp"
+    />
+
+    <AuthSignUp
+      :class="displaySignUp ? 'block' : 'hidden'"
+      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 z-20 bg-primary rounded-xl"
+      @onDisplayLogin="onDisplayLogin"
+    />
   </div>
 </template>
 
@@ -55,23 +52,23 @@ export default {
       displaySignUp: false,
     }
   },
+  watch: {
+    openAuthPanel(value) {
+      if (value === true) {
+        this.$refs.auth.focus()
+      }
+    },
+  },
   methods: {
     onCloseAuthPanel() {
-      this.openAuthPanel = false
       this.$emit('onCloseAuthPanel')
     },
-    toggleSignUp() {
-      this.displaySignUp = !this.displaySignUp
+    onDisplaySignUp() {
+      this.displaySignUp = true
+    },
+    onDisplayLogin() {
+      this.displaySignUp = false
     },
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "sign-up": "Pas encore inscrit ?",
-    "sign-in": "Déjà inscrit ?"
-  }
-}
-</i18n>

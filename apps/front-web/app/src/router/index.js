@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import store from '@/store'
 import Home from '@/views/Home.vue'
 import User from '@/views/User.vue'
+import NotFound from '@/views/NotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -19,6 +20,14 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+  },
+  {
+    path: '/404',
+    component: NotFound,
+  },
+  {
+    path: '*',
+    redirect: '/404',
   },
 ]
 

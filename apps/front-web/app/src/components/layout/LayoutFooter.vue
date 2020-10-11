@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="bg-accent h-10 py-8 sm:py-10 flex flex-row items-center justify-between"
+    class="bg-accent h-10 py-8 sm:py-10 flex flex-row items-center justify-between z-10"
   >
     <router-link
       :to="{ name: 'Home' }"

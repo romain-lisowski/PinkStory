@@ -50,7 +50,10 @@
     <header
       class="z-10 fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5"
     >
-      <a class="ml-12 sm:ml-8 lg:hidden text-2xl" @click="toggleMenu">
+      <a
+        class="ml-12 sm:ml-8 lg:hidden text-2xl cursor-pointer"
+        @click="toggleMenu"
+      >
         <font-awesome-icon icon="bars"
       /></a>
 

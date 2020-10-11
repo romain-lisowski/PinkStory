@@ -19,12 +19,12 @@
 
     <AuthLogin
       :class="!displaySignUp ? 'opacity-100 z-20' : 'opacity-0 z-0'"
-      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-in-out"
+      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-out"
       @onDisplaySignUp="onDisplaySignUp"
     />
     <AuthSignUp
       :class="displaySignUp ? 'opacity-100 z-20' : 'opacity-0 z-0'"
-      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-in-out"
+      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-out"
       @onDisplayLogin="onDisplayLogin"
     />
   </div>

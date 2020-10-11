@@ -50,7 +50,7 @@
     <header
       class="z-10 fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5"
     >
-      <a class="main-menu-toggle lg:hidden text-2xl" @click="toggleMenu">
+      <a class="ml-12 sm:ml-8 lg:hidden text-2xl" @click="toggleMenu">
         <font-awesome-icon icon="bars"
       /></a>
 
@@ -127,7 +127,7 @@
       >
         <font-awesome-icon
           icon="venus-mars"
-          class="text-4xl text-accent rounded-full"
+          class="-mt-2 lg:mt-2 mr-8 sm:mr-6 lg:mr-0 text-4xl text-accent rounded-full"
         />
       </a>
       <Auth

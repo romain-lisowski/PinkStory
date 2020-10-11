@@ -18,14 +18,13 @@
     <div class="bg-radial-gradient-center absolute inset-0"></div>
 
     <AuthLogin
-      :class="!displaySignUp ? 'block' : 'hidden'"
-      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 z-20 bg-primary rounded-xl"
+      :class="!displaySignUp ? 'opacity-100 z-20' : 'opacity-0 z-0'"
+      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-in-out"
       @onDisplaySignUp="onDisplaySignUp"
     />
-
     <AuthSignUp
-      :class="displaySignUp ? 'block' : 'hidden'"
-      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 z-20 bg-primary rounded-xl"
+      :class="displaySignUp ? 'opacity-100 z-20' : 'opacity-0 z-0'"
+      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-in-out"
       @onDisplayLogin="onDisplayLogin"
     />
   </div>

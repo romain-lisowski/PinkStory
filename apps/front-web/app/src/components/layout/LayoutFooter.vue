@@ -11,21 +11,21 @@
     <div class="text-primary text-sm font-light pr-12">
       <span class="mx-1 text-sm font-normal">{{ $t('theme') }} : </span>
       <span
-        class="mx-1 cursor-pointer"
+        class="mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'auto' ? activeThemeClasses : ''"
         @click="setThemeAuto"
         >{{ $t('auto') }}</span
       >
-      /
+      |
       <span
-        class="mx-1 cursor-pointer"
+        class="mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'light' ? activeThemeClasses : ''"
         @click="setThemeLight"
         >{{ $t('light') }}</span
       >
-      /
+      |
       <span
-        class="mx-1 cursor-pointer"
+        class="mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'dark' ? activeThemeClasses : ''"
         @click="setThemeDark"
         >{{ $t('dark') }}</span

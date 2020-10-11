@@ -1,0 +1,50 @@
+<template>
+  <div
+    name="adult-modal"
+    :class="openAdultModal ? 'opacity-100 z-40' : 'opacity-0 z-0'"
+    class="flex justify-center items-center inset-0 fixed w-full h-screen bg-primary bg-opacity-90 transition-opacity duration-500 ease-out"
+  >
+    <div
+      class="flex flex-col fixed -mt-48 px-20 pt-12 pb-16 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary bg-opacity-100 border border-primary-inverse rounded-xl"
+    >
+      <p class="text-5xl sm:text-7xl font-bold text-accent">PinkStory</p>
+      <p class="mt-6 text-2xl sm:text-4xl font-bold">
+        {{ $t('are-you-an-adult') }}
+      </p>
+      <p class="mt-4 text-sm sm:text-xl">
+        {{ $t('adult-speech') }}
+      </p>
+      <button
+        class="block mt-8 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light tracking-wide cursor-pointer"
+        @click="
+          {
+            openAdultModal = false
+          }
+        "
+      >
+        {{ $t('enter') }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'AdultModal',
+  data() {
+    return {
+      openAdultModal: true,
+    }
+  },
+}
+</script>
+
+<i18n>
+{
+  "fr": {
+    "are-you-an-adult": "Avez-vous 18 ans ?",
+    "adult-speech": "PinkStory est une communauté qui offre du contenu réservé aux adultes. Vous devez avoir 18 ans ou plus pour entrer",
+    "enter": "J'ai 18 ans ou plus - Entrer"
+  }
+}
+</i18n>

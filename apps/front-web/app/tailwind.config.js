@@ -65,6 +65,7 @@ module.exports = {
       opacity: {
         5: '0.05',
         10: '0.1',
+        90: '0.9',
       },
       borderRadius: {
         xl: '0.8rem',

@@ -4,28 +4,30 @@
   >
     <router-link
       :to="{ name: 'Home' }"
-      class="text-primary font-extrabold text-2xl pl-12"
+      class="text-primary font-extrabold text-lg sm:text-2xl pl-12"
       >PinkStory</router-link
     >
 
-    <div class="text-primary text-sm font-light pr-12">
-      <span class="mx-1 text-sm font-normal">{{ $t('theme') }} : </span>
+    <div class="pr-8 sm:pr-12 pt-2 sm:pt-0 text-primary text-xs font-light">
+      <span class="mx-1 text-xs sm:text-sm sm:font-thin font-normal"
+        >{{ $t('theme') }} :
+      </span>
       <span
-        class="mx-1 cursor-pointer transition-all duration-300 ease-in-out"
+        class="sm:mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'auto' ? activeThemeClasses : ''"
         @click="setThemeAuto"
         >{{ $t('auto') }}</span
       >
       |
       <span
-        class="mx-1 cursor-pointer transition-all duration-300 ease-in-out"
+        class="sm:mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'light' ? activeThemeClasses : ''"
         @click="setThemeLight"
         >{{ $t('light') }}</span
       >
       |
       <span
-        class="mx-1 cursor-pointer transition-all duration-300 ease-in-out"
+        class="sm:mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'dark' ? activeThemeClasses : ''"
         @click="setThemeDark"
         >{{ $t('dark') }}</span
@@ -44,7 +46,8 @@ export default {
         'text-accent',
         'rounded-md',
         'bg-primary',
-        'px-2',
+        'px-1',
+        'sm:px-2',
         'py-1',
       ],
     }

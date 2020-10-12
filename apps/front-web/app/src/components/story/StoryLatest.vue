@@ -1,6 +1,6 @@
 <template>
   <div class="mx-12">
-    <div class="mt-6 sm:mt-12 flex flex-col sm:flex-row justify-between">
+    <div class="mt-0 sm:mt-12 flex flex-col sm:flex-row justify-between">
       <h3 class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
         {{ $t('latest-stories') }}
       </h3>

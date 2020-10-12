@@ -11,11 +11,13 @@
 
     <div class="relative mx-12 pt-32 sm:pt-40 xl:pt-40">
       <h1
-        class="text-5xl sm:text-7xl xl:text-8xl xl:w-3/5 font-extrabold text-left leading-tight sm:leading-none"
+        class="text-4xl sm:text-7xl xl:text-8xl xl:w-3/5 font-extrabold text-left leading-tight sm:leading-none"
       >
         {{ story.title }}
       </h1>
-      <p class="mt-2 text-xl sm:text-2xl xl:text-3xl text-left font-extrabold">
+      <p
+        class="mt-2 text-base sm:text-2xl xl:text-3xl text-left font-extrabold"
+      >
         18+
         <span class="mx-2 font-normal">|</span>
         {{ story.date }}
@@ -25,7 +27,7 @@
         ><span v-else class="font-medium">&#9794;</span>
       </p>
       <p
-        class="mt-2 text-2xl sm:text-3xl xl:text-4xl text-left text-accent-lighter tracking-wide"
+        class="mt-2 text-xl sm:text-3xl xl:text-4xl text-left text-accent tracking-wide"
       >
         {{ story.categories }}
       </p>
@@ -33,7 +35,7 @@
       <RatingStars :rating="story.rating" class="mt-2" />
 
       <p
-        class="sm:w-4/5 xl:w-2/3 mt-8 text-lg sm:text-xl xl:text-2xl text-justify sm:text-left tracking-wide w-full leading-6 sm:leading-8 xl:leading-10"
+        class="sm:w-4/5 xl:w-2/3 mt-8 text-base sm:text-xl xl:text-2xl text-justify sm:text-left tracking-wide w-full leading-6 sm:leading-8 xl:leading-10"
       >
         {{ story.abstract }}
       </p>

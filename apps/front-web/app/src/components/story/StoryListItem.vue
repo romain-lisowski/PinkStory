@@ -24,7 +24,7 @@
       </span>
     </p>
 
-    <p class="mt-4 tracking-wide text-justify">
+    <p class="mt-4 tracking-wide text-sm sm:text-base text-justify">
       {{ story.abstract }}
     </p>
 

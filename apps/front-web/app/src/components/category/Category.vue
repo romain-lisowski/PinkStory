@@ -1,10 +1,10 @@
 <template>
   <div
     id="category"
-    class="mt-4 sm:mt-16 pb-4 sm:pb-12 bg-primary-inverse bg-opacity-5"
+    class="sm:mt-16 pb-4 sm:pb-12 bg-primary-inverse bg-opacity-5"
   >
     <div class="mx-12">
-      <div class="flex flex-col sm:flex-row justify-between mb-8 pt-12">
+      <div class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12">
         <h3 class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
           {{ $t('categories') }}
         </h3>

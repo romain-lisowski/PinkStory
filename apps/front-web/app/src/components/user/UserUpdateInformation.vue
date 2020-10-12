@@ -10,7 +10,7 @@
         type="text"
         name="name"
         :autocomplete="'nickname'"
-        class="my-5 p-3 text-primary-inverse rounded-md"
+        class="my-5 p-3 text-primary-inverse bg-primary-inverse rounded-md"
       />
       <button
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent rounded-lg"

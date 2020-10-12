@@ -16,11 +16,7 @@
       </p>
       <button
         class="block mt-8 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light tracking-wide cursor-pointer"
-        @click="
-          {
-            openAdultModal = false
-          }
-        "
+        @click="onIsAdult"
       >
         {{ $t('enter') }}
       </button>
@@ -33,8 +29,14 @@ export default {
   name: 'AdultModal',
   data() {
     return {
-      openAdultModal: true,
+      openAdultModal: !this.$store.state.isAdult,
     }
+  },
+  methods: {
+    onIsAdult() {
+      this.$store.dispatch('isAdult')
+      this.openAdultModal = false
+    },
   },
 }
 </script>

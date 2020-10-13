@@ -1,8 +1,8 @@
 <template>
   <form class="flex flex-col" @submit.prevent="processForm">
-    <h3 class="font-bold text-4xl sm:text-5xl lg:text-6xl text-accent">
+    <p class="font-bold text-4xl sm:text-5xl lg:text-6xl text-accent">
       {{ $t('sign-up') }}
-    </h3>
+    </p>
 
     <input
       v-model="name"

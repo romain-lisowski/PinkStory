@@ -17,16 +17,24 @@
 
     <div class="bg-radial-gradient-center absolute inset-0"></div>
 
-    <AuthLogin
-      :class="!displaySignUp ? 'opacity-100 z-20' : 'opacity-0 z-0'"
-      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-out"
-      @onDisplaySignUp="onDisplaySignUp"
-    />
-    <AuthSignUp
-      :class="displaySignUp ? 'opacity-100 z-20' : 'opacity-0 z-0'"
-      class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 absolute bg-primary rounded-xl transition-opacity duration-300 ease-out"
-      @onDisplayLogin="onDisplayLogin"
-    />
+    <div
+      :class="!displaySignUp ? '' : 'translate-y-full'"
+      class="flex items-center justify-center absolute w-full h-screen transform transition-transform duration-300 ease-out"
+    >
+      <AuthLogin
+        class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary rounded-xl"
+        @onDisplaySignUp="onDisplaySignUp"
+      />
+    </div>
+    <div
+      :class="displaySignUp ? 'translate-y-full' : ''"
+      class="flex items-center justify-center absolute bottom-100 w-full h-screen transform transition-transform duration-300 ease-out"
+    >
+      <AuthSignUp
+        class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary rounded-xl"
+        @onDisplayLogin="onDisplayLogin"
+      />
+    </div>
   </div>
 </template>
 
@@ -60,6 +68,7 @@ export default {
   },
   methods: {
     onCloseAuthPanel() {
+      this.displaySignUp = false
       this.$emit('onCloseAuthPanel')
     },
     onDisplaySignUp() {

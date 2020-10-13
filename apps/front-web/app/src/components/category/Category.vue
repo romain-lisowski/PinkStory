@@ -5,9 +5,9 @@
   >
     <div class="mx-12">
       <div class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12">
-        <h3 class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
+        <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
           {{ $t('categories') }}
-        </h3>
+        </p>
         <a
           class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
         >

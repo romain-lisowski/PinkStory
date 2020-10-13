@@ -9,7 +9,7 @@
       <div class="absolute inset-0 bg-radial-gradient-left"></div>
     </div>
 
-    <div class="relative mx-12 pt-32 sm:pt-40 xl:pt-40">
+    <div class="relative mx-8 sm:mx-12 pt-32 sm:pt-40 xl:pt-40">
       <h1
         class="text-4xl sm:text-7xl xl:text-8xl xl:w-3/5 font-extrabold text-left leading-tight sm:leading-none"
       >
@@ -26,22 +26,20 @@
         <span v-if="story.gender === 'female'">&#9792;</span
         ><span v-else class="font-medium">&#9794;</span>
       </p>
-      <p
-        class="mt-2 text-xl sm:text-3xl xl:text-4xl text-left text-accent tracking-wide"
-      >
+      <p class="mt-2 text-xl sm:text-3xl xl:text-4xl text-left text-accent">
         {{ story.categories }}
       </p>
 
       <RatingStars :rating="story.rating" class="mt-2" />
 
       <p
-        class="sm:w-4/5 xl:w-2/3 mt-8 text-base sm:text-xl xl:text-2xl text-justify sm:text-left tracking-wide w-full leading-6 sm:leading-8 xl:leading-10"
+        class="sm:w-4/5 xl:w-2/3 mt-8 text-base sm:text-xl xl:text-2xl text-justify sm:text-left w-full leading-6 sm:leading-8 xl:leading-10"
       >
         {{ story.abstract }}
       </p>
 
       <button
-        class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light tracking-wide"
+        class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light"
       >
         {{ $t('read-now') }}
       </button>

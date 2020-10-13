@@ -1,21 +1,25 @@
 <template>
   <div
     name="adult-modal"
-    :class="openAdultModal ? 'opacity-100 z-40' : 'opacity-0 z-0'"
-    class="flex justify-center items-center inset-0 fixed w-full h-screen bg-primary bg-opacity-90 transition-opacity duration-500 ease-out"
+    :class="openAdultModal ? 'fixed' : 'hidden'"
+    class="flex justify-center items-center inset-0 fixed w-full h-full bg-primary bg-opacity-90 z-10"
   >
     <div
-      class="flex flex-col fixed -mt-48 px-20 pt-12 pb-16 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary bg-opacity-100 border border-primary-inverse rounded-xl"
+      class="flex flex-col fixed -mt-48 px-16 pt-8 pb-12 lg:px-20 lg:pt-12 lg:pb-16 w-4/5 sm:w-3/4 lg:2/3 xl:w-1/2 bg-primary bg-opacity-100 border border-primary-inverse rounded-xl"
     >
-      <p class="text-3xl sm:text-7xl font-bold text-accent">PinkStory</p>
-      <p class="mt-6 text-xl sm:text-4xl font-bold">
+      <p
+        class="text-3xl sm:text-5xl lg:text-7xl font-bold text-accent tracking-tighter"
+      >
+        PinkStory
+      </p>
+      <p class="mt-6 text-xl sm:text-2xl lg:text-4xl font-bold">
         {{ $t('are-you-an-adult') }}
       </p>
-      <p class="mt-4 text-xs sm:text-xl">
+      <p class="mt-4 text-sm sm:text-base lg:text-xl">
         {{ $t('adult-speech') }}
       </p>
       <button
-        class="block mt-8 sm:py-5 py-4 px-8 text-xs sm:text-xl font-light tracking-wide bg-accent rounded-lg cursor-pointer"
+        class="block mt-8 sm:py-5 py-4 px-8 text-sm sm:text-lg lg:text-xl font-light tracking-wide bg-accent rounded-lg cursor-pointer"
         @click="onIsAdult"
       >
         {{ $t('enter') }}

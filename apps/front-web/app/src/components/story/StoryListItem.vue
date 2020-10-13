@@ -1,37 +1,31 @@
 <template>
-  <li class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4">
-    <img
-      class="w-full h-48 sm:h-64 object-cover object-top rounded-2xl opacity-90"
-      :src="require(`@/assets/images/${story.imagePath}`)"
-    />
+  <li
+    class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4 p-4 hover:bg-accent rounded-2xl cursor-pointer"
+  >
+    <a>
+      <img
+        class="w-full h-48 sm:h-64 object-cover object-top rounded-2xl opacity-90"
+        :src="require(`@/assets/images/${story.imagePath}`)"
+      />
 
-    <h2 class="font-semibold text-xl sm:text-2xl leading-tight mt-4">
-      {{ story.title }}
-    </h2>
-
-    <p class="mt-1 text-sm sm:text-base">
-      {{ $t('write-by') }} {{ story.author
-      }}<span v-if="story.gender === 'female'">&#9792;</span
-      ><span v-else>&#9794;</span>
-    </p>
-    <p class="mt-1 text-lg sm:text-xl text-accent">
-      {{ story.categories }}
-    </p>
-    <p class="flex justify-between mt-1">
-      <RatingStars :rating="story.rating" class="flex-1" />
-      <span class="text-base sm:text-lg mr-2 sm:mt-2">
-        {{ story.nbComments }} {{ $t('comments') }}
+      <span class="block font-semibold text-xl sm:text-2xl leading-tight mt-4">
+        {{ story.title }}
       </span>
-    </p>
 
-    <p class="mt-4 tracking-wide text-sm sm:text-base text-justify">
-      {{ story.abstract }}
-    </p>
-
-    <a
-      class="mt-2 sm:mt-3 xl:mt-4 pr-2 sm:text-lg xl:text-xl text-base text-right text-accent"
-    >
-      {{ $t('read-more') }} >
+      <span class="block mt-1 text-sm sm:text-base">
+        {{ $t('write-by') }} {{ story.author
+        }}<span v-if="story.gender === 'female'">&#9792;</span
+        ><span v-else>&#9794;</span>
+      </span>
+      <span class="block mt-1 text-lg sm:text-xl text-accent">
+        {{ story.categories }}
+      </span>
+      <span class="flex justify-between mt-1">
+        <RatingStars :rating="story.rating" class="flex-1" />
+        <span class="text-base sm:text-lg mr-2 sm:mt-2">
+          {{ story.nbComments }} {{ $t('comments') }}
+        </span>
+      </span>
     </a>
   </li>
 </template>

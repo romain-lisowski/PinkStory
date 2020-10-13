@@ -55,6 +55,9 @@ module.exports = {
           'Noto Color Emoji',
         ],
       },
+      inset: {
+        100: '100%',
+      },
       fontSize: {
         xxs: '.5rem',
         '7xl': '5rem',
@@ -84,6 +87,7 @@ module.exports = {
     variants: {
       backgroundColor: ['responsive', 'hover', 'focus', 'group-hover'],
       borderColor: ['responsive', 'hover', 'focus', 'group-hover'],
+      textColor: ['responsive', 'hover', 'focus', 'group-hover'],
     },
   },
 

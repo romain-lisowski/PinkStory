@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3 class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
+    <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
       {{ $t('update-email') }}
-    </h3>
+    </p>
     <form class="flex flex-col" @submit.prevent="processForm">
       <input
         v-model="email"

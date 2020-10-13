@@ -1,10 +1,10 @@
 <template>
   <footer
-    class="bg-accent h-10 py-8 sm:py-10 flex flex-row items-center justify-between z-10"
+    class="bg-accent h-10 py-8 sm:py-10 flex flex-row items-center justify-between"
   >
     <router-link
       :to="{ name: 'Home' }"
-      class="text-primary font-extrabold text-lg sm:text-2xl pl-12"
+      class="text-primary font-extrabold text-lg sm:text-2xl pl-12 tracking-tighter"
       >PinkStory</router-link
     >
 

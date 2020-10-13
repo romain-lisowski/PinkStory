@@ -5,19 +5,19 @@
       'background-image': `url(${require('@/assets/images/book.jpg')})`,
     }"
   >
-    <h3 class="mt-32 font-bold text-4xl sm:text-5xl lg:text-5xl">
+    <p class="mt-32 font-bold text-4xl sm:text-5xl lg:text-5xl">
       {{ $t('update-profil') }}
-    </h3>
+    </p>
     <div class="w-3/4 sm:w-1/2 lg:w-1/3 xl:w-1/4 my-10">
       <div class="flex flex-col gap-8 items-center justify-center">
         <UserUpdateEmail
-          class="mb-4 p-10 bg-primary rounded-xl opacity-75 w-full"
+          class="mb-4 px-10 pt-6 pb-10 bg-primary rounded-xl opacity-75 w-full"
         />
         <UserUpdatePassword
-          class="mb-4 p-10 bg-primary rounded-xl opacity-75 w-full"
+          class="mb-4 px-10 pt-6 pb-10 bg-primary rounded-xl opacity-75 w-full"
         />
         <UserUpdateInformation
-          class="mb-4 p-10 bg-primary rounded-xl opacity-75 w-full"
+          class="mb-4 px-10 pt-6 pb-10 bg-primary rounded-xl opacity-75 w-full"
         />
       </div>
     </div>

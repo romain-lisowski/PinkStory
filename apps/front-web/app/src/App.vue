@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="text-center flex flex-col min-h-screen bg-primary text-primary z-10"
+    class="text-center flex flex-col min-h-screen bg-primary text-primary tracking-tight"
   >
     <AdultModal />
     <LayoutHeader />

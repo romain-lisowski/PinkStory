@@ -1,10 +1,10 @@
 <template>
   <div>
     <nav
-      class="lg:hidden absolute h-screen w-full text-xl bg-primary overflow-y-scroll z-20 transform transition-transform duration-300 ease-in-out"
-      :class="!openMenu ? 'translate-x-full' : ''"
+      class="lg:hidden absolute right-100 h-screen w-full text-xl bg-primary overflow-y-scroll z-20 transform transition-transform duration-300 ease-in-out"
+      :class="!openMenu ? '' : 'translate-x-full'"
     >
-      <a class="block p-4 text-right" @click="toggleMenu"
+      <a class="block py-4 pr-8 text-right cursor-pointer" @click="toggleMenu"
         ><font-awesome-icon icon="times"
       /></a>
 
@@ -48,10 +48,10 @@
     </nav>
 
     <header
-      class="z-10 fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5"
+      class="fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5 z-10"
     >
       <a
-        class="ml-12 sm:ml-8 lg:hidden text-2xl cursor-pointer"
+        class="ml-6 sm:ml-12 lg:hidden text-2xl cursor-pointer"
         @click="toggleMenu"
       >
         <font-awesome-icon icon="bars"
@@ -59,7 +59,7 @@
 
       <router-link
         :to="{ name: 'Home' }"
-        class="mx-auto lg:ml-0 flex-shrink-0 text-2xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tightest"
+        class="mx-auto lg:ml-0 flex-shrink-0 text-2xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tighter"
       >
         PinkStory
       </router-link>
@@ -74,10 +74,10 @@
             >
           </li>
           <li class="pl-2">
-            <a
+            <router-link
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
-              href="#category"
-              >{{ $t('categories') }}</a
+              :to="{ name: 'Home', hash: '#category' }"
+              >{{ $t('categories') }}</router-link
             >
           </li>
           <li class="pl-2">
@@ -107,7 +107,7 @@
 
       <button
         v-if="loggedIn"
-        class="relative group ml-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
+        class="relative group mr-5 sm:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
           class="absolute top-0 left-0 px-1 md:px-2 bg-accent group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"

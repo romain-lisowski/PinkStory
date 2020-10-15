@@ -15,12 +15,12 @@
   ],
   "settings": {
     "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true
+    "[javascript]": {
+      "editor.formatOnSave": false // cause use eslint for javascript
     },
-
-    "prettier.configPath": "./app/.prettierrc.json",
-    "prettier.prettierPath": "./app/node_modules/prettier",
-    "eslint.workingDirectories": ["./app"]
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true // to use eslint on save
+    },
+    "prettier.prettierPath": "./node_modules/prettier"
   }
 }

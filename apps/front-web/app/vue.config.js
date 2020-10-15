@@ -1,5 +1,9 @@
 module.exports = {
-  devServer: { https: true },
+  devServer: {
+    https: true,
+    host: '0.0.0.0',
+    port: 3000,
+  },
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {
       // eslint-disable-next-line no-param-reassign

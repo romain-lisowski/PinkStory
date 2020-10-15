@@ -1,8 +1,0 @@
-version: '3.8'
-services:
-  node:
-    build:
-      context: ./docker/node
-    volumes:
-      - .:/var/www:delegated
-    command: /bin/sh -c "while sleep 1000; do :; done"

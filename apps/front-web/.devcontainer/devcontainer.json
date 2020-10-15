@@ -1,8 +1,8 @@
 {
-  "name": "PinkStory front-web",
-  "dockerComposeFile": "./docker-compose.yml",
-  "service": "node",
-  "workspaceFolder": "/var/www",
+  "name": "PinkStory - Front Web",
+  "dockerComposeFile": "../../../docker-compose.yml",
+  "service": "front-web-vue",
+  "workspaceFolder": "/www/front-web",
   "shutdownAction": "none",
   "extensions": [
     "octref.vetur",

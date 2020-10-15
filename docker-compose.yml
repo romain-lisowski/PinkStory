@@ -6,8 +6,10 @@ services:
       context: ./docker/nginx
     depends_on:
       - api-gateway-symfony
+      - front-web-vue
     volumes:
       - ./apps/api-gateway/app:/www/api-gateway:delegated
+      - ./apps/front-web/app:/www/front-web:delegated
       - ./docker/nginx/log:/var/log/nginx:delegated
     ports:
       - 443:443
@@ -57,3 +59,15 @@ services:
     ports:
       - 3080:80
       - 3443:443
+
+  front-web-vue:
+    build:
+      context: ./apps/front-web/docker/vue
+    depends_on:
+      - api-gateway-symfony
+    volumes:
+      - ./apps/front-web/app:/www/front-web:delegated
+    stdin_open: true
+    tty: true
+    ports:
+      - 3000:3000

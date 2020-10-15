@@ -38,11 +38,13 @@
         {{ story.abstract }}
       </p>
 
-      <button
+      <router-link
+        :to="{ name: 'Story' }"
+        tag="button"
         class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light"
       >
         {{ $t('read-now') }}
-      </button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -62,9 +64,11 @@ export default {
         gender: 'female',
         date: '26/09/2020',
         title: 'Chantage et soumission',
+        parentTitle: 'Une histoire de cul bien tapée - chapitre 12',
         categories: 'Hétéro, Triolisme, Hard et 4 autres',
         rating: 4.5,
-        abstract: `Cette histoire s'est passée l'an dernier et dure depuis.
+        nbComments: 5659,
+        content: `Cette histoire s'est passée l'an dernier et dure depuis.
         Je me présente Estelle, 48 ans, mariée avec deux grandes filles de 26 et 23 ans.
         Mon mari Marc et moi vivons dans un petit lotissement en région parisienne.
         Ma grande fille Cathy est marié depuis deux ans avec Laurent,

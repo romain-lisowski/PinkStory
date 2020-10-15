@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import store from '@/store'
 import Home from '@/views/Home.vue'
 import User from '@/views/User.vue'
+import Story from '@/views/Story.vue'
 import NotFound from '@/views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -20,6 +21,11 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+  },
+  {
+    path: '/story',
+    name: 'Story',
+    component: Story,
   },
   {
     path: '/404',

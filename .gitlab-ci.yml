@@ -21,3 +21,23 @@ api-gateway:symfony:docker-build:latest:
     - docker build -t $IMAGE_NAME:$IMAGE_VERSION apps/api-gateway/docker/symfony/
     - docker push $IMAGE_NAME:$IMAGE_VERSION
     - docker logout $CI_REGISTRY
+
+front-web:vue:docker-build:latest:
+  image: docker:19
+  services:
+    - docker:dind
+  stage: docker-build
+  only:
+    refs:
+      - master
+    changes:
+      - apps/front-web/docker/vue/*
+  variables:
+    IMAGE_NAME: $CI_REGISTRY_IMAGE/front-web-vue
+    IMAGE_VERSION: latest
+  script:
+    - docker info
+    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t $IMAGE_NAME:$IMAGE_VERSION apps/front-web/docker/vue/
+    - docker push $IMAGE_NAME:$IMAGE_VERSION
+    - docker logout $CI_REGISTRY

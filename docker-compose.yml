@@ -61,8 +61,7 @@ services:
       - 3443:443
 
   front-web-vue:
-    build:
-      context: ./apps/front-web/docker/vue
+    image: registry.gitlab.com/pinkstory/pinkstory/front-web-vue:latest
     depends_on:
       - api-gateway-symfony
     volumes:

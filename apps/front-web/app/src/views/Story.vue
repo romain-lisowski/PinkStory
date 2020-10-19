@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-primary">
     <div class="relative h-screen">
       <div
         class="absolute w-screen h-screen bg-center bg-cover"
@@ -33,7 +33,7 @@
 
     <div class="relative">
       <ul
-        class="flex justify-center items-center w-full h-32 text-primary-inverse bg-accent"
+        class="flex justify-center items-center w-full h-32 text-primary bg-accent"
       >
         <li class="flex flex-col px-8 border-r">
           <span class="text-xl">{{ $t('reader-reviews') }}</span>
@@ -53,9 +53,9 @@
         </li>
       </ul>
 
-      <div class="flex flex-col items-center bg-primary-inverse bg-opacity-5">
+      <div class="flex flex-col items-center">
         <p
-          class="w-2/3 pt-12 text-justify font-thin text-xl tracking-wide leading-relaxed"
+          class="w-3/4 pt-12 text-justify font-thin text-xl tracking-wide leading-relaxed"
           v-html="$sanitize(story.content)"
         ></p>
 
@@ -83,45 +83,69 @@
           </div>
         </div>
 
-        <p class="text-4xl font-bold">{{ $t('informations') }}</p>
+        <p class="text-5xl font-bold">{{ $t('informations') }}</p>
         <div class="flex justify-evenly gap-8 mt-6">
-          <div class="p-8 border rounded-xl">
+          <div class="p-12 bg-primary-inverse bg-opacity-5 rounded-xl">
             <img
               class="mx-auto w-48 object-cover rounded-2xl"
               :src="require(`@/assets/images/${story.imagePath}`)"
             />
-            <p class="py-4 text-xl font-bold">{{ story.parentTitle }}</p>
+            <p class="py-4 text-2xl font-bold">{{ story.parentTitle }}</p>
             <div class="flex">
               <div class="flex flex-col pr-6 border-r-2">
-                <span class="text-base">{{ $t('reader-reviews') }}</span>
-                <span class="text-xl font-bold">{{ story.rating }} / 5</span>
+                <span class="text-lg">{{ $t('reader-reviews') }}</span>
+                <span class="text-2xl font-bold">{{ story.rating }} / 5</span>
               </div>
               <div class="flex flex-col pl-6">
-                <span class="text-base">{{ $t('chapters') }}</span>
-                <span class="text-xl font-bold">{{ story.nbChapters }}</span>
+                <span class="text-lg">{{ $t('chapters') }}</span>
+                <span class="text-2xl font-bold">{{ story.nbChapters }}</span>
               </div>
             </div>
           </div>
-          <div class="p-8 border rounded-xl">
+
+          <div class="p-12 bg-primary-inverse bg-opacity-5 rounded-xl">
             <img
-              class="mx-auto w-24 rounded-full"
+              class="mx-auto p-1/2 md:p-1 w-32 border-2 border-accent rounded-full"
               :src="require('@/assets/images/profil.jpg')"
             />
-            <p class="py-4 text-xl font-bold">{{ story.author }}</p>
+            <p class="py-4 text-2xl font-bold">{{ story.author }}</p>
             <div class="flex">
               <div class="flex flex-col pr-6 border-r-2">
-                <span class="text-base">{{ $t('stories') }}</span>
-                <span class="text-xl font-bold">{{ story.nbStories }}</span>
+                <span class="text-lg">{{ $t('registration') }}</span>
+                <span class="text-2xl font-bold">{{ story.registration }}</span>
               </div>
               <div class="flex flex-col pl-6">
-                <span class="text-base">{{ $t('registration') }}</span>
-                <span class="text-xl font-bold">{{ story.registration }}</span>
+                <span class="text-lg">{{ $t('stories') }}</span>
+                <span class="text-2xl font-bold">{{ story.nbStories }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <p class="text-4xl font-bold mt-10">{{ $t('comments') }}</p>
+        <p class="text-5xl font-bold mt-10">{{ $t('comments') }}</p>
+
+        <div v-for="comment in comments" :key="comment.id" class="w-2/3">
+          <span class="flex items-center">
+            <img
+              class="mt-8 mx-auto p-1/2 md:p-1 w-24 border-2 border-accent rounded-full"
+              :src="require('@/assets/images/profil.jpg')"
+            />
+            <span class="flex-1 flex flex-col ml-4 mt-8 text-left">
+              <span class="text-xl font-bold">{{ comment.author }}</span>
+              <span class="mt-1">{{ comment.postDate }}</span>
+            </span>
+          </span>
+          <p
+            class="mt-8 p-4 text-left bg-primary-inverse bg-opacity-5 text-lg tracking-wide font-light rounded-xl"
+          >
+            {{ comment.content }}
+          </p>
+        </div>
+        <button
+          class="my-12 w-2/3 py-4 text-lg bg-accent tracking-wide rounded-lg"
+        >
+          {{ $t('comment-this-chapter') }}
+        </button>
       </div>
     </div>
   </div>
@@ -190,27 +214,25 @@ export default {
           <p>Il m'enlaça et m'embrassa en me disant que j'étais superbe. Nous rejoignîmes nos amis qui nous attendaient dans le salon. Marc était très élégant et Caro était super sexy dans une robe très moulante rouge fendue sur le côté. Perchée sur des hauts talons, cela lui faisait un cul superbe !! Je vis tout de suite que cela n'avait pas échappé à Eric comme je vis que ma tenue semblait plaire à notre hôte.</p><br/>
 
           <p>On s'installa au salon et je pris soin de tirer un peu sur les pans de ma robe au moment de m'asseoir afin de ne pas dévoiler mon intimité. Caro, elle, n'avait pas pris autant de précautions et sa robe dévoila ses cuisses jusque très haut. Marc nous servit une coupe Champagne et on trinqua à ce week-end fort sympathique.</p><br/>
-          L'ambiance était très bonne et chaleureuse et même nos maris respectifs semblaient se plaire à discuter ensemble.</p><br/>
-
-          <p>Marc mit un fond sonore et nous invita à onduler nos corps sur les rythmes de la musique. Caro et moi ne nous fîmes pas prier et je suivais mon amie dans ses mouvements de danse très lascives et sexys. Nos maris n'en loupaient pas une miette, trinquant et discutant en nous regardant. Il semblait y avoir une vraie complicité entre eux.
-          Caro leur fit signe de nous rejoindre. On dansa avec nos hommes et à un moment Caro proposa qu'on change de cavalier. Ainsi je me retrouvais dans les bras de Marc qui se colla immédiatement à moi, mon mari faisant de même avec Caro.</p><br/>
-
-          <p>On dansa ainsi un long moment. Les mains de Marc devenaient quelque peu baladeuses, se promenant de mes reins à mes fesses, remontant parfois le long de mes hanches pour effleurer mes seins libres de tout soutien. Il put se rendre compte rapidement que je ne portais rien dessous et je sentis que cette découverte développait une certaine partie de sa personne. Je sentais en effet une bosse que je devinais volumineuse contre mon bas ventre.
-          De son côté Eric ne restait pas en reste avec Caro et ses mains faisaient le même manège sur le corps de mon amie. La situation devenait vraiment très excitante et une douce chaleur s'installait dans mon corps.
-          Je continuais d'onduler et pris un malin plaisir à me frotter doucement au sexe de mon cavalier que je sentais grossir encore. Je surveillais du coin de l'oeil mon mari et mon amie qui dansaient très collés. La main de Caro s'était glissée dans les cheveux d'Eric pour les caresser tandis que les mains de mon mari étaient descendues sur les fesses de sa partenaire et les palpaient sans gêne. Caro me fit un large sourire et un petit clin d'oeil et en même temps, elle attira la tête de mon mari vers elle. Je vis leur baiser sensuel à quelques pas de moi et cela m'excita au plus haut point. Eric me regarda interrogateur et pour seule réponse je me saisis de Marc à la nuque et l'attirait vers moi. Ses lèvres se soudèrent aux miennes et nos langues s'enroulèrent l'une autour de l'autre.
-          Je fermais les yeux, dégustant cet instant hautement érotique.</p><br/>
-
-          <p>Nous restâmes soudés un bon moment tout comme le nouveau couple formé par mon mari et mon amie. Lorsque je relâchais mon étreinte, je vis Caro qui entraînait mon mari vers les canapés. Je l'observais pousser Eric dans l'un d'eux. Elle l'enjamba et s'assit sur ses cuisses, faisant remonter très haut sa robe et dévoilant ses fesses. Elle se remit à l'embrasser tandis que je voyais les mains de mon mari glisser sous le tissu de la robe, empoignant les fesses somptueuses de sa partenaire.</p><br/>
-
-          <p>Marc voyant cela m'embrassa de nouveau, glissant ses lèvres dans mon cou, puis sur mon décolleté. Je sentis ses mains remonter sur mes côtes puis soupeser mes seins libres de tout soutien.
-          Il se pencha un peu et les embrassa au travers du tissu, en même temps ses mains glissèrent sur mes cuisses et se saisirent de ma robe qu'il remonta lentement. Je levais les bras et il me débarrassa de mon seul vêtement, dévoilant mon corps nu. Il se jeta de nouveau sur mes seins qu'il embrassa avec passion.</p><br/>
-
-          <p>J'en profitais, pendant cette caresse délicieuse, pour regarder Caro qui avait pris une longueur d'avance avec mon mari. Elle avait glissé à ses pieds et s'était empressé de dégrafer son pantalon. Elle avait désormais le sexe de mon homme entre ses lèvres et le suçait goulûment !!
-          En voyant cela, l'envie de faire de même avec son mari me poussa à me jeter à ses pieds. A genoux devant Marc, je dégrafais fébrilement son pantalon. Son boxer gonflé semblait prêt à exploser. Je tirais sur l'élastique et extirpais un sexe énorme, effectivement beaucoup plus gros que celui de mon mari. Il était plus court mais avec un diamètre incroyable. J'ouvris la bouche et eus des difficultés à le prendre en bouche. Je m'appliquais malgré tout sur ce morceau de choix constatant que Marc ne s'était pas vanté !!</p><br/>
-
-          <p>Après quelques minutes de fellation, il m'aida à me relever et m'entraîna vers le deuxième canapé. Il s'y assit et m'attira vers lui. Je l'enfourchais et m'assis sur son sexe dressé. Il me pénétra sans autres préliminaires et je sentis chaque centimètre de son sexe s'enfoncer en moi.
-          En face de nous, Caro était désormais dans la même position que moi et je l'entendais gémir.</p><br/>`,
+          L'ambiance était très bonne et chaleureuse et même nos maris respectifs semblaient se plaire à discuter ensemble.</p><br/>`,
       },
+      comments: [
+        {
+          author: 'Romain Lisowski',
+          postDate: 'Il y a 24 jours',
+          content: `Estelle est une magicienne de l'écriture, et ce récit est absolument bandant. 
+            Un apprentissage des plaisirs intenses des plus excitants... Un récit très jouissif, hyper affolant... J'ai adorée...`,
+        },
+        {
+          author: 'Julie594',
+          postDate: 'Il y a 24 jours',
+          content: `Belle histoire. Je pense que pour une femme si une double pénétration en con et en cul est agréable, 
+          la double pénétration dans son trou du cul est bien meilleure, 
+          en effet ressentir deux grosses bites glisser tendrement dans le trou du cul c'est extraordinaire.
+          Oui c'est bon,bon,bon,bon, super bon, c'est vraiment un délice, 
+          c'est exquis de recevoir une belle verge dans le trou de son cul, une grosse pine dans l'anus.`,
+        },
+      ],
     }
   },
 }
@@ -229,7 +251,8 @@ export default {
     "stories": "Histoires",
     "registration": "Inscription",
     "informations": "Informations",
-    "comments": "Commentaires"
+    "comments": "Commentaires",
+    "comment-this-chapter": "Commenter ce chapitre"
   }
 }
 </i18n>

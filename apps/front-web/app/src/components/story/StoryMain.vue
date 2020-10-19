@@ -68,7 +68,7 @@ export default {
         categories: 'Hétéro, Triolisme, Hard et 4 autres',
         rating: 4.5,
         nbComments: 5659,
-        content: `Cette histoire s'est passée l'an dernier et dure depuis.
+        abstract: `Cette histoire s'est passée l'an dernier et dure depuis.
         Je me présente Estelle, 48 ans, mariée avec deux grandes filles de 26 et 23 ans.
         Mon mari Marc et moi vivons dans un petit lotissement en région parisienne.
         Ma grande fille Cathy est marié depuis deux ans avec Laurent,

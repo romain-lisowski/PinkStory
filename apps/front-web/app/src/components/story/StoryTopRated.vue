@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-8 sm:mx-12">
+  <div class="mx-8 sm:mx-12 mb-0 sm:mb-12">
     <div class="flex flex-col sm:flex-row justify-between mt-16">
       <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
         {{ $t('best-stories') }}

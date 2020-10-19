@@ -146,14 +146,21 @@
         >
           {{ $t('comment-this-chapter') }}
         </button>
+
+        <StoryTopRated />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import StoryTopRated from '@/components/story/StoryTopRated.vue'
+
 export default {
   name: 'Story',
+  components: {
+    StoryTopRated,
+  },
   data() {
     return {
       story: {

@@ -55,6 +55,10 @@ module.exports = {
           'Noto Color Emoji',
         ],
       },
+      height: {
+        128: '30rem',
+        256: '42rem',
+      },
       inset: {
         100: '100%',
       },

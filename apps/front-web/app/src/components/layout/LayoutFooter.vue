@@ -46,8 +46,7 @@ export default {
         'text-accent',
         'rounded-md',
         'bg-primary',
-        'px-1',
-        'sm:px-2',
+        'px-2',
         'py-1',
       ],
     }

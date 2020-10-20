@@ -51,7 +51,7 @@
       class="fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5 z-10"
     >
       <a
-        class="ml-6 sm:ml-12 lg:hidden text-2xl cursor-pointer"
+        class="ml-6 md:ml-0 lg:hidden text-2xl cursor-pointer"
         @click="toggleMenu"
       >
         <font-awesome-icon icon="bars"
@@ -107,7 +107,7 @@
 
       <button
         v-if="loggedIn"
-        class="relative group mr-5 sm:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
+        class="relative group mr-6 md:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
           class="absolute top-0 left-0 px-1 md:px-2 bg-accent group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"

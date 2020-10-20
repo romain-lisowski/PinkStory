@@ -1,152 +1,49 @@
 <template>
   <div class="bg-primary">
-    <div class="relative h-screen">
-      <div
-        class="absolute w-screen h-screen bg-center bg-cover"
-        :style="{
-          '-webkit-filter': 'blur(8px)',
-          'background-image': `url(${require('@/assets/images/1.jpg')})`,
-        }"
-      ></div>
-      <div class="absolute pt-48 w-screen h-screen bg-primary bg-opacity-50">
-        <img
-          class="mx-auto w-1/4 object-cover rounded-2xl"
-          :src="require(`@/assets/images/${story.imagePath}`)"
-        />
-        <h2
-          class="mt-20 text-7xl font-bold text-primary tracking-tighter leading-none"
-        >
-          {{ story.parentTitle }}
-        </h2>
-        <h1 class="text-4xl text-primary">
-          {{ story.title }}
-        </h1>
+    <StoryHeader :story="story" />
 
-        <p
-          class="inline-block mt-20 px-3 py-1 text-2xl text-primary border-2 rounded-l-full rounded-r-full"
-        >
-          <font-awesome-icon icon="heart" class="mr-2" />
-          {{ $t('add-to-favorites') }}
-        </p>
-      </div>
-    </div>
-
-    <div class="relative">
+    <div class="relative w-full">
       <ul
-        class="flex justify-center items-center w-full h-32 text-primary bg-accent"
+        class="flex justify-center items-center md:px-4 w-full h-20 lg:h-32 text-primary bg-accent"
       >
-        <li class="flex flex-col px-8 border-r">
-          <span class="text-xl">{{ $t('reader-reviews') }}</span>
-          <span class="text-4xl font-bold">{{ story.rating }} / 5</span>
+        <li class="flex flex-col pr-3 sm:pr-8 border-r">
+          <span class="text-xs sm:text-base lg:text-xl">{{
+            $t('reader-reviews')
+          }}</span>
+          <span class="text-lg sm:text-2xl lg:text-4xl font-bold"
+            >{{ story.rating }} / 5</span
+          >
         </li>
-        <li class="flex flex-col px-8 border-r">
-          <span class="text-xl">{{ $t('comments') }}</span>
-          <span class="text-4xl font-bold">{{ story.nbComments }}</span>
+        <li class="flex flex-col px-3 sm:px-8 border-r">
+          <span class="text-xs sm:text-base lg:text-xl">{{
+            $t('comments')
+          }}</span>
+          <span class="text-lg sm:text-2xl lg:text-4xl font-bold">{{
+            story.nbComments
+          }}</span>
         </li>
-        <li class="flex flex-col px-8 border-r">
-          <span class="text-xl">{{ $t('reading-time') }}</span>
-          <span class="text-4xl font-bold">{{ story.readingTime }} min</span>
+        <li class="flex flex-col px-3 sm:px-8 border-r">
+          <span class="text-xs sm:text-base lg:text-xl">{{
+            $t('reading-time')
+          }}</span>
+          <span class="text-lg sm:text-2xl lg:text-4xl font-bold"
+            >{{ story.readingTime }} min</span
+          >
         </li>
-        <li class="flex flex-col pl-8">
-          <span class="text-xl">{{ $t('first-publication') }}</span>
-          <span class="text-4xl font-bold">{{ story.updatedAt }}</span>
+        <li class="flex flex-col pl-3 sm:pl-8">
+          <span class="text-xs sm:text-base lg:text-xl">{{
+            $t('first-publication')
+          }}</span>
+          <span class="text-lg sm:text-2xl lg:text-4xl font-bold">{{
+            story.updatedAt
+          }}</span>
         </li>
       </ul>
 
       <div class="flex flex-col items-center">
-        <p
-          class="w-3/4 pt-12 text-justify font-thin text-xl tracking-wide leading-relaxed"
-          v-html="$sanitize(story.content)"
-        ></p>
-
-        <span class="text-xl font-bold"
-          >{{ $t('categories') }} :
-          <span class="text-xl font-normal text-accent-highlight">{{
-            story.categories
-          }}</span>
-        </span>
-
-        <div class="flex justify-around w-full my-12">
-          <div class="flex items-center">
-            <font-awesome-icon icon="chevron-left" class="text-4xl mr-4" />
-            <span class="flex flex-col">
-              <span class="text-xl text-left">Chapitre 11</span>
-              <span class="font-bold">{{ story.previousChapter }}</span>
-            </span>
-          </div>
-          <div class="flex items-center">
-            <span class="flex flex-col">
-              <span class="text-xl text-right">Chapitre 13</span>
-              <span class="font-bold">{{ story.nextChapter }}</span>
-            </span>
-            <font-awesome-icon icon="chevron-right" class="text-4xl ml-4" />
-          </div>
-        </div>
-
-        <p class="text-5xl font-bold">{{ $t('informations') }}</p>
-        <div class="flex justify-evenly gap-8 mt-6">
-          <div class="p-12 bg-primary-inverse bg-opacity-5 rounded-xl">
-            <img
-              class="mx-auto w-48 object-cover rounded-2xl"
-              :src="require(`@/assets/images/${story.imagePath}`)"
-            />
-            <p class="py-4 text-2xl font-bold">{{ story.parentTitle }}</p>
-            <div class="flex">
-              <div class="flex flex-col pr-6 border-r-2">
-                <span class="text-lg">{{ $t('reader-reviews') }}</span>
-                <span class="text-2xl font-bold">{{ story.rating }} / 5</span>
-              </div>
-              <div class="flex flex-col pl-6">
-                <span class="text-lg">{{ $t('chapters') }}</span>
-                <span class="text-2xl font-bold">{{ story.nbChapters }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-12 bg-primary-inverse bg-opacity-5 rounded-xl">
-            <img
-              class="mx-auto p-1/2 md:p-1 w-32 border-2 border-accent rounded-full"
-              :src="require('@/assets/images/profil.jpg')"
-            />
-            <p class="py-4 text-2xl font-bold">{{ story.author }}</p>
-            <div class="flex">
-              <div class="flex flex-col pr-6 border-r-2">
-                <span class="text-lg">{{ $t('registration') }}</span>
-                <span class="text-2xl font-bold">{{ story.registration }}</span>
-              </div>
-              <div class="flex flex-col pl-6">
-                <span class="text-lg">{{ $t('stories') }}</span>
-                <span class="text-2xl font-bold">{{ story.nbStories }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p class="text-5xl font-bold mt-10">{{ $t('comments') }}</p>
-
-        <div v-for="comment in comments" :key="comment.id" class="w-2/3">
-          <span class="flex items-center">
-            <img
-              class="mt-8 mx-auto p-1/2 md:p-1 w-24 border-2 border-accent rounded-full"
-              :src="require('@/assets/images/profil.jpg')"
-            />
-            <span class="flex-1 flex flex-col ml-4 mt-8 text-left">
-              <span class="text-xl font-bold">{{ comment.author }}</span>
-              <span class="mt-1">{{ comment.postDate }}</span>
-            </span>
-          </span>
-          <p
-            class="mt-8 p-4 text-left bg-primary-inverse bg-opacity-5 text-lg tracking-wide font-light rounded-xl"
-          >
-            {{ comment.content }}
-          </p>
-        </div>
-        <button
-          class="my-12 w-2/3 py-4 text-lg bg-accent tracking-wide rounded-lg"
-        >
-          {{ $t('comment-this-chapter') }}
-        </button>
-
+        <StoryContent :story="story" />
+        <StoryInformations :story="story" />
+        <StoryCommentList :comments="comments" />
         <StoryTopRated />
       </div>
     </div>
@@ -154,11 +51,19 @@
 </template>
 
 <script>
+import StoryHeader from '@/components/story/StoryHeader.vue'
+import StoryContent from '@/components/story/StoryContent.vue'
+import StoryInformations from '@/components/story/StoryInformations.vue'
+import StoryCommentList from '@/components/story/StoryCommentList.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 
 export default {
   name: 'Story',
   components: {
+    StoryHeader,
+    StoryContent,
+    StoryInformations,
+    StoryCommentList,
     StoryTopRated,
   },
   data() {
@@ -248,18 +153,11 @@ export default {
 <i18n>
 {
   "fr": {
-    "add-to-favorites": "Ajouter aux favoris",
+    "comments": "Commentaires",
     "reader-reviews": "Avis des lecteurs",
     "comments": "Commentaires",
     "reading-time": "Temps de lecture",
-    "first-publication": "Première publication",
-    "categories": "Catégories",
-    "chapters": "Chapitres",
-    "stories": "Histoires",
-    "registration": "Inscription",
-    "informations": "Informations",
-    "comments": "Commentaires",
-    "comment-this-chapter": "Commenter ce chapitre"
+    "first-publication": "Première publication"
   }
 }
 </i18n>

@@ -1,6 +1,6 @@
 <template>
   <div class="w-5/6 lg:w-2/3">
-    <p class="text-4xl md:text-5xl font-bold mt-10">{{ $t('comments') }}</p>
+    <p class="text-3xl md:text-5xl font-bold mt-10">{{ $t('comments') }}</p>
 
     <div v-for="comment in comments" :key="comment.id">
       <span class="flex items-center">

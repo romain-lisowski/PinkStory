@@ -26,7 +26,7 @@
       </h1>
 
       <p
-        class="inline-block mt-8 lg:mt-20 px-3 py-1 text-sm sm:text-lg md:text-2xl lg:text-xl xl:text-2xl text-primary border-2 rounded-l-full rounded-r-full"
+        class="inline-block mt-6 lg:mt-20 px-3 py-1 text-sm sm:text-lg md:text-2xl lg:text-xl xl:text-2xl text-primary border-2 rounded-l-full rounded-r-full"
       >
         <font-awesome-icon icon="heart" class="mr-2" />
         {{ $t('add-to-favorites') }}

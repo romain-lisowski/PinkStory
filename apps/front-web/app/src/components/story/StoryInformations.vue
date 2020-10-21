@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center">
-    <p class="text-4xl md:text-5xl font-bold">{{ $t('informations') }}</p>
+    <p class="text-3xl md:text-5xl font-bold">{{ $t('informations') }}</p>
     <div class="flex flex-wrap justify-evenly gap-8 mt-6">
       <div
         class="py-8 px-6 md:p-8 lg:p-12 bg-primary-inverse bg-opacity-5 rounded-xl"

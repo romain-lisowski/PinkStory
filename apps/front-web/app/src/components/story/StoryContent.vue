@@ -15,12 +15,14 @@
 
     <div class="flex justify-between w-full my-12">
       <div class="flex items-center">
-        <font-awesome-icon icon="chevron-left" class="text-4xl mr-4" />
+        <font-awesome-icon icon="chevron-left" class="text-2xl mr-1 md:mr-4" />
         <span class="flex flex-col">
           <span class="text-base sm:text-lg lg:text-xl text-left"
             >{{ $t('chapter') }} 11</span
           >
-          <span class="font-bold">{{ story.previousChapter }}</span>
+          <span class="text-sm md:text-base font-bold text-left">{{
+            story.previousChapter
+          }}</span>
         </span>
       </div>
       <div class="flex items-center">
@@ -28,9 +30,11 @@
           <span class="text-base sm:text-lg lg:text-xl text-right"
             >{{ $t('chapter') }} 13</span
           >
-          <span class="font-bold">{{ story.nextChapter }}</span>
+          <span class="text-sm md:text-base font-bold text-right">{{
+            story.nextChapter
+          }}</span>
         </span>
-        <font-awesome-icon icon="chevron-right" class="text-4xl ml-4" />
+        <font-awesome-icon icon="chevron-right" class="text-2xl ml-1 md:ml-2" />
       </div>
     </div>
   </div>

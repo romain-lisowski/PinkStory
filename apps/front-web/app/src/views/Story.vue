@@ -3,42 +3,7 @@
     <StoryHeader :story="story" />
 
     <div class="relative w-full">
-      <ul
-        class="flex justify-center items-center md:px-4 w-full h-20 lg:h-32 text-primary bg-accent"
-      >
-        <li class="flex flex-col pr-3 sm:pr-8 border-r">
-          <span class="text-xs sm:text-base lg:text-xl">{{
-            $t('reader-reviews')
-          }}</span>
-          <span class="text-lg sm:text-2xl lg:text-4xl font-bold"
-            >{{ story.rating }} / 5</span
-          >
-        </li>
-        <li class="flex flex-col px-3 sm:px-8 border-r">
-          <span class="text-xs sm:text-base lg:text-xl">{{
-            $t('comments')
-          }}</span>
-          <span class="text-lg sm:text-2xl lg:text-4xl font-bold">{{
-            story.nbComments
-          }}</span>
-        </li>
-        <li class="flex flex-col px-3 sm:px-8 border-r">
-          <span class="text-xs sm:text-base lg:text-xl">{{
-            $t('reading-time')
-          }}</span>
-          <span class="text-lg sm:text-2xl lg:text-4xl font-bold"
-            >{{ story.readingTime }} min</span
-          >
-        </li>
-        <li class="flex flex-col pl-3 sm:pl-8">
-          <span class="text-xs sm:text-base lg:text-xl">{{
-            $t('first-publication')
-          }}</span>
-          <span class="text-lg sm:text-2xl lg:text-4xl font-bold">{{
-            story.updatedAt
-          }}</span>
-        </li>
-      </ul>
+      <StoryHeaderBottom :story="story" />
 
       <div class="flex flex-col items-center">
         <StoryContent :story="story" />
@@ -52,6 +17,7 @@
 
 <script>
 import StoryHeader from '@/components/story/StoryHeader.vue'
+import StoryHeaderBottom from '@/components/story/StoryHeaderBottom.vue'
 import StoryContent from '@/components/story/StoryContent.vue'
 import StoryInformations from '@/components/story/StoryInformations.vue'
 import StoryCommentList from '@/components/story/StoryCommentList.vue'
@@ -61,6 +27,7 @@ export default {
   name: 'Story',
   components: {
     StoryHeader,
+    StoryHeaderBottom,
     StoryContent,
     StoryInformations,
     StoryCommentList,
@@ -149,15 +116,3 @@ export default {
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "comments": "Commentaires",
-    "reader-reviews": "Avis des lecteurs",
-    "comments": "Commentaires",
-    "reading-time": "Temps de lecture",
-    "first-publication": "Première publication"
-  }
-}
-</i18n>

@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import StoryHeader from '@/components/story/StoryHeader.vue'
-import StoryHeaderBottom from '@/components/story/StoryHeaderBottom.vue'
-import StoryContent from '@/components/story/StoryContent.vue'
-import StoryInformations from '@/components/story/StoryInformations.vue'
-import StoryCommentList from '@/components/story/StoryCommentList.vue'
+import StoryHeader from '@/pages/StoryPage/StoryHeader.vue'
+import StoryHeaderBottom from '@/pages/StoryPage/StoryHeaderBottom.vue'
+import StoryContent from '@/pages/StoryPage/StoryContent.vue'
+import StoryInformations from '@/pages/StoryPage/StoryInformations.vue'
+import StoryCommentList from '@/pages/StoryPage/StoryCommentList.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 
 export default {

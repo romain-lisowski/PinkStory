@@ -30,7 +30,7 @@
         {{ story.categories }}
       </p>
 
-      <RatingStars :rating="story.rating" class="mt-2" />
+      <UiRatingStars :rating="story.rating" class="mt-2" />
 
       <p
         class="sm:w-4/5 xl:w-2/3 mt-8 text-base sm:text-xl xl:text-2xl text-justify sm:text-left w-full leading-6 sm:leading-8 xl:leading-10"
@@ -50,12 +50,12 @@
 </template>
 
 <script>
-import RatingStars from '@/components/story/RatingStars.vue'
+import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 
 export default {
   name: 'StoryMain',
   components: {
-    RatingStars,
+    UiRatingStars,
   },
   data() {
     return {

@@ -14,20 +14,20 @@
           {{ $t('search-story') }} >
         </a>
       </div>
-      <CategoryList :categories="category1" />
-      <CategoryList :categories="category2" />
-      <CategoryList :categories="category3" />
+      <HomeCategoryList :categories="category1" />
+      <HomeCategoryList :categories="category2" />
+      <HomeCategoryList :categories="category3" />
     </div>
   </div>
 </template>
 
 <script>
-import CategoryList from '@/components/category/CategoryList.vue'
+import HomeCategoryList from '@/pages/HomePage/HomeCategoryList.vue'
 
 export default {
-  name: 'Category',
+  name: 'HomeCategory',
   components: {
-    CategoryList,
+    HomeCategoryList,
   },
   data() {
     return {

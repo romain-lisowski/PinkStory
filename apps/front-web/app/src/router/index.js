@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
-import Home from '@/views/Home.vue'
-import User from '@/views/User.vue'
-import Story from '@/views/Story.vue'
-import NotFound from '@/views/NotFound.vue'
+import Home from '@/pages/HomePage/HomePage.vue'
+import User from '@/pages/UserPage/UserPage.vue'
+import Story from '@/pages/StoryPage/StoryPage.vue'
+import NotFound from '@/pages/NotFoundPage/NotFoundPage.vue'
 
 Vue.use(VueRouter)
 

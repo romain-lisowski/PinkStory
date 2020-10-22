@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import UserUpdateEmail from '@/components/user/UserUpdateEmail.vue'
-import UserUpdatePassword from '@/components/user/UserUpdatePassword.vue'
-import UserUpdateInformation from '@/components/user/UserUpdateInformation.vue'
+import UserUpdateEmail from '@/pages/UserPage/UserUpdateEmail.vue'
+import UserUpdatePassword from '@/pages/UserPage/UserUpdatePassword.vue'
+import UserUpdateInformation from '@/pages/UserPage/UserUpdateInformation.vue'
 
 export default {
   name: 'User',

@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: 'CategoryList',
+  name: 'HomeCategoryList',
   props: {
     categories: {
       type: Array,

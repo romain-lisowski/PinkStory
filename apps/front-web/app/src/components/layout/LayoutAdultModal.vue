@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'AdultModal',
+  name: 'LayoutAdultModal',
   data() {
     return {
       openAdultModal: !this.$store.state.isAdult,

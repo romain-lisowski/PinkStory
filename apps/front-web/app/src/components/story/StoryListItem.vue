@@ -21,7 +21,7 @@
         {{ story.categories }}
       </span>
       <span class="flex justify-between mt-1">
-        <RatingStars :rating="story.rating" class="flex-1" />
+        <UiRatingStars :rating="story.rating" class="flex-1" />
         <span class="text-base sm:text-lg mr-2 sm:mt-2">
           {{ story.nbComments }} {{ $t('comments') }}
         </span>
@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import RatingStars from '@/components/story/RatingStars.vue'
+import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 
 export default {
   name: 'StoryListItem',
   components: {
-    RatingStars,
+    UiRatingStars,
   },
   props: {
     story: {

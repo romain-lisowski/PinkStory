@@ -1,25 +1,25 @@
 <template>
   <div>
-    <StoryMain />
+    <HomeMainStory />
     <StoryTopRated />
     <StoryLatest />
-    <Category />
+    <HomeCategory />
   </div>
 </template>
 
 <script>
-import StoryMain from '@/components/story/StoryMain.vue'
+import HomeMainStory from '@/pages/HomePage/HomeMainStory.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 import StoryLatest from '@/components/story/StoryLatest.vue'
-import Category from '@/components/category/Category.vue'
+import HomeCategory from '@/pages/HomePage/HomeCategory.vue'
 
 export default {
-  name: 'Home',
+  name: 'HomePage',
   components: {
-    StoryMain,
+    HomeMainStory,
     StoryTopRated,
     StoryLatest,
-    Category,
+    HomeCategory,
   },
 }
 </script>

@@ -135,7 +135,7 @@
       </a>
       <Auth
         :open-auth-panel="openAuthPanel"
-        @onCloseAuthPanel="onCloseAuthPanel"
+        @close-auth-panel="onCloseAuthPanel"
       />
     </header>
   </div>

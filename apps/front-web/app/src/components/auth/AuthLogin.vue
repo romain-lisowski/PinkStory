@@ -52,7 +52,7 @@ export default {
       })
     },
     onDisplaySignUp() {
-      this.$emit('onDisplaySignUp')
+      this.$emit('display-sign-up')
     },
   },
 }

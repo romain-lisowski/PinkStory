@@ -23,7 +23,7 @@
     >
       <AuthLogin
         class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary rounded-xl"
-        @onDisplaySignUp="onDisplaySignUp"
+        @display-sign-up="onDisplaySignUp"
       />
     </div>
     <div
@@ -32,7 +32,7 @@
     >
       <AuthSignUp
         class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary rounded-xl"
-        @onDisplayLogin="onDisplayLogin"
+        @display-login="onDisplayLogin"
       />
     </div>
   </div>
@@ -69,7 +69,7 @@ export default {
   methods: {
     onCloseAuthPanel() {
       this.displaySignUp = false
-      this.$emit('onCloseAuthPanel')
+      this.$emit('close-auth-panel')
     },
     onDisplaySignUp() {
       this.displaySignUp = true

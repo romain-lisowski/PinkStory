@@ -74,7 +74,7 @@ export default {
       this.onDisplayLogin()
     },
     onDisplayLogin() {
-      this.$emit('onDisplayLogin')
+      this.$emit('display-login')
     },
   },
 }

@@ -7,7 +7,7 @@
       >&#x2605;</span
     >
     <span
-      v-if="rating % 1 > 0"
+      v-show="rating % 1 > 0"
       class="bg-stars-gradient-to-r bg-clip-text text-opacity-0"
       style="-webkit-text-fill-color: transparent"
       >&#x2605;</span

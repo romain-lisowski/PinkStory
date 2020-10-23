@@ -41,7 +41,7 @@ export default {
   name: 'LayoutFooter',
   data() {
     return {
-      activeTheme: this.$store.state.theme ? this.$store.state.theme : 'auto',
+      activeTheme: this.$store.state.theme,
       activeThemeClasses: [
         'text-accent',
         'rounded-md',
@@ -50,20 +50,6 @@ export default {
         'py-1',
       ],
     }
-  },
-  computed: {
-    userLoggedIn() {
-      return this.$store.state.user
-    },
-    loggedIn() {
-      return this.userLoggedIn && this.$store.state.jwt
-    },
-  },
-  watch: {
-    activeTheme(theme) {
-      console.log(theme)
-      this.$store.dispatch('changeTheme', { theme })
-    },
   },
   created() {
     if (this.activeTheme === 'light') {
@@ -81,11 +67,13 @@ export default {
     },
     setThemeLight() {
       this.activeTheme = 'light'
+      this.$store.dispatch('changeTheme', { theme: 'light' })
       document.documentElement.classList.add('theme-light')
       document.documentElement.classList.remove('theme-dark')
     },
     setThemeDark() {
       this.activeTheme = 'dark'
+      this.$store.dispatch('changeTheme', { theme: 'dark' })
       document.documentElement.classList.add('theme-dark')
       document.documentElement.classList.remove('theme-light')
     },
@@ -99,6 +87,7 @@ export default {
         this.setThemeLight()
       }
       this.activeTheme = 'auto'
+      this.$store.dispatch('changeTheme', { theme: 'auto' })
     },
   },
 }

@@ -53,7 +53,7 @@
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 
 export default {
-  name: 'StoryMain',
+  name: 'HomeMainStory',
   components: {
     UiRatingStars,
   },

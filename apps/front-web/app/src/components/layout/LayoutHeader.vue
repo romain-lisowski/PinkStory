@@ -28,7 +28,7 @@
             >{{ $t('write') }}</a
           >
         </li>
-        <li v-if="loggedIn">
+        <li v-show="isLoggedIn">
           <router-link
             :to="{ name: 'User' }"
             class="p-4 w-full block hover:bg-accent text-primary hover:text-primary-inverse"
@@ -36,7 +36,7 @@
             {{ $t('settings') }}
           </router-link>
         </li>
-        <li v-if="loggedIn">
+        <li v-show="isLoggedIn">
           <a
             class="p-4 w-full block hover:bg-accent text-primary hover:text-primary-inverse"
             @click="logout"
@@ -64,7 +64,7 @@
         PinkStory
       </router-link>
 
-      <nav v-if="loggedIn" class="hidden lg:block">
+      <nav v-show="isLoggedIn" class="hidden lg:block">
         <ul class="flex items-center justify-center tracking-wide">
           <li>
             <router-link
@@ -86,7 +86,7 @@
               >{{ $t('write') }}</a
             >
           </li>
-          <li v-if="loggedIn">
+          <li>
             <router-link
               :to="{ name: 'User' }"
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
@@ -94,7 +94,7 @@
               {{ $t('settings') }}
             </router-link>
           </li>
-          <li v-if="loggedIn">
+          <li>
             <a
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
               @click="logout"
@@ -106,7 +106,7 @@
       </nav>
 
       <button
-        v-if="loggedIn"
+        v-if="isLoggedIn"
         class="relative group mr-6 md:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
@@ -142,6 +142,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Auth from '@/components/auth/Auth.vue'
 import { Closable } from '../../directives/Closable'
 
@@ -159,18 +160,12 @@ export default {
       openAuthPanel: false,
     }
   },
-
   computed: {
-    userLoggedIn() {
-      return this.$store.state.user
-    },
-    loggedIn() {
-      return this.userLoggedIn && this.$store.state.jwt
-    },
+    ...mapGetters(['isLoggedIn']),
   },
   watch: {
-    loggedIn(loggedIn) {
-      if (loggedIn && this.openAuthPanel === true) {
+    isLoggedIn(value) {
+      if (value && this.openAuthPanel === true) {
         this.onCloseAuthPanel()
       }
     },

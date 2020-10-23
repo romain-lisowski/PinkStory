@@ -8,6 +8,8 @@ const user = JSON.parse(localStorage.getItem('user'))
 const jwt = JSON.parse(localStorage.getItem('jwt'))
 const isAdult = JSON.parse(localStorage.getItem('isAdult'))
 const theme = JSON.parse(localStorage.getItem('theme'))
+  ? JSON.parse(localStorage.getItem('theme'))
+  : 'auto'
 
 export default new Vuex.Store({
   state: {
@@ -15,6 +17,14 @@ export default new Vuex.Store({
     jwt,
     theme,
     isAdult,
+  },
+  getters: {
+    isLoggedIn: (state) => {
+      return state.user && state.jwt
+    },
+    getTheme: (state) => {
+      return state.theme ? state.theme : 'auto'
+    },
   },
   actions: {
     async login({ commit }, { email, password }) {
@@ -27,42 +37,42 @@ export default new Vuex.Store({
         const { name } = responseCurrent.user
         localStorage.setItem('user', JSON.stringify({ email, name }))
         localStorage.setItem('jwt', JSON.stringify(jwt))
-        commit('loginSuccess', { email, name, jwt })
+        commit('LOGIN_SUCCESS', { email, name, jwt })
       } else {
-        commit('loginFailure')
+        commit('LOGIN_FAILURE')
       }
     },
     logout({ commit }) {
       localStorage.removeItem('user')
       localStorage.removeItem('jwt')
-      commit('logout')
+      commit('LOGOUT')
     },
     changeTheme({ commit }, { theme }) {
-      commit('setTheme', theme)
+      commit('SET_THEME', theme)
       localStorage.setItem('theme', JSON.stringify(theme))
     },
     isAdult({ commit }) {
-      commit('setIsAdult')
+      commit('IS_ADULT')
       localStorage.setItem('isAdult', true)
     },
   },
   mutations: {
-    loginSuccess(state, { email, name, jwt }) {
+    LOGIN_SUCCESS(state, { email, name, jwt }) {
       state.user = { email, name }
       state.jwt = jwt
     },
-    loginFailure(state) {
+    LOGIN_FAILURE(state) {
       state.user = null
       state.jwt = null
     },
-    logout(state) {
+    LOGOUT(state) {
       state.user = null
       state.jwt = null
     },
-    setTheme(state, theme) {
+    SET_THEME(state, theme) {
       state.theme = theme
     },
-    setIsAdult(state) {
+    IS_ADULT(state) {
       state.isAdult = true
     },
   },

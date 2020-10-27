@@ -22,9 +22,6 @@ export default new Vuex.Store({
     isLoggedIn: (state) => {
       return state.user && state.jwt
     },
-    getTheme: (state) => {
-      return state.theme ? state.theme : 'auto'
-    },
   },
   actions: {
     async login({ commit }, { email, password }) {

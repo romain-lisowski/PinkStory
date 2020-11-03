@@ -8,6 +8,7 @@ use App\User\Command\UserRegeneratePasswordForgottenSecretCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class UserRegeneratePasswordForgottenSecretCommandFormType extends AbstractType
@@ -23,6 +24,7 @@ final class UserRegeneratePasswordForgottenSecretCommandFormType extends Abstrac
     {
         $resolver->setDefaults([
             'data_class' => UserRegeneratePasswordForgottenSecretCommand::class,
+            'method' => Request::METHOD_PATCH,
         ]);
     }
 

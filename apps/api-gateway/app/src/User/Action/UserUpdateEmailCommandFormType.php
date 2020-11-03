@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class UserUpdateEmailCommandFormType extends AbstractType
@@ -27,6 +28,7 @@ final class UserUpdateEmailCommandFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => UserUpdateEmailCommand::class,
+            'method' => Request::METHOD_PATCH,
         ]);
     }
 

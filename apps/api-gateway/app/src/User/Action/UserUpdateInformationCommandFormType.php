@@ -8,6 +8,7 @@ use App\User\Command\UserUpdateInformationCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class UserUpdateInformationCommandFormType extends AbstractType
@@ -23,6 +24,7 @@ final class UserUpdateInformationCommandFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => UserUpdateInformationCommand::class,
+            'method' => Request::METHOD_PATCH,
         ]);
     }
 

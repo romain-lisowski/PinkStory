@@ -45,7 +45,7 @@ final class UserUpdatePasswordAction
 
             $form = $this->formFactory->create(UserUpdatePasswordCommandFormType::class, $command);
 
-            $form->submit(json_decode($request->getContent(), true));
+            $form->handleRequest($request);
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

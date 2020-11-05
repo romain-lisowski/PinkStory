@@ -23,9 +23,10 @@
           >
         </li>
         <li>
-          <a
+          <router-link
+            :to="{ name: 'Write' }"
             class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
-            >{{ $t('write') }}</a
+            >{{ $t('write') }}</router-link
           >
         </li>
         <li v-show="isLoggedIn">
@@ -81,9 +82,10 @@
             >
           </li>
           <li class="pl-2">
-            <a
+            <router-link
+              :to="{ name: 'Write' }"
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
-              >{{ $t('write') }}</a
+              >{{ $t('write') }}</router-link
             >
           </li>
           <li>

@@ -69,6 +69,20 @@
   --color-text-primary-inverse: var(--color-gray-800);
 }
 
+@layer base {
+  h3 {
+    @apply text-xl;
+  }
+  blockquote {
+    @apply ml-4 pl-4 border-l-2 italic;
+  }
+
+  margin-left: 0.8rem;
+  border-left: 3px solid;
+  padding-left: 0.8rem;
+  font-style: italic;
+}
+
 @tailwind components;
 
 @tailwind utilities;

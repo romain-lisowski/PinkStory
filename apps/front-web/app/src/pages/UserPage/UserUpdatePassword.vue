@@ -10,7 +10,7 @@
         type="password"
         name="password-old"
         :autocomplete="'current-password'"
-        class="mt-5 p-3 text-primary-inverse bg-primary-inverse rounded-md"
+        class="mt-5 p-3 rounded-md"
       />
       <input
         v-model="passwordNew"
@@ -18,7 +18,7 @@
         type="password"
         name="password-new"
         :autocomplete="'new-password'"
-        class="mt-5 p-3 text-primary-inverse bg-primary-inverse ounded-md"
+        class="mt-5 p-3 rounded-md"
       />
       <input
         v-model="passwordNewConfirm"
@@ -26,10 +26,10 @@
         type="password"
         name="password-new-confirm"
         :autocomplete="'new-password'"
-        class="mt-5 p-3 text-primary-inverse bg-primary-inverse ounded-md"
+        class="mt-5 p-3 rounded-md"
       />
       <button
-        class="mt-8 py-4 text-lg font-light tracking-wide text-primary bg-accent rounded-lg"
+        class="mt-8 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
         {{ $t('update') }}

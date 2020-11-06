@@ -9,10 +9,10 @@
         :placeholder="$t('new-email')"
         type="email"
         name="email"
-        class="my-5 p-3 text-primary-inverse bg-primary-inverse rounded-md"
+        class="my-5 p-3 rounded-md"
       />
       <button
-        class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent rounded-lg"
+        class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
         {{ $t('update') }}

@@ -2,10 +2,7 @@
   <div
     ref="auth"
     :class="!openAuthPanel ? '-translate-y-full' : ''"
-    class="flex flex-row absolute justify-center items-center inset-0 w-full h-screen p-10 bg-fixed bg-primary bg-cover bg-opacity-75 transform transition-transform duration-300 ease-in-out z-20"
-    :style="{
-      'background-image': `url(${require('@/assets/images/auth2.jpg')})`,
-    }"
+    class="flex flex-row absolute justify-center items-center inset-0 w-full h-screen p-10 bg-primary bg-opacity-100 transform transition-transform duration-300 ease-in-out z-20"
     tabindex="0"
     @keyup.esc="onCloseAuthPanel"
   >
@@ -15,14 +12,12 @@
       ><font-awesome-icon icon="times"
     /></a>
 
-    <div class="bg-radial-gradient-center absolute inset-0"></div>
-
     <div
       :class="!displaySignUp ? '' : 'translate-y-full'"
       class="flex items-center justify-center absolute w-full h-screen transform transition-transform duration-300 ease-out"
     >
       <AuthLogin
-        class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary rounded-xl"
+        class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
         @display-sign-up="onDisplaySignUp"
       />
     </div>
@@ -31,7 +26,7 @@
       class="flex items-center justify-center absolute bottom-100 w-full h-screen transform transition-transform duration-300 ease-out"
     >
       <AuthSignUp
-        class="-mt-48 p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary rounded-xl"
+        class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
         @display-login="onDisplayLogin"
       />
     </div>

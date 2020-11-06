@@ -9,25 +9,32 @@
           {{ $t('categories') }}
         </p>
         <a
+          v-show="displaySearchLink"
           class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
         >
           {{ $t('search-story') }} >
         </a>
       </div>
-      <HomeCategoryList :categories="category1" />
-      <HomeCategoryList :categories="category2" />
-      <HomeCategoryList :categories="category3" />
+      <CategoryList :categories="category1" />
+      <CategoryList :categories="category2" />
+      <CategoryList :categories="category3" />
     </div>
   </div>
 </template>
 
 <script>
-import HomeCategoryList from '@/pages/HomePage/HomeCategoryList.vue'
+import CategoryList from '@/components/category/CategoryList.vue'
 
 export default {
-  name: 'HomeCategory',
+  name: 'CategoryBlock',
   components: {
-    HomeCategoryList,
+    CategoryList,
+  },
+  props: {
+    displaySearchLink: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

@@ -1,24 +1,19 @@
 <template>
-  <div
-    class="flex flex-col justify-center items-center bg-cover"
-    :style="{
-      'background-image': `url(${require('@/assets/images/book.jpg')})`,
-    }"
-  >
-    <p class="mt-32 font-bold text-4xl sm:text-5xl lg:text-5xl">
+  <div class="flex flex-col justify-center items-center">
+    <p class="font-bold text-4xl sm:text-5xl lg:text-5xl">
       {{ $t('Ecrire une histoire') }}
     </p>
-    <div class="w-3/4 sm:w-1/2 lg:w-2/3 xl:w-3/4 my-10">
+    <div class="w-3/4 my-10 bg-primary">
       <div class="flex flex-col gap-8 items-center justify-center">
         <div
-          class="mb-4 px-10 pt-6 pb-10 bg-primary rounded-xl opacity-75 w-full"
+          class="mb-4 px-10 pt-6 pb-10 bg-primary-inverse bg-opacity-5 rounded-xl opacity-75 w-full"
         >
           <input
             id="title"
             type="text"
             name="title"
             :placeholder="$t('title')"
-            class="my-5 p-3 w-full text-primary-inverse bg-primary-inverse rounded-md"
+            class="my-5 p-3 w-full rounded-md"
           />
 
           <editor-menu-bar
@@ -74,11 +69,11 @@
 
           <editor-content
             id="editor"
-            class="text-primary-inverse bg-primary-inverse border text-left"
+            class="p-4 bg-primary bg-opacity-100 text-left"
             :editor="editor"
           />
           <button
-            class="mt-6 py-4 text-lg font-light tracking-wide text-primary bg-accent rounded-lg w-full"
+            class="mt-6 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg w-full"
             type="submit"
           >
             {{ $t('send') }}
@@ -101,8 +96,6 @@ export default {
   },
   data() {
     return {
-      // Create an `Editor` instance with some default content. The editor is
-      // then passed to the `EditorContent` component as a `prop`
       keepInBounds: true,
       editor: new Editor({
         extensions: [
@@ -114,12 +107,12 @@ export default {
             levels: [3],
           }),
         ],
-        content: '<h3>New Story</h3><p>This is just a boring paragraph</p>',
+        content:
+          '<h3>Nouvelle histoire !</h3><p>Commencez à écrire une nouvelle histoire érotique fictive ou réelle ...</p>',
       }),
     }
   },
   beforeDestroy() {
-    // Always destroy your editor instance when it's no longer needed
     this.editor.destroy()
   },
 }

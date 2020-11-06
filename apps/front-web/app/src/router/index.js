@@ -5,6 +5,7 @@ import HomePage from '@/pages/HomePage/HomePage.vue'
 import UserPage from '@/pages/UserPage/UserPage.vue'
 import StoryPage from '@/pages/StoryPage/StoryPage.vue'
 import WritePage from '@/pages/WritePage/WritePage.vue'
+import SearchPage from '@/pages/SearchPage/SearchPage.vue'
 import NotFound from '@/pages/NotFoundPage/NotFoundPage.vue'
 
 Vue.use(VueRouter)
@@ -27,6 +28,11 @@ const routes = [
     path: '/story',
     name: 'Story',
     component: StoryPage,
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: SearchPage,
   },
   {
     path: '/write',

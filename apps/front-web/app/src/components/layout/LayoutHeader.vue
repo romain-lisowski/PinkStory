@@ -10,11 +10,9 @@
 
       <ul class="text-center font-bold">
         <li>
-          <router-link
-            :to="{ name: 'Home' }"
-            class="p-4 block bg-primary-inverse bg-opacity-5"
-            >{{ $t('discover') }}</router-link
-          >
+          <router-link :to="{ name: 'Home' }" class="p-4 block">{{
+            $t('discover')
+          }}</router-link>
         </li>
         <li>
           <router-link
@@ -71,13 +69,21 @@
           <li>
             <router-link
               :to="{ name: 'Home' }"
-              class="p-2 px-4 block text-primary font-bold bg-opacity-5 rounded-lg bg-primary-inverse cursor-pointer"
+              class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
+              :class="
+                currentPage === '/' ? activeMenuClasses : inactiveMenuClasses
+              "
               >{{ $t('discover') }}</router-link
             >
           </li>
           <li class="pl-2">
             <router-link
-              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
+              :class="
+                currentPage.includes('/search')
+                  ? activeMenuClasses
+                  : inactiveMenuClasses
+              "
               :to="{ name: 'Search' }"
               >{{ $t('search') }}</router-link
             >
@@ -85,21 +91,31 @@
           <li class="pl-2">
             <router-link
               :to="{ name: 'Write' }"
-              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
+              :class="
+                currentPage.includes('/write')
+                  ? activeMenuClasses
+                  : inactiveMenuClasses
+              "
               >{{ $t('write') }}</router-link
             >
           </li>
-          <li>
+          <li class="pl-2">
             <router-link
               :to="{ name: 'User' }"
-              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
+              :class="
+                currentPage.includes('/user')
+                  ? activeMenuClasses
+                  : inactiveMenuClasses
+              "
             >
               {{ $t('settings') }}
             </router-link>
           </li>
-          <li>
+          <li class="pl-2">
             <a
-              class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
+              class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               @click="logout"
             >
               {{ $t('logout') }}
@@ -161,10 +177,25 @@ export default {
     return {
       openMenu: false,
       openAuthPanel: false,
+      activeMenuClasses: [
+        'bg-primary-inverse',
+        'bg-opacity-5',
+        'text-primary',
+        'hover:text-primary',
+      ],
+      inactiveMenuClasses: [
+        'text-accent',
+        'bg-opacity-100',
+        'hover:bg-accent',
+        'hover:text-primary-inverse',
+      ],
     }
   },
   computed: {
     ...mapGetters(['isLoggedIn']),
+    currentPage() {
+      return this.$route.path
+    },
   },
   watch: {
     isLoggedIn(value) {

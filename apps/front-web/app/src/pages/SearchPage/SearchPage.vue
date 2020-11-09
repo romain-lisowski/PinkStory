@@ -21,6 +21,7 @@
       </template>
     </CategoryBlock>
     <div class="mx-8">
+      <StoryListFilter />
       <StoryList />
     </div>
   </div>
@@ -28,12 +29,14 @@
 
 <script>
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
+import StoryListFilter from '@/components/story/StoryListFilter.vue'
 import StoryList from '@/components/story/StoryList.vue'
 
 export default {
   name: 'SearchPage',
   components: {
     CategoryBlock,
+    StoryListFilter,
     StoryList,
   },
   data() {

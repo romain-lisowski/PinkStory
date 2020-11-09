@@ -1,0 +1,2 @@
+/image/user/*
+!/image/user/.gitignore

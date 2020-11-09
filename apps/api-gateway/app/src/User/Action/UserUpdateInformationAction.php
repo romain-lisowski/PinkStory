@@ -45,7 +45,7 @@ final class UserUpdateInformationAction
 
             $form = $this->formFactory->create(UserUpdateInformationCommandFormType::class, $command);
 
-            $form->submit(json_decode($request->getContent(), true));
+            $form->handleRequest($request);
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();
@@ -59,9 +59,6 @@ final class UserUpdateInformationAction
 
             return $this->responder->render();
         } catch (Throwable $e) {
-            dump($e);
-            exit;
-
             throw new BadRequestHttpException(null, $e);
         }
     }

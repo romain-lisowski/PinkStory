@@ -7,6 +7,7 @@ namespace App\User\Command;
 use App\Exception\ValidatorException;
 use App\User\Entity\User;
 use App\User\Message\UserSignupMessage;
+use App\User\Upload\UserProfilePictureUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -18,13 +19,15 @@ final class UserSignupCommandHandler
     private MessageBusInterface $bus;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
+    private UserProfilePictureUploaderInterface $userProfilePictureUploader;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, UserProfilePictureUploaderInterface $userProfilePictureUploader)
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
+        $this->userProfilePictureUploader = $userProfilePictureUploader;
     }
 
     public function handle(UserSignupCommand $command): void
@@ -48,6 +51,13 @@ final class UserSignupCommandHandler
         }
 
         $this->entityManager->persist($user);
+
+        $this->userProfilePictureUploader->setUser($user);
+
+        if (true === $this->userProfilePictureUploader->upload($command->profilePicture)) {
+            $user->setProfilePictureDefined(true);
+        }
+
         $this->entityManager->flush();
 
         $this->bus->dispatch(new UserSignupMessage($user->getId()));

@@ -7,8 +7,8 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserUpdatePasswordCommand;
-use App\User\Command\UserUpdatePasswordCommandHandler;
+use App\User\Command\UserUpdateProfilePictureCommand;
+use App\User\Command\UserUpdateProfilePictureCommandHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,16 +20,16 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/update-password", name="user_update_password", methods={"PATCH"})
+ * @Route("/users/update-profile-picture", name="user_update_profile_picture", methods={"PATCH"})
  */
-final class UserUpdatePasswordAction
+final class UserUpdateProfilePictureAction
 {
     private FormFactoryInterface $formFactory;
     private Security $security;
     private ResponderInterface $responder;
-    private UserUpdatePasswordCommandHandler $handler;
+    private UserUpdateProfilePictureCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, Security $security, ResponderInterface $responder, UserUpdatePasswordCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, Security $security, ResponderInterface $responder, UserUpdateProfilePictureCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->security = $security;
@@ -40,10 +40,10 @@ final class UserUpdatePasswordAction
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserUpdatePasswordCommand();
+            $command = new UserUpdateProfilePictureCommand();
             $command->id = $this->security->getUser()->getId();
 
-            $form = $this->formFactory->create(UserUpdatePasswordCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserUpdateProfilePictureCommandFormType::class, $command);
 
             $form->handleRequest($request);
 
@@ -59,6 +59,9 @@ final class UserUpdatePasswordAction
 
             return $this->responder->render();
         } catch (Throwable $e) {
+            dump($e);
+            exit;
+
             throw new BadRequestHttpException(null, $e);
         }
     }

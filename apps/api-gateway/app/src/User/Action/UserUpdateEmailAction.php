@@ -45,7 +45,7 @@ final class UserUpdateEmailAction
 
             $form = $this->formFactory->create(UserUpdateEmailCommandFormType::class, $command);
 
-            $form->submit(json_decode($request->getContent(), true));
+            $form->handleRequest($request);
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

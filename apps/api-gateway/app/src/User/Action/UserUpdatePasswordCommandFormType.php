@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class UserUpdatePasswordCommandFormType extends AbstractType
@@ -30,6 +31,7 @@ final class UserUpdatePasswordCommandFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => UserUpdatePasswordCommand::class,
+            'method' => Request::METHOD_PATCH,
         ]);
     }
 

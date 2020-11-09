@@ -40,7 +40,7 @@ final class UserUpdatePasswordForgottenAction
 
             $form = $this->formFactory->create(UserUpdatePasswordForgottenCommandFormType::class, $command);
 
-            $form->submit(json_decode($request->getContent(), true));
+            $form->handleRequest($request);
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

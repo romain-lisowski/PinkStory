@@ -39,7 +39,7 @@ final class UserSignupAction
 
             $form = $this->formFactory->create(UserSignupCommandFormType::class, $command);
 
-            $form->submit(json_decode($request->getContent(), true));
+            $form->handleRequest($request);
 
             if (false === $form->isSubmitted()) {
                 throw new NotSubmittedFormException();

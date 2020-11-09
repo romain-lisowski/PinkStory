@@ -10,6 +10,7 @@ services:
     volumes:
       - ./apps/api-gateway/app:/www/api-gateway:delegated
       - ./apps/front-web/app:/www/front-web:delegated
+      - ./apps/file-manager:/www/file-manager:delegated
       - ./docker/nginx/log:/var/log/nginx:delegated
     ports:
       - 443:443
@@ -22,6 +23,8 @@ services:
       - ./apps/api-gateway/app:/www/api-gateway:delegated
       - ./apps/api-gateway/jwt:/jwt:delegated
       - ./apps/api-gateway/docker/symfony/log:/var/log:delegated
+      - ./apps/api-gateway/docker/sqlite/data:/sqlite/data:delegated
+      - ./apps/file-manager:/www/file-manager:delegated
 
   api-gateway-postgres:
     image: postgres:12

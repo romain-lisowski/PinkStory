@@ -17,7 +17,6 @@ export default {
     CategoryBlock,
     StoryList,
   },
-  data() {},
 }
 </script>
 

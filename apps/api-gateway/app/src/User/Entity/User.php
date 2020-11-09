@@ -107,6 +107,12 @@ final class User implements UserInterface
      */
     private string $role;
 
+    /**
+     * @Assert\NotNull
+     * @ORM\Column(name="profile_picture_defined", type="boolean")
+     */
+    private bool $profilePictureDefined;
+
     public function __construct()
     {
         $this->generateId()
@@ -118,6 +124,7 @@ final class User implements UserInterface
             ->setPasswordForgottenSecretUsed(true) // not claimed by user at account creation, so block it until new claim
             ->regenerateSecret()
             ->setRole(UserRole::ROLE_USER)
+            ->setProfilePictureDefined(false)
         ;
     }
 
@@ -327,6 +334,46 @@ final class User implements UserInterface
     public function setRole($role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getProfilePicturePath(): ?string
+    {
+        if (true === $this->hasProfilePicture()) {
+            return $this->getId().'.jpg';
+        }
+
+        return null;
+    }
+
+    /**
+     * @Groups({"detail", "list"})
+     */
+    public function getProfilePicture(): ?string
+    {
+        if (true === $this->hasProfilePicture()) {
+            return $this->getId().'-'.$this->getNameSlug().'.jpg';
+        }
+
+        return null;
+    }
+
+    public function hasProfilePicture(): bool
+    {
+        return $this->profilePictureDefined;
+    }
+
+    public function setProfilePictureDefined(bool $profilePictureDefined): self
+    {
+        $this->profilePictureDefined = $profilePictureDefined;
+
+        return $this;
+    }
+
+    public function removeProfilePicture(): self
+    {
+        $this->setProfilePictureDefined(false);
 
         return $this;
     }

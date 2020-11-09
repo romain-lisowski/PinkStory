@@ -7,6 +7,7 @@ namespace App\User\Action;
 use App\User\Command\UserSignupCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,6 +24,10 @@ final class UserSignupCommandFormType extends AbstractType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'user.validator.password_match',
+            ])
+            ->add('profile_picture', FileType::class, [
+                'property_path' => 'profilePicture',
+                'required' => false,
             ])
         ;
     }

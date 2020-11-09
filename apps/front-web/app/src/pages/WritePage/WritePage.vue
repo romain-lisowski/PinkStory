@@ -3,17 +3,17 @@
     <p class="font-bold text-4xl sm:text-5xl lg:text-5xl">
       {{ $t('Ecrire une histoire') }}
     </p>
-    <div class="w-3/4 my-10 bg-primary">
+    <div class="w-4/5 md:w-2/3 my-10 bg-primary">
       <div class="flex flex-col gap-8 items-center justify-center">
         <div
-          class="mb-4 px-10 pt-6 pb-10 bg-primary-inverse bg-opacity-5 rounded-xl opacity-75 w-full"
+          class="mb-4 px-10 pt-6 pb-10 bg-primary-inverse bg-opacity-5 rounded-xl w-full"
         >
           <input
             id="title"
             type="text"
             name="title"
             :placeholder="$t('title')"
-            class="my-5 p-3 w-full rounded-md"
+            class="my-5 p-3 w-full rounded-md bg-primary bg-opacity-100"
           />
 
           <editor-menu-bar

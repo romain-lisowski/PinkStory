@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary">
+  <div>
     <StoryHeader :story="story" />
 
     <div class="relative w-full">
@@ -24,7 +24,7 @@ import StoryCommentList from '@/pages/StoryPage/StoryCommentList.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 
 export default {
-  name: 'Story',
+  name: 'StoryPage',
   components: {
     StoryHeader,
     StoryHeaderBottom,

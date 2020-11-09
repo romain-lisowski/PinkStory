@@ -36,7 +36,7 @@
     />
 
     <button
-      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent rounded-lg"
+      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent bg-opacity-100 rounded-lg"
       type="submit"
     >
       {{ $t('submit') }}

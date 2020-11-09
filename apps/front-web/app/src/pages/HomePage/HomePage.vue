@@ -3,7 +3,7 @@
     <HomeMainStory />
     <StoryTopRated />
     <StoryLatest />
-    <HomeCategory />
+    <CategoryBlock :display-search-link="true" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 import HomeMainStory from '@/pages/HomePage/HomeMainStory.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 import StoryLatest from '@/components/story/StoryLatest.vue'
-import HomeCategory from '@/pages/HomePage/HomeCategory.vue'
+import CategoryBlock from '@/components/category/CategoryBlock.vue'
 
 export default {
   name: 'HomePage',
@@ -19,7 +19,7 @@ export default {
     HomeMainStory,
     StoryTopRated,
     StoryLatest,
-    HomeCategory,
+    CategoryBlock,
   },
 }
 </script>

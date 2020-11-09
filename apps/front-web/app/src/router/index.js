@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
-import Home from '@/pages/HomePage/HomePage.vue'
-import User from '@/pages/UserPage/UserPage.vue'
-import Story from '@/pages/StoryPage/StoryPage.vue'
+import HomePage from '@/pages/HomePage/HomePage.vue'
+import UserPage from '@/pages/UserPage/UserPage.vue'
+import StoryPage from '@/pages/StoryPage/StoryPage.vue'
+import WritePage from '@/pages/WritePage/WritePage.vue'
+import SearchPage from '@/pages/SearchPage/SearchPage.vue'
 import NotFound from '@/pages/NotFoundPage/NotFoundPage.vue'
 
 Vue.use(VueRouter)
@@ -12,12 +14,12 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: HomePage,
   },
   {
     path: '/user',
     name: 'User',
-    component: User,
+    component: UserPage,
     meta: {
       requiresAuth: true,
     },
@@ -25,7 +27,17 @@ const routes = [
   {
     path: '/story',
     name: 'Story',
-    component: Story,
+    component: StoryPage,
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: SearchPage,
+  },
+  {
+    path: '/write',
+    name: 'Write',
+    component: WritePage,
   },
   {
     path: '/404',

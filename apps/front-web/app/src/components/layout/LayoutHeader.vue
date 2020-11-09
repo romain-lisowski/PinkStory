@@ -17,28 +17,30 @@
           >
         </li>
         <li>
-          <a
+          <router-link
+            :to="{ name: 'Search' }"
             class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
-            >{{ $t('categories') }}</a
+            >{{ $t('search') }}</router-link
           >
         </li>
         <li>
-          <a
+          <router-link
+            :to="{ name: 'Write' }"
             class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
-            >{{ $t('write') }}</a
+            >{{ $t('write') }}</router-link
           >
         </li>
         <li v-show="isLoggedIn">
           <router-link
             :to="{ name: 'User' }"
-            class="p-4 w-full block hover:bg-accent text-primary hover:text-primary-inverse"
+            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
           >
             {{ $t('settings') }}
           </router-link>
         </li>
         <li v-show="isLoggedIn">
           <a
-            class="p-4 w-full block hover:bg-accent text-primary hover:text-primary-inverse"
+            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse cursor-pointer"
             @click="logout"
           >
             {{ $t('logout') }}
@@ -76,14 +78,15 @@
           <li class="pl-2">
             <router-link
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
-              :to="{ name: 'Home', hash: '#category' }"
-              >{{ $t('categories') }}</router-link
+              :to="{ name: 'Search' }"
+              >{{ $t('search') }}</router-link
             >
           </li>
           <li class="pl-2">
-            <a
+            <router-link
+              :to="{ name: 'Write' }"
               class="p-2 px-4 block text-accent font-bold bg-opacity-100 hover:bg-accent rounded-lg hover:text-primary-inverse cursor-pointer"
-              >{{ $t('write') }}</a
+              >{{ $t('write') }}</router-link
             >
           </li>
           <li>
@@ -195,7 +198,7 @@ export default {
 {
   "fr": {
     "discover": "Découvrir",
-    "categories": "Catégories",
+    "search": "Rechercher",
     "write": "Ecrire une histoire",
     "settings": "Préférences",
     "logout": "Déconnexion"

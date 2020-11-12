@@ -9,7 +9,7 @@ use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdateInformationCommand;
 use App\User\Command\UserUpdateInformationCommandHandler;
-use App\User\Security\UserSecurity;
+use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,10 +26,10 @@ final class UserUpdateInformationAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserSecurity $security;
+    private UserSecurityInterface $security;
     private UserUpdateInformationCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurity $security, UserUpdateInformationCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdateInformationCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;

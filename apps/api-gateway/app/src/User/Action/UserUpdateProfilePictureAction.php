@@ -9,7 +9,7 @@ use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdateProfilePictureCommand;
 use App\User\Command\UserUpdateProfilePictureCommandHandler;
-use App\User\Security\UserSecurity;
+use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,10 +26,10 @@ final class UserUpdateProfilePictureAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserSecurity $security;
+    private UserSecurityInterface $security;
     private UserUpdateProfilePictureCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurity $security, UserUpdateProfilePictureCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdateProfilePictureCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;

@@ -7,7 +7,7 @@ namespace App\User\Action;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRemoveProfilePictureCommand;
 use App\User\Command\UserRemoveProfilePictureCommandHandler;
-use App\User\Security\UserSecurity;
+use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +23,9 @@ final class UserRemoveProfilePictureAction
 {
     private ResponderInterface $responder;
     private UserRemoveProfilePictureCommandHandler $handler;
-    private UserSecurity $security;
+    private UserSecurityInterface $security;
 
-    public function __construct(ResponderInterface $responder, UserRemoveProfilePictureCommandHandler $handler, UserSecurity $security)
+    public function __construct(ResponderInterface $responder, UserRemoveProfilePictureCommandHandler $handler, UserSecurityInterface $security)
     {
         $this->security = $security;
         $this->responder = $responder;

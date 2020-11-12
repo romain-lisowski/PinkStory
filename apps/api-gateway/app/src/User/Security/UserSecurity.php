@@ -7,7 +7,7 @@ namespace App\User\Security;
 use App\User\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-final class UserSecurity
+final class UserSecurityInterface
 {
     private TokenStorageInterface $tokenStorage;
 

@@ -7,7 +7,7 @@ namespace App\User\Action;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserValidateEmailCommand;
 use App\User\Command\UserValidateEmailCommandHandler;
-use App\User\Security\UserSecurity;
+use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +24,10 @@ use Throwable;
 final class UserValidateEmailAction
 {
     private ResponderInterface $responder;
-    private UserSecurity $security;
+    private UserSecurityInterface $security;
     private UserValidateEmailCommandHandler $handler;
 
-    public function __construct(ResponderInterface $responder, UserSecurity $security, UserValidateEmailCommandHandler $handler)
+    public function __construct(ResponderInterface $responder, UserSecurityInterface $security, UserValidateEmailCommandHandler $handler)
     {
         $this->responder = $responder;
         $this->security = $security;

@@ -15,6 +15,7 @@ final class UserUpdateProfilePictureCommand
     public string $id;
 
     /**
+     * @Assert\NotNull
      * @Assert\File(
      *      mimeTypes = {"image/jpeg", "image/png"},
      * )

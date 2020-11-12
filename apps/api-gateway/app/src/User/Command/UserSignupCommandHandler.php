@@ -52,10 +52,11 @@ final class UserSignupCommandHandler
 
         $this->entityManager->persist($user);
 
-        $this->userProfilePictureUploader->setUser($user);
+        if (null !== $command->profilePicture) {
+            $this->userProfilePictureUploader->setUser($user);
 
-        if (true === $this->userProfilePictureUploader->upload($command->profilePicture)) {
-            $user->setProfilePictureDefined(true);
+            $isUploaded = $this->userProfilePictureUploader->upload($command->profilePicture);
+            $user->setProfilePictureDefined($isUploaded);
         }
 
         $this->entityManager->flush();

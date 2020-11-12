@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap justify-items-start gap-2 sm:gap-4 mb-4 sm:mb-8">
-    <span class="py-2 pr-2 text-base sm:text-xl xl:text-2xl text-accent">
+    <span class="py-2 pr-2 text-base sm:text-lg xl:text-2xl text-accent">
       {{ categoryList.type }} :
     </span>
     <div

@@ -7,12 +7,12 @@ namespace App\User\Action;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRegenerateEmailValidationSecretCommand;
 use App\User\Command\UserRegenerateEmailValidationSecretCommandHandler;
+use App\User\Security\UserSecurity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 /**
@@ -21,15 +21,15 @@ use Throwable;
  */
 final class UserRegenerateEmailValidationSecretAction
 {
-    private Security $security;
     private ResponderInterface $responder;
     private UserRegenerateEmailValidationSecretCommandHandler $handler;
+    private UserSecurity $security;
 
-    public function __construct(Security $security, ResponderInterface $responder, UserRegenerateEmailValidationSecretCommandHandler $handler)
+    public function __construct(ResponderInterface $responder, UserRegenerateEmailValidationSecretCommandHandler $handler, UserSecurity $security)
     {
-        $this->security = $security;
         $this->responder = $responder;
         $this->handler = $handler;
+        $this->security = $security;
     }
 
     public function __invoke(Request $request): Response

@@ -9,13 +9,13 @@ use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdateProfilePictureCommand;
 use App\User\Command\UserUpdateProfilePictureCommandHandler;
+use App\User\Security\UserSecurity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 /**
@@ -25,15 +25,15 @@ use Throwable;
 final class UserUpdateProfilePictureAction
 {
     private FormFactoryInterface $formFactory;
-    private Security $security;
     private ResponderInterface $responder;
+    private UserSecurity $security;
     private UserUpdateProfilePictureCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, Security $security, ResponderInterface $responder, UserUpdateProfilePictureCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurity $security, UserUpdateProfilePictureCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
-        $this->security = $security;
         $this->responder = $responder;
+        $this->security = $security;
         $this->handler = $handler;
     }
 

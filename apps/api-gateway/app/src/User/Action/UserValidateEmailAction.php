@@ -7,6 +7,7 @@ namespace App\User\Action;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserValidateEmailCommand;
 use App\User\Command\UserValidateEmailCommandHandler;
+use App\User\Security\UserSecurity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 /**
@@ -23,14 +23,14 @@ use Throwable;
  */
 final class UserValidateEmailAction
 {
-    private Security $security;
     private ResponderInterface $responder;
+    private UserSecurity $security;
     private UserValidateEmailCommandHandler $handler;
 
-    public function __construct(Security $security, ResponderInterface $responder, UserValidateEmailCommandHandler $handler)
+    public function __construct(ResponderInterface $responder, UserSecurity $security, UserValidateEmailCommandHandler $handler)
     {
-        $this->security = $security;
         $this->responder = $responder;
+        $this->security = $security;
         $this->handler = $handler;
     }
 

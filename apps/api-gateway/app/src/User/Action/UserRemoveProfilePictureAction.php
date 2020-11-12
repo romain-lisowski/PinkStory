@@ -7,12 +7,12 @@ namespace App\User\Action;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRemoveProfilePictureCommand;
 use App\User\Command\UserRemoveProfilePictureCommandHandler;
+use App\User\Security\UserSecurity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 /**
@@ -21,11 +21,11 @@ use Throwable;
  */
 final class UserRemoveProfilePictureAction
 {
-    private Security $security;
     private ResponderInterface $responder;
     private UserRemoveProfilePictureCommandHandler $handler;
+    private UserSecurity $security;
 
-    public function __construct(Security $security, ResponderInterface $responder, UserRemoveProfilePictureCommandHandler $handler)
+    public function __construct(ResponderInterface $responder, UserRemoveProfilePictureCommandHandler $handler, UserSecurity $security)
     {
         $this->security = $security;
         $this->responder = $responder;

@@ -9,13 +9,13 @@ use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdatePasswordCommand;
 use App\User\Command\UserUpdatePasswordCommandHandler;
+use App\User\Security\UserSecurity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 /**
@@ -25,15 +25,15 @@ use Throwable;
 final class UserUpdatePasswordAction
 {
     private FormFactoryInterface $formFactory;
-    private Security $security;
     private ResponderInterface $responder;
+    private UserSecurity $security;
     private UserUpdatePasswordCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, Security $security, ResponderInterface $responder, UserUpdatePasswordCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurity $security, UserUpdatePasswordCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
-        $this->security = $security;
         $this->responder = $responder;
+        $this->security = $security;
         $this->handler = $handler;
     }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Upload;
+namespace App\User\File;
 
 use App\User\Entity\User;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class UserProfilePictureUploader implements UserProfilePictureUploaderInterface
+final class UserProfilePictureFileManager implements UserProfilePictureFileManagerInterface
 {
     private ParameterBagInterface $params;
     private User $user;

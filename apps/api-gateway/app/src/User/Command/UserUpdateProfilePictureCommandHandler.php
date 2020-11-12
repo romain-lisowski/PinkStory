@@ -6,9 +6,9 @@ namespace App\User\Command;
 
 use App\Exception\ValidatorException;
 use App\User\Exception\ProfilePictureUploadException;
+use App\User\File\UserProfilePictureFileManagerInterface;
 use App\User\Message\UserUpdateProfilePictureMessage;
 use App\User\Repository\UserRepositoryInterface;
-use App\User\Upload\UserProfilePictureUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -18,15 +18,15 @@ final class UserUpdateProfilePictureCommandHandler
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
     private ValidatorInterface $validator;
-    private UserProfilePictureUploaderInterface $userProfilePictureUploader;
+    private UserProfilePictureFileManagerInterface $userProfilePictureFileManager;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, UserProfilePictureUploaderInterface $userProfilePictureUploader, UserRepositoryInterface $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, UserProfilePictureFileManagerInterface $userProfilePictureFileManager, UserRepositoryInterface $userRepository)
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
         $this->validator = $validator;
-        $this->userProfilePictureUploader = $userProfilePictureUploader;
+        $this->userProfilePictureFileManager = $userProfilePictureFileManager;
         $this->userRepository = $userRepository;
     }
 
@@ -40,15 +40,15 @@ final class UserUpdateProfilePictureCommandHandler
 
         $user = $this->userRepository->findOne($command->id);
 
-        $this->userProfilePictureUploader->setUser($user);
+        $this->userProfilePictureFileManager->setUser($user);
 
         if (true === $user->hasProfilePicture()) {
-            $this->userProfilePictureUploader->remove();
+            $this->userProfilePictureFileManager->remove();
 
             $user->removeProfilePicture();
         }
 
-        if (false === $this->userProfilePictureUploader->upload($command->profilePicture)) {
+        if (false === $this->userProfilePictureFileManager->upload($command->profilePicture)) {
             throw new ProfilePictureUploadException();
         }
 

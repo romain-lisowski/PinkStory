@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Upload;
+namespace App\File;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-interface UploaderInterface
+interface FileManagerInterface
 {
     public function upload(UploadedFile $file): bool;
 

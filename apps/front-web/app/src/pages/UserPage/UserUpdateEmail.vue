@@ -35,7 +35,7 @@ export default {
     processForm() {
       ApiUsers.updateEmail(this.$store.state.jwt, this.email)
       this.$store.dispatch('logout')
-      this.$router.push({ name: 'Auth' })
+      this.$router.push({ name: 'Home' })
     },
   },
 }

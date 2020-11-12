@@ -9,7 +9,7 @@
         :placeholder="$t('new-email')"
         type="email"
         name="email"
-        class="my-5 p-3 rounded-md"
+        class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
       />
       <button
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"

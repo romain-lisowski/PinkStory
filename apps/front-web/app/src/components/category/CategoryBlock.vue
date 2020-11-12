@@ -4,20 +4,13 @@
     class="sm:mt-16 pb-4 sm:pb-12 bg-primary-inverse bg-opacity-5"
   >
     <div class="mx-12">
-      <div class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12">
-        <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
-          {{ $t('categories') }}
-        </p>
-        <a
-          v-show="displaySearchLink"
-          class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
-        >
-          {{ $t('search-story') }} >
-        </a>
-      </div>
-      <CategoryList :categories="category1" />
-      <CategoryList :categories="category2" />
-      <CategoryList :categories="category3" />
+      <slot name="header"></slot>
+      <CategoryList
+        v-for="(categoryList, index) in categoryLists"
+        :key="index"
+        :category-list="categoryList"
+      />
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>
@@ -30,55 +23,49 @@ export default {
   components: {
     CategoryList,
   },
-  props: {
-    displaySearchLink: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
-      category1: [
-        'Orientation',
-        'Hétéro',
-        'Gay',
-        'Lesbien',
-        'Bisexuel',
-        'Transexuel',
-      ],
-      category2: [
-        'Type',
-        'Soft',
-        'Hard',
-        'Réel',
-        'Fictif',
-        'Fantasme',
-        'Romantique',
-      ],
-      category3: [
-        'Pratique',
-        'Sextoy',
-        'Jeu érotique',
-        'Fellation',
-        'Cunnilingus',
-        'Anulingus',
-        'Sodomie',
-        'Uro',
-        'Fist',
-        'Double pénétration',
-        'Squirt',
-        'Prostate',
+      categoryLists: [
+        {
+          type: 'Orientation',
+          categories: ['Hétéro', 'Gay', 'Lesbien', 'Bisexuel', 'LGBT+'],
+        },
+        {
+          type: 'Nombre',
+          categories: ['Solitaire', 'Couple', 'Triolisme', 'Groupe'],
+        },
+        {
+          type: 'Pratique',
+          categories: [
+            'Masturbation',
+            'Sex oral',
+            'Sodomie',
+            'Jeu érotique',
+            'Domination',
+            'Soumission',
+            'Autres BDSM',
+            'Jeux de rôles',
+          ],
+        },
+        {
+          type: 'Moeurs',
+          categories: ['Fétichisme', 'Echangisme', 'Libertinage'],
+        },
+        {
+          type: 'Âge',
+          categories: ['Jeune', 'Milf/Dilf', 'Mature'],
+        },
+        {
+          type: 'Lieu',
+          categories: [
+            'A la maison',
+            'Au bureau',
+            'Dans un lieu public',
+            'En pleine nature',
+          ],
+        },
       ],
     }
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "categories": "Catégories",
-    "search-story": "Rechercher des histoires"
-  }
-}
-</i18n>

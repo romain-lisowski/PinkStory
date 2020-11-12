@@ -9,7 +9,7 @@
       :placeholder="$t('email')"
       type="email"
       name="email"
-      class="mt-5 p-2 text-primary-inverse rounded-md"
+      class="mt-5 p-4 text-primary bg-primary bg-opacity-100 opacity-100 rounded-md"
     />
     <input
       v-model="password"
@@ -17,7 +17,7 @@
       type="password"
       name="password"
       :autocomplete="'off'"
-      class="mt-5 p-2 text-primary-inverse rounded-md"
+      class="mt-5 p-4 text-primary bg-primary bg-opacity-100 opacity-100 rounded-md"
     />
 
     <button

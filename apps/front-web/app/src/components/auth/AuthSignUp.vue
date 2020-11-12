@@ -9,14 +9,14 @@
       :placeholder="$t('pseudo')"
       type="text"
       name="name"
-      class="mt-5 p-2 text-primary-inverse rounded-md"
+      class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
     <input
       v-model="email"
       :placeholder="$t('email')"
       type="email"
       name="email"
-      class="mt-5 p-2 text-primary-inverse rounded-md"
+      class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
     <input
       v-model="password"
@@ -24,7 +24,7 @@
       type="password"
       name="password"
       autocomplete="'autocomplete'"
-      class="mt-5 p-2 text-primary-inverse rounded-md"
+      class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
     <input
       v-model="passwordConfirm"
@@ -32,7 +32,7 @@
       type="password"
       name="passwordConfirm"
       autocomplete="'autocomplete'"
-      class="mt-5 p-2 text-primary-inverse rounded-md"
+      class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
 
     <button

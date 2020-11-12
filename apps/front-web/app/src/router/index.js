@@ -17,14 +17,6 @@ const routes = [
     component: HomePage,
   },
   {
-    path: '/user',
-    name: 'User',
-    component: UserPage,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: '/story',
     name: 'Story',
     component: StoryPage,
@@ -35,9 +27,20 @@ const routes = [
     component: SearchPage,
   },
   {
+    path: '/user',
+    name: 'User',
+    component: UserPage,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/write',
     name: 'Write',
     component: WritePage,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/404',

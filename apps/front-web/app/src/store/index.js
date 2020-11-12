@@ -17,6 +17,7 @@ export default new Vuex.Store({
     jwt,
     theme,
     isAdult,
+    categoryFilters: [],
   },
   getters: {
     isLoggedIn: (state) => {
@@ -52,6 +53,13 @@ export default new Vuex.Store({
       commit('IS_ADULT')
       localStorage.setItem('isAdult', true)
     },
+    toggleFilter({ state, commit }, { category }) {
+      if (!state.categoryFilters.includes(category)) {
+        commit('ADD_CATEGORY_FILTER', category)
+      } else {
+        commit('REMOVE_CATEGORY_FILTER', category)
+      }
+    },
   },
   mutations: {
     LOGIN_SUCCESS(state, { email, name, jwt }) {
@@ -71,6 +79,15 @@ export default new Vuex.Store({
     },
     IS_ADULT(state) {
       state.isAdult = true
+    },
+    ADD_CATEGORY_FILTER(state, category) {
+      state.categoryFilters.push(category)
+    },
+    REMOVE_CATEGORY_FILTER(state, category) {
+      const index = state.categoryFilters.indexOf(category)
+      if (index > -1) {
+        state.categoryFilters.splice(index, 1)
+      }
     },
   },
 })

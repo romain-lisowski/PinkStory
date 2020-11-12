@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center items-center">
     <p class="font-bold text-4xl sm:text-5xl lg:text-5xl">
-      {{ $t('Ecrire une histoire') }}
+      {{ $t('write') }}
     </p>
     <div class="w-4/5 md:w-2/3 my-10 bg-primary">
       <div class="flex flex-col gap-8 items-center justify-center">
@@ -121,6 +121,7 @@ export default {
 <i18n>
 {
   "fr": {
+    "write": "Ecrire une histoire",
     "title": "Titre de l'histoire",
     "send": "Envoyer"
   }

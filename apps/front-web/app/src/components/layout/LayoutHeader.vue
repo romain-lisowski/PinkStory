@@ -9,38 +9,51 @@
       /></a>
 
       <ul class="text-center font-bold">
-        <li>
-          <router-link :to="{ name: 'Home' }" class="p-4 block">{{
-            $t('discover')
-          }}</router-link>
+        <li @click="toggleMenu">
+          <router-link
+            :to="{ name: 'Home' }"
+            class="p-4 block"
+            :class="
+              currentPage === '/' ? activeMenuClasses : inactiveMenuClasses
+            "
+            >{{ $t('discover') }}</router-link
+          >
         </li>
-        <li>
+        <li @click="toggleMenu">
           <router-link
             :to="{ name: 'Search' }"
-            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
+            class="p-4 block"
+            :class="
+              currentPage === '/search'
+                ? activeMenuClasses
+                : inactiveMenuClasses
+            "
             >{{ $t('search') }}</router-link
           >
         </li>
-        <li>
+        <li @click="toggleMenu">
           <router-link
             :to="{ name: 'Write' }"
-            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
+            class="p-4 block"
+            :class="
+              currentPage === '/write' ? activeMenuClasses : inactiveMenuClasses
+            "
             >{{ $t('write') }}</router-link
           >
         </li>
-        <li v-show="isLoggedIn">
+        <li v-show="isLoggedIn" @click="toggleMenu">
           <router-link
             :to="{ name: 'User' }"
-            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse"
+            :class="
+              currentPage === '/user' ? activeMenuClasses : inactiveMenuClasses
+            "
+            class="p-4 block"
           >
             {{ $t('settings') }}
           </router-link>
         </li>
         <li v-show="isLoggedIn">
-          <a
-            class="p-4 w-full block hover:bg-accent text-accent hover:text-primary-inverse cursor-pointer"
-            @click="logout"
-          >
+          <a class="p-4 block cursor-pointer" @click="logout">
             {{ $t('logout') }}
           </a>
         </li>
@@ -163,15 +176,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import Auth from '@/components/auth/Auth.vue'
-import { Closable } from '../../directives/Closable'
 
 export default {
   name: 'LayoutHeader',
   components: {
     Auth,
-  },
-  directives: {
-    Closable,
   },
   data() {
     return {
@@ -207,6 +216,7 @@ export default {
   methods: {
     logout() {
       this.openAuthPanel = false
+      this.openMenu = false
       this.$store.dispatch('logout')
       if (this.$route.path !== '/') {
         this.$router.push({ name: 'Home' })

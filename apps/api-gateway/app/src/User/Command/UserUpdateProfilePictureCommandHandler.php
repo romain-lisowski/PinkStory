@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Exception\ValidatorException;
-use App\User\Exception\ProfilePictureUploadException;
+use App\User\Exception\UserProfilePictureUploadException;
 use App\User\File\UserProfilePictureFileManagerInterface;
 use App\User\Message\UserUpdateProfilePictureMessage;
 use App\User\Repository\UserRepositoryInterface;
@@ -49,7 +49,7 @@ final class UserUpdateProfilePictureCommandHandler
         }
 
         if (false === $this->userProfilePictureFileManager->upload($command->profilePicture)) {
-            throw new ProfilePictureUploadException();
+            throw new UserProfilePictureUploadException();
         }
 
         $user->setProfilePictureDefined(true);

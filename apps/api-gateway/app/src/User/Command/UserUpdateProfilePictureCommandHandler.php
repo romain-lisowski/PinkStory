@@ -46,6 +46,9 @@ final class UserUpdateProfilePictureCommandHandler
             $this->userProfilePictureFileManager->remove();
 
             $user->removeProfilePicture();
+            $user->updateLastUpdatedAt();
+
+            $this->entityManager->flush();
         }
 
         if (false === $this->userProfilePictureFileManager->upload($command->profilePicture)) {

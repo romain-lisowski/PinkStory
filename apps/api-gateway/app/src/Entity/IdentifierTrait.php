@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait IdentifierTrait
 {
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"short", "medium", "full"})
      * @Assert\NotBlank
      * @ORM\Id()
      * @ORM\Column(name="id", type="guid", unique=true)

@@ -12,14 +12,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait TimestampTrait
 {
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"medium", "full"})
      * @Assert\NotBlank
      * @ORM\Column(name="created_at", type="datetime")
      */
     private DateTime $createdAt;
 
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"medium", "full"})
      * @Assert\NotBlank
      * @ORM\Column(name="last_updated_at", type="datetime")
      */

@@ -32,21 +32,21 @@ final class User implements UserInterface
     use TimestampTrait;
 
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"medium", "full"})
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
      */
     private string $name;
 
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"medium", "full"})
      * @Assert\NotBlank
      * @ORM\Column(name="name_slug", type="string", length=255)
      */
     private string $nameSlug;
 
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"full"})
      * @Assert\NotBlank
      * @AppUserAssert\Email
      * @ORM\Column(name="email", type="string", length=255, unique=true)
@@ -348,7 +348,7 @@ final class User implements UserInterface
     }
 
     /**
-     * @Groups({"detail", "list"})
+     * @Groups({"medium", "full"})
      */
     public function getProfilePicture(): ?string
     {

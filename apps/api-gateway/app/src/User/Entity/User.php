@@ -341,7 +341,7 @@ final class User implements UserInterface
     public function getProfilePicturePath(): ?string
     {
         if (true === $this->hasProfilePicture()) {
-            return $this->getId().'.jpg';
+            return $this->getId().'.jpeg';
         }
 
         return null;
@@ -353,7 +353,7 @@ final class User implements UserInterface
     public function getProfilePicture(): ?string
     {
         if (true === $this->hasProfilePicture()) {
-            return $this->getId().'-'.$this->getNameSlug().'.jpg';
+            return $this->getId().'-'.$this->getNameSlug().'.jpeg';
         }
 
         return null;

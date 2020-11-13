@@ -117,6 +117,9 @@
     "firebase/php-jwt": {
         "version": "v5.2.0"
     },
+    "imagine/imagine": {
+        "version": "1.2.4"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },

@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\User\File;
 
 use App\User\Entity\User;
+use Imagine\Image\Box;
+use Imagine\Imagick\Imagine;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Throwable;
 
 final class UserProfilePictureFileManager implements UserProfilePictureFileManagerInterface
 {
@@ -24,13 +26,26 @@ final class UserProfilePictureFileManager implements UserProfilePictureFileManag
     public function upload(UploadedFile $file): bool
     {
         try {
-            $file->move(
-                $this->params->get('project_file_manager_dir').$this->params->get('project_file_manager_image_dir').$this->params->get('project_file_manager_image_user_dir'),
-                $this->user->getId().'.'.$file->getClientOriginalExtension()
-            );
+            // open image
+            $imagine = new Imagine();
+            $image = $imagine->open($file->getRealPath());
+
+            // get uploaded image informations
+            $uploadedImageExtension = $file->guessExtension();
+            $uploadedImageWidth = $image->getSize()->getWidth();
+            $uploadedImageHeight = $image->getSize()->getHeight();
+
+            // resize image
+            $uploadedImageRatio = $uploadedImageWidth >= $uploadedImageHeight ? ($uploadedImageWidth / $uploadedImageHeight) : ($uploadedImageHeight / $uploadedImageWidth);
+            $imageWidth = $uploadedImageWidth >= $uploadedImageHeight ? 1500 : (1500 / $uploadedImageRatio);
+            $imageHeight = $uploadedImageHeight >= $uploadedImageWidth ? 1500 : (1500 / $uploadedImageRatio);
+            $image->resize(new Box($imageWidth, $imageHeight));
+
+            // save image
+            $image->save($this->params->get('project_file_manager_dir').$this->params->get('project_file_manager_image_dir').$this->params->get('project_file_manager_image_user_dir').'/'.$this->user->getId().'.jpeg', ['jpeg_quality' => 80]);
 
             return true;
-        } catch (FileException $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }

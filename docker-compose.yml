@@ -16,7 +16,8 @@ services:
       - 443:443
 
   api-gateway-symfony:
-    image: registry.gitlab.com/pinkstory/pinkstory/api-gateway-symfony:latest
+    build:
+      context: ./apps/api-gateway/docker/symfony
     depends_on:
       - api-gateway-postgres
     volumes:
@@ -64,7 +65,8 @@ services:
       - 3443:443
 
   front-web-vue:
-    image: registry.gitlab.com/pinkstory/pinkstory/front-web-vue:latest
+    build:
+      context: ./apps/front-web/docker/vue
     depends_on:
       - api-gateway-symfony
     volumes:

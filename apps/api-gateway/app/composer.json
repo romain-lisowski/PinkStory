@@ -13,6 +13,7 @@
         "doctrine/orm": "^2.7",
         "egulias/email-validator": "^2.1",
         "firebase/php-jwt": "^5.2",
+        "imagine/imagine": "^1.2",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",

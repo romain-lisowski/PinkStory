@@ -33,7 +33,7 @@ final class UserGetCurrentAction
         try {
             return $this->responder->render([
                 'user' => $this->security->getUser(),
-            ], ['groups' => 'detail']);
+            ], ['groups' => 'full']);
         } catch (Throwable $e) {
             throw new BadRequestHttpException(null, $e);
         }

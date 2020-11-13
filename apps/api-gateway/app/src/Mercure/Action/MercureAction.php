@@ -53,9 +53,6 @@ final class MercureAction
 
             return $this->responder->render();
         } catch (Throwable $e) {
-            dump($e);
-            exit;
-
             throw new BadRequestHttpException(null, $e);
         }
     }

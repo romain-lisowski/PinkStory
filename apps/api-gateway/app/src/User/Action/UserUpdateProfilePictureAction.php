@@ -59,9 +59,6 @@ final class UserUpdateProfilePictureAction
 
             return $this->responder->render();
         } catch (Throwable $e) {
-            dump($e);
-            exit;
-
             throw new BadRequestHttpException(null, $e);
         }
     }

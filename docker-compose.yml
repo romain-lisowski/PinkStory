@@ -14,6 +14,7 @@ services:
       - ./docker/nginx/log:/var/log/nginx:delegated
     ports:
       - 443:443
+      - 3001:3001
 
   api-gateway-symfony:
     build:

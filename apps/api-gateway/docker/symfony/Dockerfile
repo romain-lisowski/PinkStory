@@ -12,11 +12,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install zip \
     && docker-php-ext-install pdo pdo_pgsql \
     && docker-php-ext-enable opcache \
-
+    ###
     # imagick
     && pecl install imagick \
     && docker-php-ext-enable imagick \
-
+    ###
     # php cs fixer
     && curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o php-cs-fixer\
     && chmod a+x php-cs-fixer \

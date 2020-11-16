@@ -42,15 +42,6 @@ final class UserUpdateProfilePictureCommandHandler
 
         $this->userProfilePictureFileManager->setUser($user);
 
-        if (true === $user->hasProfilePicture()) {
-            $this->userProfilePictureFileManager->remove();
-
-            $user->removeProfilePicture();
-            $user->updateLastUpdatedAt();
-
-            $this->entityManager->flush();
-        }
-
         if (false === $this->userProfilePictureFileManager->upload($command->profilePicture)) {
             throw new UserProfilePictureUploadException();
         }
@@ -61,6 +52,8 @@ final class UserUpdateProfilePictureCommandHandler
         $errors = $this->validator->validate($user);
 
         if (count($errors) > 0) {
+            $this->userProfilePictureFileManager->remove();
+
             throw new ValidatorException($errors);
         }
 

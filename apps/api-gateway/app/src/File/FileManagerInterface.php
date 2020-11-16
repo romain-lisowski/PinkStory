@@ -10,5 +10,5 @@ interface FileManagerInterface
 {
     public function upload(UploadedFile $file): bool;
 
-    public function remove(): void;
+    public function remove(): bool;
 }

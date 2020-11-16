@@ -50,12 +50,18 @@ final class UserProfilePictureFileManager implements UserProfilePictureFileManag
         }
     }
 
-    public function remove(): void
+    public function remove(): bool
     {
-        $file = new File($this->params->get('project_file_manager_dir').$this->params->get('project_file_manager_image_dir').$this->params->get('project_file_manager_image_user_dir').'/'.$this->user->getProfilePicturePath());
+        try {
+            $file = new File($this->params->get('project_file_manager_dir').$this->params->get('project_file_manager_image_dir').$this->params->get('project_file_manager_image_user_dir').'/'.$this->user->getProfilePicturePath());
 
-        $filesystem = new Filesystem();
-        $filesystem->remove($file->getRealPath());
+            $filesystem = new Filesystem();
+            $filesystem->remove($file->getRealPath());
+
+            return true;
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     public function setUser(User $user): self

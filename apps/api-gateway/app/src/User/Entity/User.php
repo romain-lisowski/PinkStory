@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Entity;
 
-use App\Entity\ActivatedTrait;
-use App\Entity\IdentifierTrait;
-use App\Entity\TimestampTrait;
+use App\Entity\AbstractEntity;
+use App\Story\Entity\Story;
 use App\User\Validator\Constraints as AppUserAssert;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,12 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-final class User implements UserInterface
+class User extends AbstractEntity implements UserInterface
 {
-    use IdentifierTrait;
-    use ActivatedTrait;
-    use TimestampTrait;
-
     /**
      * @Groups({"medium", "full"})
      * @Assert\NotBlank
@@ -109,23 +106,35 @@ final class User implements UserInterface
 
     /**
      * @Assert\NotNull
-     * @ORM\Column(name="profile_picture_defined", type="boolean")
+     * @ORM\Column(name="profile_picture_defined", type="boolean", options={"default" : false})
      */
     private bool $profilePictureDefined;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="user", cascade={"remove"})
+     * @ORM\OrderBy({"title" = "ASC"})
+     */
+    private Collection $stories;
+
     public function __construct()
     {
-        $this->generateId()
-            ->setActivated(true)
-            ->initCreatedAt()
-            ->updateLastUpdatedAt()
-            ->regenerateEmailValidationSecret()
-            ->regeneratePasswordForgottenSecret()
-            ->setPasswordForgottenSecretUsed(true) // not claimed by user at account creation, so block it until new claim
-            ->regenerateSecret()
-            ->setRole(UserRole::ROLE_USER)
-            ->setProfilePictureDefined(false)
-        ;
+        parent::__construct();
+
+        // init zero values
+        $this->name = '';
+        $this->nameSlug = '';
+        $this->email = '';
+        $this->emailValidated = false;
+        $this->emailValidationSecret = Uuid::v4()->toRfc4122();
+        $this->emailValidationSecretUsed = false;
+        $this->password = '';
+        $this->passwordForgottenSecret = Uuid::v4()->toRfc4122();
+        $this->passwordForgottenSecretUsed = true; // not claimed by user at account creation, so block it until new claim
+        $this->passwordForgottenSecretCreatedAt = new DateTime();
+        $this->secret = Uuid::v4()->toRfc4122();
+        $this->role = UserRole::ROLE_USER;
+        $this->profilePictureDefined = false;
+        $this->stories = new ArrayCollection();
     }
 
     public function getName(): string
@@ -396,5 +405,24 @@ final class User implements UserInterface
 
     public function eraseCredentials(): void
     {
+    }
+
+    public function getStories(): Collection
+    {
+        return $this->stories;
+    }
+
+    public function addStory(Story $story): self
+    {
+        $this->stories[] = $story;
+
+        return $this;
+    }
+
+    public function removeStory(Story $story): self
+    {
+        $this->stories->remove($story);
+
+        return $this;
     }
 }

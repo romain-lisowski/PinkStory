@@ -18,3 +18,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/User/Entity'
                 prefix: 'App\User\Entity'
                 alias: AppUser
+            App\Story:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Story/Entity'
+                prefix: 'App\Story\Entity'
+                alias: AppStory

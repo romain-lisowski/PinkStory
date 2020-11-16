@@ -21,25 +21,37 @@ final class UserFixture extends Fixture
     {
         $user = new User();
         $user->rename('Yannis')
-            ->updateEmail('auth@yannissgarra.com')
+            ->updateEmail('hello@yannissgarra.com')
             ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
             ->setRole(UserRole::ROLE_GOD)
         ;
         $manager->persist($user);
+        $this->addReference('user-yannis', $user);
 
         $user = new User();
-        $user->rename('John')
-            ->updateEmail('john@gmail.com')
+        $user->rename('Romain')
+            ->updateEmail('romain.lisowski@gmail.com')
+            ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
+            ->setRole(UserRole::ROLE_GOD)
+        ;
+        $manager->persist($user);
+        $this->addReference('user-romain', $user);
+
+        $user = new User();
+        $user->rename('Leslie')
+            ->updateEmail('leslie.akindou@gmail.com')
             ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
         ;
         $manager->persist($user);
+        $this->addReference('user-leslie', $user);
 
         $user = new User();
-        $user->rename('Jane')
-            ->updateEmail('jane@gmail.com')
+        $user->rename('Juliette')
+            ->updateEmail('contact@julietteverdurand.com')
             ->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'))
         ;
         $manager->persist($user);
+        $this->addReference('user-juliette', $user);
 
         $manager->flush();
     }

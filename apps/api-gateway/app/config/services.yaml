@@ -29,21 +29,14 @@ services:
         resource: '../src'
         exclude:
             - '../src/Kernel.php'
-            - '../src/Entity/'
-            - '../src/Exception/'
-
-    App\User\:
-        resource: '../src/User'
-        exclude:
-            - '../src/User/Command/*Command.php'
-            - '../src/User/Entity/'
-            - '../src/User/Event/'
-            - '../src/User/Exception/'
-
-    App\Mercure\:
-        resource: '../src/Mercure'
-        exclude:
-            - '../src/Mercure/Command/*Command.php'
+            - '../src/Command/*Command.php'
+            - '../src/*/Command/*Command.php'
+            - '../src/Entity'
+            - '../src/*/Entity'
+            - '../src/Exception'
+            - '../src/*/Exception'
+            - '../src/Event'
+            - '../src/*/Event'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

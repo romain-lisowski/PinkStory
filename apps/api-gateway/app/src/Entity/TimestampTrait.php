@@ -37,13 +37,6 @@ trait TimestampTrait
         return $this;
     }
 
-    public function initCreatedAt(): self
-    {
-        $this->setCreatedAt(new DateTime());
-
-        return $this;
-    }
-
     public function getLastUpdatedAt(): DateTime
     {
         return $this->lastUpdatedAt;

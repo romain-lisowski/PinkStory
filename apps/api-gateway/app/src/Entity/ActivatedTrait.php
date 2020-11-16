@@ -26,4 +26,18 @@ trait ActivatedTrait
 
         return $this;
     }
+
+    public function activate(): self
+    {
+        $this->setActivated(true);
+
+        return $this;
+    }
+
+    public function deactivate(): self
+    {
+        $this->setActivated(false);
+
+        return $this;
+    }
 }

@@ -23,19 +23,35 @@ export default new Vuex.Store({
     isLoggedIn: (state) => {
       return state.user && state.jwt
     },
+    getUserName: (state) => {
+      return state.user.name
+    },
+    getUserProfilePicture: (state, getters) => {
+      return getters.isLoggedIn && state.user.profile_picture
+        ? `${
+            process.env.VUE_APP_PROJECT_FILE_MANAGER_DSN +
+            process.env.VUE_APP_PROJECT_FILE_MANAGER_IMAGE_DIR +
+            process.env.VUE_APP_PROJECT_FILE_MANAGER_IMAGE_USER_DIR
+          }/${state.user.profile_picture}`
+        : null
+    },
   },
   actions: {
-    async login({ commit }, { email, password }) {
+    async getCurrentUser() {
+      const responseCurrent = await ApiUsers.current(jwt)
+      const { user } = responseCurrent
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
+    },
+    async login({ commit, dispatch }, { email, password }) {
       // get jwt
       const responseLogin = await ApiUsers.login(email, password)
       if (responseLogin.ok) {
         const jwt = responseLogin.token
-        // get user
-        const responseCurrent = await ApiUsers.current(jwt)
-        const { name } = responseCurrent.user
-        localStorage.setItem('user', JSON.stringify({ email, name }))
         localStorage.setItem('jwt', JSON.stringify(jwt))
-        commit('LOGIN_SUCCESS', { email, name, jwt })
+        // get user informations
+        dispatch('getCurrentUser')
+        commit('LOGIN_SUCCESS', { user, jwt })
       } else {
         commit('LOGIN_FAILURE')
       }

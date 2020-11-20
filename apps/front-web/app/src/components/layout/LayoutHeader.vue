@@ -142,17 +142,23 @@
         class="relative group mr-6 md:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
-          class="absolute top-0 left-0 px-1 md:px-2 bg-accent group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"
-          >12</span
+          class="absolute top-0 right-0 px-1 md:px-1 bg-primary-inverse group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"
+          >8</span
         >
         <span
+          v-if="getUserProfilePicture"
           class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
         >
           <img
             class="w-8 md:w-10 h-8 md:h-10 rounded-xl md:rounded-2xl"
-            :src="require('@/assets/images/profil.jpg')"
+            :src="getUserProfilePicture"
           />
         </span>
+        <span
+          v-else
+          class="px-5 py-3 font-bold bg-accent bg-opacity-100 rounded-full"
+          >{{ getUserName[0] }}</span
+        >
       </button>
 
       <a
@@ -201,7 +207,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['isLoggedIn', 'getUserName', 'getUserProfilePicture']),
     currentPage() {
       return this.$route.path
     },

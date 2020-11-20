@@ -94,15 +94,28 @@ export default {
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async updatePicture(jwt, file) {
+  async updateProfilePicture(jwt, file) {
+    const formData = new FormData()
+    formData.append('profile_picture', file)
+
     const response = await fetch(
-      `${baseUrl}/users/update-information?_method=PATCH`,
+      `${baseUrl}/users/update-profile-picture?_method=PATCH`,
       {
         method: 'POST',
-        body: file,
+        body: formData,
         headers: { Authorization: `Bearer ${jwt}` },
       }
     )
+
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
+  },
+
+  async deleteProfilePicture(jwt) {
+    const response = await fetch(`${baseUrl}/users/remove-profile-picture`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${jwt}` },
+    })
 
     const responseJson = await response.json()
     return { ok: response.ok, status: response.status, ...responseJson }

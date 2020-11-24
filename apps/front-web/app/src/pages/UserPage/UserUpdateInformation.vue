@@ -33,10 +33,9 @@ export default {
     }
   },
   methods: {
-    processForm() {
-      ApiUsers.updateInformation(this.$store.state.jwt, this.name)
-      this.$store.dispatch('logout')
-      this.$router.push({ name: 'Home' })
+    async processForm() {
+      await ApiUsers.updateInformation(this.$store.state.jwt, this.name)
+      this.$store.dispatch('fetchCurrentUser')
     },
   },
 }

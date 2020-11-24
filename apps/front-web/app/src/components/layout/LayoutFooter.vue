@@ -67,13 +67,13 @@ export default {
     },
     setThemeLight() {
       this.activeTheme = 'light'
-      this.$store.dispatch('changeTheme', { theme: 'light' })
+      this.$store.dispatch('updateTheme', { theme: 'light' })
       document.documentElement.classList.add('theme-light')
       document.documentElement.classList.remove('theme-dark')
     },
     setThemeDark() {
       this.activeTheme = 'dark'
-      this.$store.dispatch('changeTheme', { theme: 'dark' })
+      this.$store.dispatch('updateTheme', { theme: 'dark' })
       document.documentElement.classList.add('theme-dark')
       document.documentElement.classList.remove('theme-light')
     },
@@ -87,7 +87,7 @@ export default {
         this.setThemeLight()
       }
       this.activeTheme = 'auto'
-      this.$store.dispatch('changeTheme', { theme: 'auto' })
+      this.$store.dispatch('updateTheme', { theme: 'auto' })
     },
   },
 }

@@ -157,7 +157,7 @@
         <span
           v-else
           class="px-5 py-3 font-bold bg-accent bg-opacity-100 rounded-full"
-          >{{ getUserName[0] }}</span
+          >{{ getUserName[0].toUpperCase() }}</span
         >
       </button>
 

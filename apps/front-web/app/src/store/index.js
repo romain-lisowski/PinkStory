@@ -37,10 +37,12 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async getCurrentUser() {
+    async fetchCurrentUser({ commit }) {
       const responseCurrent = await ApiUsers.current(jwt)
       const { user } = responseCurrent
+      commit('SET_USER', user)
       localStorage.setItem('user', JSON.stringify(user))
+
       return user
     },
     async login({ commit, dispatch }, { email, password }) {
@@ -50,7 +52,7 @@ export default new Vuex.Store({
         const jwt = responseLogin.token
         localStorage.setItem('jwt', JSON.stringify(jwt))
         // get user informations
-        dispatch('getCurrentUser')
+        dispatch('fetchCurrentUser')
         commit('LOGIN_SUCCESS', { user, jwt })
       } else {
         commit('LOGIN_FAILURE')
@@ -61,7 +63,7 @@ export default new Vuex.Store({
       localStorage.removeItem('jwt')
       commit('LOGOUT')
     },
-    changeTheme({ commit }, { theme }) {
+    updateTheme({ commit }, { theme }) {
       commit('SET_THEME', theme)
       localStorage.setItem('theme', JSON.stringify(theme))
     },
@@ -104,6 +106,9 @@ export default new Vuex.Store({
       if (index > -1) {
         state.categoryFilters.splice(index, 1)
       }
+    },
+    SET_USER(state, user) {
+      state.user = user
     },
   },
 })

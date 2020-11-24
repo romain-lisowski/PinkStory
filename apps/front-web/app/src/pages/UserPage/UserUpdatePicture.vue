@@ -17,7 +17,7 @@
       <span
         v-else
         class="px-12 py-8 text-4xl font-bold bg-accent bg-opacity-100 rounded-full"
-        >{{ getUserName[0] }}</span
+        >{{ getUserName[0].toUpperCase() }}</span
       >
     </div>
     <form class="flex flex-col" @submit.prevent="processForm">
@@ -58,16 +58,16 @@ export default {
         this.uploadProfilePicture = uploadedFile
       }
     },
-    deleteProfilePicture() {
-      ApiUsers.deleteProfilePicture(this.$store.state.jwt)
-      this.$store.dispatch('getCurrentUser')
+    async deleteProfilePicture() {
+      await ApiUsers.deleteProfilePicture(this.$store.state.jwt)
+      this.$store.dispatch('fetchCurrentUser')
     },
-    processForm() {
-      ApiUsers.updateProfilePicture(
+    async processForm() {
+      await ApiUsers.updateProfilePicture(
         this.$store.state.jwt,
         this.uploadProfilePicture
       )
-      this.$store.dispatch('getCurrentUser')
+      this.$store.dispatch('fetchCurrentUser')
     },
   },
 }

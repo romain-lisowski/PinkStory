@@ -2,21 +2,21 @@
   <div class="mt-10 text-right">
     {{ $t('filter-by') + ' : ' }}
     <button
-      class="ml-4 px-4 py-3 rounded-lg"
+      class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
       :class="activeOrder === 'rate' ? activeClasses : inactiveClasses"
       @click="orderRate"
     >
       {{ $t('rate') }}
     </button>
     <button
-      class="ml-4 px-4 py-3 rounded-lg"
+      class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
       :class="activeOrder === 'date' ? activeClasses : inactiveClasses"
       @click="orderDate"
     >
       {{ $t('date') }}
     </button>
     <button
-      class="ml-4 px-4 py-3 rounded-lg"
+      class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
       :class="activeOrder === 'random' ? activeClasses : inactiveClasses"
       @click="orderRandom"
     >

@@ -18,6 +18,7 @@ export default new Vuex.Store({
     theme,
     isAdult,
     categoryFilters: [],
+    storyOrder: 'rate',
   },
   getters: {
     isLoggedIn: (state) => {
@@ -78,8 +79,14 @@ export default new Vuex.Store({
         commit('REMOVE_CATEGORY_FILTER', category)
       }
     },
+    updateStoryOrder({ commit }, { storyOrder }) {
+      commit('SET_STORY_ORDER', storyOrder)
+    },
   },
   mutations: {
+    SET_USER(state, user) {
+      state.user = user
+    },
     LOGIN_SUCCESS(state, { email, name, jwt }) {
       state.user = { email, name }
       state.jwt = jwt
@@ -107,8 +114,8 @@ export default new Vuex.Store({
         state.categoryFilters.splice(index, 1)
       }
     },
-    SET_USER(state, user) {
-      state.user = user
+    SET_STORY_ORDER(state, storyOrder) {
+      state.storyOrder = storyOrder
     },
   },
 })

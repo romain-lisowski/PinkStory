@@ -5,7 +5,7 @@
     </p>
     <div class="flex justify-center my-4">
       <span v-if="getUserProfilePicture" class="relative">
-        <img class="rounded-full h-48 w-48" :src="getUserProfilePicture" />
+        <img class="h-40 w-40 rounded-full" :src="getUserProfilePicture" />
         <button
           class="mt-2 text-accent underline"
           @click="deleteProfilePicture"
@@ -16,7 +16,7 @@
 
       <span
         v-else
-        class="px-12 py-8 text-4xl font-bold bg-accent bg-opacity-100 rounded-full"
+        class="h-40 w-40 flex items-center justify-center text-4xl font-bold bg-accent bg-opacity-100 rounded-full"
         >{{ getUserName[0].toUpperCase() }}</span
       >
     </div>

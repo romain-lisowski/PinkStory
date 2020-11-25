@@ -150,13 +150,13 @@
           class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
         >
           <img
-            class="w-8 md:w-10 h-8 md:h-10 rounded-xl md:rounded-2xl"
+            class="w-8 md:w-12 h-8 md:h-12 rounded-xl md:rounded-2xl"
             :src="getUserProfilePicture"
           />
         </span>
         <span
           v-else
-          class="px-5 py-3 font-bold bg-accent bg-opacity-100 rounded-full"
+          class="w-8 md:w-12 h-8 md:h-12 flex items-center justify-center font-bold bg-accent bg-opacity-100 rounded-full"
           >{{ getUserName[0].toUpperCase() }}</span
         >
       </button>

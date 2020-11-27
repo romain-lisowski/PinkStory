@@ -38,11 +38,8 @@ final class UserSignupCommandHandler
             throw new ValidatorException($errors);
         }
 
-        $user = new User();
-        $user->rename($command->name)
-            ->updateEmail($command->email)
-            ->updatePassword($this->passwordEncoder->encodePassword($user, $command->password))
-        ;
+        $user = new User($command->name, $command->email);
+        $user->updatePassword($this->passwordEncoder->encodePassword($user, $command->password));
 
         if (null !== $command->image) {
             $isUploaded = $this->imageManager->upload($command->image, $user);

@@ -120,7 +120,7 @@ class User extends AbstractEntity implements UserInterface, ImageInterface
      */
     private Collection $stories;
 
-    public function __construct()
+    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER)
     {
         parent::__construct();
 
@@ -139,6 +139,12 @@ class User extends AbstractEntity implements UserInterface, ImageInterface
         $this->role = UserRole::ROLE_USER;
         $this->imageDefined = false;
         $this->stories = new ArrayCollection();
+
+        // init values
+        $this->setName($name)
+            ->setEmail($email)
+            ->setRole($role)
+        ;
     }
 
     public function getName(): string
@@ -150,15 +156,15 @@ class User extends AbstractEntity implements UserInterface, ImageInterface
     {
         $this->name = $name;
 
+        $slugger = new AsciiSlugger();
+        $this->nameSlug = $slugger->slug($name)->lower()->toString();
+
         return $this;
     }
 
     public function rename(string $name): self
     {
         $this->setName($name);
-
-        $slugger = new AsciiSlugger();
-        $this->nameSlug = $slugger->slug($name)->lower()->toString();
 
         return $this;
     }

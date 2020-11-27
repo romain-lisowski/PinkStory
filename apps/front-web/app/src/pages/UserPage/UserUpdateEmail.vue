@@ -32,10 +32,9 @@ export default {
     }
   },
   methods: {
-    processForm() {
-      ApiUsers.updateEmail(this.$store.state.jwt, this.email)
-      this.$store.dispatch('logout')
-      this.$router.push({ name: 'Auth' })
+    async processForm() {
+      await ApiUsers.updateEmail(this.$store.state.jwt, this.email)
+      this.$store.dispatch('fetchCurrentUser')
     },
   },
 }

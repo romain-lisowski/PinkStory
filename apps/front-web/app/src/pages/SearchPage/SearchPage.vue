@@ -6,7 +6,7 @@
           class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12"
         >
           <p
-            class="block w-full mt-12 sm:mt-0 text-4xl md:text-5xl xl:text-6xl font-semibold text-center"
+            class="block w-full mt-12 sm:mt-0 text-5xl md:text-5xl xl:text-6xl font-semibold text-center"
           >
             {{ $t('search') }}
           </p>
@@ -21,7 +21,7 @@
       </template>
     </CategoryBlock>
     <div class="mx-8">
-      <StoryListFilter />
+      <StoryListOrder />
       <StoryList />
     </div>
   </div>
@@ -29,14 +29,14 @@
 
 <script>
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
-import StoryListFilter from '@/components/story/StoryListFilter.vue'
+import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryList from '@/components/story/StoryList.vue'
 
 export default {
   name: 'SearchPage',
   components: {
     CategoryBlock,
-    StoryListFilter,
+    StoryListOrder,
     StoryList,
   },
   data() {

@@ -18,24 +18,43 @@ export default new Vuex.Store({
     theme,
     isAdult,
     categoryFilters: [],
+    storyOrder: 'rate',
   },
   getters: {
     isLoggedIn: (state) => {
       return state.user && state.jwt
     },
+    getUserName: (state) => {
+      return state.user.name
+    },
+    getUserProfilePicture: (state, getters) => {
+      return getters.isLoggedIn && state.user.profile_picture
+        ? `${
+            process.env.VUE_APP_PROJECT_FILE_MANAGER_DSN +
+            process.env.VUE_APP_PROJECT_FILE_MANAGER_IMAGE_DIR +
+            process.env.VUE_APP_PROJECT_FILE_MANAGER_IMAGE_USER_DIR
+          }/${state.user.profile_picture}`
+        : null
+    },
   },
   actions: {
-    async login({ commit }, { email, password }) {
+    async fetchCurrentUser({ commit }) {
+      const responseCurrent = await ApiUsers.current(jwt)
+      const { user } = responseCurrent
+      commit('SET_USER', user)
+      localStorage.setItem('user', JSON.stringify(user))
+
+      return user
+    },
+    async login({ commit, dispatch }, { email, password }) {
       // get jwt
       const responseLogin = await ApiUsers.login(email, password)
       if (responseLogin.ok) {
         const jwt = responseLogin.token
-        // get user
-        const responseCurrent = await ApiUsers.current(jwt)
-        const { name } = responseCurrent.user
-        localStorage.setItem('user', JSON.stringify({ email, name }))
         localStorage.setItem('jwt', JSON.stringify(jwt))
-        commit('LOGIN_SUCCESS', { email, name, jwt })
+        // get user informations
+        dispatch('fetchCurrentUser')
+        commit('LOGIN_SUCCESS', { user, jwt })
       } else {
         commit('LOGIN_FAILURE')
       }
@@ -45,7 +64,7 @@ export default new Vuex.Store({
       localStorage.removeItem('jwt')
       commit('LOGOUT')
     },
-    changeTheme({ commit }, { theme }) {
+    updateTheme({ commit }, { theme }) {
       commit('SET_THEME', theme)
       localStorage.setItem('theme', JSON.stringify(theme))
     },
@@ -60,8 +79,14 @@ export default new Vuex.Store({
         commit('REMOVE_CATEGORY_FILTER', category)
       }
     },
+    updateStoryOrder({ commit }, { storyOrder }) {
+      commit('SET_STORY_ORDER', storyOrder)
+    },
   },
   mutations: {
+    SET_USER(state, user) {
+      state.user = user
+    },
     LOGIN_SUCCESS(state, { email, name, jwt }) {
       state.user = { email, name }
       state.jwt = jwt
@@ -88,6 +113,9 @@ export default new Vuex.Store({
       if (index > -1) {
         state.categoryFilters.splice(index, 1)
       }
+    },
+    SET_STORY_ORDER(state, storyOrder) {
+      state.storyOrder = storyOrder
     },
   },
 })

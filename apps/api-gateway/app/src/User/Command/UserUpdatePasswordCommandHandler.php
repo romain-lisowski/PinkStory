@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Exception\ValidatorException;
+use App\User\Message\UserUpdatePasswordMessage;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserUpdatePasswordCommandHandler
 {
     private EntityManagerInterface $entityManager;
+    private MessageBusInterface $bus;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, UserRepositoryInterface $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, UserRepositoryInterface $userRepository)
     {
         $this->entityManager = $entityManager;
+        $this->bus = $bus;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
         $this->userRepository = $userRepository;
@@ -45,5 +49,7 @@ final class UserUpdatePasswordCommandHandler
         }
 
         $this->entityManager->flush();
+
+        $this->bus->dispatch(new UserUpdatePasswordMessage($user->getId()));
     }
 }

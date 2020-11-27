@@ -1,6 +1,7 @@
 exception:
     access_denied: Access denied.
     error: An error occured.
+    image_upload: An error occured during image upload.
     invalid_form: The form is not valid.
     invalid_ssl_key: The SSL key is not valid.
     not_submitted_form: The form has not been submitted.
@@ -10,7 +11,6 @@ user:
     exception:
         invalid_token: No token provided.
         no_token_provided: No token provided.
-        profile_picture_upload: An error occured during profile picture upload.
     validator:
         email_match: The email adresses must match.
         invalid_email: The email address is not valid.

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\User\Entity;
 
 use App\Entity\AbstractEntity;
+use App\File\ImageInterface;
+use App\File\ImageTrait;
 use App\Story\Entity\Story;
 use App\User\Validator\Constraints as AppUserAssert;
 use DateTime;
@@ -26,8 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity implements UserInterface
+class User extends AbstractEntity implements UserInterface, ImageInterface
 {
+    use ImageTrait;
+
     /**
      * @Groups({"medium", "full"})
      * @Assert\NotBlank
@@ -106,9 +110,9 @@ class User extends AbstractEntity implements UserInterface
 
     /**
      * @Assert\NotNull
-     * @ORM\Column(name="profile_picture_defined", type="boolean", options={"default" : false})
+     * @ORM\Column(name="image_defined", type="boolean", options={"default" : false})
      */
-    private bool $profilePictureDefined;
+    private bool $imageDefined;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="user", cascade={"remove"})
@@ -133,7 +137,7 @@ class User extends AbstractEntity implements UserInterface
         $this->passwordForgottenSecretCreatedAt = new DateTime();
         $this->secret = Uuid::v4()->toRfc4122();
         $this->role = UserRole::ROLE_USER;
-        $this->profilePictureDefined = false;
+        $this->imageDefined = false;
         $this->stories = new ArrayCollection();
     }
 
@@ -154,14 +158,7 @@ class User extends AbstractEntity implements UserInterface
         $this->setName($name);
 
         $slugger = new AsciiSlugger();
-        $this->setNameSlug($slugger->slug($name)->lower()->toString());
-
-        return $this;
-    }
-
-    public function setNameSlug(string $slug): self
-    {
-        $this->nameSlug = $slug;
+        $this->nameSlug = $slugger->slug($name)->lower()->toString();
 
         return $this;
     }
@@ -178,14 +175,14 @@ class User extends AbstractEntity implements UserInterface
 
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->email = (new UnicodeString($email))->lower()->toString();
 
         return $this;
     }
 
     public function updateEmail(string $email): self
     {
-        $this->setEmail((new UnicodeString($email))->lower()->toString());
+        $this->setEmail($email);
         $this->regenerateEmailValidationSecret();
 
         return $this;
@@ -347,44 +344,33 @@ class User extends AbstractEntity implements UserInterface
         return $this;
     }
 
-    public function getProfilePicturePath(): ?string
+    public function hasImageDefined(): bool
     {
-        if (true === $this->hasProfilePicture()) {
-            return $this->getId().'.jpeg';
-        }
-
-        return null;
+        return $this->imageDefined;
     }
 
-    /**
-     * @Groups({"medium", "full"})
-     */
-    public function getProfilePicture(): ?string
+    public function setImageDefined(bool $imageDefined): self
     {
-        if (true === $this->hasProfilePicture()) {
-            return $this->getId().'.jpeg';
-        }
-
-        return null;
-    }
-
-    public function hasProfilePicture(): bool
-    {
-        return $this->profilePictureDefined;
-    }
-
-    public function setProfilePictureDefined(bool $profilePictureDefined): self
-    {
-        $this->profilePictureDefined = $profilePictureDefined;
+        $this->imageDefined = $imageDefined;
 
         return $this;
     }
 
-    public function removeProfilePicture(): self
+    public function hasImage(): bool
     {
-        $this->setProfilePictureDefined(false);
+        return $this->imageDefined;
+    }
+
+    public function removeImage(): self
+    {
+        $this->setImageDefined(false);
 
         return $this;
+    }
+
+    public function getImageBasePath(): string
+    {
+        return '/user';
     }
 
     public function getUsername(): string

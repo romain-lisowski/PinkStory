@@ -87,6 +87,16 @@ class StoryImage extends AbstractEntity implements ImageInterface
         return $this->titleSlug;
     }
 
+    public function hasImage(): bool
+    {
+        return true;
+    }
+
+    public function getImageBasePath(): string
+    {
+        return '/story';
+    }
+
     public function getStories(): Collection
     {
         return $this->stories;

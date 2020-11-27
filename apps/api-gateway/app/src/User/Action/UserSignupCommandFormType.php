@@ -25,8 +25,7 @@ final class UserSignupCommandFormType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'user.validator.password_match',
             ])
-            ->add('profile_picture', FileType::class, [
-                'property_path' => 'profilePicture',
+            ->add('image', FileType::class, [
                 'required' => false,
             ])
         ;

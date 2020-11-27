@@ -32,5 +32,5 @@ final class UserSignupCommand
      *      mimeTypes = {"image/jpeg", "image/png"},
      * )
      */
-    public ?UploadedFile $profilePicture = null;
+    public ?UploadedFile $image = null;
 }

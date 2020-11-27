@@ -6,7 +6,7 @@ namespace App\User\Command;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserRemoveProfilePictureCommand
+final class UserRemoveImageCommand
 {
     /**
      * @Assert\NotBlank

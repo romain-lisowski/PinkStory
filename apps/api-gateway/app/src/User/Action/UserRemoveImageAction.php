@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\User\Action;
 
 use App\Responder\ResponderInterface;
-use App\User\Command\UserRemoveProfilePictureCommand;
-use App\User\Command\UserRemoveProfilePictureCommandHandler;
+use App\User\Command\UserRemoveImageCommand;
+use App\User\Command\UserRemoveImageCommandHandler;
 use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +17,15 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/remove-profile-picture", name="user_remove_profile_picture", methods={"DELETE"})
+ * @Route("/users/remove-image", name="user_remove_image", methods={"DELETE"})
  */
-final class UserRemoveProfilePictureAction
+final class UserRemoveImageAction
 {
     private ResponderInterface $responder;
-    private UserRemoveProfilePictureCommandHandler $handler;
+    private UserRemoveImageCommandHandler $handler;
     private UserSecurityInterface $security;
 
-    public function __construct(ResponderInterface $responder, UserRemoveProfilePictureCommandHandler $handler, UserSecurityInterface $security)
+    public function __construct(ResponderInterface $responder, UserRemoveImageCommandHandler $handler, UserSecurityInterface $security)
     {
         $this->security = $security;
         $this->responder = $responder;
@@ -35,7 +35,7 @@ final class UserRemoveProfilePictureAction
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserRemoveProfilePictureCommand();
+            $command = new UserRemoveImageCommand();
             $command->id = $this->security->getUser()->getId();
 
             $this->handler->handle($command);

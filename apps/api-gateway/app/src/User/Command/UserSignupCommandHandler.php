@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Exception\ValidatorException;
+use App\File\ImageManagerInterface;
 use App\User\Entity\User;
-use App\User\File\UserProfilePictureFileManagerInterface;
 use App\User\Message\UserSignupMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,15 +19,15 @@ final class UserSignupCommandHandler
     private MessageBusInterface $bus;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
-    private UserProfilePictureFileManagerInterface $userProfilePictureFileManager;
+    private ImageManagerInterface $imageManager;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, UserProfilePictureFileManagerInterface $userProfilePictureFileManager)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, ImageManagerInterface $imageManager)
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
-        $this->userProfilePictureFileManager = $userProfilePictureFileManager;
+        $this->imageManager = $imageManager;
     }
 
     public function handle(UserSignupCommand $command): void
@@ -44,17 +44,15 @@ final class UserSignupCommandHandler
             ->updatePassword($this->passwordEncoder->encodePassword($user, $command->password))
         ;
 
-        $this->userProfilePictureFileManager->setUser($user);
-
-        if (null !== $command->profilePicture) {
-            $isUploaded = $this->userProfilePictureFileManager->upload($command->profilePicture);
-            $user->setProfilePictureDefined($isUploaded);
+        if (null !== $command->image) {
+            $isUploaded = $this->imageManager->upload($command->image, $user);
+            $user->setImageDefined($isUploaded);
         }
 
         $errors = $this->validator->validate($user);
 
         if (count($errors) > 0) {
-            $this->userProfilePictureFileManager->remove();
+            $this->imageManager->remove($user);
 
             throw new ValidatorException($errors);
         }

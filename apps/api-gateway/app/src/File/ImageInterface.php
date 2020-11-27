@@ -6,5 +6,11 @@ namespace App\File;
 
 interface ImageInterface
 {
-    public function getImagePath(): ?string;
+    public function hasImage(): bool;
+
+    public function getImageName(bool $forced = false): ?string;
+
+    public function getImagePath(bool $forced = false): ?string;
+
+    public function getImageBasePath(): string;
 }

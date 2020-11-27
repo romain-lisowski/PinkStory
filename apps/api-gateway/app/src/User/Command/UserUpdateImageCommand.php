@@ -7,7 +7,7 @@ namespace App\User\Command;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserUpdateProfilePictureCommand
+final class UserUpdateImageCommand
 {
     /**
      * @Assert\NotBlank
@@ -20,5 +20,5 @@ final class UserUpdateProfilePictureCommand
      *      mimeTypes = {"image/jpeg", "image/png"},
      * )
      */
-    public UploadedFile $profilePicture;
+    public UploadedFile $image;
 }

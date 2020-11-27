@@ -4,32 +4,33 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Exception\ImageUploadException;
 use App\Exception\ValidatorException;
-use App\User\File\UserProfilePictureFileManagerInterface;
-use App\User\Message\UserRemoveProfilePictureMessage;
+use App\File\ImageManagerInterface;
+use App\User\Message\UserUpdateImageMessage;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserRemoveProfilePictureCommandHandler
+final class UserUpdateImageCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
     private ValidatorInterface $validator;
-    private UserProfilePictureFileManagerInterface $userProfilePictureFileManager;
+    private ImageManagerInterface $imageManagerInterface;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, UserProfilePictureFileManagerInterface $userProfilePictureFileManager, UserRepositoryInterface $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, ImageManagerInterface $imageManagerInterface, UserRepositoryInterface $userRepository)
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
         $this->validator = $validator;
-        $this->userProfilePictureFileManager = $userProfilePictureFileManager;
+        $this->imageManagerInterface = $imageManagerInterface;
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserRemoveProfilePictureCommand $command): void
+    public function handle(UserUpdateImageCommand $command): void
     {
         $errors = $this->validator->validate($command);
 
@@ -39,24 +40,23 @@ final class UserRemoveProfilePictureCommandHandler
 
         $user = $this->userRepository->findOne($command->id);
 
-        if (false === $user->hasProfilePicture()) {
-            return;
+        if (false === $this->imageManagerInterface->upload($command->image, $user)) {
+            throw new ImageUploadException();
         }
 
-        $this->userProfilePictureFileManager->setUser($user);
-        $this->userProfilePictureFileManager->remove();
-
-        $user->removeProfilePicture();
+        $user->setImageDefined(true);
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);
 
         if (count($errors) > 0) {
+            $this->imageManagerInterface->remove($user);
+
             throw new ValidatorException($errors);
         }
 
         $this->entityManager->flush();
 
-        $this->bus->dispatch(new UserRemoveProfilePictureMessage($user->getId()));
+        $this->bus->dispatch(new UserUpdateImageMessage($user->getId()));
     }
 }

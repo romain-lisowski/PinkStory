@@ -7,34 +7,27 @@ namespace App\Story\Entity;
 use App\Entity\AbstractEntity;
 use App\Entity\PositionInterface;
 use App\Entity\PositionTrait;
+use App\Language\Entity\TranslatableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="sty_story_theme")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryThemeRepository")
  */
-class StoryTheme extends AbstractEntity implements PositionInterface
+class StoryTheme extends AbstractEntity implements PositionInterface, TranslatableInterface
 {
     use PositionTrait;
 
     /**
      * @Groups({"medium", "full"})
      * @Assert\NotBlank
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="reference", type="string", length=255)
      */
-    private string $title;
-
-    /**
-     * @Groups({"medium", "full"})
-     * @Assert\NotBlank
-     * @ORM\Column(name="title_slug", type="string", length=255)
-     */
-    private string $titleSlug;
+    private string $reference;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryTheme", inversedBy="children")
@@ -49,6 +42,11 @@ class StoryTheme extends AbstractEntity implements PositionInterface
     private Collection $children;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryThemeTranslation", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $storyThemeTranslations;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryHasStoryTheme", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $storyHasStoryThemes;
@@ -58,50 +56,42 @@ class StoryTheme extends AbstractEntity implements PositionInterface
      */
     private Collection $storyImageHasStoryThemes;
 
-    public function __construct(string $title = '', ?StoryTheme $parent = null)
+    public function __construct(string $reference = '', ?StoryTheme $parent = null)
     {
         parent::__construct();
 
         // init zero values
-        $this->title = '';
-        $this->titleSlug = '';
+        $this->reference = '';
         $this->parent = null;
         $this->position = 1;
         $this->children = new ArrayCollection();
+        $this->storyThemeTranslations = new ArrayCollection();
         $this->storyHasStoryThemes = new ArrayCollection();
         $this->storyImageHasStoryThemes = new ArrayCollection();
 
         // init values
-        $this->setTitle($title)
+        $this->setReference($reference)
             ->setParent($parent)
         ;
     }
 
-    public function getTitle(): string
+    public function getReference(): string
     {
-        return $this->title;
+        return $this->reference;
     }
 
-    public function setTitle(string $title): self
+    public function setReference(string $reference): self
     {
-        $this->title = $title;
-
-        $slugger = new AsciiSlugger();
-        $this->titleSlug = $slugger->slug($title)->lower()->toString();
+        $this->reference = $reference;
 
         return $this;
     }
 
-    public function updateTitle(string $title): self
+    public function updateReference(string $reference): self
     {
-        $this->setTitle($title);
+        $this->setReference($reference);
 
         return $this;
-    }
-
-    public function getTitleSlug(): string
-    {
-        return $this->titleSlug;
     }
 
     public function getParent(): ?StoryTheme
@@ -152,6 +142,30 @@ class StoryTheme extends AbstractEntity implements PositionInterface
         self::resetPosition($this->children);
 
         return $this;
+    }
+
+    public function getStoryThemeTranslations(): Collection
+    {
+        return $this->storyThemeTranslations;
+    }
+
+    public function addStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
+    {
+        $this->storyThemeTranslations[] = $storyThemeTranslation;
+
+        return $this;
+    }
+
+    public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
+    {
+        $this->storyThemeTranslations->remove($storyThemeTranslation);
+
+        return $this;
+    }
+
+    public function getTranslations(): Collection
+    {
+        return $this->getStoryThemeTranslations();
     }
 
     public function getStoryHasStoryThemes(): Collection

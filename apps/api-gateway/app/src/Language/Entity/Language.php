@@ -6,6 +6,7 @@ namespace App\Language\Entity;
 
 use App\Entity\AbstractEntity;
 use App\Story\Entity\StoryImageTranslation;
+use App\Story\Entity\StoryThemeTranslation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +35,11 @@ class Language extends AbstractEntity
     private string $locale;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryThemeTranslation", mappedBy="language", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $storyThemeTranslations;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="language", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $storyImageTranslations;
@@ -45,6 +51,7 @@ class Language extends AbstractEntity
         // init zero values
         $this->title = '';
         $this->locale = '';
+        $this->storyThemeTranslations = new ArrayCollection();
         $this->storyImageTranslations = new ArrayCollection();
 
         // init values
@@ -88,6 +95,25 @@ class Language extends AbstractEntity
     public function updateLocale(string $locale): self
     {
         $this->setLocale($locale);
+
+        return $this;
+    }
+
+    public function getStoryThemeTranslations(): Collection
+    {
+        return $this->storyThemeTranslations;
+    }
+
+    public function addStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
+    {
+        $this->storyThemeTranslations[] = $storyThemeTranslation;
+
+        return $this;
+    }
+
+    public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
+    {
+        $this->storyThemeTranslations->remove($storyThemeTranslation);
 
         return $this;
     }

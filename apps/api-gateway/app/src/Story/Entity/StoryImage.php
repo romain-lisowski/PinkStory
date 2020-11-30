@@ -7,34 +7,32 @@ namespace App\Story\Entity;
 use App\Entity\AbstractEntity;
 use App\File\ImageInterface;
 use App\File\ImageTrait;
+use App\Language\Entity\TranslatableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="sty_story_image")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryImageRepository")
  */
-class StoryImage extends AbstractEntity implements ImageInterface
+class StoryImage extends AbstractEntity implements ImageInterface, TranslatableInterface
 {
     use ImageTrait;
 
     /**
      * @Groups({"medium", "full"})
      * @Assert\NotBlank
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="reference", type="string", length=255)
      */
-    private string $title;
+    private string $reference;
 
     /**
-     * @Groups({"medium", "full"})
-     * @Assert\NotBlank
-     * @ORM\Column(name="title_slug", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="storyImage", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    private string $titleSlug;
+    private Collection $storyImageTranslations;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="storyImage")
@@ -46,45 +44,37 @@ class StoryImage extends AbstractEntity implements ImageInterface
      */
     private Collection $storyImageHasStoryThemes;
 
-    public function __construct(string $title = '')
+    public function __construct(string $reference = '')
     {
         parent::__construct();
 
         // init zero values
-        $this->title = '';
-        $this->titleSlug = '';
+        $this->reference = '';
+        $this->storyImageTranslations = new ArrayCollection();
         $this->stories = new ArrayCollection();
         $this->storyImageHasStoryThemes = new ArrayCollection();
 
         // init values
-        $this->setTitle($title);
+        $this->setReference($reference);
     }
 
-    public function getTitle(): string
+    public function getReference(): string
     {
-        return $this->title;
+        return $this->reference;
     }
 
-    public function setTitle(string $title): self
+    public function setReference(string $reference): self
     {
-        $this->title = $title;
-
-        $slugger = new AsciiSlugger();
-        $this->titleSlug = $slugger->slug($title)->lower()->toString();
+        $this->reference = $reference;
 
         return $this;
     }
 
-    public function updateTitle(string $title): self
+    public function updateReference(string $reference): self
     {
-        $this->setTitle($title);
+        $this->setReference($reference);
 
         return $this;
-    }
-
-    public function getTitleSlug(): string
-    {
-        return $this->titleSlug;
     }
 
     public function hasImage(): bool
@@ -95,6 +85,30 @@ class StoryImage extends AbstractEntity implements ImageInterface
     public function getImageBasePath(): string
     {
         return '/story';
+    }
+
+    public function getStoryImageTranslations(): Collection
+    {
+        return $this->getTranslations();
+    }
+
+    public function addStoryImageTranslation(StoryImageTranslation $storyImageTranslation): self
+    {
+        $this->storyImageTranslations[] = $storyImageTranslation;
+
+        return $this;
+    }
+
+    public function removeStoryImageTranslation(StoryImageTranslation $storyImageTranslation): self
+    {
+        $this->storyImageTranslations->remove($storyImageTranslation);
+
+        return $this;
+    }
+
+    public function getTranslations(): Collection
+    {
+        return $this->getStoryImageTranslations();
     }
 
     public function getStories(): Collection

@@ -12,6 +12,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            App\Language:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Language/Entity'
+                prefix: 'App\Language\Entity'
+                alias: AppLanguage
             App\User:
                 is_bundle: false
                 type: annotation

@@ -110,7 +110,7 @@ class User extends AbstractEntity implements UserInterface, ImageInterface
 
     /**
      * @Assert\NotNull
-     * @ORM\Column(name="image_defined", type="boolean", options={"default" : false})
+     * @ORM\Column(name="image_defined", type="boolean")
      */
     private bool $imageDefined;
 

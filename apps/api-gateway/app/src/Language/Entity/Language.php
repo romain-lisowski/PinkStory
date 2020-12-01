@@ -36,17 +36,17 @@ class Language extends AbstractEntity
     private string $locale;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="language", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="language")
      */
     private Collection $stories;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryThemeTranslation", mappedBy="language", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryThemeTranslation", mappedBy="language")
      */
     private Collection $storyThemeTranslations;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="language", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="language")
      */
     private Collection $storyImageTranslations;
 

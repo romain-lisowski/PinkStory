@@ -47,12 +47,12 @@ class StoryTheme extends AbstractEntity implements PositionInterface, Translatab
     private Collection $storyThemeTranslations;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryHasStoryTheme", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryHasStoryTheme", mappedBy="storyTheme", cascade={"remove"}, orphanRemoval=true)
      */
     private Collection $storyHasStoryThemes;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageHasStoryTheme", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageHasStoryTheme", mappedBy="storyTheme", cascade={"remove"}, orphanRemoval=true)
      */
     private Collection $storyImageHasStoryThemes;
 

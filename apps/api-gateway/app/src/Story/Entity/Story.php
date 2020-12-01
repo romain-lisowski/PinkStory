@@ -72,7 +72,7 @@ class Story extends AbstractEntity implements PositionInterface, LanguageableInt
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryImage", inversedBy="stories")
-     * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id")
      */
     private ?StoryImage $storyImage;
 

@@ -12,4 +12,6 @@ trait LanguageableTrait
     {
         return $this->language;
     }
+
+    abstract public function setLanguage(Language $language): self;
 }

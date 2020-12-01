@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait ImageableTrait
 {
+    abstract public function hasImage(): bool;
+
     public function getImageName(bool $forced = false): ?string
     {
         if (false === $this->hasImage() && false === $forced) {
@@ -28,4 +30,6 @@ trait ImageableTrait
 
         return $this->getImageBasePath().'/'.$this->getImageName($forced);
     }
+
+    abstract public function getImageBasePath(): string;
 }

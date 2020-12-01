@@ -21,6 +21,4 @@ abstract class AbstractTranslation extends AbstractEntity implements Languageabl
         // init values
         $this->setLanguage($language);
     }
-
-    abstract public function setLanguage(Language $language): self;
 }

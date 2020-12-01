@@ -12,4 +12,6 @@ trait UserableTrait
     {
         return $this->user;
     }
+
+    abstract public function setUser(User $user): self;
 }

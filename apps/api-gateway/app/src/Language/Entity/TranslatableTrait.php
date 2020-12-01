@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Language\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -35,4 +36,6 @@ trait TranslatableTrait
 
         return $this;
     }
+
+    abstract public function getTranslations(): Collection;
 }

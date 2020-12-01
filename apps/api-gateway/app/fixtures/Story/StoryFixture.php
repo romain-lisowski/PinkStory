@@ -2,6 +2,7 @@
 
 namespace App\Fixture\Story;
 
+use App\Fixture\Language\LanguageFixture;
 use App\Fixture\User\UserFixture;
 use App\Story\Entity\Story;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -12,7 +13,7 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $storyParent = new Story('Première histoire', 'Contenu de la première histoire', $this->getReference('user-romain'), null, $this->getReference('story-image-first'));
+        $storyParent = new Story('Première histoire', 'Contenu de la première histoire', $this->getReference('user-romain'), $this->getReference('language-french'), null, $this->getReference('story-image-first'));
         $storyParent->addStoryTheme($this->getReference('story-theme-heterosexual'))
             ->addStoryTheme($this->getReference('story-theme-office'))
             ->addStoryTheme($this->getReference('story-theme-threesome'))
@@ -21,13 +22,13 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
         ;
         $manager->persist($storyParent);
 
-        $storyParent = new Story('Deuxième histoire', 'Contenu de la deuxième histoire', $this->getReference('user-leslie'), null, $this->getReference('story-image-second'));
+        $storyParent = new Story('Deuxième histoire', 'Contenu de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), null, $this->getReference('story-image-second'));
         $storyParent->addStoryTheme($this->getReference('story-theme-heterosexual'))
             ->addStoryTheme($this->getReference('story-theme-office'))
         ;
         $manager->persist($storyParent);
 
-        $storyChild = new Story('Premier chapitre de la deuxième histoire', 'Contenu du premier chapitre de la deuxième histoire', $this->getReference('user-leslie'), $storyParent, $this->getReference('story-image-second'));
+        $storyChild = new Story('Premier chapitre de la deuxième histoire', 'Contenu du premier chapitre de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), $storyParent, $this->getReference('story-image-second'));
         $storyChild->addStoryTheme($this->getReference('story-theme-heterosexual'))
             ->addStoryTheme($this->getReference('story-theme-office'))
             ->addStoryTheme($this->getReference('story-theme-oral-sex'))
@@ -35,7 +36,7 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
         ;
         $manager->persist($storyChild);
 
-        $storyChild = new Story('Deuxième chapitre de la deuxième histoire', 'Contenu du deuxième chapitre de la deuxième histoire', $this->getReference('user-leslie'), $storyParent, $this->getReference('story-image-third'));
+        $storyChild = new Story('Deuxième chapitre de la deuxième histoire', 'Contenu du deuxième chapitre de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), $storyParent, $this->getReference('story-image-third'));
         $storyChild->addStoryTheme($this->getReference('story-theme-heterosexual'))
             ->addStoryTheme($this->getReference('story-theme-home'))
             ->addStoryTheme($this->getReference('story-theme-sodomy'))
@@ -49,6 +50,7 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
+            LanguageFixture::class,
             UserFixture::class,
             StoryImageFixture::class,
             StoryThemeFixture::class,

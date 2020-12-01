@@ -7,6 +7,8 @@ namespace App\Story\Entity;
 use App\Entity\AbstractEntity;
 use App\Entity\PositionInterface;
 use App\Entity\PositionTrait;
+use App\Language\Entity\Language;
+use App\Language\Entity\LanguageableInterface;
 use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryRepository")
  */
-class Story extends AbstractEntity implements PositionInterface
+class Story extends AbstractEntity implements PositionInterface, LanguageableInterface
 {
     use PositionTrait;
 
@@ -51,6 +53,12 @@ class Story extends AbstractEntity implements PositionInterface
     private User $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="stories")
+     * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
+     */
+    private Language $language;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\Story", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
@@ -73,7 +81,7 @@ class Story extends AbstractEntity implements PositionInterface
      */
     private Collection $storyHasStoryThemes;
 
-    public function __construct(string $title = '', string $content = '', User $user, ?Story $parent = null, ?StoryImage $storyImage = null)
+    public function __construct(string $title = '', string $content = '', User $user, Language $language, ?Story $parent = null, ?StoryImage $storyImage = null)
     {
         parent::__construct();
 
@@ -91,6 +99,7 @@ class Story extends AbstractEntity implements PositionInterface
         $this->setTitle($title)
             ->setContent($content)
             ->setUser($user)
+            ->setLanguage($language)
             ->setParent($parent)
             ->setStoryImage($storyImage)
         ;
@@ -151,6 +160,19 @@ class Story extends AbstractEntity implements PositionInterface
     {
         $this->user = $user;
         $user->addStory($this);
+
+        return $this;
+    }
+
+    public function getLanguage(): Language
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(Language $language): self
+    {
+        $this->language = $language;
+        $language->addStory($this);
 
         return $this;
     }

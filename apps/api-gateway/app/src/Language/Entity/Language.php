@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Language\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Story\Entity\Story;
 use App\Story\Entity\StoryImageTranslation;
 use App\Story\Entity\StoryThemeTranslation;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -35,6 +36,11 @@ class Language extends AbstractEntity
     private string $locale;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="language", cascade={"persist"})
+     */
+    private Collection $stories;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryThemeTranslation", mappedBy="language", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $storyThemeTranslations;
@@ -51,6 +57,7 @@ class Language extends AbstractEntity
         // init zero values
         $this->title = '';
         $this->locale = '';
+        $this->stories = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
         $this->storyImageTranslations = new ArrayCollection();
 
@@ -95,6 +102,25 @@ class Language extends AbstractEntity
     public function updateLocale(string $locale): self
     {
         $this->setLocale($locale);
+
+        return $this;
+    }
+
+    public function getStories(): Collection
+    {
+        return $this->stories;
+    }
+
+    public function addStory(Story $story): self
+    {
+        $this->stories[] = $story;
+
+        return $this;
+    }
+
+    public function removeStory(Story $story): self
+    {
+        $this->stories->remove($story);
 
         return $this;
     }

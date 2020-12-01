@@ -8,11 +8,10 @@ use App\Entity\AbstractEntity;
 use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
 use App\Language\Entity\TranslatableInterface;
+use App\Language\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="sty_story_theme")
@@ -21,13 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class StoryTheme extends AbstractEntity implements PositionableInterface, TranslatableInterface
 {
     use PositionableTrait;
-
-    /**
-     * @Groups({"medium", "full"})
-     * @Assert\NotBlank
-     * @ORM\Column(name="reference", type="string", length=255)
-     */
-    private string $reference;
+    use TranslatableTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryTheme", inversedBy="children")
@@ -73,25 +66,6 @@ class StoryTheme extends AbstractEntity implements PositionableInterface, Transl
         $this->setReference($reference)
             ->setParent($parent)
         ;
-    }
-
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
-
-    public function setReference(string $reference): self
-    {
-        $this->reference = $reference;
-
-        return $this;
-    }
-
-    public function updateReference(string $reference): self
-    {
-        $this->setReference($reference);
-
-        return $this;
     }
 
     public function getParent(): ?StoryTheme

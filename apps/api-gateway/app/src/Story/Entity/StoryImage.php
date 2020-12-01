@@ -8,11 +8,10 @@ use App\Entity\AbstractEntity;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Language\Entity\TranslatableInterface;
+use App\Language\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="sty_story_image")
@@ -21,13 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class StoryImage extends AbstractEntity implements ImageableInterface, TranslatableInterface
 {
     use ImageableTrait;
-
-    /**
-     * @Groups({"medium", "full"})
-     * @Assert\NotBlank
-     * @ORM\Column(name="reference", type="string", length=255)
-     */
-    private string $reference;
+    use TranslatableTrait;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="storyImage", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -56,25 +49,6 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
 
         // init values
         $this->setReference($reference);
-    }
-
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
-
-    public function setReference(string $reference): self
-    {
-        $this->reference = $reference;
-
-        return $this;
-    }
-
-    public function updateReference(string $reference): self
-    {
-        $this->setReference($reference);
-
-        return $this;
     }
 
     public function hasImage(): bool

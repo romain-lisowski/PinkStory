@@ -41,7 +41,7 @@ final class UserValidateEmailAction
             $command->id = $this->security->getUser()->getId();
             $command->secret = $secret;
 
-            $this->handler->setCommand($command)->handle();
+            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
 
             return $this->responder->render();
         } catch (AccessDeniedException $e) {

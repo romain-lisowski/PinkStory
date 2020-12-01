@@ -55,7 +55,7 @@ final class UserUpdateEmailAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $this->handler->setCommand($command)->handle();
+            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
 
             return $this->responder->render();
         } catch (Throwable $e) {

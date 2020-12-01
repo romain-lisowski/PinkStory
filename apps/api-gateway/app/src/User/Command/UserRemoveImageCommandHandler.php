@@ -9,20 +9,25 @@ use App\Exception\ValidatorException;
 use App\File\ImageManagerInterface;
 use App\User\Message\UserRemoveImageMessage;
 use App\User\Repository\UserRepositoryInterface;
+use App\User\Voter\UserableVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserRemoveImageCommandHandler extends AbstractCommandHandler
 {
+    private AuthorizationCheckerInterface $authorizationChecker;
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
     private ValidatorInterface $validator;
     private ImageManagerInterface $imageManager;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, ImageManagerInterface $imageManager, UserRepositoryInterface $userRepository)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, ImageManagerInterface $imageManager, UserRepositoryInterface $userRepository)
     {
+        $this->authorizationChecker = $authorizationChecker;
         $this->entityManager = $entityManager;
         $this->bus = $bus;
         $this->validator = $validator;
@@ -39,6 +44,10 @@ final class UserRemoveImageCommandHandler extends AbstractCommandHandler
         }
 
         $user = $this->userRepository->findOne($this->command->id);
+
+        if (false === $this->authorizationChecker->isGranted(UserableVoter::UPDATE, $user)) {
+            throw new AccessDeniedException();
+        }
 
         if (false === $user->hasImage()) {
             return;

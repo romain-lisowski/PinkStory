@@ -6,10 +6,12 @@ namespace App\Command;
 
 use InvalidArgumentException;
 use ReflectionClass;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractCommandHandler implements CommandHandlerInterface
 {
     protected CommandInterface $command;
+    protected ?UserInterface $currentUser;
 
     public function setCommand(CommandInterface $command): self
     {
@@ -21,6 +23,13 @@ abstract class AbstractCommandHandler implements CommandHandlerInterface
         }
 
         $this->command = $command;
+
+        return $this;
+    }
+
+    public function setCurrentUser(?UserInterface $currentUser): self
+    {
+        $this->currentUser = $currentUser;
 
         return $this;
     }

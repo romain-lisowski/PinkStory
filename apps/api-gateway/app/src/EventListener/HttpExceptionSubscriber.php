@@ -49,6 +49,11 @@ final class HttpExceptionSubscriber implements EventSubscriberInterface
 
         $exception = $httpException->getPrevious();
 
+        if ($exception instanceof AccessDeniedException) {
+            $data['type'] = (new UnicodeString((new ReflectionClass($exception))->getShortName()))->snake()->toString();
+            $data['message'] = $this->translator->trans($exception->getMessage());
+        }
+
         if ($exception instanceof HasErrorsExceptionInterface) {
             $data['type'] = (new UnicodeString((new ReflectionClass($exception))->getShortName()))->snake()->toString();
             $data['message'] = $this->translator->trans($exception->getMessage());

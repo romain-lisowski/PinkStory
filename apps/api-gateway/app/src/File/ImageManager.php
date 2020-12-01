@@ -21,7 +21,7 @@ final class ImageManager implements ImageManagerInterface
         $this->params = $params;
     }
 
-    public function upload(UploadedFile $file, ImageInterface $image): bool
+    public function upload(UploadedFile $file, ImageableInterface $image): bool
     {
         try {
             // open image
@@ -47,7 +47,7 @@ final class ImageManager implements ImageManagerInterface
         }
     }
 
-    public function remove(ImageInterface $image): bool
+    public function remove(ImageableInterface $image): bool
     {
         try {
             $file = new File($this->params->get('project_file_manager_path').$this->params->get('project_file_manager_image_path').$image->getImagePath(true));

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\File;
 
-interface ImageInterface
+interface ImageableInterface
 {
     public function hasImage(): bool;
 

@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait IdentifierTrait
+trait IdentifiableTrait
 {
     /**
      * @Groups({"short", "medium", "full"})

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
-use App\Entity\PositionInterface;
-use App\Entity\PositionTrait;
+use App\Entity\PositionableInterface;
+use App\Entity\PositionableTrait;
 use App\Language\Entity\Language;
 use App\Language\Entity\LanguageableInterface;
 use App\User\Entity\User;
@@ -21,9 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryRepository")
  */
-class Story extends AbstractEntity implements PositionInterface, LanguageableInterface
+class Story extends AbstractEntity implements PositionableInterface, LanguageableInterface
 {
-    use PositionTrait;
+    use PositionableTrait;
 
     /**
      * @Groups({"medium", "full"})

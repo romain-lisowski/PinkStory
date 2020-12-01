@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface IdentifierInterface
+interface IdentifiableInterface
 {
     public function getId(): string;
 

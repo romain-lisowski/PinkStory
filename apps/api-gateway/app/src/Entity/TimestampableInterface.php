@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use DateTime;
 
-interface TimestampInterface
+interface TimestampableInterface
 {
     public function getCreatedAt(): DateTime;
 

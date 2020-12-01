@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait PositionTrait
+trait PositionableTrait
 {
     /**
      * @Assert\NotBlank
@@ -57,11 +57,11 @@ trait PositionTrait
         $position = 1;
         $positionnedItems = $positionnedItems->toArray();
 
-        usort($positionnedItems, function (PositionInterface $positionnedItem1, PositionInterface $positionnedItem2) {
+        usort($positionnedItems, function (PositionableInterface $positionnedItem1, PositionableInterface $positionnedItem2) {
             return $positionnedItem1->getPosition() > $positionnedItem2->getPosition();
         });
 
-        array_map(function (PositionInterface $positionnedItem) use (&$position) {
+        array_map(function (PositionableInterface $positionnedItem) use (&$position) {
             $positionnedItem->updatePosition($position);
             ++$position;
         }, $positionnedItems);

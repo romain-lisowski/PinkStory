@@ -10,11 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\MappedSuperclass
  */
-abstract class AbstractEntity implements IdentifierInterface, ActivateInterface, TimestampInterface
+abstract class AbstractEntity implements IdentifiableInterface, ActivatableInterface, TimestampableInterface
 {
-    use IdentifierTrait;
-    use ActivatedTrait;
-    use TimestampTrait;
+    use IdentifiableTrait;
+    use ActivatableTrait;
+    use TimestampableTrait;
 
     public function __construct()
     {

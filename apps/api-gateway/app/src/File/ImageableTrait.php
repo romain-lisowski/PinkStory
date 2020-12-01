@@ -6,7 +6,7 @@ namespace App\File;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
-trait ImageTrait
+trait ImageableTrait
 {
     public function getImageName(bool $forced = false): ?string
     {

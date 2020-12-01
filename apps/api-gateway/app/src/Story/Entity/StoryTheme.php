@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
-use App\Entity\PositionInterface;
-use App\Entity\PositionTrait;
+use App\Entity\PositionableInterface;
+use App\Entity\PositionableTrait;
 use App\Language\Entity\TranslatableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,9 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story_theme")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryThemeRepository")
  */
-class StoryTheme extends AbstractEntity implements PositionInterface, TranslatableInterface
+class StoryTheme extends AbstractEntity implements PositionableInterface, TranslatableInterface
 {
-    use PositionTrait;
+    use PositionableTrait;
 
     /**
      * @Groups({"medium", "full"})

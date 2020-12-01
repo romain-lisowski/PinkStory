@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
 
-interface PositionInterface
+interface PositionableInterface
 {
     public function initPosition(?Collection $positionnedItems = null): self;
 

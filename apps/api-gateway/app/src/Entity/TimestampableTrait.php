@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait TimestampTrait
+trait TimestampableTrait
 {
     /**
      * @Groups({"medium", "full"})

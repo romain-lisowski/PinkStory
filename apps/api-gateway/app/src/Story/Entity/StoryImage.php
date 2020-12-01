@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
-use App\File\ImageInterface;
-use App\File\ImageTrait;
+use App\File\ImageableInterface;
+use App\File\ImageableTrait;
 use App\Language\Entity\TranslatableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,9 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story_image")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryImageRepository")
  */
-class StoryImage extends AbstractEntity implements ImageInterface, TranslatableInterface
+class StoryImage extends AbstractEntity implements ImageableInterface, TranslatableInterface
 {
-    use ImageTrait;
+    use ImageableTrait;
 
     /**
      * @Groups({"medium", "full"})

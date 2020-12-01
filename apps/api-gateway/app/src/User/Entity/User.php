@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\User\Entity;
 
 use App\Entity\AbstractEntity;
-use App\File\ImageInterface;
-use App\File\ImageTrait;
+use App\File\ImageableInterface;
+use App\File\ImageableTrait;
 use App\Story\Entity\Story;
 use App\User\Validator\Constraints as AppUserAssert;
 use DateTime;
@@ -28,9 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity implements UserInterface, ImageInterface
+class User extends AbstractEntity implements UserInterface, ImageableInterface
 {
-    use ImageTrait;
+    use ImageableTrait;
 
     /**
      * @Groups({"medium", "full"})

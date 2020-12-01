@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface ImageManagerInterface
 {
-    public function upload(UploadedFile $file, ImageInterface $image): bool;
+    public function upload(UploadedFile $file, ImageableInterface $image): bool;
 
-    public function remove(ImageInterface $image): bool;
+    public function remove(ImageableInterface $image): bool;
 }

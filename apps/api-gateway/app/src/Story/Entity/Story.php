@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Entity\DepthableInterface;
+use App\Entity\DepthableTrait;
 use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
-use App\Exception\ChildDepthException;
 use App\Language\Entity\Language;
 use App\Language\Entity\LanguageableInterface;
 use App\Language\Entity\LanguageableTrait;
@@ -26,10 +27,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryRepository")
  */
-class Story extends AbstractEntity implements UserableInterface, LanguageableInterface, PositionableInterface
+class Story extends AbstractEntity implements UserableInterface, LanguageableInterface, DepthableInterface, PositionableInterface
 {
     use UserableTrait;
     use LanguageableTrait;
+    use DepthableTrait;
     use PositionableTrait;
 
     /**
@@ -69,7 +71,7 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\Story", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private ?Story $parent;
+    private ?DepthableInterface $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="parent", cascade={"remove"})
@@ -170,60 +172,6 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
     {
         $this->language = $language;
         $language->addStory($this);
-
-        return $this;
-    }
-
-    public function getParent(): ?Story
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?Story $parent): self
-    {
-        $this->parent = $parent;
-
-        if (null !== $parent) {
-            if (null !== $parent->getParent()) {
-                throw new ChildDepthException();
-            }
-
-            $this->initPosition($this->parent->getChildren());
-            $parent->addChild($this);
-        } else {
-            $this->initPosition(null);
-        }
-
-        return $this;
-    }
-
-    public function updateParent(?Story $parent): self
-    {
-        if (null !== $this->parent) {
-            $this->parent->removeChild($this);
-        }
-
-        $this->setParent($parent);
-
-        return $this;
-    }
-
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function addChild(Story $child): self
-    {
-        $this->children[] = $child;
-
-        return $this;
-    }
-
-    public function removeChild(Story $child): self
-    {
-        $this->children->remove($child);
-        self::resetPosition($this->children);
 
         return $this;
     }

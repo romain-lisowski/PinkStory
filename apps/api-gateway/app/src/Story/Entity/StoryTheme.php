@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Entity\DepthableInterface;
+use App\Entity\DepthableTrait;
 use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
-use App\Exception\ChildDepthException;
 use App\Language\Entity\TranslatableInterface;
 use App\Language\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,8 +19,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sty_story_theme")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryThemeRepository")
  */
-class StoryTheme extends AbstractEntity implements PositionableInterface, TranslatableInterface
+class StoryTheme extends AbstractEntity implements DepthableInterface, PositionableInterface, TranslatableInterface
 {
+    use DepthableTrait;
     use PositionableTrait;
     use TranslatableTrait;
 
@@ -27,7 +29,7 @@ class StoryTheme extends AbstractEntity implements PositionableInterface, Transl
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryTheme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private ?StoryTheme $parent;
+    private ?DepthableInterface $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryTheme", mappedBy="parent", cascade={"remove"})
@@ -67,60 +69,6 @@ class StoryTheme extends AbstractEntity implements PositionableInterface, Transl
         $this->setReference($reference)
             ->setParent($parent)
         ;
-    }
-
-    public function getParent(): ?StoryTheme
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?StoryTheme $parent): self
-    {
-        $this->parent = $parent;
-
-        if (null !== $parent) {
-            if (null !== $parent->getParent()) {
-                throw new ChildDepthException();
-            }
-
-            $this->initPosition($this->parent->getChildren());
-            $parent->addChild($this);
-        } else {
-            $this->initPosition(null);
-        }
-
-        return $this;
-    }
-
-    public function updateParent(?StoryTheme $parent): self
-    {
-        if (null !== $this->parent) {
-            $this->parent->removeChild($this);
-        }
-
-        $this->setParent($parent);
-
-        return $this;
-    }
-
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function addChild(StoryTheme $child): self
-    {
-        $this->children[] = $child;
-
-        return $this;
-    }
-
-    public function removeChild(StoryTheme $child): self
-    {
-        $this->children->remove($child);
-        self::resetPosition($this->children);
-
-        return $this;
     }
 
     public function getStoryThemeTranslations(): Collection

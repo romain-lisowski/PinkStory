@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ImageUploadException;
 use App\Exception\ValidatorException;
 use App\File\ImageManagerInterface;
@@ -13,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserUpdateImageCommandHandler
+final class UserUpdateImageCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -30,17 +31,17 @@ final class UserUpdateImageCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserUpdateImageCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOne($command->id);
+        $user = $this->userRepository->findOne($this->command->id);
 
-        if (false === $this->imageManagerInterface->upload($command->image, $user)) {
+        if (false === $this->imageManagerInterface->upload($this->command->image, $user)) {
             throw new ImageUploadException();
         }
 

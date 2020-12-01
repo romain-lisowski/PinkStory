@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\CommandInterface;
 use App\User\Validator\Constraints as AppUserAssert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserSignupCommand
+final class UserSignupCommand implements CommandInterface
 {
     /**
      * @Assert\NotBlank

@@ -49,7 +49,7 @@ final class UserLoginAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $token = $this->handler->handle($command);
+            $token = $this->handler->setCommand($command)->handle();
 
             return $this->responder->render([
                 'token' => $token,

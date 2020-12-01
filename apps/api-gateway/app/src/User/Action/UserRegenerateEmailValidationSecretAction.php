@@ -38,7 +38,7 @@ final class UserRegenerateEmailValidationSecretAction
             $command = new UserRegenerateEmailValidationSecretCommand();
             $command->id = $this->security->getUser()->getId();
 
-            $this->handler->handle($command);
+            $this->handler->setCommand($command)->handle();
 
             return $this->responder->render();
         } catch (Throwable $e) {

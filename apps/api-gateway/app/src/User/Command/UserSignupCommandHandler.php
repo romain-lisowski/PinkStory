@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\File\ImageManagerInterface;
 use App\User\Entity\User;
@@ -13,7 +14,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserSignupCommandHandler
+final class UserSignupCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -30,19 +31,19 @@ final class UserSignupCommandHandler
         $this->imageManager = $imageManager;
     }
 
-    public function handle(UserSignupCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = new User($command->name, $command->email);
-        $user->updatePassword($this->passwordEncoder->encodePassword($user, $command->password));
+        $user = new User($this->command->name, $this->command->email);
+        $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
 
-        if (null !== $command->image) {
-            $isUploaded = $this->imageManager->upload($command->image, $user);
+        if (null !== $this->command->image) {
+            $isUploaded = $this->imageManager->upload($this->command->image, $user);
             $user->setImageDefined($isUploaded);
         }
 

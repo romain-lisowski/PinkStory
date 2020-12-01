@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserUpdatePasswordForgottenCommandHandler
+final class UserUpdatePasswordForgottenCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private UserPasswordEncoderInterface $passwordEncoder;
@@ -25,17 +26,17 @@ final class UserUpdatePasswordForgottenCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserUpdatePasswordForgottenCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOneByActivePasswordForgottenSecret($command->secret);
+        $user = $this->userRepository->findOneByActivePasswordForgottenSecret($this->command->secret);
 
-        $user->updatePassword($this->passwordEncoder->encodePassword($user, $command->password));
+        $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);

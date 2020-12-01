@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\User\Message\UserRegenerateEmailValidationSecretMessage;
 use App\User\Repository\UserRepositoryInterface;
@@ -11,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserRegenerateEmailValidationSecretCommandHandler
+final class UserRegenerateEmailValidationSecretCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -26,15 +27,15 @@ final class UserRegenerateEmailValidationSecretCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserRegenerateEmailValidationSecretCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOne($command->id);
+        $user = $this->userRepository->findOne($this->command->id);
 
         $user->regenerateEmailValidationSecret();
         $user->updateLastUpdatedAt();

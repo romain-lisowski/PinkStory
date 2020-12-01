@@ -55,7 +55,7 @@ final class UserUpdateInformationAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $this->handler->handle($command);
+            $this->handler->setCommand($command)->handle();
 
             return $this->responder->render();
         } catch (Throwable $e) {

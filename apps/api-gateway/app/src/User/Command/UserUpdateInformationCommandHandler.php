@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\User\Message\UserUpdateInformationMessage;
 use App\User\Repository\UserRepositoryInterface;
@@ -11,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserUpdateInformationCommandHandler
+final class UserUpdateInformationCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -26,17 +27,17 @@ final class UserUpdateInformationCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserUpdateInformationCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOne($command->id);
+        $user = $this->userRepository->findOne($this->command->id);
 
-        $user->rename($command->name);
+        $user->rename($this->command->name);
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);

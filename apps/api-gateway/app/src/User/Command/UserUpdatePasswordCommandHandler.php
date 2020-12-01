@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\User\Message\UserUpdatePasswordMessage;
 use App\User\Repository\UserRepositoryInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserUpdatePasswordCommandHandler
+final class UserUpdatePasswordCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -29,17 +30,17 @@ final class UserUpdatePasswordCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserUpdatePasswordCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOne($command->id);
+        $user = $this->userRepository->findOne($this->command->id);
 
-        $user->updatePassword($this->passwordEncoder->encodePassword($user, $command->password));
+        $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);

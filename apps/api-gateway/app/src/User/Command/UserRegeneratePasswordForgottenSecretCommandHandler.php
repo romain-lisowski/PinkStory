@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\User\Message\UserRegeneratePasswordForgottenSecretMessage;
 use App\User\Repository\UserRepositoryInterface;
@@ -11,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserRegeneratePasswordForgottenSecretCommandHandler
+final class UserRegeneratePasswordForgottenSecretCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -26,15 +27,15 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserRegeneratePasswordForgottenSecretCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOneByEmail($command->email);
+        $user = $this->userRepository->findOneByEmail($this->command->email);
 
         $user->regeneratePasswordForgottenSecret();
         $user->updateLastUpdatedAt();

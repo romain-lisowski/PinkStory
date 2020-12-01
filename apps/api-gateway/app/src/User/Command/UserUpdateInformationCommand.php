@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\CommandInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserUpdateInformationCommand
+final class UserUpdateInformationCommand implements CommandInterface
 {
     /**
      * @Assert\NotBlank

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserValidateEmailCommandHandler
+final class UserValidateEmailCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private ValidatorInterface $validator;
@@ -23,17 +24,17 @@ final class UserValidateEmailCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserValidateEmailCommand $command): void
+    public function handle(): void
     {
-        $errors = $this->validator->validate($command);
+        $errors = $this->validator->validate($this->command);
 
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOneByActiveEmailValidationSecret($command->secret);
+        $user = $this->userRepository->findOneByActiveEmailValidationSecret($this->command->secret);
 
-        if ($user->getId() !== $command->id) {
+        if ($user->getId() !== $this->command->id) {
             throw new AccessDeniedException();
         }
 

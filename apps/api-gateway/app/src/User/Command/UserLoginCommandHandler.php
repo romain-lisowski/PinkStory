@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\Command\AbstractCommandHandler;
 use App\Exception\InvalidSSLKeyException;
 use App\Exception\ValidatorException;
 use App\User\Repository\UserRepositoryInterface;
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserLoginCommandHandler
+final class UserLoginCommandHandler extends AbstractCommandHandler
 {
     private ParameterBagInterface $params;
     private UserPasswordEncoderInterface $passwordEncoder;
@@ -32,18 +33,18 @@ final class UserLoginCommandHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UserLoginCommand $command): string
+    public function handle(): string
     {
         try {
-            $errors = $this->validator->validate($command);
+            $errors = $this->validator->validate($this->command);
 
             if (count($errors) > 0) {
                 throw new ValidatorException($errors);
             }
 
-            $user = $this->userRepository->findOneByEmail($command->email);
+            $user = $this->userRepository->findOneByEmail($this->command->email);
 
-            if (false === $this->passwordEncoder->isPasswordValid($user, $command->password)) {
+            if (false === $this->passwordEncoder->isPasswordValid($user, $this->command->password)) {
                 throw new BadCredentialsException();
             }
 

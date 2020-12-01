@@ -7,6 +7,7 @@ namespace App\Story\Entity;
 use App\Entity\AbstractEntity;
 use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
+use App\Exception\ChildDepthException;
 use App\Language\Entity\TranslatableInterface;
 use App\Language\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -78,6 +79,10 @@ class StoryTheme extends AbstractEntity implements PositionableInterface, Transl
         $this->parent = $parent;
 
         if (null !== $parent) {
+            if (null !== $parent->getParent()) {
+                throw new ChildDepthException();
+            }
+
             $this->initPosition($this->parent->getChildren());
             $parent->addChild($this);
         } else {

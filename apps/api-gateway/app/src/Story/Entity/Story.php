@@ -7,6 +7,7 @@ namespace App\Story\Entity;
 use App\Entity\AbstractEntity;
 use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
+use App\Exception\ChildDepthException;
 use App\Language\Entity\Language;
 use App\Language\Entity\LanguageableInterface;
 use App\Language\Entity\LanguageableTrait;
@@ -183,6 +184,10 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
         $this->parent = $parent;
 
         if (null !== $parent) {
+            if (null !== $parent->getParent()) {
+                throw new ChildDepthException();
+            }
+
             $this->initPosition($this->parent->getChildren());
             $parent->addChild($this);
         } else {

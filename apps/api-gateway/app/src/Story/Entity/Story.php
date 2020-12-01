@@ -11,6 +11,8 @@ use App\Language\Entity\Language;
 use App\Language\Entity\LanguageableInterface;
 use App\Language\Entity\LanguageableTrait;
 use App\User\Entity\User;
+use App\User\Entity\UserableInterface;
+use App\User\Entity\UserableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,8 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryRepository")
  */
-class Story extends AbstractEntity implements LanguageableInterface, PositionableInterface
+class Story extends AbstractEntity implements UserableInterface, LanguageableInterface, PositionableInterface
 {
+    use UserableTrait;
     use LanguageableTrait;
     use PositionableTrait;
 
@@ -151,11 +154,6 @@ class Story extends AbstractEntity implements LanguageableInterface, Positionabl
         $this->setContent($content);
 
         return $this;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     public function setUser(User $user): self

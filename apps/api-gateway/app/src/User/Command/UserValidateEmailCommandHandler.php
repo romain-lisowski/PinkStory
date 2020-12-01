@@ -36,7 +36,7 @@ final class UserValidateEmailCommandHandler extends AbstractCommandHandler
             throw new ValidatorException($errors);
         }
 
-        $user = $this->userRepository->findOneByActiveEmailValidationSecret($this->command->secret);
+        $user = $this->userRepository->findOneByActiveEmailValidationCode($this->command->code);
 
         if ($user->getId() !== $this->command->id) {
             throw new AccessDeniedException();

@@ -6,7 +6,7 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
-use App\User\Message\UserRegenerateEmailValidationSecretMessage;
+use App\User\Message\UserRegenerateEmailValidationCodeMessage;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserRegenerateEmailValidationSecretCommandHandler extends AbstractCommandHandler
+final class UserRegenerateEmailValidationCodeCommandHandler extends AbstractCommandHandler
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private EntityManagerInterface $entityManager;
@@ -46,11 +46,11 @@ final class UserRegenerateEmailValidationSecretCommandHandler extends AbstractCo
             throw new AccessDeniedException();
         }
 
-        $user->regenerateEmailValidationSecret();
+        $user->regenerateEmailValidationCode();
         $user->updateLastUpdatedAt();
 
         $this->entityManager->flush();
 
-        $this->bus->dispatch(new UserRegenerateEmailValidationSecretMessage($user->getId()));
+        $this->bus->dispatch(new UserRegenerateEmailValidationCodeMessage($user->getId()));
     }
 }

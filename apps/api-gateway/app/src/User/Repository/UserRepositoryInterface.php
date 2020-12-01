@@ -12,7 +12,7 @@ interface UserRepositoryInterface
 
     public function findOneByEmail(string $email): User;
 
-    public function findOneByActiveEmailValidationSecret(string $secret): User;
+    public function findOneByActiveEmailValidationCode(string $code): User;
 
     public function findOneByActivePasswordForgottenSecret(string $secret): User;
 }

@@ -38,16 +38,16 @@ final class UserRepository extends ServiceEntityRepository implements UserReposi
         return $qb->getQuery()->getSingleResult();
     }
 
-    public function findOneByActiveEmailValidationSecret(string $secret): User
+    public function findOneByActiveEmailValidationCode(string $code): User
     {
         $qb = $this->createQueryBuilder('user');
 
         $qb->where($qb->expr()->andX(
-            $qb->expr()->eq('user.emailValidationSecret', ':user_secret'),
-            $qb->expr()->eq('user.emailValidationSecretUsed', ':user_secret_used')
+            $qb->expr()->eq('user.emailValidationCode', ':user_email_validation_code'),
+            $qb->expr()->eq('user.emailValidationCodeUsed', ':user_email_validation_code_used')
         ))->setParameters([
-            'user_secret' => $secret,
-            'user_secret_used' => false,
+            'user_email_validation_code' => $code,
+            'user_email_validation_code_used' => false,
         ]);
 
         return $qb->getQuery()->getSingleResult();
@@ -58,13 +58,13 @@ final class UserRepository extends ServiceEntityRepository implements UserReposi
         $qb = $this->createQueryBuilder('user');
 
         $qb->where($qb->expr()->andX(
-            $qb->expr()->eq('user.passwordForgottenSecret', ':user_secret'),
-            $qb->expr()->eq('user.passwordForgottenSecretUsed', ':user_secret_used'),
-            $qb->expr()->gt('user.passwordForgottenSecretCreatedAt', ':user_secret_created_at')
+            $qb->expr()->eq('user.passwordForgottenSecret', ':user_password_forgotten_secret'),
+            $qb->expr()->eq('user.passwordForgottenSecretUsed', ':user_password_forgotten_secret_used'),
+            $qb->expr()->gt('user.passwordForgottenSecretCreatedAt', ':user_password_forgotten_secret_created_at')
         ))->setParameters([
-            'user_secret' => $secret,
-            'user_secret_used' => false,
-            'user_secret_created_at' => (new DateTime())->modify('-1 hour'),
+            'user_password_forgotten_secret' => $secret,
+            'user_password_forgotten_secret_used' => false,
+            'user_password_forgotten_secret_created_at' => (new DateTime())->modify('-1 hour'),
         ]);
 
         return $qb->getQuery()->getSingleResult();

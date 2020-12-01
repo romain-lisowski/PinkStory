@@ -62,15 +62,15 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
 
     /**
      * @Assert\NotBlank
-     * @ORM\Column(name="email_validation_secret", type="guid", unique=true)
+     * @ORM\Column(name="email_validation_code", type="string", length=255)
      */
-    private string $emailValidationSecret;
+    private string $emailValidationCode;
 
     /**
      * @Assert\NotNull
-     * @ORM\Column(name="email_validation_secret_used", type="boolean")
+     * @ORM\Column(name="email_validation_code_used", type="boolean")
      */
-    private bool $emailValidationSecretUsed;
+    private bool $emailValidationCodeUsed;
 
     /**
      * @Assert\NotBlank
@@ -129,8 +129,8 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         $this->nameSlug = '';
         $this->email = '';
         $this->emailValidated = false;
-        $this->emailValidationSecret = Uuid::v4()->toRfc4122();
-        $this->emailValidationSecretUsed = false;
+        $this->emailValidationCode = sprintf('%06d', random_int(0, 999999));
+        $this->emailValidationCodeUsed = false;
         $this->password = '';
         $this->passwordForgottenSecret = Uuid::v4()->toRfc4122();
         $this->passwordForgottenSecretUsed = true; // not claimed by user at account creation, so block it until new claim
@@ -189,7 +189,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function updateEmail(string $email): self
     {
         $this->setEmail($email);
-        $this->regenerateEmailValidationSecret();
+        $this->regenerateEmailValidationCode();
 
         return $this;
     }
@@ -209,40 +209,40 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function validateEmail(): self
     {
         $this->setEmailValidated(true);
-        $this->setEmailValidationSecretUsed(true);
+        $this->setEmailValidationCodeUsed(true);
 
         return $this;
     }
 
-    public function getEmailValidationSecret(): string
+    public function getEmailValidationCode(): string
     {
-        return $this->emailValidationSecret;
+        return $this->emailValidationCode;
     }
 
-    public function setEmailValidationSecret(string $secret): self
+    public function setEmailValidationCode(string $code): self
     {
-        $this->emailValidationSecret = $secret;
+        $this->emailValidationCode = $code;
 
         return $this;
     }
 
-    public function regenerateEmailValidationSecret(): self
+    public function regenerateEmailValidationCode(): self
     {
-        $this->setEmailValidationSecret(Uuid::v4()->toRfc4122());
-        $this->setEmailValidationSecretUsed(false);
+        $this->setEmailValidationCode(sprintf('%06d', random_int(0, 999999)));
+        $this->setEmailValidationCodeUsed(false);
         $this->setEmailValidated(false);
 
         return $this;
     }
 
-    public function isEmailValidationSecretUsed(): bool
+    public function isEmailValidationCodeUsed(): bool
     {
-        return $this->emailValidationSecretUsed;
+        return $this->emailValidationCodeUsed;
     }
 
-    public function setEmailValidationSecretUsed(bool $used): self
+    public function setEmailValidationCodeUsed(bool $used): self
     {
-        $this->emailValidationSecretUsed = $used;
+        $this->emailValidationCodeUsed = $used;
 
         return $this;
     }

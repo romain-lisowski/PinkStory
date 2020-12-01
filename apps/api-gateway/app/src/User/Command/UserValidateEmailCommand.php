@@ -17,5 +17,5 @@ final class UserValidateEmailCommand implements CommandInterface
     /**
      * @Assert\NotBlank
      */
-    public string $secret;
+    public string $code;
 }

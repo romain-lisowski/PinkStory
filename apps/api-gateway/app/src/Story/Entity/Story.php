@@ -9,6 +9,7 @@ use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
 use App\Language\Entity\Language;
 use App\Language\Entity\LanguageableInterface;
+use App\Language\Entity\LanguageableTrait;
 use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,8 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryRepository")
  */
-class Story extends AbstractEntity implements PositionableInterface, LanguageableInterface
+class Story extends AbstractEntity implements LanguageableInterface, PositionableInterface
 {
+    use LanguageableTrait;
     use PositionableTrait;
 
     /**
@@ -162,11 +164,6 @@ class Story extends AbstractEntity implements PositionableInterface, Languageabl
         $user->addStory($this);
 
         return $this;
-    }
-
-    public function getLanguage(): Language
-    {
-        return $this->language;
     }
 
     public function setLanguage(Language $language): self

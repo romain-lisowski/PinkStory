@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class AbstractTranslation extends AbstractEntity implements LanguageableInterface
 {
-    private Language $language;
+    use LanguageableTrait;
 
     public function __construct(Language $language)
     {
@@ -20,11 +20,6 @@ abstract class AbstractTranslation extends AbstractEntity implements Languageabl
 
         // init values
         $this->setLanguage($language);
-    }
-
-    public function getLanguage(): Language
-    {
-        return $this->language;
     }
 
     abstract public function setLanguage(Language $language): self;

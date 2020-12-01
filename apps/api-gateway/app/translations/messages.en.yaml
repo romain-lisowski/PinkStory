@@ -7,6 +7,10 @@ exception:
     not_submitted_form: The form has not been submitted.
     validator: The validator reports errors.
 
+story:
+    exception:
+        story_theme_depth: Only child theme can be linked.
+
 user:
     exception:
         invalid_token: No token provided.

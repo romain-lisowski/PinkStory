@@ -9,6 +9,7 @@ use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Language\Entity\TranslatableInterface;
 use App\Language\Entity\TranslatableTrait;
+use App\Story\Exception\StoryThemeDepthException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -125,7 +126,9 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
 
     public function addStoryTheme(StoryTheme $storyTheme): self
     {
-        // todo, only allow child themes here
+        if ($storyTheme->getChildren()->count() > 0) {
+            throw new StoryThemeDepthException();
+        }
 
         new StoryImageHasStoryTheme($this, $storyTheme);
 

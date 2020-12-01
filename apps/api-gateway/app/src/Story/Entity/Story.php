@@ -10,6 +10,7 @@ use App\Entity\PositionableTrait;
 use App\Language\Entity\Language;
 use App\Language\Entity\LanguageableInterface;
 use App\Language\Entity\LanguageableTrait;
+use App\Story\Exception\StoryThemeDepthException;
 use App\User\Entity\User;
 use App\User\Entity\UserableInterface;
 use App\User\Entity\UserableTrait;
@@ -270,6 +271,10 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
 
     public function addStoryTheme(StoryTheme $storyTheme): self
     {
+        if ($storyTheme->getChildren()->count() > 0) {
+            throw new StoryThemeDepthException();
+        }
+
         new StoryHasStoryTheme($this, $storyTheme);
 
         return $this;

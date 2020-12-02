@@ -21,12 +21,14 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
             ->addStoryTheme($this->getReference('story-theme-extreme'))
         ;
         $manager->persist($storyParent);
+        $this->addReference('story-first', $storyParent);
 
         $storyParent = new Story('Deuxième histoire', 'Contenu de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), null, $this->getReference('story-image-second'));
         $storyParent->addStoryTheme($this->getReference('story-theme-heterosexual'))
             ->addStoryTheme($this->getReference('story-theme-office'))
         ;
         $manager->persist($storyParent);
+        $this->addReference('story-second', $storyParent);
 
         $storyChild = new Story('Premier chapitre de la deuxième histoire', 'Contenu du premier chapitre de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), $storyParent, $this->getReference('story-image-second'));
         $storyChild->addStoryTheme($this->getReference('story-theme-heterosexual'))
@@ -35,6 +37,7 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
             ->addStoryTheme($this->getReference('story-theme-soft'))
         ;
         $manager->persist($storyChild);
+        $this->addReference('story-second-first', $storyChild);
 
         $storyChild = new Story('Deuxième chapitre de la deuxième histoire', 'Contenu du deuxième chapitre de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), $storyParent, $this->getReference('story-image-third'));
         $storyChild->addStoryTheme($this->getReference('story-theme-heterosexual'))
@@ -43,6 +46,7 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
             ->addStoryTheme($this->getReference('story-theme-hard'))
         ;
         $manager->persist($storyChild);
+        $this->addReference('story-second-second', $storyChild);
 
         $manager->flush();
     }

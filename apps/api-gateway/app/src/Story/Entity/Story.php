@@ -90,6 +90,11 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
      */
     private Collection $storyHasStoryThemes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryRating", mappedBy="story", cascade={"remove"})
+     */
+    private Collection $storyRatings;
+
     public function __construct(string $title = '', string $content = '', User $user, Language $language, ?Story $parent = null, ?StoryImage $storyImage = null)
     {
         parent::__construct();
@@ -103,6 +108,7 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
         $this->children = new ArrayCollection();
         $this->storyImage = null;
         $this->storyHasStoryThemes = new ArrayCollection();
+        $this->storyRatings = new ArrayCollection();
 
         // init values
         $this->setTitle($title)
@@ -229,6 +235,25 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
         }
 
         new StoryHasStoryTheme($this, $storyTheme);
+
+        return $this;
+    }
+
+    public function getStoryRatings(): Collection
+    {
+        return $this->storyRatings;
+    }
+
+    public function addStoryRating(StoryRating $storyRating): self
+    {
+        $this->storyRatings[] = $storyRating;
+
+        return $this;
+    }
+
+    public function removeStoryRating(StoryRating $storyRating): self
+    {
+        $this->storyRatings->remove($storyRating);
 
         return $this;
     }

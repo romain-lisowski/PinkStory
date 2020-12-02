@@ -8,6 +8,7 @@ use App\Entity\AbstractEntity;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Story\Entity\Story;
+use App\Story\Entity\StoryRating;
 use App\User\Validator\Constraints as AppUserAssert;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -120,6 +121,11 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
      */
     private Collection $stories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryRating", mappedBy="user", cascade={"remove"})
+     */
+    private Collection $storyRatings;
+
     public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER)
     {
         parent::__construct();
@@ -139,6 +145,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         $this->role = UserRole::ROLE_USER;
         $this->imageDefined = false;
         $this->stories = new ArrayCollection();
+        $this->storyRatings = new ArrayCollection();
 
         // init values
         $this->setName($name)
@@ -424,6 +431,25 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function removeStory(Story $story): self
     {
         $this->stories->remove($story);
+
+        return $this;
+    }
+
+    public function getStoryRatings(): Collection
+    {
+        return $this->storyRatings;
+    }
+
+    public function addStoryRating(StoryRating $storyRating): self
+    {
+        $this->storyRatings[] = $storyRating;
+
+        return $this;
+    }
+
+    public function removeStoryRating(StoryRating $storyRating): self
+    {
+        $this->storyRatings->remove($storyRating);
 
         return $this;
     }

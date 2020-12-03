@@ -7,7 +7,7 @@ namespace App\User\Command;
 use App\Command\CommandInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserLoginCommand implements CommandInterface
+final class UserGenerateAuthTokenCommand implements CommandInterface
 {
     /**
      * @Assert\NotBlank

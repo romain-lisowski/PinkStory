@@ -7,8 +7,9 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserUpdateEmailCommand;
-use App\User\Command\UserUpdateEmailCommandHandler;
+use App\User\Command\UserValidateEmailCommand;
+use App\User\Command\UserValidateEmailCommandFormType;
+use App\User\Command\UserValidateEmailCommandHandler;
 use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -20,16 +21,16 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/update-email", name="user_update_email", methods={"PATCH"})
+ * @Route("/account/validate-email", name="account_validate_email", methods={"PATCH"})
  */
-final class UserUpdateEmailAction
+final class AccountValidateEmailAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
     private UserSecurityInterface $security;
-    private UserUpdateEmailCommandHandler $handler;
+    private UserValidateEmailCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdateEmailCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserValidateEmailCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;
@@ -40,10 +41,10 @@ final class UserUpdateEmailAction
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserUpdateEmailCommand();
+            $command = new UserValidateEmailCommand();
             $command->id = $this->security->getUser()->getId();
 
-            $form = $this->formFactory->create(UserUpdateEmailCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserValidateEmailCommandFormType::class, $command);
 
             $form->handleRequest($request);
 

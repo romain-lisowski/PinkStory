@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserLoginCommandHandler extends AbstractCommandHandler
+final class UserGenerateAuthTokenCommandHandler extends AbstractCommandHandler
 {
     private ParameterBagInterface $params;
     private UserPasswordEncoderInterface $passwordEncoder;

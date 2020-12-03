@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Mailer\Message\Handler;
 
-use App\User\Message\UserRegeneratePasswordForgottenSecretMessage;
+use App\User\Message\UserCreateMessage;
 use App\User\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
 
-final class UserRegeneratePasswordForgottenSecretMessageHandler implements MessageSubscriberInterface
+final class AccountSignupMessageHandler implements MessageSubscriberInterface
 {
     private EntityManagerInterface $entityManager;
     private UserRepository $repository;
@@ -20,7 +20,7 @@ final class UserRegeneratePasswordForgottenSecretMessageHandler implements Messa
         $this->repository = $repository;
     }
 
-    public function __invoke(UserRegeneratePasswordForgottenSecretMessage $message)
+    public function __invoke(UserCreateMessage $message)
     {
         $user = $this->repository->findOne($message->getId());
 
@@ -29,7 +29,7 @@ final class UserRegeneratePasswordForgottenSecretMessageHandler implements Messa
 
     public static function getHandledMessages(): iterable
     {
-        yield UserRegeneratePasswordForgottenSecretMessage::class => [
+        yield UserCreateMessage::class => [
             'from_transport' => 'sync',
         ];
     }

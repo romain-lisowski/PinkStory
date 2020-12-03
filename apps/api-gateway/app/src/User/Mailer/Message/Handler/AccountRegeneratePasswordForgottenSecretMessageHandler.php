@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Mailer\Message\Handler;
 
-use App\User\Message\UserRegenerateEmailValidationCodeMessage;
+use App\User\Message\UserRegeneratePasswordForgottenSecretMessage;
 use App\User\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
 
-final class UserRegenerateEmailValidationCodeMessageHandler implements MessageSubscriberInterface
+final class AccountRegeneratePasswordForgottenSecretMessageHandler implements MessageSubscriberInterface
 {
     private EntityManagerInterface $entityManager;
     private UserRepository $repository;
@@ -20,7 +20,7 @@ final class UserRegenerateEmailValidationCodeMessageHandler implements MessageSu
         $this->repository = $repository;
     }
 
-    public function __invoke(UserRegenerateEmailValidationCodeMessage $message)
+    public function __invoke(UserRegeneratePasswordForgottenSecretMessage $message)
     {
         $user = $this->repository->findOne($message->getId());
 
@@ -29,7 +29,7 @@ final class UserRegenerateEmailValidationCodeMessageHandler implements MessageSu
 
     public static function getHandledMessages(): iterable
     {
-        yield UserRegenerateEmailValidationCodeMessage::class => [
+        yield UserRegeneratePasswordForgottenSecretMessage::class => [
             'from_transport' => 'sync',
         ];
     }

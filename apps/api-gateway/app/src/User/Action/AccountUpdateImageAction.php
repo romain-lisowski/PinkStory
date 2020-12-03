@@ -8,6 +8,7 @@ use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdateImageCommand;
+use App\User\Command\UserUpdateImageCommandFormType;
 use App\User\Command\UserUpdateImageCommandHandler;
 use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -20,9 +21,9 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/update-image", name="user_update_image", methods={"PATCH"})
+ * @Route("/account/update-image", name="account_update_image", methods={"PATCH"})
  */
-final class UserUpdateImageAction
+final class AccountUpdateImageAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;

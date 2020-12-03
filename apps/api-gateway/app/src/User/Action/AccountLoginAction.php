@@ -7,10 +7,9 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserUpdateInformationCommand;
-use App\User\Command\UserUpdateInformationCommandHandler;
-use App\User\Security\UserSecurityInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\User\Command\UserGenerateAuthTokenCommand;
+use App\User\Command\UserGenerateAuthTokenCommandFormType;
+use App\User\Command\UserGenerateAuthTokenCommandHandler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,31 +18,27 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @IsGranted("ROLE_USER")
- * @Route("/users/update-information", name="user_update_information", methods={"PATCH"})
+ * @Route("/account/login", name="acount_login", methods={"POST"})
  */
-final class UserUpdateInformationAction
+final class AccountLoginAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserSecurityInterface $security;
-    private UserUpdateInformationCommandHandler $handler;
+    private UserGenerateAuthTokenCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdateInformationCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserGenerateAuthTokenCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;
-        $this->security = $security;
         $this->handler = $handler;
     }
 
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserUpdateInformationCommand();
-            $command->id = $this->security->getUser()->getId();
+            $command = new UserGenerateAuthTokenCommand();
 
-            $form = $this->formFactory->create(UserUpdateInformationCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserGenerateAuthTokenCommandFormType::class, $command);
 
             $form->handleRequest($request);
 
@@ -55,9 +50,11 @@ final class UserUpdateInformationAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+            $token = $this->handler->setCommand($command)->handle();
 
-            return $this->responder->render();
+            return $this->responder->render([
+                'token' => $token,
+            ]);
         } catch (Throwable $e) {
             throw new BadRequestHttpException(null, $e);
         }

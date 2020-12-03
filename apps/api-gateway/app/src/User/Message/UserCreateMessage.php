@@ -7,6 +7,6 @@ namespace App\User\Message;
 use App\Message\AbstractEntityMessage;
 use App\Message\SyncMessageInterface;
 
-final class UserSignupMessage extends AbstractEntityMessage implements SyncMessageInterface
+final class UserCreateMessage extends AbstractEntityMessage implements SyncMessageInterface
 {
 }

@@ -9,7 +9,7 @@ use App\User\Validator\Constraints as AppUserAssert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserSignupCommand implements CommandInterface
+final class UserCreateCommand implements CommandInterface
 {
     /**
      * @Assert\NotBlank

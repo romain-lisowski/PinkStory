@@ -8,13 +8,13 @@ use App\Command\AbstractCommandHandler;
 use App\Exception\ValidatorException;
 use App\File\ImageManagerInterface;
 use App\User\Entity\User;
-use App\User\Message\UserSignupMessage;
+use App\User\Message\UserCreateMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class UserSignupCommandHandler extends AbstractCommandHandler
+final class UserCreateCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -58,6 +58,6 @@ final class UserSignupCommandHandler extends AbstractCommandHandler
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->bus->dispatch(new UserSignupMessage($user->getId()));
+        $this->bus->dispatch(new UserCreateMessage($user->getId()));
     }
 }

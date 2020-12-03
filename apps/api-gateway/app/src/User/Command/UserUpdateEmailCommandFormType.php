@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\User\Action;
+namespace App\User\Command;
 
-use App\User\Command\UserUpdateEmailCommand;
-use Symfony\Component\Form\AbstractType;
+use App\Command\AbstractCommandFormType;
+use App\Command\CommandFormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class UserUpdateEmailCommandFormType extends AbstractType
+final class UserUpdateEmailCommandFormType extends AbstractCommandFormType implements CommandFormTypeInterface
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', RepeatedType::class, [
@@ -24,16 +24,12 @@ final class UserUpdateEmailCommandFormType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
-            'data_class' => UserUpdateEmailCommand::class,
             'method' => Request::METHOD_PATCH,
         ]);
-    }
-
-    public function getBlockPrefix()
-    {
-        return '';
     }
 }

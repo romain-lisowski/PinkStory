@@ -7,10 +7,9 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserUpdatePasswordCommand;
-use App\User\Command\UserUpdatePasswordCommandHandler;
-use App\User\Security\UserSecurityInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\User\Command\UserUpdatePasswordForgottenCommand;
+use App\User\Command\UserUpdatePasswordForgottenCommandFormType;
+use App\User\Command\UserUpdatePasswordForgottenCommandHandler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,31 +18,28 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @IsGranted("ROLE_USER")
- * @Route("/users/update-password", name="user_update_password", methods={"PATCH"})
+ * @Route("/account/update-password-forgotten/{secret<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="account_update_password_forgotten", methods={"PATCH"})
  */
-final class UserUpdatePasswordAction
+final class AccountUpdatePasswordForgottenAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserSecurityInterface $security;
-    private UserUpdatePasswordCommandHandler $handler;
+    private UserUpdatePasswordForgottenCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdatePasswordCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserUpdatePasswordForgottenCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;
-        $this->security = $security;
         $this->handler = $handler;
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, string $secret): Response
     {
         try {
-            $command = new UserUpdatePasswordCommand();
-            $command->id = $this->security->getUser()->getId();
+            $command = new UserUpdatePasswordForgottenCommand();
+            $command->secret = $secret;
 
-            $form = $this->formFactory->create(UserUpdatePasswordCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserUpdatePasswordForgottenCommandFormType::class, $command);
 
             $form->handleRequest($request);
 
@@ -55,7 +51,7 @@ final class UserUpdatePasswordAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+            $this->handler->setCommand($command)->handle();
 
             return $this->responder->render();
         } catch (Throwable $e) {

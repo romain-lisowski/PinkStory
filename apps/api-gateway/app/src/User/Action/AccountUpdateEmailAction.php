@@ -7,8 +7,11 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserSignupCommand;
-use App\User\Command\UserSignupCommandHandler;
+use App\User\Command\UserUpdateEmailCommand;
+use App\User\Command\UserUpdateEmailCommandFormType;
+use App\User\Command\UserUpdateEmailCommandHandler;
+use App\User\Security\UserSecurityInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,27 +20,31 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @Route("/users/signup", name="user_signup", methods={"POST"})
+ * @IsGranted("ROLE_USER")
+ * @Route("/account/update-email", name="account_update_email", methods={"PATCH"})
  */
-final class UserSignupAction
+final class AccountUpdateEmailAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserSignupCommandHandler $handler;
+    private UserSecurityInterface $security;
+    private UserUpdateEmailCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSignupCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdateEmailCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;
+        $this->security = $security;
         $this->handler = $handler;
     }
 
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserSignupCommand();
+            $command = new UserUpdateEmailCommand();
+            $command->id = $this->security->getUser()->getId();
 
-            $form = $this->formFactory->create(UserSignupCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserUpdateEmailCommandFormType::class, $command);
 
             $form->handleRequest($request);
 
@@ -49,7 +56,7 @@ final class UserSignupAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $this->handler->setCommand($command)->handle();
+            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
 
             return $this->responder->render();
         } catch (Throwable $e) {

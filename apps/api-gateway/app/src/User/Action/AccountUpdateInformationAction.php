@@ -7,8 +7,11 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserLoginCommand;
-use App\User\Command\UserLoginCommandHandler;
+use App\User\Command\UserUpdateInformationCommand;
+use App\User\Command\UserUpdateInformationCommandFormType;
+use App\User\Command\UserUpdateInformationCommandHandler;
+use App\User\Security\UserSecurityInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,27 +20,31 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @Route("/users/login", name="user_login", methods={"POST"})
+ * @IsGranted("ROLE_USER")
+ * @Route("/account/update-information", name="account_update_information", methods={"PATCH"})
  */
-final class UserLoginAction
+final class AccountUpdateInformationAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserLoginCommandHandler $handler;
+    private UserSecurityInterface $security;
+    private UserUpdateInformationCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserLoginCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserUpdateInformationCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;
+        $this->security = $security;
         $this->handler = $handler;
     }
 
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserLoginCommand();
+            $command = new UserUpdateInformationCommand();
+            $command->id = $this->security->getUser()->getId();
 
-            $form = $this->formFactory->create(UserLoginCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserUpdateInformationCommandFormType::class, $command);
 
             $form->handleRequest($request);
 
@@ -49,11 +56,9 @@ final class UserLoginAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $token = $this->handler->setCommand($command)->handle();
+            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
 
-            return $this->responder->render([
-                'token' => $token,
-            ]);
+            return $this->responder->render();
         } catch (Throwable $e) {
             throw new BadRequestHttpException(null, $e);
         }

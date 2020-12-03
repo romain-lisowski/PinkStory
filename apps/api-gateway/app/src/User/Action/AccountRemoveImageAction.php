@@ -17,9 +17,9 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/remove-image", name="user_remove_image", methods={"DELETE"})
+ * @Route("/account/remove-image", name="account_remove_image", methods={"DELETE"})
  */
-final class UserRemoveImageAction
+final class AccountRemoveImageAction
 {
     private ResponderInterface $responder;
     private UserRemoveImageCommandHandler $handler;

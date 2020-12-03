@@ -7,10 +7,9 @@ namespace App\User\Action;
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserValidateEmailCommand;
-use App\User\Command\UserValidateEmailCommandHandler;
-use App\User\Security\UserSecurityInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\User\Command\UserCreateCommand;
+use App\User\Command\UserCreateCommandFormType;
+use App\User\Command\UserCreateCommandHandler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,31 +18,27 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * @IsGranted("ROLE_USER")
- * @Route("/users/validate-email", name="user_validate_email", methods={"PATCH"})
+ * @Route("/account/signup", name="account_signup", methods={"POST"})
  */
-final class UserValidateEmailAction
+final class AccountSignupAction
 {
     private FormFactoryInterface $formFactory;
     private ResponderInterface $responder;
-    private UserSecurityInterface $security;
-    private UserValidateEmailCommandHandler $handler;
+    private UserCreateCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserSecurityInterface $security, UserValidateEmailCommandHandler $handler)
+    public function __construct(FormFactoryInterface $formFactory, ResponderInterface $responder, UserCreateCommandHandler $handler)
     {
         $this->formFactory = $formFactory;
         $this->responder = $responder;
-        $this->security = $security;
         $this->handler = $handler;
     }
 
     public function __invoke(Request $request): Response
     {
         try {
-            $command = new UserValidateEmailCommand();
-            $command->id = $this->security->getUser()->getId();
+            $command = new UserCreateCommand();
 
-            $form = $this->formFactory->create(UserValidateEmailCommandFormType::class, $command);
+            $form = $this->formFactory->create(UserCreateCommandFormType::class, $command);
 
             $form->handleRequest($request);
 
@@ -55,7 +50,7 @@ final class UserValidateEmailAction
                 throw new InvalidFormException($form->getErrors(true));
             }
 
-            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+            $this->handler->setCommand($command)->handle();
 
             return $this->responder->render();
         } catch (Throwable $e) {

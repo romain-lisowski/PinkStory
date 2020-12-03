@@ -17,9 +17,9 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/regenerate-email-validation-code", name="user_regenerate_email_validation_code", methods={"GET"})
+ * @Route("/account/regenerate-email-validation-code", name="account_regenerate_email_validation_code", methods={"GET"})
  */
-final class UserRegenerateEmailValidationCodeAction
+final class AccountRegenerateEmailValidationCodeAction
 {
     private ResponderInterface $responder;
     private UserRegenerateEmailValidationCodeCommandHandler $handler;

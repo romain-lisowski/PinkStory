@@ -18,9 +18,9 @@ use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/users/current/update", name="user_current_update", methods={"GET"})
+ * @Route("/account/update", name="account_update", methods={"GET"})
  */
-final class UserGetCurrentAction
+final class AccountReadForUpdateAction
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private ResponderInterface $responder;

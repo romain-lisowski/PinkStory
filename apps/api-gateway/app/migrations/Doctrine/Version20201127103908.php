@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Migration;
+namespace App\Migration\Doctrine;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201104110000 extends AbstractMigration
+final class Version20201127103908 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20201104110000 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE usr_user ADD profile_picture_defined BOOLEAN DEFAULT NULL');
-        $this->addSql('UPDATE usr_user SET profile_picture_defined = FALSE');
-        $this->addSql('ALTER TABLE usr_user ALTER COLUMN profile_picture_defined SET NOT NULL');
+        $this->addSql('ALTER TABLE usr_user RENAME COLUMN profile_picture_defined TO image_defined');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE usr_user DROP profile_picture_defined');
+        $this->addSql('ALTER TABLE usr_user RENAME COLUMN image_defined TO profile_picture_defined');
     }
 }

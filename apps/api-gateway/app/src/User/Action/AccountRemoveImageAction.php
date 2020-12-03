@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Action;
 
+use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRemoveImageCommand;
 use App\User\Command\UserRemoveImageCommandHandler;
@@ -11,15 +12,13 @@ use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
  * @Route("/account/remove-image", name="account_remove_image", methods={"DELETE"})
  */
-final class AccountRemoveImageAction
+final class AccountRemoveImageAction extends AbstractAction
 {
     private ResponderInterface $responder;
     private UserRemoveImageCommandHandler $handler;
@@ -32,17 +31,13 @@ final class AccountRemoveImageAction
         $this->handler = $handler;
     }
 
-    public function __invoke(Request $request): Response
+    public function run(Request $request): Response
     {
-        try {
-            $command = new UserRemoveImageCommand();
-            $command->id = $this->security->getUser()->getId();
+        $command = new UserRemoveImageCommand();
+        $command->id = $this->security->getUser()->getId();
 
-            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+        $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
 
-            return $this->responder->render();
-        } catch (Throwable $e) {
-            throw new BadRequestHttpException(null, $e);
-        }
+        return $this->responder->render();
     }
 }

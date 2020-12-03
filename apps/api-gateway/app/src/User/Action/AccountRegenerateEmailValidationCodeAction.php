@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Action;
 
+use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRegenerateEmailValidationCodeCommand;
 use App\User\Command\UserRegenerateEmailValidationCodeCommandHandler;
@@ -11,15 +12,13 @@ use App\User\Security\UserSecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 /**
  * @IsGranted("ROLE_USER")
  * @Route("/account/regenerate-email-validation-code", name="account_regenerate_email_validation_code", methods={"GET"})
  */
-final class AccountRegenerateEmailValidationCodeAction
+final class AccountRegenerateEmailValidationCodeAction extends AbstractAction
 {
     private ResponderInterface $responder;
     private UserRegenerateEmailValidationCodeCommandHandler $handler;
@@ -32,17 +31,13 @@ final class AccountRegenerateEmailValidationCodeAction
         $this->security = $security;
     }
 
-    public function __invoke(Request $request): Response
+    public function run(Request $request): Response
     {
-        try {
-            $command = new UserRegenerateEmailValidationCodeCommand();
-            $command->id = $this->security->getUser()->getId();
+        $command = new UserRegenerateEmailValidationCodeCommand();
+        $command->id = $this->security->getUser()->getId();
 
-            $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+        $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
 
-            return $this->responder->render();
-        } catch (Throwable $e) {
-            throw new BadRequestHttpException(null, $e);
-        }
+        return $this->responder->render();
     }
 }

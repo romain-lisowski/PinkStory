@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Form;
 
 use ReflectionClass;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractCommandFormType extends AbstractType
+abstract class AbstractFormType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $commandFormTypeClass = (new ReflectionClass($this))->getName();
-        $commandClass = preg_replace('/^(.+)FormType$/', '$1', $commandFormTypeClass);
+        $formTypeClass = (new ReflectionClass($this))->getName();
+        $class = preg_replace('/^(.+)FormType$/', '$1', $formTypeClass);
 
-        $resolver->setDefault('data_class', $commandClass);
+        $resolver->setDefault('data_class', $class);
     }
 
     public function getBlockPrefix(): string

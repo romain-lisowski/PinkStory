@@ -6,16 +6,23 @@ namespace App\Form;
 
 use App\Exception\InvalidFormException;
 use App\Exception\NotSubmittedFormException;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class FormManager implements FormManagerInterface
 {
+    private FormFactoryInterface $formFactory;
     private FormInterface $form;
 
-    public function setForm(FormInterface $form): self
+    public function __construct(FormFactoryInterface $formFactory)
     {
-        $this->form = $form;
+        $this->formFactory = $formFactory;
+    }
+
+    public function initForm(FormableInterface $formable, array $options = []): self
+    {
+        $this->form = $this->formFactory->create($formable->getFormType(), $formable, $options);
 
         return $this;
     }

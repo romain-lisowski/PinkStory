@@ -8,9 +8,7 @@ use App\Action\AbstractAction;
 use App\Form\FormManagerInterface;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdatePasswordForgottenCommand;
-use App\User\Command\UserUpdatePasswordForgottenCommandFormType;
 use App\User\Command\UserUpdatePasswordForgottenCommandHandler;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,14 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AccountUpdatePasswordForgottenAction extends AbstractAction
 {
-    private FormFactoryInterface $formFactory;
     private FormManagerInterface $formManager;
     private ResponderInterface $responder;
     private UserUpdatePasswordForgottenCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, FormManagerInterface $formManager, ResponderInterface $responder, UserUpdatePasswordForgottenCommandHandler $handler)
+    public function __construct(FormManagerInterface $formManager, ResponderInterface $responder, UserUpdatePasswordForgottenCommandHandler $handler)
     {
-        $this->formFactory = $formFactory;
         $this->formManager = $formManager;
         $this->responder = $responder;
         $this->handler = $handler;
@@ -38,8 +34,7 @@ final class AccountUpdatePasswordForgottenAction extends AbstractAction
         $command = new UserUpdatePasswordForgottenCommand();
         $command->secret = (string) $request->attributes->get('secret');
 
-        $form = $this->formFactory->create(UserUpdatePasswordForgottenCommandFormType::class, $command);
-        $this->formManager->setForm($form)->handleRequest($request);
+        $this->formManager->initForm($command)->handleRequest($request);
 
         $this->handler->setCommand($command)->handle();
 

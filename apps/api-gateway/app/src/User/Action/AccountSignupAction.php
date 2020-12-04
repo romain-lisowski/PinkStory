@@ -8,9 +8,7 @@ use App\Action\AbstractAction;
 use App\Form\FormManagerInterface;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserCreateCommand;
-use App\User\Command\UserCreateCommandFormType;
 use App\User\Command\UserCreateCommandHandler;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,14 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AccountSignupAction extends AbstractAction
 {
-    private FormFactoryInterface $formFactory;
     private FormManagerInterface $formManager;
     private ResponderInterface $responder;
     private UserCreateCommandHandler $handler;
 
-    public function __construct(FormFactoryInterface $formFactory, FormManagerInterface $formManager, ResponderInterface $responder, UserCreateCommandHandler $handler)
+    public function __construct(FormManagerInterface $formManager, ResponderInterface $responder, UserCreateCommandHandler $handler)
     {
-        $this->formFactory = $formFactory;
         $this->formManager = $formManager;
         $this->responder = $responder;
         $this->handler = $handler;
@@ -37,8 +33,7 @@ final class AccountSignupAction extends AbstractAction
     {
         $command = new UserCreateCommand();
 
-        $form = $this->formFactory->create(UserCreateCommandFormType::class, $command);
-        $this->formManager->setForm($form)->handleRequest($request);
+        $this->formManager->initForm($command)->handleRequest($request);
 
         $this->handler->setCommand($command)->handle();
 

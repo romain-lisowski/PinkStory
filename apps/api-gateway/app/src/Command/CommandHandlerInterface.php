@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Handler\HandlerInterface;
 
-interface CommandHandlerInterface
+interface CommandHandlerInterface extends HandlerInterface
 {
     public function setCommand(CommandInterface $command): self;
-
-    public function setCurrentUser(?UserInterface $currentUser): self;
-
-    public function handle();
 }

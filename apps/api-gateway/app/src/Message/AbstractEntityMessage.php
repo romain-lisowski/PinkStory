@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace App\Message;
 
-abstract class AbstractEntityMessage
+abstract class AbstractEntityMessage implements EntityMessageInterface
 {
-    private string $id;
+    use EntityMessageTrait;
 
     public function __construct(string $id)
     {
         $this->id = $id;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
     }
 }

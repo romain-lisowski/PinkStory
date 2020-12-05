@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Mercure\Action;
 
-use App\Exception\InvalidFormException;
-use App\Exception\NotSubmittedFormException;
+use App\Form\InvalidFormException;
+use App\Form\NotSubmittedFormException;
 use App\Mercure\Command\MercureCommand;
 use App\Mercure\Command\MercureCommandHandler;
 use App\Responder\ResponderInterface;

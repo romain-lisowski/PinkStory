@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\Exception\ValidatorException;
 use App\User\Message\UserRegeneratePasswordForgottenSecretMessage;
 use App\User\Repository\UserRepositoryInterface;
+use App\Validator\ValidatorException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

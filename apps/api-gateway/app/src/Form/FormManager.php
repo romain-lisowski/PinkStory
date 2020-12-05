@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Exception\InvalidFormException;
-use App\Exception\NotSubmittedFormException;
+use App\Form\InvalidFormException;
+use App\Form\NotSubmittedFormException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

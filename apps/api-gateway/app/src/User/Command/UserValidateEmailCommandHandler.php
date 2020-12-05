@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\Exception\ValidatorException;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
+use App\Validator\ValidatorException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;

@@ -11,10 +11,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 final class HttpExceptionSubscriber implements EventSubscriberInterface
 {
@@ -36,9 +35,9 @@ final class HttpExceptionSubscriber implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        $httpException = $event->getThrowable();
+        $e = $event->getThrowable();
 
-        if (!$httpException instanceof HttpExceptionInterface) {
+        if (!$e instanceof HttpExceptionInterface) {
             return;
         }
 
@@ -47,38 +46,25 @@ final class HttpExceptionSubscriber implements EventSubscriberInterface
             'message' => $this->translator->trans('exception.error'),
         ];
 
-        $exception = $httpException->getPrevious();
-
-        if ($exception instanceof AccessDeniedException) {
-            $data['type'] = (new UnicodeString((new ReflectionClass($exception))->getShortName()))->snake()->toString();
-            $data['message'] = $this->translator->trans($exception->getMessage());
-        }
-
-        if ($exception instanceof HasErrorsExceptionInterface) {
-            $data['type'] = (new UnicodeString((new ReflectionClass($exception))->getShortName()))->snake()->toString();
-            $data['message'] = $this->translator->trans($exception->getMessage());
-            $data['errors'] = array_map([$this->translator, 'trans'], $exception->getErrors());
-        }
-
-        if ($exception instanceof AuthenticationException) {
-            $data['type'] = (new UnicodeString((new ReflectionClass($exception))->getShortName()))->snake()->toString();
-            $data['message'] = $this->translator->trans($exception->getMessage());
-
-            $childException = $exception->getPrevious();
-
-            if (null !== $childException) {
-                $data['type'] = (new UnicodeString((new ReflectionClass($childException))->getShortName()))->snake()->toString();
-                $data['message'] = $this->translator->trans($childException->getMessage());
-
-                if ($childException instanceof AccessDeniedException) {
-                    $data['message'] = $this->translator->trans('exception.access_denied');
-                }
-            }
-        }
+        $this->format($e, $data);
 
         $response = $this->responder->render($data);
-        $response->setStatusCode($httpException->getStatusCode());
+        $response->setStatusCode($e->getStatusCode());
 
         $event->setResponse($response);
+    }
+
+    private function format(Throwable $e, array &$data)
+    {
+        $data['type'] = (new UnicodeString((new ReflectionClass($e))->getShortName()))->snake()->toString();
+        $data['message'] = $this->translator->trans($e->getMessage());
+
+        if ($e instanceof HasErrorsExceptionInterface) {
+            $data['errors'] = array_map([$this->translator, 'trans'], $e->getErrors());
+        }
+
+        if (null !== $e->getPrevious()) {
+            $this->format($e->getPrevious(), $data);
+        }
     }
 }

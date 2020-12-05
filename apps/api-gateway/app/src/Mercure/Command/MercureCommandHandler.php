@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mercure\Command;
 
-use App\Exception\ValidatorException;
+use App\Validator\ValidatorException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Mercure\Update;

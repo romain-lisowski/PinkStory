@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\Exception\ValidatorException;
 use App\File\ImageManagerInterface;
 use App\User\Message\UserRemoveImageMessage;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
+use App\Validator\ValidatorException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

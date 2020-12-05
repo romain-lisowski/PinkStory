@@ -6,8 +6,8 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\Exception\InvalidSSLKeyException;
-use App\Exception\ValidatorException;
 use App\User\Repository\UserRepositoryInterface;
+use App\Validator\ValidatorException;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -45,7 +45,7 @@ final class UserGenerateAuthTokenCommandHandler extends AbstractCommandHandler
             $user = $this->userRepository->findOneByEmail($this->command->email);
 
             if (false === $this->passwordEncoder->isPasswordValid($user, $this->command->password)) {
-                throw new BadCredentialsException();
+                throw new BadCredentialsException('user.exception.bad_credentials_exception');
             }
 
             $payload = [
@@ -74,7 +74,7 @@ final class UserGenerateAuthTokenCommandHandler extends AbstractCommandHandler
 
             return JWT::encode($payload, $privateKey, $this->params->get('jwt_algorithm'));
         } catch (NonUniqueResultException | NoResultException $e) {
-            throw new BadCredentialsException();
+            throw new BadCredentialsException('user.exception.bad_credentials_exception');
         }
     }
 }

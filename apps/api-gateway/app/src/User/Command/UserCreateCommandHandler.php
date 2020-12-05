@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\Exception\ValidatorException;
 use App\File\ImageManagerInterface;
 use App\User\Entity\User;
 use App\User\Message\UserCreateMessage;
+use App\Validator\ValidatorException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;

@@ -7,7 +7,7 @@ namespace App\User\Command;
 use App\Command\AbstractCommandHandler;
 use App\Exception\InvalidSSLKeyException;
 use App\User\Repository\UserRepositoryInterface;
-use App\Validator\ValidatorException;
+use App\Validator\ValidatorManagerInterface;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -16,31 +16,26 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserGenerateAuthTokenCommandHandler extends AbstractCommandHandler
 {
     private ParameterBagInterface $params;
     private UserPasswordEncoderInterface $passwordEncoder;
-    private ValidatorInterface $validator;
     private UserRepositoryInterface $userRepository;
+    private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(ParameterBagInterface $params, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, UserRepositoryInterface $userRepository)
+    public function __construct(ParameterBagInterface $params, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
     {
         $this->params = $params;
         $this->passwordEncoder = $passwordEncoder;
-        $this->validator = $validator;
         $this->userRepository = $userRepository;
+        $this->validatorManager = $validatorManager;
     }
 
     public function handle(): string
     {
         try {
-            $errors = $this->validator->validate($this->command);
-
-            if (count($errors) > 0) {
-                throw new ValidatorException($errors);
-            }
+            $this->validatorManager->validate($this->command);
 
             $user = $this->userRepository->findOneByEmail($this->command->email);
 

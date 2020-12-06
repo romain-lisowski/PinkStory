@@ -9,39 +9,34 @@ use App\File\ImageManagerInterface;
 use App\User\Message\UserUpdateImageMessage;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
-use App\Validator\ValidatorException;
+use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserUpdateImageCommandHandler extends AbstractCommandHandler
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
-    private ValidatorInterface $validator;
-    private ImageManagerInterface $imageManagerInterface;
+    private ImageManagerInterface $imageManager;
     private UserRepositoryInterface $userRepository;
+    private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, MessageBusInterface $bus, ValidatorInterface $validator, ImageManagerInterface $imageManagerInterface, UserRepositoryInterface $userRepository)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, MessageBusInterface $bus, ImageManagerInterface $imageManager, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->entityManager = $entityManager;
         $this->bus = $bus;
-        $this->validator = $validator;
-        $this->imageManagerInterface = $imageManagerInterface;
+        $this->imageManager = $imageManager;
         $this->userRepository = $userRepository;
+        $this->validatorManager = $validatorManager;
     }
 
     public function handle(): void
     {
-        $errors = $this->validator->validate($this->command);
-
-        if (count($errors) > 0) {
-            throw new ValidatorException($errors);
-        }
+        $this->validatorManager->validate($this->command);
 
         $user = $this->userRepository->findOne($this->command->id);
 
@@ -52,13 +47,9 @@ final class UserUpdateImageCommandHandler extends AbstractCommandHandler
         $user->setImageDefined(true);
         $user->updateLastUpdatedAt();
 
-        $errors = $this->validator->validate($user);
+        $this->validatorManager->validate($user);
 
-        if (count($errors) > 0) {
-            throw new ValidatorException($errors);
-        }
-
-        $this->imageManagerInterface->upload($this->command->image, $user);
+        $this->imageManager->upload($this->command->image, $user);
 
         $this->entityManager->flush();
 

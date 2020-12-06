@@ -4,32 +4,27 @@ declare(strict_types=1);
 
 namespace App\Mercure\Command;
 
-use App\Validator\ValidatorException;
+use App\Validator\ValidatorManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Mercure\Update;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class MercureCommandHandler
 {
     private ParameterBagInterface $params;
     private PublisherInterface $publisher;
-    private ValidatorInterface $validator;
+    private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(ParameterBagInterface $params, PublisherInterface $publisher, ValidatorInterface $validator)
+    public function __construct(ParameterBagInterface $params, PublisherInterface $publisher, ValidatorManagerInterface $validatorManager)
     {
         $this->params = $params;
         $this->publisher = $publisher;
-        $this->validator = $validator;
+        $this->validatorManager = $validatorManager;
     }
 
     public function handle(MercureCommand $command): void
     {
-        $errors = $this->validator->validate($command);
-
-        if (count($errors) > 0) {
-            throw new ValidatorException($errors);
-        }
+        $this->validatorManager->validate($command);
 
         $topics = [$this->params->get('project_front_web_dsn').'/mercure'];
         $private = false;

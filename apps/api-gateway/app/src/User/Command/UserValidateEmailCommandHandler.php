@@ -7,34 +7,29 @@ namespace App\User\Command;
 use App\Command\AbstractCommandHandler;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
-use App\Validator\ValidatorException;
+use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserValidateEmailCommandHandler extends AbstractCommandHandler
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private EntityManagerInterface $entityManager;
-    private ValidatorInterface $validator;
     private UserRepositoryInterface $userRepository;
+    private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserRepositoryInterface $userRepository)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->entityManager = $entityManager;
-        $this->validator = $validator;
         $this->userRepository = $userRepository;
+        $this->validatorManager = $validatorManager;
     }
 
     public function handle(): void
     {
-        $errors = $this->validator->validate($this->command);
-
-        if (count($errors) > 0) {
-            throw new ValidatorException($errors);
-        }
+        $this->validatorManager->validate($this->command);
 
         $user = $this->userRepository->findOneByActiveEmailValidationCode($this->command->code);
 
@@ -48,6 +43,8 @@ final class UserValidateEmailCommandHandler extends AbstractCommandHandler
 
         $user->validateEmail();
         $user->updateLastUpdatedAt();
+
+        $this->validatorManager->validate($user);
 
         $this->entityManager->flush();
     }

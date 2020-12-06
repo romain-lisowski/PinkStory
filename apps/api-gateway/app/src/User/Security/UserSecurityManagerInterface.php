@@ -6,7 +6,7 @@ namespace App\User\Security;
 
 use App\User\Entity\User;
 
-interface UserSecurityInterface
+interface UserSecurityManagerInterface
 {
     public function getUser(): ?User;
 }

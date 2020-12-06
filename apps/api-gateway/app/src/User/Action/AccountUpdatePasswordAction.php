@@ -9,7 +9,7 @@ use App\Form\FormManagerInterface;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserUpdatePasswordCommand;
 use App\User\Command\UserUpdatePasswordCommandHandler;
-use App\User\Security\UserSecurityInterface;
+use App\User\Security\UserSecurityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,25 +23,25 @@ final class AccountUpdatePasswordAction extends AbstractAction
 {
     private FormManagerInterface $formManager;
     private ResponderInterface $responder;
-    private UserSecurityInterface $security;
+    private UserSecurityManagerInterface $userSecurityManager;
     private UserUpdatePasswordCommandHandler $handler;
 
-    public function __construct(FormManagerInterface $formManager, ResponderInterface $responder, UserSecurityInterface $security, UserUpdatePasswordCommandHandler $handler)
+    public function __construct(FormManagerInterface $formManager, ResponderInterface $responder, UserSecurityManagerInterface $userSecurityManager, UserUpdatePasswordCommandHandler $handler)
     {
         $this->formManager = $formManager;
         $this->responder = $responder;
-        $this->security = $security;
+        $this->userSecurityManager = $userSecurityManager;
         $this->handler = $handler;
     }
 
     public function run(Request $request): Response
     {
         $command = new UserUpdatePasswordCommand();
-        $command->id = $this->security->getUser()->getId();
+        $command->id = $this->userSecurityManager->getUser()->getId();
 
         $this->formManager->initForm($command)->handleRequest($request);
 
-        $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+        $this->handler->setCommand($command)->setCurrentUser($this->userSecurityManager->getUser())->handle();
 
         return $this->responder->render();
     }

@@ -7,7 +7,7 @@ namespace App\User\Action;
 use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
 use App\Security\AuthorizationManagerInterface;
-use App\User\Security\UserSecurityInterface;
+use App\User\Security\UserSecurityManagerInterface;
 use App\User\Voter\UserableVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,21 +22,21 @@ final class AccountReadForUpdateAction extends AbstractAction
 {
     private AuthorizationManagerInterface $authorizationManager;
     private ResponderInterface $responder;
-    private UserSecurityInterface $security;
+    private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(AuthorizationManagerInterface $authorizationManager, ResponderInterface $responder, UserSecurityInterface $security)
+    public function __construct(AuthorizationManagerInterface $authorizationManager, ResponderInterface $responder, UserSecurityManagerInterface $userSecurityManager)
     {
         $this->authorizationManager = $authorizationManager;
         $this->responder = $responder;
-        $this->security = $security;
+        $this->userSecurityManager = $userSecurityManager;
     }
 
     public function run(Request $request): Response
     {
-        $this->authorizationManager->isGranted(UserableVoter::UPDATE, $this->security->getUser());
+        $this->authorizationManager->isGranted(UserableVoter::UPDATE, $this->userSecurityManager->getUser());
 
         return $this->responder->render([
-            'user' => $this->security->getUser(),
+            'user' => $this->userSecurityManager->getUser(),
         ], ['groups' => 'full']);
     }
 }

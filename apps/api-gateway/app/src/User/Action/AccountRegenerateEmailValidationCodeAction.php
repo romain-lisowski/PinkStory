@@ -8,7 +8,7 @@ use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRegenerateEmailValidationCodeCommand;
 use App\User\Command\UserRegenerateEmailValidationCodeCommandHandler;
-use App\User\Security\UserSecurityInterface;
+use App\User\Security\UserSecurityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,21 +22,21 @@ final class AccountRegenerateEmailValidationCodeAction extends AbstractAction
 {
     private ResponderInterface $responder;
     private UserRegenerateEmailValidationCodeCommandHandler $handler;
-    private UserSecurityInterface $security;
+    private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(ResponderInterface $responder, UserRegenerateEmailValidationCodeCommandHandler $handler, UserSecurityInterface $security)
+    public function __construct(ResponderInterface $responder, UserRegenerateEmailValidationCodeCommandHandler $handler, UserSecurityManagerInterface $userSecurityManager)
     {
         $this->responder = $responder;
         $this->handler = $handler;
-        $this->security = $security;
+        $this->userSecurityManager = $userSecurityManager;
     }
 
     public function run(Request $request): Response
     {
         $command = new UserRegenerateEmailValidationCodeCommand();
-        $command->id = $this->security->getUser()->getId();
+        $command->id = $this->userSecurityManager->getUser()->getId();
 
-        $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+        $this->handler->setCommand($command)->setCurrentUser($this->userSecurityManager->getUser())->handle();
 
         return $this->responder->render();
     }

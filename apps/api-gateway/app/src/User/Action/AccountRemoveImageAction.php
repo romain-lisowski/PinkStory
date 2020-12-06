@@ -8,7 +8,7 @@ use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
 use App\User\Command\UserRemoveImageCommand;
 use App\User\Command\UserRemoveImageCommandHandler;
-use App\User\Security\UserSecurityInterface;
+use App\User\Security\UserSecurityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,21 +22,21 @@ final class AccountRemoveImageAction extends AbstractAction
 {
     private ResponderInterface $responder;
     private UserRemoveImageCommandHandler $handler;
-    private UserSecurityInterface $security;
+    private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(ResponderInterface $responder, UserRemoveImageCommandHandler $handler, UserSecurityInterface $security)
+    public function __construct(ResponderInterface $responder, UserRemoveImageCommandHandler $handler, UserSecurityManagerInterface $userSecurityManager)
     {
-        $this->security = $security;
         $this->responder = $responder;
         $this->handler = $handler;
+        $this->userSecurityManager = $userSecurityManager;
     }
 
     public function run(Request $request): Response
     {
         $command = new UserRemoveImageCommand();
-        $command->id = $this->security->getUser()->getId();
+        $command->id = $this->userSecurityManager->getUser()->getId();
 
-        $this->handler->setCommand($command)->setCurrentUser($this->security->getUser())->handle();
+        $this->handler->setCommand($command)->setCurrentUser($this->userSecurityManager->getUser())->handle();
 
         return $this->responder->render();
     }

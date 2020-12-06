@@ -21,7 +21,7 @@ final class ImageManager implements ImageManagerInterface
         $this->params = $params;
     }
 
-    public function upload(UploadedFile $file, ImageableInterface $image): bool
+    public function upload(UploadedFile $file, ImageableInterface $image): void
     {
         try {
             // open image
@@ -40,24 +40,20 @@ final class ImageManager implements ImageManagerInterface
 
             // save image
             $imageFile->save($this->params->get('project_file_manager_path').$this->params->get('project_file_manager_image_path').$image->getImagePath(true), ['jpeg_quality' => 80]);
-
-            return true;
         } catch (Throwable $e) {
-            return false;
+            throw new ImageUploadException();
         }
     }
 
-    public function remove(ImageableInterface $image): bool
+    public function remove(ImageableInterface $image): void
     {
         try {
             $file = new File($this->params->get('project_file_manager_path').$this->params->get('project_file_manager_image_path').$image->getImagePath(true));
 
             $filesystem = new Filesystem();
             $filesystem->remove($file->getRealPath());
-
-            return true;
         } catch (Throwable $e) {
-            return false;
+            throw new ImageRemoveException();
         }
     }
 }

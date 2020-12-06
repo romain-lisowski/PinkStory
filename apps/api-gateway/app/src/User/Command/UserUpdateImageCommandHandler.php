@@ -6,7 +6,6 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\File\ImageManagerInterface;
-use App\File\ImageUploadException;
 use App\User\Message\UserUpdateImageMessage;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
@@ -50,20 +49,16 @@ final class UserUpdateImageCommandHandler extends AbstractCommandHandler
             throw new AccessDeniedException();
         }
 
-        if (false === $this->imageManagerInterface->upload($this->command->image, $user)) {
-            throw new ImageUploadException();
-        }
-
         $user->setImageDefined(true);
         $user->updateLastUpdatedAt();
 
         $errors = $this->validator->validate($user);
 
         if (count($errors) > 0) {
-            $this->imageManagerInterface->remove($user);
-
             throw new ValidatorException($errors);
         }
+
+        $this->imageManagerInterface->upload($this->command->image, $user);
 
         $this->entityManager->flush();
 

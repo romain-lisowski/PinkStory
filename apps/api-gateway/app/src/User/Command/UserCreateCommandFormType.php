@@ -6,7 +6,6 @@ namespace App\User\Command;
 
 use App\Form\AbstractFormType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,9 +21,6 @@ final class UserCreateCommandFormType extends AbstractFormType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'user.validator.password_match',
-            ])
-            ->add('image', FileType::class, [
-                'required' => false,
             ])
         ;
     }

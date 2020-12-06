@@ -53,8 +53,6 @@ final class UserRemoveImageCommandHandler extends AbstractCommandHandler
             return;
         }
 
-        $this->imageManager->remove($user);
-
         $user->removeImage();
         $user->updateLastUpdatedAt();
 
@@ -63,6 +61,8 @@ final class UserRemoveImageCommandHandler extends AbstractCommandHandler
         if (count($errors) > 0) {
             throw new ValidatorException($errors);
         }
+
+        $this->imageManager->remove($user);
 
         $this->entityManager->flush();
 

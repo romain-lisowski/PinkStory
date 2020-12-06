@@ -10,7 +10,6 @@ use App\Form\FormableTrait;
 use App\Handler\HandlerableInterface;
 use App\Handler\HandlerableTrait;
 use App\User\Validator\Constraints as AppUserAssert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserCreateCommand implements CommandInterface, HandlerableInterface, FormableInterface
@@ -34,11 +33,4 @@ final class UserCreateCommand implements CommandInterface, HandlerableInterface,
      * @AppUserAssert\PasswordStrenght
      */
     public string $password;
-
-    /**
-     * @Assert\File(
-     *      mimeTypes = {"image/jpeg", "image/png"},
-     * )
-     */
-    public ?UploadedFile $image = null;
 }

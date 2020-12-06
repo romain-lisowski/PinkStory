@@ -32,6 +32,7 @@ final class AccountSignupAction extends AbstractAction
     public function run(Request $request): Response
     {
         $command = new UserCreateCommand();
+        $command->language = $request->get('language');
 
         $this->formManager->initForm($command)->handleRequest($request);
 

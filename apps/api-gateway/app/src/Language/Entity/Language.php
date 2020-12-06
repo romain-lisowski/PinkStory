@@ -8,6 +8,7 @@ use App\Entity\AbstractEntity;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryImageTranslation;
 use App\Story\Entity\StoryThemeTranslation;
+use App\User\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,6 +41,11 @@ class Language extends AbstractEntity
     private string $locale;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\User\Entity\User", mappedBy="language")
+     */
+    private Collection $users;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="language")
      */
     private Collection $stories;
@@ -61,6 +67,7 @@ class Language extends AbstractEntity
         // init zero values
         $this->title = '';
         $this->locale = '';
+        $this->users = new ArrayCollection();
         $this->stories = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
         $this->storyImageTranslations = new ArrayCollection();
@@ -106,6 +113,25 @@ class Language extends AbstractEntity
     public function updateLocale(string $locale): self
     {
         $this->setLocale($locale);
+
+        return $this;
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
 
         return $this;
     }

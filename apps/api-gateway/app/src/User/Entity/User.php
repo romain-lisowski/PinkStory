@@ -7,6 +7,9 @@ namespace App\User\Entity;
 use App\Entity\AbstractEntity;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
+use App\Language\Entity\Language;
+use App\Language\Entity\LanguageableInterface;
+use App\Language\Entity\LanguageableTrait;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryRating;
 use App\User\Validator\Constraints as AppUserAssert;
@@ -29,9 +32,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface
+class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface, LanguageableInterface
 {
     use ImageableTrait;
+    use LanguageableTrait;
 
     /**
      * @Groups({"medium", "full"})
@@ -116,6 +120,12 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     private bool $imageDefined;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="users")
+     * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
+     */
+    private Language $language;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"title" = "ASC"})
      */
@@ -126,7 +136,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
      */
     private Collection $storyRatings;
 
-    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER)
+    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER, Language $language)
     {
         parent::__construct();
 
@@ -151,6 +161,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         $this->setName($name)
             ->setEmail($email)
             ->setRole($role)
+            ->setLanguage($language)
         ;
     }
 
@@ -394,6 +405,23 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function getImageBasePath(): string
     {
         return '/user';
+    }
+
+    public function setLanguage(Language $language): self
+    {
+        $this->language = $language;
+        $language->addUser($this);
+
+        return $this;
+    }
+
+    public function updateLanguage(Language $language): self
+    {
+        $this->language->removeUser($this);
+
+        $this->setLanguage($language);
+
+        return $this;
     }
 
     public function getUsername(): string

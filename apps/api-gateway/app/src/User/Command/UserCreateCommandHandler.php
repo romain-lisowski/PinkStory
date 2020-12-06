@@ -6,6 +6,7 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\User\Entity\User;
+use App\User\Entity\UserRole;
 use App\User\Message\UserCreateMessage;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,7 +32,7 @@ final class UserCreateCommandHandler extends AbstractCommandHandler
     {
         $this->validatorManager->validate($this->command);
 
-        $user = new User($this->command->name, $this->command->email);
+        $user = new User($this->command->name, $this->command->email, UserRole::ROLE_USER, $this->command->language);
         $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
 
         $this->validatorManager->validate($user);

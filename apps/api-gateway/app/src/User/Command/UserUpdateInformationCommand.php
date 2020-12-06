@@ -9,6 +9,7 @@ use App\Form\FormableInterface;
 use App\Form\FormableTrait;
 use App\Handler\HandlerableInterface;
 use App\Handler\HandlerableTrait;
+use App\Language\Entity\Language;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserUpdateInformationCommand implements CommandInterface, HandlerableInterface, FormableInterface
@@ -25,4 +26,9 @@ final class UserUpdateInformationCommand implements CommandInterface, Handlerabl
      * @Assert\NotBlank
      */
     public string $name;
+
+    /**
+     * @Assert\NotBlank
+     */
+    public Language $language;
 }

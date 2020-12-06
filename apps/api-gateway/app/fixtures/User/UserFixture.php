@@ -19,27 +19,27 @@ final class UserFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $user = new User('PinkStory', 'hello@pinkstory.io', UserRole::ROLE_GOD);
+        $user = new User('PinkStory', 'hello@pinkstory.io', UserRole::ROLE_GOD, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
         $manager->persist($user);
         $this->addReference('user-pinkstory', $user);
 
-        $user = new User('Yannis', 'hello@yannissgarra.com', UserRole::ROLE_GOD);
+        $user = new User('Yannis', 'hello@yannissgarra.com', UserRole::ROLE_GOD, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
         $manager->persist($user);
         $this->addReference('user-yannis', $user);
 
-        $user = new User('Romain', 'romain.lisowski@gmail.com', UserRole::ROLE_GOD);
+        $user = new User('Romain', 'romain.lisowski@gmail.com', UserRole::ROLE_GOD, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
         $manager->persist($user);
         $this->addReference('user-romain', $user);
 
-        $user = new User('Leslie', 'leslie.akindou@gmail.com');
+        $user = new User('Leslie', 'leslie.akindou@gmail.com', UserRole::ROLE_MODERATOR, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
         $manager->persist($user);
         $this->addReference('user-leslie', $user);
 
-        $user = new User('Juliette', 'contact@julietteverdurand.com');
+        $user = new User('Juliette', 'contact@julietteverdurand.com', UserRole::ROLE_EDITOR, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
         $manager->persist($user);
         $this->addReference('user-juliette', $user);

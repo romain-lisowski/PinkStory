@@ -39,6 +39,7 @@ final class UserUpdateInformationCommandHandler extends AbstractCommandHandler
         $this->authorizationManager->isGranted(UserableVoter::UPDATE, $user);
 
         $user->rename($this->command->name);
+        $user->updateLanguage($this->command->language);
         $user->updateLastUpdatedAt();
 
         $this->validatorManager->validate($user);

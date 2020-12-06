@@ -11,6 +11,7 @@ use App\Story\Entity\StoryThemeTranslation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,6 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="lng_language")
  * @ORM\Entity(repositoryClass="App\Language\Repository\LanguageRepository")
+ * @UniqueEntity(
+ *      fields = {"locale"}
+ * )
  */
 class Language extends AbstractEntity
 {
@@ -31,7 +35,7 @@ class Language extends AbstractEntity
     /**
      * @Groups({"medium", "full"})
      * @Assert\NotBlank
-     * @ORM\Column(name="locale", type="string", length=255)
+     * @ORM\Column(name="locale", type="string", length=255, unique=true)
      */
     private string $locale;
 

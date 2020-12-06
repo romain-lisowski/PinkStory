@@ -223,7 +223,7 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
 
     public function removeStoryHasStoryTheme(StoryHasStoryTheme $storyHasStoryTheme): self
     {
-        $this->storyHasStoryThemes->remove($storyHasStoryTheme);
+        $this->storyHasStoryThemes->removeElement($storyHasStoryTheme);
 
         return $this;
     }
@@ -253,7 +253,7 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
 
     public function removeStoryRating(StoryRating $storyRating): self
     {
-        $this->storyRatings->remove($storyRating);
+        $this->storyRatings->removeElement($storyRating);
 
         return $this;
     }

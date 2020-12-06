@@ -76,7 +76,7 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
 
     public function removeStoryImageTranslation(StoryImageTranslation $storyImageTranslation): self
     {
-        $this->storyImageTranslations->remove($storyImageTranslation);
+        $this->storyImageTranslations->removeElement($storyImageTranslation);
 
         return $this;
     }
@@ -100,7 +100,7 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
 
     public function removeStory(Story $story): self
     {
-        $this->stories->remove($story);
+        $this->stories->removeElement($story);
 
         return $this;
     }
@@ -119,7 +119,7 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
 
     public function removeStoryImageHasStoryTheme(StoryImageHasStoryTheme $storyImageHasStoryTheme): self
     {
-        $this->storyImageHasStoryThemes->remove($storyImageHasStoryTheme);
+        $this->storyImageHasStoryThemes->removeElement($storyImageHasStoryTheme);
 
         return $this;
     }

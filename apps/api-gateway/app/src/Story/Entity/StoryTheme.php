@@ -85,7 +85,7 @@ class StoryTheme extends AbstractEntity implements DepthableInterface, Positiona
 
     public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
     {
-        $this->storyThemeTranslations->remove($storyThemeTranslation);
+        $this->storyThemeTranslations->removeElement($storyThemeTranslation);
 
         return $this;
     }
@@ -109,7 +109,7 @@ class StoryTheme extends AbstractEntity implements DepthableInterface, Positiona
 
     public function removeStoryHasStoryTheme(StoryHasStoryTheme $storyHasStoryTheme): self
     {
-        $this->storyHasStoryThemes->remove($storyHasStoryTheme);
+        $this->storyHasStoryThemes->removeElement($storyHasStoryTheme);
 
         return $this;
     }
@@ -128,7 +128,7 @@ class StoryTheme extends AbstractEntity implements DepthableInterface, Positiona
 
     public function removeStoryImageHasStoryTheme(StoryImageHasStoryTheme $storyImageHasStoryTheme): self
     {
-        $this->storyImageHasStoryThemes->remove($storyImageHasStoryTheme);
+        $this->storyImageHasStoryThemes->removeElement($storyImageHasStoryTheme);
 
         return $this;
     }

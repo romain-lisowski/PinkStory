@@ -124,7 +124,7 @@ class Language extends AbstractEntity
 
     public function removeStory(Story $story): self
     {
-        $this->stories->remove($story);
+        $this->stories->removeElement($story);
 
         return $this;
     }
@@ -143,7 +143,7 @@ class Language extends AbstractEntity
 
     public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
     {
-        $this->storyThemeTranslations->remove($storyThemeTranslation);
+        $this->storyThemeTranslations->removeElement($storyThemeTranslation);
 
         return $this;
     }
@@ -162,7 +162,7 @@ class Language extends AbstractEntity
 
     public function removeStoryImageTranslation(StoryImageTranslation $storyImageTranslation): self
     {
-        $this->storyImageTranslations->remove($storyImageTranslation);
+        $this->storyImageTranslations->removeElement($storyImageTranslation);
 
         return $this;
     }

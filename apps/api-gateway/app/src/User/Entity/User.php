@@ -430,7 +430,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
 
     public function removeStory(Story $story): self
     {
-        $this->stories->remove($story);
+        $this->stories->removeElement($story);
 
         return $this;
     }
@@ -449,7 +449,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
 
     public function removeStoryRating(StoryRating $storyRating): self
     {
-        $this->storyRatings->remove($storyRating);
+        $this->storyRatings->removeElement($storyRating);
 
         return $this;
     }

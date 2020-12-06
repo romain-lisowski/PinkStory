@@ -9,4 +9,6 @@ use App\Language\Entity\Language;
 interface LanguageRepositoryInterface
 {
     public function findOne(string $id): Language;
+
+    public function findOneByLocale(string $locale): Language;
 }

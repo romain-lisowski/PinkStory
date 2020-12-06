@@ -25,4 +25,15 @@ final class LanguageRepository extends ServiceEntityRepository implements Langua
 
         return $qb->getQuery()->getSingleResult();
     }
+
+    public function findOneByLocale(string $locale): Language
+    {
+        $qb = $this->createQueryBuilder('language');
+
+        $qb->where($qb->expr()->eq('language.locale', ':language_locale'))
+            ->setParameter('language_locale', $locale)
+        ;
+
+        return $qb->getQuery()->getSingleResult();
+    }
 }

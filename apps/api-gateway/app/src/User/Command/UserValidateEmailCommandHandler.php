@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
+use App\Security\AuthorizationManagerInterface;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class UserValidateEmailCommandHandler extends AbstractCommandHandler
 {
-    private AuthorizationCheckerInterface $authorizationChecker;
     private EntityManagerInterface $entityManager;
+    private AuthorizationManagerInterface $authorizationManager;
     private UserRepositoryInterface $userRepository;
     private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
+    public function __construct(EntityManagerInterface $entityManager, AuthorizationManagerInterface $authorizationManager, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
     {
-        $this->authorizationChecker = $authorizationChecker;
         $this->entityManager = $entityManager;
+        $this->authorizationManager = $authorizationManager;
         $this->userRepository = $userRepository;
         $this->validatorManager = $validatorManager;
     }
@@ -37,9 +37,7 @@ final class UserValidateEmailCommandHandler extends AbstractCommandHandler
             throw new AccessDeniedException();
         }
 
-        if (false === $this->authorizationChecker->isGranted(UserableVoter::UPDATE, $user)) {
-            throw new AccessDeniedException();
-        }
+        $this->authorizationManager->isGranted(UserableVoter::UPDATE, $user);
 
         $user->validateEmail();
         $user->updateLastUpdatedAt();

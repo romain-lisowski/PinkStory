@@ -6,29 +6,28 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\File\ImageManagerInterface;
+use App\Security\AuthorizationManagerInterface;
 use App\User\Message\UserRemoveImageMessage;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class UserRemoveImageCommandHandler extends AbstractCommandHandler
 {
-    private AuthorizationCheckerInterface $authorizationChecker;
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
+    private AuthorizationManagerInterface $authorizationManager;
     private ImageManagerInterface $imageManager;
     private UserRepositoryInterface $userRepository;
     private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, MessageBusInterface $bus, ImageManagerInterface $imageManager, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, AuthorizationManagerInterface $authorizationManager, ImageManagerInterface $imageManager, UserRepositoryInterface $userRepository, ValidatorManagerInterface $validatorManager)
     {
-        $this->authorizationChecker = $authorizationChecker;
         $this->entityManager = $entityManager;
         $this->bus = $bus;
+        $this->authorizationManager = $authorizationManager;
         $this->imageManager = $imageManager;
         $this->userRepository = $userRepository;
         $this->validatorManager = $validatorManager;
@@ -40,9 +39,7 @@ final class UserRemoveImageCommandHandler extends AbstractCommandHandler
 
         $user = $this->userRepository->findOne($this->command->id);
 
-        if (false === $this->authorizationChecker->isGranted(UserableVoter::UPDATE, $user)) {
-            throw new AccessDeniedException();
-        }
+        $this->authorizationManager->isGranted(UserableVoter::UPDATE, $user);
 
         if (false === $user->hasImage()) {
             return;

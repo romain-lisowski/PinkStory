@@ -7,8 +7,8 @@ namespace App\User\Voter;
 use App\User\Entity\UserableInterface;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserableVoter extends Voter
@@ -18,11 +18,11 @@ final class UserableVoter extends Voter
     const UPDATE = 'UPDATE';
     const DELETE = 'DELETE';
 
-    private Security $security;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    public function __construct(Security $security)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->security = $security;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     protected function supports(string $attribute, $subject)
@@ -50,7 +50,7 @@ final class UserableVoter extends Voter
         }
 
         // moderators are like small gods
-        if (true === $this->security->isGranted('ROLE_MODERATOR')) {
+        if (true === $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
             return true;
         }
 

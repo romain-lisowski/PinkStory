@@ -14,4 +14,6 @@ trait LanguageableTrait
     }
 
     abstract public function setLanguage(Language $language): self;
+
+    abstract public function updateLanguage(Language $language): self;
 }

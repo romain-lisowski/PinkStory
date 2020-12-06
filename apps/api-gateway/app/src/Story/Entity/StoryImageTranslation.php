@@ -104,4 +104,13 @@ class StoryImageTranslation extends AbstractTranslation
 
         return $this;
     }
+
+    public function updateLanguage(Language $language): self
+    {
+        $this->language->removeStoryImageTranslation($this);
+
+        $this->setLanguage($language);
+
+        return $this;
+    }
 }

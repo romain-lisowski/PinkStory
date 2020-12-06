@@ -182,6 +182,15 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
         return $this;
     }
 
+    public function updateLanguage(Language $language): self
+    {
+        $this->language->removeStory($this);
+
+        $this->setLanguage($language);
+
+        return $this;
+    }
+
     public function getStoryImage(): ?StoryImage
     {
         return $this->storyImage;

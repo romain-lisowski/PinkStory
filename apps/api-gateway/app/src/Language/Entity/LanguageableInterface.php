@@ -9,4 +9,6 @@ interface LanguageableInterface
     public function getLanguage(): Language;
 
     public function setLanguage(Language $language): self;
+
+    public function updateLanguage(Language $language): self;
 }

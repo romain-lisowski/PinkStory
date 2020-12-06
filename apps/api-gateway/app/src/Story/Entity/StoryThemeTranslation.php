@@ -104,4 +104,13 @@ class StoryThemeTranslation extends AbstractTranslation
 
         return $this;
     }
+
+    public function updateLanguage(Language $language): self
+    {
+        $this->language->removeStoryThemeTranslation($this);
+
+        $this->setLanguage($language);
+
+        return $this;
+    }
 }

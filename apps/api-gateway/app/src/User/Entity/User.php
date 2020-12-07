@@ -120,6 +120,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     private bool $imageDefined;
 
     /**
+     * @Groups({"medium", "full"})
      * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */

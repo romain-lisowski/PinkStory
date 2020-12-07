@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Language\Repository\LanguageRepositoryInterface;
+use App\User\Security\UserSecurityManager;
 use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -13,10 +14,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class RequestSubscriber implements EventSubscriberInterface
 {
     private LanguageRepositoryInterface $languageRepository;
+    private UserSecurityManager $userSecurityManager;
 
-    public function __construct(LanguageRepositoryInterface $languageRepository)
+    public function __construct(LanguageRepositoryInterface $languageRepository, UserSecurityManager $userSecurityManager)
     {
         $this->languageRepository = $languageRepository;
+        $this->userSecurityManager = $userSecurityManager;
     }
 
     public static function getSubscribedEvents()
@@ -30,15 +33,24 @@ final class RequestSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $language = $this->languageRepository->findOneByLocale('en');
+        $currentLanguage = null;
+        $currentReadingLanguages = [];
 
-        try {
-            $language = $this->languageRepository->findOneByLocale($request->get('_locale', 'en'));
-        } catch (UnexpectedResultException $e) {
-            // do nothing
+        if (null !== $this->userSecurityManager->getUser()) {
+            $currentLanguage = $this->userSecurityManager->getUser()->getLanguage();
+            $currentReadingLanguages = [$currentLanguage];
+        } else {
+            try {
+                $currentLanguage = $this->languageRepository->findOneByLocale($request->get('_locale', 'en'));
+            } catch (UnexpectedResultException $e) {
+                $currentLanguage = $this->languageRepository->findOneByLocale('en');
+            }
+
+            $currentReadingLanguages = [$currentLanguage];
         }
 
-        $request->attributes->set('language', $language);
-        $request->setLocale($language->getLocale());
+        $request->attributes->set('current-language', $currentLanguage);
+        $request->setLocale($currentLanguage->getLocale());
+        $request->attributes->set('current-reading-languages', $currentReadingLanguages);
     }
 }

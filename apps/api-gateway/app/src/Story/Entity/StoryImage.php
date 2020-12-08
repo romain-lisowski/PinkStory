@@ -59,7 +59,7 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
 
     public function getImageBasePath(): string
     {
-        return '/story';
+        return 'story';
     }
 
     public function getStoryImageTranslations(): Collection

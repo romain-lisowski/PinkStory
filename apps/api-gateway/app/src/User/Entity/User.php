@@ -34,6 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface, LanguageableInterface
 {
+    use UserableTrait;
     use ImageableTrait;
     use LanguageableTrait;
 
@@ -405,7 +406,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
 
     public function getImageBasePath(): string
     {
-        return '/user';
+        return 'user';
     }
 
     public function setLanguage(Language $language): self

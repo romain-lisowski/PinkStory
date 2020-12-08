@@ -13,11 +13,11 @@ interface UserableInterface
 
     public function setUser(User $user): self;
 
-    public function getCanUpdate(): bool;
+    public function getUpdatable(): bool;
 
-    public function setCanUpdate(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self;
+    public function setUpdatable(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self;
 
-    public function getCanRemove(): bool;
+    public function getDeletable(): bool;
 
-    public function setCanRemove(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self;
+    public function setDeletable(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self;
 }

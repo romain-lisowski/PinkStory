@@ -34,8 +34,8 @@ class UserableNormalizer extends AbstractEntityNormalizer
             $currentUser = $token->getUser();
         }
 
-        $userable->setCanUpdate($currentUser, $this->authorizationChecker);
-        $userable->setCanRemove($currentUser, $this->authorizationChecker);
+        $userable->setUpdatable($currentUser, $this->authorizationChecker);
+        $userable->setDeletable($currentUser, $this->authorizationChecker);
     }
 
     public function supportsNormalizationEntity($userable, string $format = null, array $context = []): bool

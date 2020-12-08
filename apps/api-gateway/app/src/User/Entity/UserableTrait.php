@@ -15,12 +15,12 @@ trait UserableTrait
     /**
      * @Serializer\Groups({"serializer"})
      */
-    private bool $canUpdate = false;
+    private bool $updatable = false;
 
     /**
      * @Serializer\Groups({"serializer"})
      */
-    private bool $canRemove = false;
+    private bool $deletable = false;
 
     public function getUser(): User
     {
@@ -29,39 +29,39 @@ trait UserableTrait
 
     abstract public function setUser(User $user): self;
 
-    public function getCanUpdate(): bool
+    public function getUpdatable(): bool
     {
-        return $this->canUpdate;
+        return $this->updatable;
     }
 
-    public function setCanUpdate(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self
+    public function setUpdatable(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self
     {
         // moderators are like small gods
         if (null !== $authorizationChecker && true === $authorizationChecker->isGranted(UserRole::ROLE_MODERATOR)) {
-            $this->canUpdate = true;
+            $this->updatable = true;
         }
 
         if (null !== $currentUser && $this->getUser() === $currentUser) {
-            $this->canUpdate = true;
+            $this->updatable = true;
         }
 
         return $this;
     }
 
-    public function getCanRemove(): bool
+    public function getDeletable(): bool
     {
-        return $this->canRemove;
+        return $this->deletable;
     }
 
-    public function setCanRemove(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self
+    public function setDeletable(?UserInterface $currentUser = null, ?AuthorizationCheckerInterface $authorizationChecker = null): self
     {
         // moderators are like small gods
         if (null !== $authorizationChecker && true === $authorizationChecker->isGranted(UserRole::ROLE_MODERATOR)) {
-            $this->canRemove = true;
+            $this->deletable = true;
         }
 
         if (null !== $currentUser && $this->getUser() === $currentUser) {
-            $this->canRemove = true;
+            $this->deletable = true;
         }
 
         return $this;

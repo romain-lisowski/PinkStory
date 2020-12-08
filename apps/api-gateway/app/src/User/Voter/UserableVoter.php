@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Voter;
 
 use App\User\Entity\UserableInterface;
+use App\User\Entity\UserRole;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -13,10 +14,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserableVoter extends Voter
 {
-    const CREATE = 'CREATE';
-    const READ = 'READ';
-    const UPDATE = 'UPDATE';
-    const DELETE = 'DELETE';
+    public const CREATE = 'CREATE';
+    public const READ = 'READ';
+    public const UPDATE = 'UPDATE';
+    public const DELETE = 'DELETE';
 
     private AuthorizationCheckerInterface $authorizationChecker;
 
@@ -50,7 +51,7 @@ final class UserableVoter extends Voter
         }
 
         // moderators are like small gods
-        if (true === $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
+        if (true === $this->authorizationChecker->isGranted(UserRole::ROLE_MODERATOR)) {
             return true;
         }
 

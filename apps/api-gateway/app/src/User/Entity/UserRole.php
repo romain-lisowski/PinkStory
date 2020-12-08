@@ -6,9 +6,9 @@ namespace App\User\Entity;
 
 final class UserRole
 {
-    const ROLE_GOD = 'ROLE_GOD';
-    const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_MODERATOR = 'ROLE_MODERATOR';
-    const ROLE_EDITOR = 'ROLE_EDITOR';
-    const ROLE_USER = 'ROLE_USER';
+    public const ROLE_GOD = 'ROLE_GOD';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_MODERATOR = 'ROLE_MODERATOR';
+    public const ROLE_EDITOR = 'ROLE_EDITOR';
+    public const ROLE_USER = 'ROLE_USER';
 }

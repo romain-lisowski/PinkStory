@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace App\User\Serializer;
 
+use App\Serializer\AbstractEntityNormalizer;
 use App\User\Entity\UserableInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 
-class UserableNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+class UserableNormalizer extends AbstractEntityNormalizer
 {
-    use NormalizerAwareTrait;
-
-    private const ALREADY_CALLED = self::class.'.used';
-
     private AuthorizationCheckerInterface $authorizationChecker;
     private TokenStorageInterface $tokenStorage;
 
@@ -26,8 +20,12 @@ class UserableNormalizer implements ContextAwareNormalizerInterface, NormalizerA
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function normalize($userable, string $format = null, array $context = [])
+    public function normalizeEntity($userable, string $format = null, array $context = []): void
     {
+        if (!$userable instanceof UserableInterface) {
+            return;
+        }
+
         $currentUser = null;
 
         $token = $this->tokenStorage->getToken();
@@ -38,19 +36,10 @@ class UserableNormalizer implements ContextAwareNormalizerInterface, NormalizerA
 
         $userable->setCanUpdate($currentUser, $this->authorizationChecker);
         $userable->setCanRemove($currentUser, $this->authorizationChecker);
-
-        $context[self::ALREADY_CALLED] = true;
-
-        return $this->normalizer->normalize($userable, $format, $context);
     }
 
-    public function supportsNormalization($data, string $format = null, array $context = [])
+    public function supportsNormalizationEntity($userable, string $format = null, array $context = []): bool
     {
-        // Make sure we're not called twice
-        if (isset($context[self::ALREADY_CALLED])) {
-            return false;
-        }
-
-        return $data instanceof UserableInterface;
+        return $userable instanceof UserableInterface;
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Language\Entity;
 
 use App\Entity\AbstractEntity;
+use App\File\ImageableInterface;
+use App\File\ImageableTrait;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryImageTranslation;
 use App\Story\Entity\StoryThemeTranslation;
@@ -24,8 +26,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"locale"}
  * )
  */
-class Language extends AbstractEntity
+class Language extends AbstractEntity implements ImageableInterface
 {
+    use ImageableTrait;
+
     /**
      * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
@@ -115,6 +119,11 @@ class Language extends AbstractEntity
         $this->setLocale($locale);
 
         return $this;
+    }
+
+    public function getImageBasePath(): string
+    {
+        return 'language';
     }
 
     public function getUsers(): Collection

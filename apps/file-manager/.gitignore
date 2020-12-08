@@ -1,2 +1,8 @@
+/image/language/*
+!/image/language/.gitignore
+
+/image/story/*
+!/image/story/.gitignore
+
 /image/user/*
 !/image/user/.gitignore

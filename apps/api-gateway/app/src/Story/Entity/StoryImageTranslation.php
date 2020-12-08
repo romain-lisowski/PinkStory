@@ -7,7 +7,7 @@ namespace App\Story\Entity;
 use App\Language\Entity\AbstractTranslation;
 use App\Language\Entity\Language;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,14 +18,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class StoryImageTranslation extends AbstractTranslation
 {
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title_slug", type="string", length=255)
      */

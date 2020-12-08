@@ -6,20 +6,20 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait TimestampableTrait
 {
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="created_at", type="datetime")
      */
     private DateTime $createdAt;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="last_updated_at", type="datetime")
      */

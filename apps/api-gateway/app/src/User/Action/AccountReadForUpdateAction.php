@@ -37,6 +37,6 @@ final class AccountReadForUpdateAction extends AbstractAction
 
         return $this->responder->render([
             'user' => $this->userSecurityManager->getUser(),
-        ], ['groups' => 'full']);
+        ]);
     }
 }

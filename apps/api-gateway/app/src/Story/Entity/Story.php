@@ -19,7 +19,7 @@ use App\User\Entity\UserableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,33 +35,35 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
     use PositionableTrait;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title_slug", type="string", length=255)
      */
     private string $titleSlug;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="content", type="text")
      */
     private string $content;
 
     /**
+     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\User\Entity\User", inversedBy="stories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private User $user;
 
     /**
+     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="stories")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
@@ -80,6 +82,7 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
     private Collection $children;
 
     /**
+     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryImage", inversedBy="stories")
      * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id")
      */

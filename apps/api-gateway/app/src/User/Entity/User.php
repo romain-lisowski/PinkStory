@@ -19,7 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
@@ -38,21 +38,21 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     use LanguageableTrait;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
      */
     private string $name;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="name_slug", type="string", length=255)
      */
     private string $nameSlug;
 
     /**
-     * @Groups({"full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @AppUserAssert\Email
      * @ORM\Column(name="email", type="string", length=255, unique=true)
@@ -120,7 +120,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     private bool $imageDefined;
 
     /**
-     * @Groups({"medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */

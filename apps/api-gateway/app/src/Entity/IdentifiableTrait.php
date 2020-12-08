@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait IdentifiableTrait
 {
     /**
-     * @Groups({"short", "medium", "full"})
+     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Id()
      * @ORM\Column(name="id", type="guid", unique=true)

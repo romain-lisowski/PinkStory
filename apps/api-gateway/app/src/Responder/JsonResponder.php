@@ -20,6 +20,8 @@ final class JsonResponder implements ResponderInterface
 
     public function render(array $data = [], array $context = []): Response
     {
+        $context = array_merge($context, ['groups' => 'serializer']);
+
         $json = $this->serializer->serialize($data, JsonEncoder::FORMAT, $context);
 
         return new JsonResponse($json, 200, [], true);

@@ -52,11 +52,6 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
         $this->setReference($reference);
     }
 
-    public function hasImage(): bool
-    {
-        return true;
-    }
-
     public function getImageBasePath(): string
     {
         return 'story';

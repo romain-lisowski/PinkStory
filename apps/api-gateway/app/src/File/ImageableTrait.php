@@ -13,7 +13,10 @@ trait ImageableTrait
      */
     private string $imageUrl = '';
 
-    abstract public function hasImage(): bool;
+    public function hasImage(): bool
+    {
+        return true;
+    }
 
     public function getImageName(bool $forced = false): ?string
     {
@@ -40,7 +43,7 @@ trait ImageableTrait
 
     public function setImageUrl(string $baseUrl = '', bool $forced = false): self
     {
-        if (false !== $this->hasImage() || false !== $forced) {
+        if (true === $this->hasImage() || true === $forced) {
             $this->imageUrl = $baseUrl.$this->getImagePath($forced);
         }
 

@@ -43,6 +43,10 @@ services:
         resource: '../src/Language/Action'
         tags: ['controller.service_arguments']
 
+    App\Story\Action\:
+        resource: '../src/Story/Action'
+        tags: ['controller.service_arguments']
+
     App\User\Action\:
         resource: '../src/User/Action'
         tags: ['controller.service_arguments']

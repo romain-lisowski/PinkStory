@@ -6,6 +6,10 @@ language_action:
     resource: ../../src/Language/Action/
     type: annotation
 
+story_action:
+    resource: ../../src/Story/Action/
+    type: annotation
+
 user_action:
     resource: ../../src/User/Action/
     type: annotation

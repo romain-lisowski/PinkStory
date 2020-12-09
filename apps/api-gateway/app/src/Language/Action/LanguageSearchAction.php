@@ -32,6 +32,6 @@ final class LanguageSearchAction extends AbstractAction
 
         return $this->responder->render([
             'languages' => $this->handler->setQuery($query)->handle(),
-        ], ['groups' => 'medium']);
+        ]);
     }
 }

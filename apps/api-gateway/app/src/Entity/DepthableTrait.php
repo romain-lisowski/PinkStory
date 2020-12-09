@@ -83,7 +83,7 @@ trait DepthableTrait
             throw new InvalidArgumentException();
         }
 
-        $this->children->remove($child);
+        $this->children->removeElement($child);
 
         if ($this instanceof PositionableInterface) {
             self::resetPosition($this->children);

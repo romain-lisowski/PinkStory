@@ -11,7 +11,7 @@ trait ImageableTrait
     /**
      * @Serializer\Groups({"serializer"})
      */
-    private string $imageUrl = '';
+    private ?string $imageUrl = null;
 
     public function hasImage(): bool
     {

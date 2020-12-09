@@ -86,7 +86,7 @@ trait DepthableTrait
         $this->children->removeElement($child);
 
         if ($this instanceof PositionableInterface) {
-            self::resetPosition($this->children);
+            static::resetPosition($this->children);
         }
 
         return $this;

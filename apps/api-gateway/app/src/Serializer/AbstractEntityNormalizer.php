@@ -26,7 +26,7 @@ abstract class AbstractEntityNormalizer implements ContextAwareNormalizerInterfa
             return false;
         }
 
-        if (false === empty($context[self::class.'.used'])) {
+        if (false === empty($context[static::class.'.used'])) {
             $context[static::class.'.used'] = [];
         }
 

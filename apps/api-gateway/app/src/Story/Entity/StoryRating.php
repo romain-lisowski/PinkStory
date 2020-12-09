@@ -6,8 +6,8 @@ namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
 use App\User\Entity\User;
-use App\User\Entity\UserableInterface;
-use App\User\Entity\UserableTrait;
+use App\User\Entity\UserEditableInterface;
+use App\User\Entity\UserEditableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"story", "user"}
  * )
  */
-class StoryRating extends AbstractEntity implements UserableInterface
+class StoryRating extends AbstractEntity implements UserEditableInterface
 {
-    use UserableTrait;
+    use UserEditableTrait;
 
     /**
      * @Assert\NotBlank

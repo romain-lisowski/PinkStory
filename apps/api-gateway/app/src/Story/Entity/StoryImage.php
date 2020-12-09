@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Entity\EditableInterface;
+use App\Entity\EditableTrait;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Language\Entity\TranslatableInterface;
@@ -18,10 +20,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sty_story_image")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryImageRepository")
  */
-class StoryImage extends AbstractEntity implements ImageableInterface, TranslatableInterface
+class StoryImage extends AbstractEntity implements ImageableInterface, TranslatableInterface, EditableInterface
 {
     use ImageableTrait;
     use TranslatableTrait;
+    use EditableTrait;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="storyImage", cascade={"persist", "remove"}, orphanRemoval=true)

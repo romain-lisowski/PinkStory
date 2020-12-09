@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\User\Action;
 
 use App\Action\AbstractAction;
+use App\Entity\EditableInterface;
 use App\Responder\ResponderInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Security\UserSecurityManagerInterface;
-use App\User\Voter\UserableVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +33,7 @@ final class AccountReadForUpdateAction extends AbstractAction
 
     public function run(Request $request): Response
     {
-        $this->authorizationManager->isGranted(UserableVoter::UPDATE, $this->userSecurityManager->getUser());
+        $this->authorizationManager->isGranted(EditableInterface::UPDATE, $this->userSecurityManager->getUser());
 
         return $this->responder->render([
             'user' => $this->userSecurityManager->getUser(),

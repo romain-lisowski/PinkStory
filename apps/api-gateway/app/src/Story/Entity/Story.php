@@ -14,8 +14,8 @@ use App\Language\Entity\LanguageableInterface;
 use App\Language\Entity\LanguageableTrait;
 use App\Story\Exception\StoryThemeDepthException;
 use App\User\Entity\User;
-use App\User\Entity\UserableInterface;
-use App\User\Entity\UserableTrait;
+use App\User\Entity\UserEditableInterface;
+use App\User\Entity\UserEditableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,9 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryRepository")
  */
-class Story extends AbstractEntity implements UserableInterface, LanguageableInterface, DepthableInterface, PositionableInterface
+class Story extends AbstractEntity implements UserEditableInterface, LanguageableInterface, DepthableInterface, PositionableInterface
 {
-    use UserableTrait;
+    use UserEditableTrait;
     use LanguageableTrait;
     use DepthableTrait;
     use PositionableTrait;

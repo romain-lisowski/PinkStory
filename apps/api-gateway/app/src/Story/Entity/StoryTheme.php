@@ -7,6 +7,8 @@ namespace App\Story\Entity;
 use App\Entity\AbstractEntity;
 use App\Entity\DepthableInterface;
 use App\Entity\DepthableTrait;
+use App\Entity\EditableInterface;
+use App\Entity\EditableTrait;
 use App\Entity\PositionableInterface;
 use App\Entity\PositionableTrait;
 use App\Language\Entity\TranslatableInterface;
@@ -19,11 +21,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sty_story_theme")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryThemeRepository")
  */
-class StoryTheme extends AbstractEntity implements DepthableInterface, PositionableInterface, TranslatableInterface
+class StoryTheme extends AbstractEntity implements DepthableInterface, PositionableInterface, TranslatableInterface, EditableInterface
 {
     use DepthableTrait;
     use PositionableTrait;
     use TranslatableTrait;
+    use EditableTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryTheme", inversedBy="children")

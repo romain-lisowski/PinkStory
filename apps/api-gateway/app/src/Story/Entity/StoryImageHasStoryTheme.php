@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Entity\EditableInterface;
+use App\Entity\EditableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="sty_story_image_has_story_theme")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryImageHasStoryThemeRepository")
  */
-class StoryImageHasStoryTheme extends AbstractEntity
+class StoryImageHasStoryTheme extends AbstractEntity implements EditableInterface
 {
+    use EditableTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Entity\StoryImage", inversedBy="storyImageHasStoryThemes")
      * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id", nullable=false)

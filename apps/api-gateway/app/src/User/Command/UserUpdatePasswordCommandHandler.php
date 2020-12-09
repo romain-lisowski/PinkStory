@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
+use App\Entity\EditableInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Message\UserUpdatePasswordMessage;
 use App\User\Repository\UserRepositoryInterface;
-use App\User\Voter\UserableVoter;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -39,7 +39,7 @@ final class UserUpdatePasswordCommandHandler extends AbstractCommandHandler
 
         $user = $this->userRepository->findOne($this->command->id);
 
-        $this->authorizationManager->isGranted(UserableVoter::UPDATE, $user);
+        $this->authorizationManager->isGranted(EditableInterface::UPDATE, $user);
 
         $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
         $user->updateLastUpdatedAt();

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Language\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Entity\EditableInterface;
+use App\Entity\EditableTrait;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Story\Entity\Story;
@@ -26,9 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"locale"}
  * )
  */
-class Language extends AbstractEntity implements ImageableInterface
+class Language extends AbstractEntity implements ImageableInterface, EditableInterface
 {
     use ImageableTrait;
+    use EditableTrait;
 
     /**
      * @Serializer\Groups({"serializer"})

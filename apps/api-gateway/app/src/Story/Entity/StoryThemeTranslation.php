@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Story\Entity;
 
+use App\Entity\EditableInterface;
+use App\Entity\EditableTrait;
 use App\Language\Entity\AbstractTranslation;
 use App\Language\Entity\Language;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,8 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="sty_story_theme_translation")
  * @ORM\Entity(repositoryClass="App\Story\Repository\StoryThemeTranslationRepository")
  */
-class StoryThemeTranslation extends AbstractTranslation
+class StoryThemeTranslation extends AbstractTranslation implements EditableInterface
 {
+    use EditableTrait;
+
     /**
      * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank

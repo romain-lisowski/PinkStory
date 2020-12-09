@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\User\Serializer;
+namespace App\Serializer;
 
-use App\Serializer\AbstractEntityNormalizer;
-use App\User\Entity\UserableInterface;
+use App\Entity\EditableInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class UserableNormalizer extends AbstractEntityNormalizer
+final class EditableNormalizer extends AbstractEntityNormalizer
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private TokenStorageInterface $tokenStorage;
@@ -20,9 +19,9 @@ class UserableNormalizer extends AbstractEntityNormalizer
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function normalizeEntity($userable, string $format = null, array $context = []): void
+    public function normalizeEntity($editable, string $format = null, array $context = []): void
     {
-        if (!$userable instanceof UserableInterface) {
+        if (!$editable instanceof EditableInterface) {
             return;
         }
 
@@ -34,12 +33,11 @@ class UserableNormalizer extends AbstractEntityNormalizer
             $currentUser = $token->getUser();
         }
 
-        $userable->setUpdatable($currentUser, $this->authorizationChecker);
-        $userable->setDeletable($currentUser, $this->authorizationChecker);
+        $editable->setEditable($this->authorizationChecker, $currentUser);
     }
 
-    public function supportsNormalizationEntity($userable, string $format = null, array $context = []): bool
+    public function supportsNormalizationEntity($editable, string $format = null, array $context = []): bool
     {
-        return $userable instanceof UserableInterface;
+        return $editable instanceof EditableInterface;
     }
 }

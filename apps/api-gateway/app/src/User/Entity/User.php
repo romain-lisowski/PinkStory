@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Entity;
 
 use App\Entity\AbstractEntity;
+use App\Entity\EditableTrait;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Language\Entity\Language;
@@ -32,9 +33,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface, LanguageableInterface
+class User extends AbstractEntity implements UserInterface, UserEditableInterface, ImageableInterface, LanguageableInterface
 {
-    use UserableTrait;
+    use EditableTrait;
     use ImageableTrait;
     use LanguageableTrait;
 

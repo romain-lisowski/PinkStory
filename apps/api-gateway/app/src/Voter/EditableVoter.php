@@ -2,23 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\User\Voter;
+namespace App\Voter;
 
-use App\User\Entity\UserableInterface;
-use App\User\Entity\UserRole;
+use App\Entity\EditableInterface;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class UserableVoter extends Voter
+final class EditableVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const READ = 'READ';
-    public const UPDATE = 'UPDATE';
-    public const DELETE = 'DELETE';
-
     private AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(AuthorizationCheckerInterface $authorizationChecker)
@@ -29,12 +23,12 @@ final class UserableVoter extends Voter
     protected function supports(string $attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::CREATE, self::READ, self::UPDATE, self::DELETE])) {
+        if (!in_array($attribute, [EditableInterface::CREATE, EditableInterface::READ, EditableInterface::UPDATE, EditableInterface::DELETE])) {
             return false;
         }
 
-        // only vote on userable
-        if (!$subject instanceof UserableInterface) {
+        // only vote on editable
+        if (!$subject instanceof EditableInterface) {
             return false;
         }
 
@@ -43,26 +37,20 @@ final class UserableVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
     {
-        $user = $token->getUser();
+        if (!$subject instanceof EditableInterface) {
+            return false;
+        }
 
-        if (!$user instanceof UserInterface) {
+        $currentUser = $token->getUser();
+
+        if (!$currentUser instanceof UserInterface) {
             // the user must be logged in; if not, deny access
             return false;
         }
 
-        // moderators are like small gods
-        if (true === $this->authorizationChecker->isGranted(UserRole::ROLE_MODERATOR)) {
-            return true;
-        }
+        $subject->setEditable($this->authorizationChecker, $currentUser);
 
-        // you know subject is a userable, thanks to `supports()`
-        $userable = $subject;
-
-        if ($userable->getUser() === $user) {
-            return true;
-        }
-
-        return false;
+        return $subject->getEditable();
 
         throw new LogicException('This code should not be reached!');
     }

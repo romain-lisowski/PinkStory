@@ -7,14 +7,14 @@ namespace App\User\Command;
 use App\Command\AbstractCommandHandler;
 use App\File\ImageManagerInterface;
 use App\Security\AuthorizationManagerInterface;
-use App\User\Message\UserRemoveImageMessage;
+use App\User\Message\UserDeleteImageMessage;
 use App\User\Repository\UserRepositoryInterface;
 use App\User\Voter\UserableVoter;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class UserRemoveImageCommandHandler extends AbstractCommandHandler
+final class UserDeleteImageCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
@@ -45,15 +45,15 @@ final class UserRemoveImageCommandHandler extends AbstractCommandHandler
             return;
         }
 
-        $user->removeImage();
+        $user->deleteImage();
         $user->updateLastUpdatedAt();
 
         $this->validatorManager->validate($user);
 
-        $this->imageManager->remove($user);
+        $this->imageManager->delete($user);
 
         $this->entityManager->flush();
 
-        $this->bus->dispatch(new UserRemoveImageMessage($user->getId()));
+        $this->bus->dispatch(new UserDeleteImageMessage($user->getId()));
     }
 }

@@ -8,7 +8,7 @@ exception:
 file:
     exception:
         image_upload: An error occured during image upload.
-        image_remove: An error occured during image remove.
+        image_delete: An error occured during image delete.
 
 form:
     exception:

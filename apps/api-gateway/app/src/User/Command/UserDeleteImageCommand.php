@@ -11,7 +11,7 @@ use App\Handler\HandlerableInterface;
 use App\Handler\HandlerableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserRemoveImageCommand implements CommandInterface, HandlerableInterface, FormableInterface
+final class UserDeleteImageCommand implements CommandInterface, HandlerableInterface, FormableInterface
 {
     use FormableTrait;
     use HandlerableTrait;

@@ -397,7 +397,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         return $this->imageDefined;
     }
 
-    public function removeImage(): self
+    public function deleteImage(): self
     {
         $this->setImageDefined(false);
 

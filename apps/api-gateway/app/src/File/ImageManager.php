@@ -45,7 +45,7 @@ final class ImageManager implements ImageManagerInterface
         }
     }
 
-    public function remove(ImageableInterface $image): void
+    public function delete(ImageableInterface $image): void
     {
         try {
             $file = new File($this->params->get('project_file_manager_path').$this->params->get('project_file_manager_image_path').$image->getImagePath(true));
@@ -53,7 +53,7 @@ final class ImageManager implements ImageManagerInterface
             $filesystem = new Filesystem();
             $filesystem->remove($file->getRealPath());
         } catch (Throwable $e) {
-            throw new ImageRemoveException();
+            throw new ImageDeleteException();
         }
     }
 }

@@ -6,8 +6,8 @@ namespace App\User\Action;
 
 use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
-use App\User\Command\UserRemoveImageCommand;
-use App\User\Command\UserRemoveImageCommandHandler;
+use App\User\Command\UserDeleteImageCommand;
+use App\User\Command\UserDeleteImageCommandHandler;
 use App\User\Security\UserSecurityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +16,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/account/remove-image", name="account_remove_image", methods={"DELETE"})
+ * @Route("/account/delete-image", name="account_delete_image", methods={"DELETE"})
  */
-final class AccountRemoveImageAction extends AbstractAction
+final class AccountDeleteImageAction extends AbstractAction
 {
     private ResponderInterface $responder;
-    private UserRemoveImageCommandHandler $handler;
+    private UserDeleteImageCommandHandler $handler;
     private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(ResponderInterface $responder, UserRemoveImageCommandHandler $handler, UserSecurityManagerInterface $userSecurityManager)
+    public function __construct(ResponderInterface $responder, UserDeleteImageCommandHandler $handler, UserSecurityManagerInterface $userSecurityManager)
     {
         $this->responder = $responder;
         $this->handler = $handler;
@@ -33,7 +33,7 @@ final class AccountRemoveImageAction extends AbstractAction
 
     public function run(Request $request): Response
     {
-        $command = new UserRemoveImageCommand();
+        $command = new UserDeleteImageCommand();
         $command->id = $this->userSecurityManager->getUser()->getId();
 
         $this->handler->setCommand($command)->setCurrentUser($this->userSecurityManager->getUser())->handle();

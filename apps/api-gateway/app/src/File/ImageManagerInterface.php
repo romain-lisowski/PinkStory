@@ -16,9 +16,9 @@ interface ImageManagerInterface
     public function upload(UploadedFile $file, ImageableInterface $image): void;
 
     /**
-     * Remove image.
+     * Delete image.
      *
-     * @throws ImageRemoveException
+     * @throws ImageDeleteException
      */
-    public function remove(ImageableInterface $image): void;
+    public function delete(ImageableInterface $image): void;
 }

@@ -6,8 +6,8 @@ namespace App\Story\Entity;
 
 use App\Entity\EditableInterface;
 use App\Entity\EditableTrait;
-use App\Language\Entity\AbstractTranslation;
-use App\Language\Entity\Language;
+use App\Language\Model\Entity\AbstractTranslation;
+use App\Language\Model\Entity\Language;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -42,7 +42,7 @@ class StoryThemeTranslation extends AbstractTranslation implements EditableInter
     private StoryTheme $storyTheme;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="storyThemeTranslations")
+     * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="storyThemeTranslations")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
     private Language $language;

@@ -15,8 +15,8 @@ doctrine:
             App\Language:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Language/Entity'
-                prefix: 'App\Language\Entity'
+                dir: '%kernel.project_dir%/src/Language/Model/Entity'
+                prefix: 'App\Language\Model\Entity'
                 alias: AppLanguage
             App\User:
                 is_bundle: false

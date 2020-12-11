@@ -32,6 +32,8 @@ services:
             - '../src/*/Command/*Command.php'
             - '../src/Entity'
             - '../src/*/Entity'
+            - '../src/Model'
+            - '../src/*/Model'
             - '../src/Exception'
             - '../src/*/Exception'
             - '../src/Event'

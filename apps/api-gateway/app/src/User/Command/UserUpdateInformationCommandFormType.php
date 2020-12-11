@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Form\AbstractFormType;
-use App\Language\Entity\Language;
+use App\Language\Model\Entity\Language;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Language\Query;
 
-use App\Language\Repository\LanguageRepositoryInterface;
+use App\Language\Repository\Dto\LanguageRepositoryInterface;
 use App\Query\AbstractQueryHandler;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\Common\Collections\Collection;

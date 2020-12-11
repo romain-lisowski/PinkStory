@@ -8,9 +8,9 @@ use App\Entity\AbstractEntity;
 use App\Entity\EditableTrait;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
-use App\Language\Entity\Language;
-use App\Language\Entity\LanguageableInterface;
-use App\Language\Entity\LanguageableTrait;
+use App\Language\Model\Entity\Language;
+use App\Language\Model\Entity\LanguageableInterface;
+use App\Language\Model\Entity\LanguageableTrait;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryRating;
 use App\User\Validator\Constraints as AppUserAssert;
@@ -123,7 +123,7 @@ class User extends AbstractEntity implements UserInterface, UserEditableInterfac
 
     /**
      * @Serializer\Groups({"serializer"})
-     * @ORM\ManyToOne(targetEntity="App\Language\Entity\Language", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
     private Language $language;

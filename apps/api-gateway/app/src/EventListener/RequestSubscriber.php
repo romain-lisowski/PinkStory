@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
-use App\Language\Repository\LanguageRepositoryInterface;
+use App\Language\Repository\Entity\LanguageRepositoryInterface;
 use App\User\Security\UserSecurityManager;
 use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -2,7 +2,7 @@
 
 namespace App\Fixture\Language;
 
-use App\Language\Entity\Language;
+use App\Language\Model\Entity\Language;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

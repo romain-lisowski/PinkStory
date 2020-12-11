@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Language\Entity;
+namespace App\Language\Model\Entity;
 
 use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;

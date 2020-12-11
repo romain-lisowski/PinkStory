@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Language\Entity;
+namespace App\Language\Model\Entity;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait TranslatableTrait
 {
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="reference", type="string", length=255)
      */

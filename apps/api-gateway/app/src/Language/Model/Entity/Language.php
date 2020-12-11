@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Language\Entity;
+namespace App\Language\Model\Entity;
 
 use App\Entity\AbstractEntity;
 use App\Entity\EditableInterface;
 use App\Entity\EditableTrait;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
+use App\Language\Model\LanguageInterface;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryImageTranslation;
 use App\Story\Entity\StoryThemeTranslation;
@@ -17,31 +18,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="lng_language")
- * @ORM\Entity(repositoryClass="App\Language\Repository\LanguageRepository")
+ * @ORM\Entity(repositoryClass="App\Language\Repository\Entity\LanguageRepository")
  * @UniqueEntity(
  *      fields = {"locale"}
  * )
  */
-class Language extends AbstractEntity implements ImageableInterface, EditableInterface
+class Language extends AbstractEntity implements LanguageInterface, ImageableInterface, EditableInterface
 {
     use ImageableTrait;
     use EditableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="locale", type="string", length=255, unique=true)
      */

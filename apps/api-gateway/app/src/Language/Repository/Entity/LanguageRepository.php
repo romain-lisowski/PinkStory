@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Language\Repository;
+namespace App\Language\Repository\Entity;
 
-use App\Language\Entity\Language;
-use App\Language\Query\LanguageSearchQuery;
+use App\Language\Model\Entity\Language;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class LanguageRepository extends ServiceEntityRepository implements LanguageRepositoryInterface
@@ -38,14 +35,5 @@ final class LanguageRepository extends ServiceEntityRepository implements Langua
         ;
 
         return $qb->getQuery()->getSingleResult();
-    }
-
-    public function search(LanguageSearchQuery $query): Collection
-    {
-        $qb = $this->createQueryBuilder('language');
-
-        $languages = $qb->getQuery()->getResult();
-
-        return new ArrayCollection($languages);
     }
 }

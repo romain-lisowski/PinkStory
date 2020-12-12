@@ -6,7 +6,7 @@ namespace App\User\Security;
 
 use App\User\Exception\InvalidTokenException;
 use App\User\Exception\NoTokenProvidedException;
-use App\User\Repository\Entity\UserRepositoryInterface;
+use App\User\Repository\Dto\UserRepositoryInterface;
 use Exception;
 use Firebase\JWT\JWT;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -61,7 +61,7 @@ final class UserAuthenticator extends AbstractAuthenticator
                 throw new InvalidTokenException();
             }
 
-            $user = $this->userRepository->findOne($payload->user_id);
+            $user = $this->userRepository->findCurrent($payload->user_id);
 
             if (null === $user
                 || $user->getId() !== $payload->sub

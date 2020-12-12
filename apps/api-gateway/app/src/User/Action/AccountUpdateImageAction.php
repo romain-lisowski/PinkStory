@@ -37,11 +37,11 @@ final class AccountUpdateImageAction extends AbstractAction
     public function run(Request $request): Response
     {
         $command = new UserUpdateImageCommand();
-        $command->id = $this->userSecurityManager->getUser()->getId();
+        $command->id = $this->userSecurityManager->getCurrentUser()->getId();
 
         $this->formManager->initForm($command)->handleRequest($request);
 
-        $this->handler->setCommand($command)->setCurrentUser($this->userSecurityManager->getUser())->handle();
+        $this->handler->setCommand($command)->handle();
 
         return $this->responder->render();
     }

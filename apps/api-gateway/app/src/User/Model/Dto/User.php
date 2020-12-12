@@ -16,9 +16,17 @@ class User implements DtoInterface, UserInterface, IdentifiableInterface, Imagea
     use IdentifiableTrait;
     use ImageableTrait;
 
-    public function __construct(string $id = '')
+    private bool $imageDefined;
+
+    public function __construct(string $id = '', bool $imageDefined = false)
     {
         $this->id = $id;
+        $this->imageDefined = $imageDefined;
+    }
+
+    public function hasImage(): bool
+    {
+        return $this->imageDefined;
     }
 
     public function getImageBasePath(): string

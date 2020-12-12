@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\User\Action;
 
 use App\Action\AbstractAction;
-use App\Model\EditableInterface;
 use App\Responder\ResponderInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Query\UserReadForUpdateQuery;
@@ -37,10 +36,8 @@ final class AccountReadForUpdateAction extends AbstractAction
 
     public function run(Request $request): Response
     {
-        $this->authorizationManager->isGranted(EditableInterface::UPDATE, $this->userSecurityManager->getUser());
-
         $query = new UserReadForUpdateQuery();
-        $query->id = $this->userSecurityManager->getUser()->getId();
+        $query->id = $this->userSecurityManager->getCurrentUser()->getId();
 
         return $this->responder->render([
             'user' => $this->handler->setQuery($query)->handle(),

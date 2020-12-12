@@ -34,9 +34,9 @@ final class AccountRegenerateEmailValidationCodeAction extends AbstractAction
     public function run(Request $request): Response
     {
         $command = new UserRegenerateEmailValidationCodeCommand();
-        $command->id = $this->userSecurityManager->getUser()->getId();
+        $command->id = $this->userSecurityManager->getCurrentUser()->getId();
 
-        $this->handler->setCommand($command)->setCurrentUser($this->userSecurityManager->getUser())->handle();
+        $this->handler->setCommand($command)->handle();
 
         return $this->responder->render();
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
-use App\Language\Repository\Entity\LanguageRepositoryInterface;
-use App\User\Security\UserSecurityManager;
+use App\Language\Repository\Dto\LanguageRepositoryInterface;
+use App\User\Security\UserSecurityManagerInterface;
 use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -14,9 +14,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class RequestSubscriber implements EventSubscriberInterface
 {
     private LanguageRepositoryInterface $languageRepository;
-    private UserSecurityManager $userSecurityManager;
+    private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(LanguageRepositoryInterface $languageRepository, UserSecurityManager $userSecurityManager)
+    public function __construct(LanguageRepositoryInterface $languageRepository, UserSecurityManagerInterface $userSecurityManager)
     {
         $this->languageRepository = $languageRepository;
         $this->userSecurityManager = $userSecurityManager;
@@ -36,14 +36,14 @@ final class RequestSubscriber implements EventSubscriberInterface
         $currentLanguage = null;
         $currentReadingLanguages = [];
 
-        if (null !== $this->userSecurityManager->getUser()) {
-            $currentLanguage = $this->userSecurityManager->getUser()->getLanguage();
+        if (null !== $this->userSecurityManager->getCurrentUser()) {
+            $currentLanguage = $this->userSecurityManager->getCurrentUser()->getLanguage();
             $currentReadingLanguages = [$currentLanguage];
         } else {
             try {
-                $currentLanguage = $this->languageRepository->findOneByLocale($request->get('_locale', 'en'));
+                $currentLanguage = $this->languageRepository->findCurrentByLocale($request->get('_locale', 'en'));
             } catch (UnexpectedResultException $e) {
-                $currentLanguage = $this->languageRepository->findOneByLocale('en');
+                $currentLanguage = $this->languageRepository->findCurrentByLocale('en');
             }
 
             $currentReadingLanguages = [$currentLanguage];

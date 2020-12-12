@@ -27,16 +27,13 @@ final class UserFull extends User implements UserEditableInterface
      */
     private string $email;
 
-    private bool $imageDefined;
-
-    public function __construct(string $id = '', string $name = '', string $nameSlug = '', string $email = '', bool $imageDefined = false)
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '')
     {
-        parent::__construct($id);
+        parent::__construct($id, $imageDefined);
 
         $this->name = $name;
         $this->nameSlug = $nameSlug;
         $this->email = $email;
-        $this->imageDefined = $imageDefined;
         $this->user = $this;
     }
 
@@ -58,10 +55,5 @@ final class UserFull extends User implements UserEditableInterface
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    public function hasImage(): bool
-    {
-        return $this->imageDefined;
     }
 }

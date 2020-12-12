@@ -6,12 +6,10 @@ namespace App\Handler;
 
 use InvalidArgumentException;
 use ReflectionClass;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractHandler implements HandlerInterface
 {
     protected HandlerableInterface $handlerable;
-    protected ?UserInterface $currentUser;
 
     public function setHandlerable(HandlerableInterface $handlerable): self
     {
@@ -20,13 +18,6 @@ abstract class AbstractHandler implements HandlerInterface
         }
 
         $this->handlerable = $handlerable;
-
-        return $this;
-    }
-
-    public function setCurrentUser(?UserInterface $currentUser): self
-    {
-        $this->currentUser = $currentUser;
 
         return $this;
     }

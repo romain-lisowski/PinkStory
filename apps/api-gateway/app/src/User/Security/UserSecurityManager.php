@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Security;
 
-use App\User\Model\Entity\User;
+use App\User\Model\Dto\CurrentUser;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class UserSecurityManager implements UserSecurityManagerInterface
@@ -16,7 +16,7 @@ final class UserSecurityManager implements UserSecurityManagerInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function getUser(): ?User
+    public function getCurrentUser(): ?CurrentUser
     {
         $token = $this->tokenStorage->getToken();
 
@@ -30,7 +30,7 @@ final class UserSecurityManager implements UserSecurityManagerInterface
             return null;
         }
 
-        if (!$user instanceof User) {
+        if (!$user instanceof CurrentUser) {
             return null;
         }
 

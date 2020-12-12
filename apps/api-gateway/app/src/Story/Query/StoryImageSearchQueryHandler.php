@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Query;
 
 use App\Query\AbstractQueryHandler;
-use App\Story\Dto\StoryImageRepositoryInterface;
+use App\Story\Repository\Dto\StoryImageRepositoryInterface;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\Common\Collections\Collection;
 

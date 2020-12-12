@@ -10,9 +10,9 @@ use App\Model\EditableTrait;
 use App\File\Model\ImageableInterface;
 use App\File\Model\ImageableTrait;
 use App\Language\Model\LanguageInterface;
-use App\Story\Entity\Story;
-use App\Story\Entity\StoryImageTranslation;
-use App\Story\Entity\StoryThemeTranslation;
+use App\Story\Model\Entity\Story;
+use App\Story\Model\Entity\StoryImageTranslation;
+use App\Story\Model\Entity\StoryThemeTranslation;
 use App\User\Model\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,17 +51,17 @@ class Language extends AbstractEntity implements LanguageInterface, ImageableInt
     private Collection $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="language")
+     * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\Story", mappedBy="language")
      */
     private Collection $stories;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryThemeTranslation", mappedBy="language")
+     * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\StoryThemeTranslation", mappedBy="language")
      */
     private Collection $storyThemeTranslations;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryImageTranslation", mappedBy="language")
+     * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\StoryImageTranslation", mappedBy="language")
      */
     private Collection $storyImageTranslations;
 

@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace App\Story\Query;
 
-use App\Form\FormableInterface;
-use App\Form\FormableTrait;
 use App\Handler\HandlerableInterface;
 use App\Handler\HandlerableTrait;
-use App\Language\Model\Entity\Language;
+use App\Language\Model\LanguageInterface;
 use App\Query\QueryInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class StoryImageSearchQuery implements QueryInterface, HandlerableInterface, FormableInterface
+final class StoryImageSearchQuery implements QueryInterface, HandlerableInterface
 {
-    use FormableTrait;
     use HandlerableTrait;
 
     /**
      * @Assert\NotBlank
      */
-    public Language $language;
+    public LanguageInterface $language;
 }

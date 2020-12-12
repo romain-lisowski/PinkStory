@@ -25,7 +25,7 @@ final class UserRepository implements UserRepositoryInterface
 
         $qb->select('u.id as user_id', 'u.image_defined as user_image_defined', 'u.secret as user_secret', 'u.role as user_role', 'language.id as language_id', 'language.title as language_title', 'language.locale as language_locale')
             ->from('usr_user', 'u')
-            ->join('u', 'lng_language', 'language', 'u.language_id = language.id')
+            ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
         ;
 
         $qb->where($qb->expr()->eq('u.id', ':user_id'))

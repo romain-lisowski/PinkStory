@@ -10,8 +10,8 @@ use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
 use App\Model\Entity\AbstractEntity;
-use App\Story\Entity\Story;
-use App\Story\Entity\StoryRating;
+use App\Story\Model\Entity\Story;
+use App\Story\Model\Entity\StoryRating;
 use App\User\Model\UserEditableInterface;
 use App\User\Model\UserEditableTrait;
 use App\User\Model\UserInterface as ModelUserInterface;
@@ -132,13 +132,13 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     private Language $language;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\Story", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\Story", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"title" = "ASC"})
      */
     private Collection $stories;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Story\Entity\StoryRating", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\StoryRating", mappedBy="user", cascade={"remove"})
      */
     private Collection $storyRatings;
 

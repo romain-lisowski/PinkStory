@@ -34,7 +34,7 @@ final class CurrentUser extends User implements UserInterface
         return $this->language;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return [$this->role];
     }

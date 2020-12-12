@@ -1,7 +1,7 @@
 security:
     enable_authenticator_manager: true
     encoders:
-        App\User\Entity\User:
+        App\User\Model\Entity\User:
             algorithm: sodium
     firewalls:
         dev:

@@ -8,6 +8,8 @@ use App\Action\AbstractAction;
 use App\Model\EditableInterface;
 use App\Responder\ResponderInterface;
 use App\Security\AuthorizationManagerInterface;
+use App\User\Query\UserReadForUpdateQuery;
+use App\User\Query\UserReadForUpdateQueryHandler;
 use App\User\Security\UserSecurityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +24,14 @@ final class AccountReadForUpdateAction extends AbstractAction
 {
     private AuthorizationManagerInterface $authorizationManager;
     private ResponderInterface $responder;
+    private UserReadForUpdateQueryHandler $handler;
     private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(AuthorizationManagerInterface $authorizationManager, ResponderInterface $responder, UserSecurityManagerInterface $userSecurityManager)
+    public function __construct(AuthorizationManagerInterface $authorizationManager, ResponderInterface $responder, UserReadForUpdateQueryHandler $handler, UserSecurityManagerInterface $userSecurityManager)
     {
         $this->authorizationManager = $authorizationManager;
         $this->responder = $responder;
+        $this->handler = $handler;
         $this->userSecurityManager = $userSecurityManager;
     }
 
@@ -35,8 +39,11 @@ final class AccountReadForUpdateAction extends AbstractAction
     {
         $this->authorizationManager->isGranted(EditableInterface::UPDATE, $this->userSecurityManager->getUser());
 
+        $query = new UserReadForUpdateQuery();
+        $query->id = $this->userSecurityManager->getUser()->getId();
+
         return $this->responder->render([
-            'user' => $this->userSecurityManager->getUser(),
+            'user' => $this->handler->setQuery($query)->handle(),
         ]);
     }
 }

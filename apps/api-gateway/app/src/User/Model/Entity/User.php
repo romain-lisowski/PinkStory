@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\User\Entity;
+namespace App\User\Model\Entity;
 
-use App\Model\Entity\AbstractEntity;
-use App\Model\EditableTrait;
 use App\File\Model\ImageableInterface;
 use App\File\Model\ImageableTrait;
 use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
+use App\Model\Entity\AbstractEntity;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryRating;
+use App\User\Model\UserEditableInterface;
+use App\User\Model\UserEditableTrait;
+use App\User\Model\UserInterface as ModelUserInterface;
+use App\User\Model\UserRole;
 use App\User\Validator\Constraints as AppUserAssert;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,14 +31,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="usr_user")
- * @ORM\Entity(repositoryClass="App\User\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\User\Repository\Entity\UserRepository")
  * @UniqueEntity(
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity implements UserInterface, UserEditableInterface, ImageableInterface, LanguageableInterface
+class User extends AbstractEntity implements UserInterface, ModelUserInterface, UserEditableInterface, ImageableInterface, LanguageableInterface
 {
-    use EditableTrait;
+    use UserEditableTrait;
     use ImageableTrait;
     use LanguageableTrait;
 
@@ -383,12 +386,12 @@ class User extends AbstractEntity implements UserInterface, UserEditableInterfac
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ModelUserInterface
     {
         return $this;
     }
 
-    public function setUser(User $user): self
+    public function setUser(ModelUserInterface $user): self
     {
         return $this;
     }

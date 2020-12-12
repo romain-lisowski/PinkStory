@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\User\Entity;
+namespace App\User\Model;
 
 use App\Model\EditableInterface;
 
 interface UserEditableInterface extends EditableInterface
 {
-    public function getUser(): User;
+    public function getUser(): UserInterface;
 
-    public function setUser(User $user): self;
+    public function setUser(UserInterface $user): self;
 }

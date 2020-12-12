@@ -13,7 +13,7 @@ use App\Language\Model\LanguageInterface;
 use App\Story\Entity\Story;
 use App\Story\Entity\StoryImageTranslation;
 use App\Story\Entity\StoryThemeTranslation;
-use App\User\Entity\User;
+use App\User\Model\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -46,7 +46,7 @@ class Language extends AbstractEntity implements LanguageInterface, ImageableInt
     private string $locale;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\User\Entity\User", mappedBy="language")
+     * @ORM\OneToMany(targetEntity="App\User\Model\Entity\User", mappedBy="language")
      */
     private Collection $users;
 

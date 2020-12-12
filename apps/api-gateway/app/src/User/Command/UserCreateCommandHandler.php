@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\User\Entity\User;
-use App\User\Entity\UserRole;
+use App\User\Model\Entity\User;
+use App\User\Model\UserRole;
 use App\User\Message\UserCreateMessage;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;

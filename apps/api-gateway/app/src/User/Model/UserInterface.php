@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Language\Model;
+namespace App\User\Model;
 
 use App\Model\ModelInterface;
 
-interface LanguageInterface extends ModelInterface
+interface UserInterface extends ModelInterface
 {
     public function getId(): string;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Security;
 
-use App\User\Entity\User;
+use App\User\Model\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class UserSecurityManager implements UserSecurityManagerInterface

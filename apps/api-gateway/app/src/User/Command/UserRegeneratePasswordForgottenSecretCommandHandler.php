@@ -6,7 +6,7 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\User\Message\UserRegeneratePasswordForgottenSecretMessage;
-use App\User\Repository\UserRepositoryInterface;
+use App\User\Repository\Entity\UserRepositoryInterface;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;

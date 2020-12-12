@@ -8,7 +8,7 @@ use App\Command\AbstractCommandHandler;
 use App\Model\EditableInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Message\UserUpdateInformationMessage;
-use App\User\Repository\UserRepositoryInterface;
+use App\User\Repository\Entity\UserRepositoryInterface;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;

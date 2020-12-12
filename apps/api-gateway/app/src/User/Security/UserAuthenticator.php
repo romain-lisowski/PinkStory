@@ -6,7 +6,7 @@ namespace App\User\Security;
 
 use App\User\Exception\InvalidTokenException;
 use App\User\Exception\NoTokenProvidedException;
-use App\User\Repository\UserRepositoryInterface;
+use App\User\Repository\Entity\UserRepositoryInterface;
 use Exception;
 use Firebase\JWT\JWT;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

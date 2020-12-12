@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Story\Entity;
 
-use App\Model\Entity\AbstractEntity;
-use App\Model\DepthableInterface;
-use App\Model\DepthableTrait;
-use App\Model\Entity\PositionableInterface;
-use App\Model\Entity\PositionableTrait;
 use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
+use App\Model\DepthableInterface;
+use App\Model\DepthableTrait;
+use App\Model\Entity\AbstractEntity;
+use App\Model\Entity\PositionableInterface;
+use App\Model\Entity\PositionableTrait;
 use App\Story\Exception\StoryThemeDepthException;
-use App\User\Entity\User;
-use App\User\Entity\UserEditableInterface;
-use App\User\Entity\UserEditableTrait;
+use App\User\Model\Entity\User;
+use App\User\Model\UserEditableInterface;
+use App\User\Model\UserEditableTrait;
+use App\User\Model\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -57,10 +59,10 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
 
     /**
      * @Serializer\Groups({"serializer"})
-     * @ORM\ManyToOne(targetEntity="App\User\Entity\User", inversedBy="stories")
+     * @ORM\ManyToOne(targetEntity="App\User\Model\Entity\User", inversedBy="stories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private User $user;
+    private UserInterface $user;
 
     /**
      * @Serializer\Groups({"serializer"})
@@ -169,8 +171,12 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         return $this;
     }
 
-    public function setUser(User $user): self
+    public function setUser(UserInterface $user): self
     {
+        if (!$user instanceof User) {
+            throw new InvalidArgumentException();
+        }
+
         $this->user = $user;
         $user->addStory($this);
 

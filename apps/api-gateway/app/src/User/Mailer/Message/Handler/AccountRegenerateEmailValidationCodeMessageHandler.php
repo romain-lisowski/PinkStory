@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Mailer\Message\Handler;
 
 use App\User\Message\UserRegenerateEmailValidationCodeMessage;
-use App\User\Repository\UserRepository;
+use App\User\Repository\Entity\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
 

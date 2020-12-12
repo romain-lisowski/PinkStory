@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Voter;
 
 use App\Model\EditableInterface;
+use App\User\Model\UserInterface;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class EditableVoter extends Voter
 {

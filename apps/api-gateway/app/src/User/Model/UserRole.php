@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Entity;
+namespace App\User\Model;
 
 final class UserRole
 {

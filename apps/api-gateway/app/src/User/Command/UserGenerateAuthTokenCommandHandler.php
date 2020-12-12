@@ -6,7 +6,7 @@ namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
 use App\Exception\InvalidSSLKeyException;
-use App\User\Repository\UserRepositoryInterface;
+use App\User\Repository\Entity\UserRepositoryInterface;
 use App\Validator\ValidatorManagerInterface;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;

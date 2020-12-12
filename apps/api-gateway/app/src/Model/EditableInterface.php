@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\User\Model\UserInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 interface EditableInterface
 {

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Story\Entity;
 
 use App\Model\Entity\AbstractEntity;
-use App\User\Entity\User;
-use App\User\Entity\UserEditableInterface;
-use App\User\Entity\UserEditableTrait;
+use App\User\Model\Entity\User;
+use App\User\Model\UserEditableInterface;
+use App\User\Model\UserEditableTrait;
+use App\User\Model\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -40,10 +42,10 @@ class StoryRating extends AbstractEntity implements UserEditableInterface
     private Story $story;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\User\Entity\User", inversedBy="storyRatings")
+     * @ORM\ManyToOne(targetEntity="App\User\Model\Entity\User", inversedBy="storyRatings")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private User $user;
+    private UserInterface $user;
 
     public function __construct(int $rate, Story $story, User $user)
     {
@@ -91,8 +93,12 @@ class StoryRating extends AbstractEntity implements UserEditableInterface
         return $this;
     }
 
-    public function setUser(User $user): self
+    public function setUser(UserInterface $user): self
     {
+        if (!$user instanceof User) {
+            throw new InvalidArgumentException();
+        }
+
         $this->user = $user;
         $user->addStoryRating($this);
 

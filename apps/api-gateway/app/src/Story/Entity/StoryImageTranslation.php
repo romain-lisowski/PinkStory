@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Story\Entity;
 
-use App\Entity\EditableInterface;
-use App\Entity\EditableTrait;
+use App\Model\EditableInterface;
+use App\Model\EditableTrait;
 use App\Language\Model\Entity\AbstractTranslation;
 use App\Language\Model\Entity\Language;
 use Doctrine\ORM\Mapping as ORM;

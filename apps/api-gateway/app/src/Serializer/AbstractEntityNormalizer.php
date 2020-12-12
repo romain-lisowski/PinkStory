@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Serializer;
 
-use App\Entity\AbstractEntity;
-use App\Entity\IdentifiableInterface;
+use App\Model\Entity\AbstractEntity;
+use App\Model\Entity\IdentifiableInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;

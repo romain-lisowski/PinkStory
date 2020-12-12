@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Language\Model\Entity;
 
-use App\Entity\AbstractEntity;
+use App\Model\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\Entity\EditableInterface;
+use App\Model\EditableInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Message\UserUpdateInformationMessage;
 use App\User\Repository\UserRepositoryInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Model;
 
 use App\Exception\ChildDepthException;
 use Doctrine\Common\Collections\Collection;

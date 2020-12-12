@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Voter;
 
-use App\Entity\EditableInterface;
+use App\Model\EditableInterface;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

@@ -30,7 +30,6 @@ services:
             - '../src/Kernel.php'
             - '../src/Command/*Command.php'
             - '../src/*/Command/*Command.php'
-            - '../src/Entity'
             - '../src/*/Entity'
             - '../src/Model'
             - '../src/*/Model'

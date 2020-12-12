@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\User\Entity;
 
-use App\Entity\AbstractEntity;
-use App\Entity\EditableTrait;
+use App\Model\Entity\AbstractEntity;
+use App\Model\EditableTrait;
 use App\File\ImageableInterface;
 use App\File\ImageableTrait;
 use App\Language\Model\Entity\Language;

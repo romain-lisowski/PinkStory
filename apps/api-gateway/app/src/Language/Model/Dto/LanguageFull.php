@@ -11,28 +11,39 @@ final class LanguageFull extends Language
     /**
      * @Serializer\Groups({"serializer"})
      */
-    public string $id;
+    private string $title;
 
     /**
      * @Serializer\Groups({"serializer"})
      */
-    public string $title;
+    private string $locale;
 
     /**
      * @Serializer\Groups({"serializer"})
      */
-    public string $locale;
-
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    public string $imageUrl;
+    private string $imageUrl;
 
     public function __construct(string $id = '', string $title = '', string $locale = '')
     {
-        $this->id = $id;
+        parent::__construct($id);
+
         $this->title = $title;
         $this->locale = $locale;
         $this->imageUrl = '';
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function getImageUrl(): string
+    {
+        return $this->imageUrl;
     }
 }

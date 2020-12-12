@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Story\Entity;
 
-use App\Entity\AbstractEntity;
-use App\Entity\DepthableInterface;
-use App\Entity\DepthableTrait;
-use App\Entity\PositionableInterface;
-use App\Entity\PositionableTrait;
+use App\Model\Entity\AbstractEntity;
+use App\Model\DepthableInterface;
+use App\Model\DepthableTrait;
+use App\Model\Entity\PositionableInterface;
+use App\Model\Entity\PositionableTrait;
 use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;

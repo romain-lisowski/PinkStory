@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Model\Entity;
 
+use App\Model\TimestampableInterface as ModelTimestampableInterface;
 use DateTime;
 
-interface TimestampableInterface
+interface TimestampableInterface extends ModelTimestampableInterface
 {
-    public function getCreatedAt(): DateTime;
-
     public function setCreatedAt(DateTime $date): self;
-
-    public function getLastUpdatedAt(): DateTime;
 
     public function setLastUpdatedAt(DateTime $date): self;
 

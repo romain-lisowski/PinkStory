@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Story\Entity;
 
-use App\Entity\AbstractEntity;
-use App\Entity\DepthableInterface;
-use App\Entity\DepthableTrait;
-use App\Entity\EditableInterface;
-use App\Entity\EditableTrait;
-use App\Entity\PositionableInterface;
-use App\Entity\PositionableTrait;
+use App\Model\Entity\AbstractEntity;
+use App\Model\DepthableInterface;
+use App\Model\DepthableTrait;
+use App\Model\EditableInterface;
+use App\Model\EditableTrait;
+use App\Model\Entity\PositionableInterface;
+use App\Model\Entity\PositionableTrait;
 use App\Language\Model\Entity\TranslatableInterface;
 use App\Language\Model\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;

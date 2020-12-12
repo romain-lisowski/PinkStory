@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Entity;
 
-use App\Entity\EditableTrait;
+use App\Model\EditableTrait;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;

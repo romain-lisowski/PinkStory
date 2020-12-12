@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Action;
 
 use App\Action\AbstractAction;
-use App\Entity\EditableInterface;
+use App\Model\EditableInterface;
 use App\Responder\ResponderInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Security\UserSecurityManagerInterface;

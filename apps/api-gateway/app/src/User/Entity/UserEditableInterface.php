@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Entity;
 
-use App\Entity\EditableInterface;
+use App\Model\EditableInterface;
 
 interface UserEditableInterface extends EditableInterface
 {

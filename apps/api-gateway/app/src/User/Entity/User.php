@@ -6,8 +6,8 @@ namespace App\User\Entity;
 
 use App\Model\Entity\AbstractEntity;
 use App\Model\EditableTrait;
-use App\File\ImageableInterface;
-use App\File\ImageableTrait;
+use App\File\Model\ImageableInterface;
+use App\File\Model\ImageableTrait;
 use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;

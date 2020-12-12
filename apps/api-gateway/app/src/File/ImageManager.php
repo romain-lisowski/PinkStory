@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\File;
 
+use App\File\Exception\ImageDeleteException;
+use App\File\Exception\ImageUploadException;
+use App\File\Model\ImageableInterface;
 use Imagine\Image\Box;
 use Imagine\Imagick\Imagine;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Language\Model\Dto;
 
+use App\Model\Dto\EditableTrait;
+use App\Model\EditableInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class LanguageFull extends Language
+final class LanguageFull extends Language implements EditableInterface
 {
+    use EditableTrait;
+
     /**
      * @Serializer\Groups({"serializer"})
      */
@@ -18,18 +22,12 @@ final class LanguageFull extends Language
      */
     private string $locale;
 
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private string $imageUrl;
-
     public function __construct(string $id = '', string $title = '', string $locale = '')
     {
         parent::__construct($id);
 
         $this->title = $title;
         $this->locale = $locale;
-        $this->imageUrl = '';
     }
 
     public function getTitle(): string
@@ -40,10 +38,5 @@ final class LanguageFull extends Language
     public function getLocale(): string
     {
         return $this->locale;
-    }
-
-    public function getImageUrl(): string
-    {
-        return $this->imageUrl;
     }
 }

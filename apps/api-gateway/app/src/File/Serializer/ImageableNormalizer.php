@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\File;
+namespace App\File\Serializer;
 
-use App\Serializer\AbstractEntityNormalizer;
+use App\File\Model\ImageableInterface;
+use App\Serializer\AbstractModelNormalizer;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class ImageableNormalizer extends AbstractEntityNormalizer
+class ImageableNormalizer extends AbstractModelNormalizer
 {
     private ParameterBagInterface $params;
 
@@ -16,7 +17,7 @@ class ImageableNormalizer extends AbstractEntityNormalizer
         $this->params = $params;
     }
 
-    public function normalizeEntity($imageable, string $format = null, array $context = []): void
+    public function normalizeModel($imageable, string $format = null, array $context = []): void
     {
         if (!$imageable instanceof ImageableInterface) {
             return;
@@ -25,7 +26,7 @@ class ImageableNormalizer extends AbstractEntityNormalizer
         $imageable->setImageUrl($this->params->get('project_file_manager_dsn'));
     }
 
-    public function supportsNormalizationEntity($imageable, string $format = null, array $context = []): bool
+    public function supportsNormalizationModel($imageable, string $format = null, array $context = []): bool
     {
         return $imageable instanceof ImageableInterface;
     }

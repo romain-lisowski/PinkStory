@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace App\Serializer;
 
-use App\Model\Entity\AbstractEntity;
-use App\Model\Entity\IdentifiableInterface;
+use App\Model\ModelInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 
-abstract class AbstractEntityNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+abstract class AbstractModelNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
-    abstract public function normalizeEntity($entity, string $format = null, array $context = []): void;
+    abstract public function normalizeModel($model, string $format = null, array $context = []): void;
 
     public function normalize($object, string $format = null, array $context = [])
     {
-        if (!$object instanceof AbstractEntity) {
-            return;
-        }
-
-        if (!$object instanceof IdentifiableInterface) {
+        if (!$object instanceof ModelInterface) {
             return false;
         }
 
@@ -30,22 +25,18 @@ abstract class AbstractEntityNormalizer implements ContextAwareNormalizerInterfa
             $context[static::class.'.used'] = [];
         }
 
-        $context[static::class.'.used'][] = $object->getId();
+        $context[static::class.'.used'][] = $object;
 
-        $this->normalizeEntity($object, $format, $context);
+        $this->normalizeModel($object, $format, $context);
 
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    abstract public function supportsNormalizationEntity($entity, string $format = null, array $context = []): bool;
+    abstract public function supportsNormalizationModel($model, string $format = null, array $context = []): bool;
 
     public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
-        if (!$data instanceof AbstractEntity) {
-            return false;
-        }
-
-        if (!$data instanceof IdentifiableInterface) {
+        if (!$data instanceof ModelInterface) {
             return false;
         }
 
@@ -53,11 +44,11 @@ abstract class AbstractEntityNormalizer implements ContextAwareNormalizerInterfa
         if (
             false === empty($context[static::class.'.used'])
             && true === is_array($context[static::class.'.used'])
-            && in_array($data->getId(), $context[static::class.'.used'])
+            && in_array($data, $context[static::class.'.used'])
         ) {
             return false;
         }
 
-        return $this->supportsNormalizationEntity($data, $format, $context);
+        return $this->supportsNormalizationModel($data, $format, $context);
     }
 }

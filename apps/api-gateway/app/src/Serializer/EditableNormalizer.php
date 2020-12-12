@@ -8,7 +8,7 @@ use App\Model\EditableInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class EditableNormalizer extends AbstractEntityNormalizer
+final class EditableNormalizer extends AbstractModelNormalizer
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private TokenStorageInterface $tokenStorage;
@@ -19,7 +19,7 @@ final class EditableNormalizer extends AbstractEntityNormalizer
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function normalizeEntity($editable, string $format = null, array $context = []): void
+    public function normalizeModel($editable, string $format = null, array $context = []): void
     {
         if (!$editable instanceof EditableInterface) {
             return;
@@ -36,7 +36,7 @@ final class EditableNormalizer extends AbstractEntityNormalizer
         $editable->setEditable($this->authorizationChecker, $currentUser);
     }
 
-    public function supportsNormalizationEntity($editable, string $format = null, array $context = []): bool
+    public function supportsNormalizationModel($editable, string $format = null, array $context = []): bool
     {
         return $editable instanceof EditableInterface;
     }

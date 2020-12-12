@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 namespace App\Story\Repository\Dto;
 
+use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\StoryImageMedium;
 use App\Story\Query\StoryImageSearchQuery;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManagerInterface;
 
-final class StoryImageRepository implements StoryImageRepositoryInterface
+final class StoryImageRepository extends AbstractRepository implements StoryImageRepositoryInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function search(StoryImageSearchQuery $query): Collection
     {
-        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $qb->select('storyImage.id as id', 'storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
             ->from('sty_story_image', 'storyImage')

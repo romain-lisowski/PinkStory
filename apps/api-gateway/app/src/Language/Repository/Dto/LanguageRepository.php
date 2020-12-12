@@ -7,23 +7,16 @@ namespace App\Language\Repository\Dto;
 use App\Language\Model\Dto\CurrentLanguage;
 use App\Language\Model\Dto\LanguageFull;
 use App\Language\Query\LanguageSearchQuery;
+use App\Repository\Dto\AbstractRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 
-final class LanguageRepository implements LanguageRepositoryInterface
+final class LanguageRepository extends AbstractRepository implements LanguageRepositoryInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function findCurrentByLocale(string $locale): CurrentLanguage
     {
-        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $qb->select('id', 'title', 'locale')
             ->from('lng_language', 'language')
@@ -44,7 +37,7 @@ final class LanguageRepository implements LanguageRepositoryInterface
 
     public function search(LanguageSearchQuery $query): Collection
     {
-        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $qb->select('id', 'title', 'locale')
             ->from('lng_language')

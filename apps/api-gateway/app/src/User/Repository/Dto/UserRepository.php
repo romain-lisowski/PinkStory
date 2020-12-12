@@ -5,23 +5,16 @@ declare(strict_types=1);
 namespace App\User\Repository\Dto;
 
 use App\Language\Model\Dto\CurrentLanguage;
+use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserFull;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 
-final class UserRepository implements UserRepositoryInterface
+final class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function findCurrent(string $id): CurrentUser
     {
-        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $qb->select('u.id as user_id', 'u.image_defined as user_image_defined', 'u.secret as user_secret', 'u.role as user_role', 'language.id as language_id', 'language.title as language_title', 'language.locale as language_locale')
             ->from('usr_user', 'u')
@@ -45,7 +38,7 @@ final class UserRepository implements UserRepositoryInterface
 
     public function findOne(string $id): UserFull
     {
-        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $qb->select('id', 'image_defined', 'name', 'name_slug', 'email')
             ->from('usr_user')

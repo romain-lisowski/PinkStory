@@ -9,9 +9,19 @@ use App\Story\Model\Dto\StoryImageMedium;
 use App\Story\Query\StoryImageSearchQuery;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class StoryImageRepository extends AbstractRepository implements StoryImageRepositoryInterface
 {
+    private StoryThemeRepositoryInterface $storyThemeRepository;
+
+    public function __construct(EntityManagerInterface $entityManager, StoryThemeRepositoryInterface $storyThemeRepository)
+    {
+        parent::__construct($entityManager);
+
+        $this->storyThemeRepository = $storyThemeRepository;
+    }
+
     public function search(StoryImageSearchQuery $query): Collection
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
@@ -33,6 +43,8 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
             $storyImage = new StoryImageMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
             $storyImages->add($storyImage);
         }
+
+        $this->storyThemeRepository->populateStoryImages($storyImages, $query->language);
 
         return $storyImages;
     }

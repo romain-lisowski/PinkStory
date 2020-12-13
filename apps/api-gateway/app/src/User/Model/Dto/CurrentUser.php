@@ -49,9 +49,9 @@ final class CurrentUser extends User implements UserInterface
         return null;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
-        return null;
+        return $this->getId();
     }
 
     public function eraseCredentials()

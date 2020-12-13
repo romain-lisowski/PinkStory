@@ -8,6 +8,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            stateless: true
             custom_authenticators:
                 - App\User\Security\UserAuthenticator
 

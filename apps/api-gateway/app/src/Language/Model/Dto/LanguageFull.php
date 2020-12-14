@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace App\Language\Model\Dto;
 
-use App\Model\Dto\EditableTrait;
-use App\Model\EditableInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class LanguageFull extends Language implements EditableInterface
+final class LanguageFull extends Language
 {
-    use EditableTrait;
-
     /**
      * @Serializer\Groups({"serializer"})
      */

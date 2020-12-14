@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Story\Model\Entity;
 
 use App\Model\Entity\AbstractEntity;
-use App\Model\DepthableInterface;
-use App\Model\DepthableTrait;
+use App\Model\Entity\DepthableInterface;
+use App\Model\Entity\DepthableTrait;
 use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use App\Model\Entity\PositionableInterface;

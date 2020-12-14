@@ -7,13 +7,59 @@ namespace App\Story\Repository\Dto;
 use App\Language\Model\LanguageInterface;
 use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\StoryImage;
+use App\Story\Model\Dto\StoryThemeFull;
 use App\Story\Model\Dto\StoryThemeMedium;
+use App\Story\Query\StoryThemeSearchQuery;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Connection;
 
 final class StoryThemeRepository extends AbstractRepository implements StoryThemeRepositoryInterface
 {
+    public function search(StoryThemeSearchQuery $query): Collection
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('storyTheme.id as id', 'storyTheme.parent_id as parent_id', 'storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
+            ->from('sty_story_theme', 'storyTheme')
+            ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
+                $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
+                $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
+            ))
+            ->setParameter('language_id', $query->language->getId())
+            ->orderBy('storyTheme.position', Criteria::ASC)
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        $storyThemes = new ArrayCollection();
+        $storyThemeChildrenTmp = [];
+
+        foreach ($datas as $data) {
+            $storyTheme = new StoryThemeFull(strval($data['id']), strval($data['title']), strval($data['title_slug']));
+
+            if (null === $data['parent_id']) {
+                $storyThemes->add($storyTheme);
+            } else {
+                $storyThemeChildrenTmp[] = [
+                    'parent_id' => strval($data['parent_id']),
+                    'story_theme' => $storyTheme,
+                ];
+            }
+        }
+
+        foreach ($storyThemeChildrenTmp as $storyThemeChildTmp) {
+            foreach ($storyThemes as $storyTheme) {
+                if ($storyThemeChildTmp['parent_id'] === $storyTheme->getId()) {
+                    $storyTheme->addChild($storyThemeChildTmp['story_theme']);
+                }
+            }
+        }
+
+        return $storyThemes;
+    }
+
     public function populateStoryImages(Collection $storyImages, LanguageInterface $language): void
     {
         $storyImageIds = StoryImage::extractIds($storyImages);

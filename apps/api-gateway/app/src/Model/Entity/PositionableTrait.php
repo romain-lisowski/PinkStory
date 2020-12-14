@@ -12,9 +12,9 @@ trait PositionableTrait
 {
     /**
      * @Assert\NotBlank
-     * @ORM\Column(name="position", type="integer")
+     * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    private int $position;
+    private ?int $position;
 
     public function initPosition(?Collection $positionnedItems = null): self
     {
@@ -33,19 +33,19 @@ trait PositionableTrait
         return $this;
     }
 
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position): self
+    public function setPosition(?int $position): self
     {
         $this->position = $position;
 
         return $this;
     }
 
-    public function updatePosition(int $position): self
+    public function updatePosition(?int $position): self
     {
         $this->setPosition($position);
 

@@ -55,7 +55,7 @@ class StoryTheme extends AbstractEntity implements DepthableInterface, Positiona
      */
     private Collection $storyImageHasStoryThemes;
 
-    public function __construct(string $reference = '', ?StoryTheme $parent = null, int $position = 1)
+    public function __construct(string $reference = '', ?StoryTheme $parent = null, ?int $position = null)
     {
         parent::__construct();
 

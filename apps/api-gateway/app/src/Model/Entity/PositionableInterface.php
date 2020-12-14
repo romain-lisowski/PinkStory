@@ -10,11 +10,11 @@ interface PositionableInterface
 {
     public function initPosition(?Collection $positionnedItems = null): self;
 
-    public function getPosition(): int;
+    public function getPosition(): ?int;
 
-    public function setPosition(int $position): self;
+    public function setPosition(?int $position): self;
 
-    public function updatePosition(int $position): self;
+    public function updatePosition(?int $position): self;
 
     public static function resetPosition(Collection $positionnedItems): void;
 }

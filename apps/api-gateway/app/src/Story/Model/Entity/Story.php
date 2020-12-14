@@ -100,7 +100,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
      */
     private Collection $storyRatings;
 
-    public function __construct(string $title = '', string $content = '', User $user, Language $language, ?Story $parent = null, ?StoryImage $storyImage = null)
+    public function __construct(string $title = '', string $content = '', User $user, Language $language, ?Story $parent = null, ?int $position = null, ?StoryImage $storyImage = null)
     {
         parent::__construct();
 
@@ -109,7 +109,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         $this->titleSlug = '';
         $this->content = '';
         $this->parent = null;
-        $this->position = 1;
+        $this->position = $position;
         $this->children = new ArrayCollection();
         $this->storyImage = null;
         $this->storyHasStoryThemes = new ArrayCollection();

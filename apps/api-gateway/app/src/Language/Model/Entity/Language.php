@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Language\Model\Entity;
 
-use App\Model\Entity\AbstractEntity;
-use App\Model\EditableInterface;
-use App\Model\EditableTrait;
 use App\File\Model\ImageableInterface;
 use App\File\Model\ImageableTrait;
 use App\Language\Model\LanguageInterface;
+use App\Model\EditableInterface;
+use App\Model\EditableTrait;
+use App\Model\Entity\AbstractEntity;
 use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryImageTranslation;
 use App\Story\Model\Entity\StoryThemeTranslation;

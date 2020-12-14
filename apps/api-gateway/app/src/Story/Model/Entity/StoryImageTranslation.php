@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Story\Model\Entity;
 
-use App\Model\EditableInterface;
-use App\Model\EditableTrait;
 use App\Language\Model\Entity\AbstractTranslation;
 use App\Language\Model\Entity\Language;
+use App\Model\EditableInterface;
+use App\Model\EditableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;

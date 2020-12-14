@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Story\Model\Entity;
 
-use App\Model\Entity\AbstractEntity;
 use App\Model\EditableInterface;
 use App\Model\EditableTrait;
+use App\Model\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

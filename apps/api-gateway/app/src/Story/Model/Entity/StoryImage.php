@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Story\Model\Entity;
 
-use App\Model\Entity\AbstractEntity;
-use App\Model\EditableInterface;
-use App\Model\EditableTrait;
 use App\File\Model\ImageableInterface;
 use App\File\Model\ImageableTrait;
 use App\Language\Model\Entity\TranslatableInterface;
 use App\Language\Model\Entity\TranslatableTrait;
+use App\Model\EditableInterface;
+use App\Model\EditableTrait;
+use App\Model\Entity\AbstractEntity;
 use App\Story\Exception\StoryThemeDepthException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

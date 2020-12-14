@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Story\Model\Entity;
 
+use App\Language\Model\Entity\TranslatableInterface;
+use App\Language\Model\Entity\TranslatableTrait;
+use App\Model\EditableInterface;
+use App\Model\EditableTrait;
 use App\Model\Entity\AbstractEntity;
 use App\Model\Entity\DepthableInterface;
 use App\Model\Entity\DepthableTrait;
-use App\Model\EditableInterface;
-use App\Model\EditableTrait;
 use App\Model\Entity\PositionableInterface;
 use App\Model\Entity\PositionableTrait;
-use App\Language\Model\Entity\TranslatableInterface;
-use App\Language\Model\Entity\TranslatableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

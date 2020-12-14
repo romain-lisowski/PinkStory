@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
-use App\Model\EditableInterface;
 use App\File\ImageManagerInterface;
+use App\Model\EditableInterface;
 use App\Security\AuthorizationManagerInterface;
 use App\User\Message\UserDeleteImageMessage;
 use App\User\Repository\Entity\UserRepositoryInterface;

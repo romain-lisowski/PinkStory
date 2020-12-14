@@ -4,7 +4,7 @@ namespace App\Fixture\Story;
 
 use App\Fixture\Language\LanguageFixture;
 use App\Fixture\User\UserFixture;
-use App\Story\Entity\Story;
+use App\Story\Model\Entity\Story;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

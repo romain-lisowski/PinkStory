@@ -2,8 +2,8 @@
 
 namespace App\Fixture\User;
 
-use App\User\Entity\User;
-use App\User\Entity\UserRole;
+use App\User\Model\Entity\User;
+use App\User\Model\UserRole;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;

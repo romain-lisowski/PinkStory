@@ -3,8 +3,8 @@
 namespace App\Fixture\Story;
 
 use App\Fixture\Language\LanguageFixture;
-use App\Story\Entity\StoryTheme;
-use App\Story\Entity\StoryThemeTranslation;
+use App\Story\Model\Entity\StoryTheme;
+use App\Story\Model\Entity\StoryThemeTranslation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -13,7 +13,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
 {
     public function load(ObjectManager $manager)
     {
-        $storyThemeParent = new StoryTheme('Orientation');
+        $storyThemeParent = new StoryTheme('Orientation', null, 1);
         new StoryThemeTranslation('Orientation', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Orientation', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);
@@ -48,7 +48,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
         $manager->persist($storyThemeChild);
         $this->addReference('story-theme-other-lgbt', $storyThemeChild);
 
-        $storyThemeParent = new StoryTheme('Place');
+        $storyThemeParent = new StoryTheme('Place', null, 2);
         new StoryThemeTranslation('Place', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Lieu', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);
@@ -77,7 +77,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
         $manager->persist($storyThemeChild);
         $this->addReference('story-theme-nature', $storyThemeChild);
 
-        $storyThemeParent = new StoryTheme('Number');
+        $storyThemeParent = new StoryTheme('Number', null, 3);
         new StoryThemeTranslation('Number', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Nombre', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);
@@ -106,7 +106,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
         $manager->persist($storyThemeChild);
         $this->addReference('story-theme-group', $storyThemeChild);
 
-        $storyThemeParent = new StoryTheme('Age');
+        $storyThemeParent = new StoryTheme('Age', null, 4);
         new StoryThemeTranslation('Age', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Âge', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);
@@ -129,7 +129,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
         $manager->persist($storyThemeChild);
         $this->addReference('story-theme-mature', $storyThemeChild);
 
-        $storyThemeParent = new StoryTheme('Pratice');
+        $storyThemeParent = new StoryTheme('Pratice', null, 5);
         new StoryThemeTranslation('Pratice', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Pratique', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);
@@ -176,7 +176,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
         $manager->persist($storyThemeChild);
         $this->addReference('story-theme-other-bdsm', $storyThemeChild);
 
-        $storyThemeParent = new StoryTheme('Mores');
+        $storyThemeParent = new StoryTheme('Mores', null, 6);
         new StoryThemeTranslation('Mores', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Moeurs', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);
@@ -211,7 +211,7 @@ final class StoryThemeFixture extends Fixture implements DependentFixtureInterfa
         $manager->persist($storyThemeChild);
         $this->addReference('story-theme-voyeurism', $storyThemeChild);
 
-        $storyThemeParent = new StoryTheme('Level');
+        $storyThemeParent = new StoryTheme('Level', null, 7);
         new StoryThemeTranslation('Level', $storyThemeParent, $this->getReference('language-english'));
         new StoryThemeTranslation('Niveau', $storyThemeParent, $this->getReference('language-french'));
         $manager->persist($storyThemeParent);

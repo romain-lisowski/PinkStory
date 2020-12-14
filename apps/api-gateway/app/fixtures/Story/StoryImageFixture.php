@@ -3,8 +3,8 @@
 namespace App\Fixture\Story;
 
 use App\Fixture\Language\LanguageFixture;
-use App\Story\Entity\StoryImage;
-use App\Story\Entity\StoryImageTranslation;
+use App\Story\Model\Entity\StoryImage;
+use App\Story\Model\Entity\StoryImageTranslation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

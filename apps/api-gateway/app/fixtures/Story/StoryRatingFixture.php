@@ -3,7 +3,7 @@
 namespace App\Fixture\Story;
 
 use App\Fixture\User\UserFixture;
-use App\Story\Entity\StoryRating;
+use App\Story\Model\Entity\StoryRating;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

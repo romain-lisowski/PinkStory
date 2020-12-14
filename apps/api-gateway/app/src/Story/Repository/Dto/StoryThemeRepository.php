@@ -9,6 +9,7 @@ use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\StoryImage;
 use App\Story\Model\Dto\StoryThemeMedium;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Connection;
 
 final class StoryThemeRepository extends AbstractRepository implements StoryThemeRepositoryInterface
@@ -25,12 +26,17 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 $qb->expr()->eq('storyTheme.id', 'storyImageHasStoryTheme.story_theme_id'),
                 $qb->expr()->in('storyImageHasStoryTheme.story_image_id', ':story_image_ids')
             ))
+            ->setParameter('story_image_ids', $storyImageIds, Connection::PARAM_STR_ARRAY)
             ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
             ))
-            ->setParameter('story_image_ids', $storyImageIds, Connection::PARAM_STR_ARRAY)
             ->setParameter('language_id', $language->getId())
+            ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
+                $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
+            ))
+            ->orderBy('storyThemeParent.position', Criteria::ASC)
+            ->addOrderBy('storyTheme.position', Criteria::ASC)
         ;
 
         $datas = $qb->execute()->fetchAll();

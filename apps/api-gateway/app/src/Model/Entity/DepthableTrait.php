@@ -37,10 +37,6 @@ trait DepthableTrait
             }
 
             $parent->addChild($this);
-        } else {
-            if ($this instanceof PositionableInterface) {
-                $this->initPosition();
-            }
         }
 
         return $this;

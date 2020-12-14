@@ -32,7 +32,7 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
                 $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
             ))
-            ->setParameter('language_id', $query->language->getId())
+            ->setParameter('language_id', $query->languageId)
         ;
 
         $datas = $qb->execute()->fetchAll();
@@ -44,7 +44,7 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
             $storyImages->add($storyImage);
         }
 
-        $this->storyThemeRepository->populateStoryImages($storyImages, $query->language);
+        $this->storyThemeRepository->populateStoryImages($storyImages, $query->languageId);
 
         return $storyImages;
     }

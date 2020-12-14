@@ -6,7 +6,6 @@ namespace App\Story\Query;
 
 use App\Handler\HandlerableInterface;
 use App\Handler\HandlerableTrait;
-use App\Language\Model\LanguageInterface;
 use App\Query\QueryInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,5 +16,5 @@ final class StoryImageSearchQuery implements QueryInterface, HandlerableInterfac
     /**
      * @Assert\NotBlank
      */
-    public LanguageInterface $language;
+    public string $languageId;
 }

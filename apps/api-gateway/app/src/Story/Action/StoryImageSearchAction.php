@@ -29,7 +29,7 @@ final class StoryImageSearchAction extends AbstractAction
     public function run(Request $request): Response
     {
         $query = new StoryImageSearchQuery();
-        $query->language = $request->get('current-language');
+        $query->languageId = $request->get('current-language')->getId();
 
         return $this->responder->render([
             'story-images' => $this->handler->setQuery($query)->handle(),

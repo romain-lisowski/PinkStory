@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Story\Repository\Dto;
 
-use App\Language\Model\LanguageInterface;
 use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\StoryImage;
 use App\Story\Model\Dto\StoryThemeFull;
@@ -27,7 +26,7 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
             ))
-            ->setParameter('language_id', $query->language->getId())
+            ->setParameter('language_id', $query->languageId)
             ->orderBy('storyTheme.position', Criteria::ASC)
         ;
 
@@ -60,7 +59,7 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
         return $storyThemes;
     }
 
-    public function populateStoryImages(Collection $storyImages, LanguageInterface $language): void
+    public function populateStoryImages(Collection $storyImages, string $languageId): void
     {
         $storyImageIds = StoryImage::extractIds($storyImages);
 
@@ -77,7 +76,7 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
             ))
-            ->setParameter('language_id', $language->getId())
+            ->setParameter('language_id', $languageId)
             ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
             ))

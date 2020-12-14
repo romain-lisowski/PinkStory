@@ -29,7 +29,7 @@ final class StoryThemeSearchAction extends AbstractAction
     public function run(Request $request): Response
     {
         $query = new StoryThemeSearchQuery();
-        $query->language = $request->get('current-language');
+        $query->languageId = $request->get('current-language')->getId();
 
         return $this->responder->render([
             'story-themes' => $this->handler->setQuery($query)->handle(),

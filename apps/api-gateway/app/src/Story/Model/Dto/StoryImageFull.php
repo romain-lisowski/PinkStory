@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class StoryImageMedium extends StoryImage
+final class StoryImageFull extends StoryImage
 {
     /**
      * @Serializer\Groups({"serializer"})

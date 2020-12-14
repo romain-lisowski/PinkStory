@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Repository\Dto;
 
 use App\Repository\Dto\AbstractRepository;
-use App\Story\Model\Dto\StoryImageMedium;
+use App\Story\Model\Dto\StoryImageFull;
 use App\Story\Query\StoryImageSearchQuery;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -40,7 +40,7 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
         $storyImages = new ArrayCollection();
 
         foreach ($datas as $data) {
-            $storyImage = new StoryImageMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
+            $storyImage = new StoryImageFull(strval($data['id']), strval($data['title']), strval($data['title_slug']));
             $storyImages->add($storyImage);
         }
 

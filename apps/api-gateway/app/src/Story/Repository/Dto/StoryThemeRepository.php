@@ -7,6 +7,7 @@ namespace App\Story\Repository\Dto;
 use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\StoryImage;
 use App\Story\Model\Dto\StoryThemeFull;
+use App\Story\Model\Dto\StoryThemeFullParent;
 use App\Story\Model\Dto\StoryThemeMedium;
 use App\Story\Query\StoryThemeSearchQuery;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -36,14 +37,12 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
         $storyThemeChildrenTmp = [];
 
         foreach ($datas as $data) {
-            $storyTheme = new StoryThemeFull(strval($data['id']), strval($data['title']), strval($data['title_slug']));
-
             if (null === $data['parent_id']) {
-                $storyThemes->add($storyTheme);
+                $storyThemes->add(new StoryThemeFullParent(strval($data['id']), strval($data['title']), strval($data['title_slug'])));
             } else {
                 $storyThemeChildrenTmp[] = [
                     'parent_id' => strval($data['parent_id']),
-                    'story_theme' => $storyTheme,
+                    'story_theme' => new StoryThemeFull(strval($data['id']), strval($data['title']), strval($data['title_slug'])),
                 ];
             }
         }

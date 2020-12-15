@@ -13,7 +13,6 @@ interface FormManagerInterface
     /**
      * Handle request.
      *
-     * @throws NotSubmittedFormException
      * @throws InvalidFormException
      */
     public function handleRequest(Request $request): void;

@@ -29,11 +29,7 @@ final class FormManager implements FormManagerInterface
     {
         $this->form->handleRequest($request);
 
-        if (false === $this->form->isSubmitted()) {
-            throw new NotSubmittedFormException();
-        }
-
-        if (false === $this->form->isValid()) {
+        if (true === $this->form->isSubmitted() && false === $this->form->isValid()) {
             throw new InvalidFormException($this->form->getErrors(true));
         }
     }

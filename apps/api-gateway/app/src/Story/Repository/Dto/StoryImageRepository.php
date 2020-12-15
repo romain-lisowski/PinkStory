@@ -9,6 +9,7 @@ use App\Story\Model\Dto\StoryImageFull;
 use App\Story\Query\StoryImageSearchQuery;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class StoryImageRepository extends AbstractRepository implements StoryImageRepositoryInterface
@@ -33,7 +34,25 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
             ))
             ->setParameter('language_id', $query->languageId)
+            ->orderBy('storyImage.created_at', Criteria::DESC)
         ;
+
+        if (count($query->storyThemeIds) > 0) {
+            $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+            $subQb->select('story_theme_id')
+                ->from('sty_story_image_has_story_theme', 'storyImageHasStoryTheme')
+                ->where($subQb->expr()->eq('storyImageHasStoryTheme.story_image_id', 'storyImage.id'))
+            ;
+
+            $i = 0;
+            foreach ($query->storyThemeIds as $storyThemeId) {
+                $qb->andWhere($qb->expr()->in(':story_theme_id_'.$i, $subQb->getSQL()))
+                    ->setParameter('story_theme_id_'.$i, $storyThemeId)
+                ;
+
+                ++$i;
+            }
+        }
 
         $datas = $qb->execute()->fetchAll();
 

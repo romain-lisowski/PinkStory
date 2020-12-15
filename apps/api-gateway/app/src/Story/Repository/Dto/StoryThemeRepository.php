@@ -95,4 +95,20 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
             }
         }
     }
+
+    public function findChildrenIds(): array
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('storyTheme.id as id')
+            ->from('sty_story_theme', 'storyTheme')
+            ->where($qb->expr()->isNotNull('storyTheme.parent_id'))
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        return array_map(function ($data) {
+            return $data['id'];
+        }, $datas);
+    }
 }

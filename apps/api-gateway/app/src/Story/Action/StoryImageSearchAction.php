@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Action;
 
 use App\Action\AbstractAction;
+use App\Form\FormManagerInterface;
 use App\Responder\ResponderInterface;
 use App\Story\Query\StoryImageSearchQuery;
 use App\Story\Query\StoryImageSearchQueryHandler;
@@ -17,11 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class StoryImageSearchAction extends AbstractAction
 {
+    private FormManagerInterface $formManager;
     private StoryImageSearchQueryHandler $handler;
     private ResponderInterface $responder;
 
-    public function __construct(StoryImageSearchQueryHandler $handler, ResponderInterface $responder)
+    public function __construct(FormManagerInterface $formManager, StoryImageSearchQueryHandler $handler, ResponderInterface $responder)
     {
+        $this->formManager = $formManager;
         $this->handler = $handler;
         $this->responder = $responder;
     }
@@ -30,6 +33,8 @@ final class StoryImageSearchAction extends AbstractAction
     {
         $query = new StoryImageSearchQuery();
         $query->languageId = $request->get('current-language')->getId();
+
+        $this->formManager->initForm($query)->handleRequest($request);
 
         return $this->responder->render([
             'story-images' => $this->handler->setQuery($query)->handle(),

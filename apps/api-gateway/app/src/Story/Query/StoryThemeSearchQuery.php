@@ -16,5 +16,5 @@ final class StoryThemeSearchQuery implements QueryInterface, HandlerableInterfac
     /**
      * @Assert\NotBlank
      */
-    public string $languageId;
+    public string $languageId = '';
 }

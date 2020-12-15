@@ -19,10 +19,10 @@ final class UserValidateEmailCommand implements CommandInterface, HandlerableInt
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 
     /**
      * @Assert\NotBlank
      */
-    public string $code;
+    public string $code = '';
 }

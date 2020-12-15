@@ -20,11 +20,11 @@ final class UserUpdateEmailCommand implements CommandInterface, HandlerableInter
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 
     /**
      * @Assert\NotBlank
      * @AppUserAssert\Email
      */
-    public string $email;
+    public string $email = '';
 }

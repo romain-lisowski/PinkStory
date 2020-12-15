@@ -16,5 +16,5 @@ final class UserReadForUpdateQuery implements QueryInterface, HandlerableInterfa
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 }

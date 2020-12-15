@@ -19,10 +19,10 @@ final class UserGenerateAuthTokenCommand implements CommandInterface, Handlerabl
     /**
      * @Assert\NotBlank
      */
-    public string $email;
+    public string $email = '';
 
     /**
      * @Assert\NotBlank
      */
-    public string $password;
+    public string $password = '';
 }

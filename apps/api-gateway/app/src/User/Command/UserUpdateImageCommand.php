@@ -20,7 +20,7 @@ final class UserUpdateImageCommand implements CommandInterface, HandlerableInter
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 
     /**
      * @Assert\NotNull

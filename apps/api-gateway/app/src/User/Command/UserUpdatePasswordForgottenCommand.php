@@ -20,11 +20,11 @@ final class UserUpdatePasswordForgottenCommand implements CommandInterface, Hand
     /**
      * @Assert\NotBlank
      */
-    public string $secret;
+    public string $secret = '';
 
     /**
      * @Assert\NotBlank
      * @AppUserAssert\PasswordStrenght
      */
-    public string $password;
+    public string $password = '';
 }

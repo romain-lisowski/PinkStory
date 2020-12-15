@@ -24,5 +24,5 @@ final class StoryImageSearchQuery implements QueryInterface, HandlerableInterfac
     /**
      * @Assert\NotBlank
      */
-    public string $languageId;
+    public string $languageId = '';
 }

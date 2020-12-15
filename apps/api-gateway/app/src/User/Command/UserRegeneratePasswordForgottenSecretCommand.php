@@ -20,5 +20,5 @@ final class UserRegeneratePasswordForgottenSecretCommand implements CommandInter
      * @Assert\NotBlank
      * @Assert\Email
      */
-    public string $email;
+    public string $email = '';
 }

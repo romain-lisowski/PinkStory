@@ -21,19 +21,19 @@ final class UserCreateCommand implements CommandInterface, HandlerableInterface,
     /**
      * @Assert\NotBlank
      */
-    public string $name;
+    public string $name = '';
 
     /**
      * @Assert\NotBlank
      * @AppUserAssert\Email
      */
-    public string $email;
+    public string $email = '';
 
     /**
      * @Assert\NotBlank
      * @AppUserAssert\PasswordStrenght
      */
-    public string $password;
+    public string $password = '';
 
     /**
      * @Assert\NotBlank

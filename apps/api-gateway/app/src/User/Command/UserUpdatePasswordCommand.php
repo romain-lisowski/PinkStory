@@ -21,17 +21,17 @@ final class UserUpdatePasswordCommand implements CommandInterface, HandlerableIn
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 
     /**
      * @Assert\NotBlank
      * @SecurityAssert\UserPassword
      */
-    public string $oldPassword;
+    public string $oldPassword = '';
 
     /**
      * @Assert\NotBlank
      * @AppUserAssert\PasswordStrenght
      */
-    public string $password;
+    public string $password = '';
 }

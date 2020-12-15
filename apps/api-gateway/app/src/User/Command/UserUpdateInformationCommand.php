@@ -20,12 +20,12 @@ final class UserUpdateInformationCommand implements CommandInterface, Handlerabl
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 
     /**
      * @Assert\NotBlank
      */
-    public string $name;
+    public string $name = '';
 
     /**
      * @Assert\NotBlank

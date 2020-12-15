@@ -19,5 +19,5 @@ final class UserDeleteImageCommand implements CommandInterface, HandlerableInter
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 }

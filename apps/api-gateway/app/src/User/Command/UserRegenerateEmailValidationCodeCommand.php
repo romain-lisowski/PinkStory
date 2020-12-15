@@ -19,5 +19,5 @@ final class UserRegenerateEmailValidationCodeCommand implements CommandInterface
     /**
      * @Assert\NotBlank
      */
-    public string $id;
+    public string $id = '';
 }

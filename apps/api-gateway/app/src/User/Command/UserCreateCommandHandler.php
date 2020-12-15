@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Command\AbstractCommandHandler;
+use App\Language\Repository\Entity\LanguageRepositoryInterface;
 use App\User\Message\UserCreateMessage;
 use App\User\Model\Entity\User;
 use App\User\Model\UserRole;
@@ -17,13 +18,15 @@ final class UserCreateCommandHandler extends AbstractCommandHandler
 {
     private EntityManagerInterface $entityManager;
     private MessageBusInterface $bus;
+    private LanguageRepositoryInterface $languageRepository;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorManagerInterface $validatorManager;
 
-    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, UserPasswordEncoderInterface $passwordEncoder, ValidatorManagerInterface $validatorManager)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus, LanguageRepositoryInterface $languageRepository, UserPasswordEncoderInterface $passwordEncoder, ValidatorManagerInterface $validatorManager)
     {
         $this->entityManager = $entityManager;
         $this->bus = $bus;
+        $this->languageRepository = $languageRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->validatorManager = $validatorManager;
     }
@@ -32,7 +35,9 @@ final class UserCreateCommandHandler extends AbstractCommandHandler
     {
         $this->validatorManager->validate($this->command);
 
-        $user = new User($this->command->name, $this->command->email, UserRole::ROLE_USER, $this->command->language);
+        $language = $this->languageRepository->findOne($this->command->languageId);
+
+        $user = new User($this->command->name, $this->command->email, UserRole::ROLE_USER, $language);
         $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
 
         $this->validatorManager->validate($user);

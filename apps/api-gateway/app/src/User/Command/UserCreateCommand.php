@@ -9,7 +9,6 @@ use App\Form\FormableInterface;
 use App\Form\FormableTrait;
 use App\Handler\HandlerableInterface;
 use App\Handler\HandlerableTrait;
-use App\Language\Model\Entity\Language;
 use App\User\Validator\Constraints as AppUserAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,5 +37,5 @@ final class UserCreateCommand implements CommandInterface, HandlerableInterface,
     /**
      * @Assert\NotBlank
      */
-    public Language $language;
+    public string $languageId = '';
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Repository\Dto;
 
 use App\Language\Model\Dto\CurrentLanguage;
+use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserFull;
@@ -40,11 +41,12 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('id', 'image_defined', 'name', 'name_slug', 'email')
-            ->from('usr_user')
+        $qb->select('u.id as user_id', 'u.image_defined as user_image_defined', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.email as user_email', 'language.id as language_id')
+            ->from('usr_user', 'u')
+            ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
         ;
 
-        $qb->where($qb->expr()->eq('id', ':user_id'))
+        $qb->where($qb->expr()->eq('u.id', ':user_id'))
             ->setParameter('user_id', $id)
         ;
 
@@ -54,6 +56,8 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
             throw new NoResultException();
         }
 
-        return new UserFull(strval($data['id']), boolval($data['image_defined']), strval($data['name']), strval($data['name_slug']), strval($data['email']));
+        $language = new LanguageMedium(strval($data['language_id']));
+
+        return new UserFull(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_email']), $language);
     }
 }

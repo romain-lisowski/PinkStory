@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Model\Dto;
 
+use App\Language\Model\Dto\Language;
 use App\User\Model\UserEditableInterface;
 use App\User\Model\UserInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -27,14 +28,20 @@ final class UserFull extends User implements UserEditableInterface
      */
     private string $email;
 
-    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '')
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    private Language $language;
+
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '', Language $language)
     {
         parent::__construct($id, $imageDefined);
 
+        $this->user = $this;
         $this->name = $name;
         $this->nameSlug = $nameSlug;
         $this->email = $email;
-        $this->user = $this;
+        $this->language = $language;
     }
 
     public function setUser(UserInterface $user): self
@@ -55,5 +62,10 @@ final class UserFull extends User implements UserEditableInterface
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function getLanguage(): Language
+    {
+        return $this->language;
     }
 }

@@ -6,7 +6,6 @@ namespace App\Language\Model\Entity;
 
 use App\File\Model\ImageableInterface;
 use App\File\Model\ImageableTrait;
-use App\Language\Model\LanguageInterface;
 use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use App\Model\Entity\AbstractEntity;
@@ -28,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"locale"}
  * )
  */
-class Language extends AbstractEntity implements LanguageInterface, ImageableInterface, EditableInterface
+class Language extends AbstractEntity implements ImageableInterface, EditableInterface
 {
     use ImageableTrait;
     use EditableTrait;

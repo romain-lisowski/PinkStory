@@ -6,7 +6,6 @@ namespace App\User\Model\Dto;
 
 use App\Language\Model\Dto\Language;
 use App\User\Model\UserEditableInterface;
-use App\User\Model\UserInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 final class UserFull extends User implements UserEditableInterface
@@ -42,11 +41,6 @@ final class UserFull extends User implements UserEditableInterface
         $this->nameSlug = $nameSlug;
         $this->email = $email;
         $this->language = $language;
-    }
-
-    public function setUser(UserInterface $user): self
-    {
-        return $this;
     }
 
     public function getName(): string

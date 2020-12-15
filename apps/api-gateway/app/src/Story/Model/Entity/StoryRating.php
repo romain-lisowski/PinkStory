@@ -6,8 +6,8 @@ namespace App\Story\Model\Entity;
 
 use App\Model\Entity\AbstractEntity;
 use App\User\Model\Entity\User;
-use App\User\Model\UserEditableInterface;
-use App\User\Model\UserEditableTrait;
+use App\User\Model\Entity\UserEditableInterface;
+use App\User\Model\Entity\UserEditableTrait;
 use App\User\Model\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;

@@ -18,8 +18,6 @@ trait UserEditableTrait
         return $this->user;
     }
 
-    abstract public function setUser(UserInterface $user): self;
-
     public function setEditable(?AuthorizationCheckerInterface $authorizationChecker = null, ?UserInterface $currentUser = null): self
     {
         // moderators are like small gods

@@ -12,8 +12,6 @@ use App\Language\Model\Entity\LanguageableTrait;
 use App\Model\Entity\AbstractEntity;
 use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryRating;
-use App\User\Model\UserEditableInterface;
-use App\User\Model\UserEditableTrait;
 use App\User\Model\UserInterface as ModelUserInterface;
 use App\User\Model\UserRole;
 use App\User\Validator\Constraints as AppUserAssert;

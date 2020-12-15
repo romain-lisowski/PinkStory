@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use App\Exception\ChildDepthException;
-use App\Model\DepthableTrait as ModelDepthableTrait;
+use Doctrine\Common\Collections\Collection;
 use InvalidArgumentException;
 
 trait DepthableTrait
 {
-    use ModelDepthableTrait;
-
     private ?DepthableInterface $parent;
+
+    private Collection $children;
 
     public function getParent(): ?DepthableInterface
     {
@@ -53,6 +53,22 @@ trait DepthableTrait
         }
 
         $this->setParent($parent);
+
+        return $this;
+    }
+
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(DepthableInterface $child): self
+    {
+        if (!$child instanceof self) {
+            throw new InvalidArgumentException();
+        }
+
+        $this->children[] = $child;
 
         return $this;
     }

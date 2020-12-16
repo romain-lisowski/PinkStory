@@ -6,6 +6,7 @@ namespace App\EventListener;
 
 use App\Language\Repository\Dto\LanguageRepositoryInterface;
 use App\User\Security\UserSecurityManagerInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -38,7 +39,7 @@ final class RequestSubscriber implements EventSubscriberInterface
 
         if (null !== $this->userSecurityManager->getCurrentUser()) {
             $currentLanguage = $this->userSecurityManager->getCurrentUser()->getLanguage();
-            $currentReadingLanguages = [$currentLanguage];
+            $currentReadingLanguages = new ArrayCollection([$currentLanguage]);
         } else {
             try {
                 $currentLanguage = $this->languageRepository->findCurrentByLocale($request->query->get('_locale', 'en'));
@@ -46,7 +47,7 @@ final class RequestSubscriber implements EventSubscriberInterface
                 $currentLanguage = $this->languageRepository->findCurrentByLocale('en');
             }
 
-            $currentReadingLanguages = [$currentLanguage];
+            $currentReadingLanguages = new ArrayCollection([$currentLanguage]);
         }
 
         $request->attributes->set('current-language', $currentLanguage);

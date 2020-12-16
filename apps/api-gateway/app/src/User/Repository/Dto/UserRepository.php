@@ -24,8 +24,12 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
         ;
 
-        $qb->where($qb->expr()->eq('u.id', ':user_id'))
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('u.id', ':user_id'),
+            $qb->expr()->eq('u.activated', ':user_activated')
+        ))
             ->setParameter('user_id', $id)
+            ->setParameter('user_activated', true)
         ;
 
         $data = $qb->execute()->fetch();
@@ -49,8 +53,12 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
         ;
 
-        $qb->where($qb->expr()->eq('u.id', ':user_id'))
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('u.id', ':user_id'),
+            $qb->expr()->eq('u.activated', ':user_activated')
+        ))
             ->setParameter('user_id', $id)
+            ->setParameter('user_activated', true)
         ;
 
         $data = $qb->execute()->fetch();

@@ -38,6 +38,8 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
             ))
             ->setParameter('language_id', $query->languageId)
+            ->where($qb->expr()->eq('storyImage.activated', ':story_image_activated'))
+            ->setParameter('story_image_activated', true)
             ->orderBy('storyImage.created_at', Criteria::DESC)
         ;
 
@@ -92,6 +94,8 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 $qb->expr()->in('story.id', ':story_ids')
             ))
             ->setParameter('story_ids', $storyIds, Connection::PARAM_STR_ARRAY)
+            ->where($qb->expr()->eq('storyImage.activated', ':story_image_activated'))
+            ->setParameter('story_image_activated', true)
         ;
 
         $datas = $qb->execute()->fetchAll();

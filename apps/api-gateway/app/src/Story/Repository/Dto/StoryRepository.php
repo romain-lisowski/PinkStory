@@ -41,8 +41,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->eq('story.id', ':story_id'))
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('story.id', ':story_id'),
+            $qb->expr()->eq('story.activated', ':story_activated')
+        ))
             ->setParameter('story_id', $query->id)
+            ->setParameter('story_activated', true)
         ;
 
         $data = $qb->execute()->fetch();
@@ -71,15 +75,13 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
             $storyPrevious = null;
 
-            if (intval($data['story_position']) - 1 > 0) {
-                $storyPrevious = $this->getChildByPosition(strval($data['story_parent_id']), intval($data['story_position']) - 1);
+            $storyPrevious = $this->getPrevious(strval($data['story_parent_id']), intval($data['story_position']));
 
-                if (null !== $storyPrevious) {
-                    $stories->add($storyPrevious);
-                }
+            if (null !== $storyPrevious) {
+                $stories->add($storyPrevious);
             }
 
-            $storyNext = $this->getChildByPosition(strval($data['story_parent_id']), intval($data['story_position']) + 1);
+            $storyNext = $this->getNext(strval($data['story_parent_id']), intval($data['story_position']));
 
             if (null !== $storyNext) {
                 $stories->add($storyNext);
@@ -104,8 +106,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->eq('story.parent_id', ':story_parent_id'))
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('story.parent_id', ':story_parent_id'),
+            $qb->expr()->eq('story.activated', ':story_activated')
+        ))
             ->setParameter('story_parent_id', $parentId)
+            ->setParameter('story_activated', true)
             ->orderBy('story.position', Criteria::ASC)
         ;
 
@@ -127,8 +133,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->eq('story.id', ':story_id'))
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('story.id', ':story_id'),
+            $qb->expr()->eq('story.activated', ':story_activated')
+        ))
             ->setParameter('story_id', $id)
+            ->setParameter('story_activated', true)
         ;
 
         $data = $qb->execute()->fetch();
@@ -140,7 +150,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         return $this->populateMedium($data);
     }
 
-    private function getChildByPosition(string $parentId, int $position): ?StoryMedium
+    private function getPrevious(string $parentId, int $position): ?StoryMedium
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -148,10 +158,41 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $qb->where($qb->expr()->andX(
             $qb->expr()->eq('story.parent_id', ':story_parent_id'),
-            $qb->expr()->eq('story.position', ':story_position'),
+            $qb->expr()->lt('story.position', ':story_position'),
+            $qb->expr()->eq('story.activated', ':story_activated')
         ))
             ->setParameter('story_parent_id', $parentId)
             ->setParameter('story_position', $position)
+            ->setParameter('story_activated', true)
+            ->orderBy('story.position', Criteria::DESC)
+            ->setMaxResults(1)
+        ;
+
+        $data = $qb->execute()->fetch();
+
+        if (false === $data) {
+            return null;
+        }
+
+        return $this->populateMedium($data);
+    }
+
+    private function getNext(string $parentId, int $position): ?StoryMedium
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb);
+
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('story.parent_id', ':story_parent_id'),
+            $qb->expr()->gt('story.position', ':story_position'),
+            $qb->expr()->eq('story.activated', ':story_activated')
+        ))
+            ->setParameter('story_parent_id', $parentId)
+            ->setParameter('story_position', $position)
+            ->setParameter('story_activated', true)
+            ->orderBy('story.position', Criteria::ASC)
+            ->setMaxResults(1)
         ;
 
         $data = $qb->execute()->fetch();

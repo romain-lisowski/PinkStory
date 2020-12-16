@@ -30,6 +30,8 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
             ))
             ->setParameter('language_id', $query->languageId)
+            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
+            ->setParameter('story_theme_activated', true)
             ->orderBy('storyTheme.position', Criteria::ASC)
         ;
 
@@ -64,9 +66,14 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyTheme.id as id')
-            ->from('sty_story_theme', 'storyTheme')
-            ->where($qb->expr()->isNotNull('storyTheme.parent_id'))
+        $qb->select('id')
+            ->from('sty_story_theme')
+            ->where($qb->expr()->andX(
+                $qb->expr()->isNotNull('parent_id'),
+                $qb->expr()->eq('activated', ':activated')
+            ))
+            ->setParameter('activated', true)
+
         ;
 
         $datas = $qb->execute()->fetchAll();
@@ -99,6 +106,8 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
             ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
             ))
+            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
+            ->setParameter('story_theme_activated', true)
             ->orderBy('storyThemeParent.position', Criteria::ASC)
             ->addOrderBy('storyTheme.position', Criteria::ASC)
         ;
@@ -138,6 +147,8 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
             ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
             ))
+            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
+            ->setParameter('story_theme_activated', true)
             ->orderBy('storyThemeParent.position', Criteria::ASC)
             ->addOrderBy('storyTheme.position', Criteria::ASC)
         ;

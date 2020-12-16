@@ -20,10 +20,12 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
 
         $qb->select('id', 'title', 'locale')
             ->from('lng_language', 'language')
+            ->where($qb->expr()->eq('activated', ':activated'))
+            ->setParameter('activated', true)
         ;
 
-        $qb->where($qb->expr()->eq('language.locale', ':language_locale'))
-            ->setParameter('language_locale', $locale)
+        $qb->where($qb->expr()->eq('locale', ':locale'))
+            ->setParameter('locale', $locale)
         ;
 
         $data = $qb->execute()->fetch();
@@ -41,6 +43,8 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
 
         $qb->select('id', 'title', 'locale')
             ->from('lng_language')
+            ->where($qb->expr()->eq('activated', ':activated'))
+            ->setParameter('activated', true)
         ;
 
         $languageDatas = $qb->execute()->fetchAll();
@@ -59,8 +63,10 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('language.id as id')
-            ->from('lng_language', 'language')
+        $qb->select('id')
+            ->from('lng_language')
+            ->where($qb->expr()->eq('activated', ':activated'))
+            ->setParameter('activated', true)
         ;
 
         $datas = $qb->execute()->fetchAll();

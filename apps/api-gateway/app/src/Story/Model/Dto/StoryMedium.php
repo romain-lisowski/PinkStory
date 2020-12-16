@@ -45,7 +45,7 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
     /**
      * @Serializer\Groups({"serializer"})
      */
-    private float $rate;
+    private ?float $rate;
 
     /**
      * @Serializer\Groups({"serializer"})
@@ -68,7 +68,7 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
         $this->user = $user;
         $this->language = $language;
         $this->rates = [];
-        $this->rate = 0;
+        $this->rate = null;
         $this->storyImage = null;
         $this->storyThemes = new ArrayCollection();
     }
@@ -93,7 +93,7 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
         return $this->createdAt;
     }
 
-    public function getRate(): float
+    public function getRate(): ?float
     {
         return $this->rate;
     }

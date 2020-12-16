@@ -30,9 +30,9 @@ final class StoryFullParent extends StoryFull
         return $this->children;
     }
 
-    public function addChild(StoryMedium $child): self
+    public function setChildren(Collection $children): self
     {
-        $this->children[] = $child;
+        $this->children = $children;
 
         return $this;
     }

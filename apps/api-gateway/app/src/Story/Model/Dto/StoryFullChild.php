@@ -40,12 +40,12 @@ final class StoryFullChild extends StoryFull
         return $this->parent;
     }
 
-    public function getPrevious(): StoryMedium
+    public function getPrevious(): ?StoryMedium
     {
         return $this->previous;
     }
 
-    public function getNext(): StoryMedium
+    public function getNext(): ?StoryMedium
     {
         return $this->next;
     }

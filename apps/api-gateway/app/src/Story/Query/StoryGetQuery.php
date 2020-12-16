@@ -17,4 +17,9 @@ final class StoryGetQuery implements QueryInterface, HandlerableInterface
      * @Assert\NotBlank
      */
     public string $id = '';
+
+    /**
+     * @Assert\NotBlank
+     */
+    public string $languageId = '';
 }

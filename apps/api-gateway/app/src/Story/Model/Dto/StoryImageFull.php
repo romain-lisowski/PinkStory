@@ -8,18 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class StoryImageFull extends StoryImage
+final class StoryImageFull extends StoryImageMedium
 {
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private string $title;
-
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private string $titleSlug;
-
     /**
      * @Serializer\Groups({"serializer"})
      */
@@ -27,21 +17,9 @@ final class StoryImageFull extends StoryImage
 
     public function __construct(string $id = '', string $title = '', string $titleSlug = '')
     {
-        parent::__construct($id);
+        parent::__construct($id, $title, $titleSlug);
 
-        $this->title = $title;
-        $this->titleSlug = $titleSlug;
         $this->storyThemes = new ArrayCollection();
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getTitleSlug(): string
-    {
-        return $this->titleSlug;
     }
 
     public function getStoryThemes(): Collection

@@ -24,6 +24,6 @@ final class StoryGetQueryHandler extends AbstractQueryHandler
     {
         $this->validatorManager->validate($this->query);
 
-        return $this->storyRepository->findOne($this->query->id);
+        return $this->storyRepository->getOne($this->query);
     }
 }

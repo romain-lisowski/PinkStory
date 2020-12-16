@@ -7,13 +7,27 @@ namespace App\Story\Repository\Dto;
 use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\StoryFull;
+use App\Story\Model\Dto\StoryFullParent;
+use App\Story\Query\StoryGetQuery;
 use App\User\Model\Dto\UserMedium;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class StoryRepository extends AbstractRepository implements StoryRepositoryInterface
 {
-    public function findOne(string $id): StoryFull
+    private StoryImageRepositoryInterface $storyImageRepository;
+    private StoryThemeRepositoryInterface $storyThemeRepository;
+
+    public function __construct(EntityManagerInterface $entityManager, StoryImageRepositoryInterface $storyImageRepository, StoryThemeRepositoryInterface $storyThemeRepository)
+    {
+        parent::__construct($entityManager);
+
+        $this->storyImageRepository = $storyImageRepository;
+        $this->storyThemeRepository = $storyThemeRepository;
+    }
+
+    public function getOne(StoryGetQuery $query): StoryFull
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -26,7 +40,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ->addSelect('u_language.id as user_language_id')
             ->join('u', 'lng_language', 'u_language', $qb->expr()->eq('u_language.id', 'u.language_id'))
             ->where($qb->expr()->eq('story.id', ':story_id'))
-            ->setParameter('story_id', $id)
+            ->setParameter('story_id', $query->id)
         ;
 
         $data = $qb->execute()->fetch();
@@ -38,8 +52,17 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        $story = new StoryFull(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime($data['story_created_at']), $user, $language);
-        $stories->add($story);
+        if (null === $data['story_parent_id']) {
+            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime($data['story_created_at']), $user, $language);
+            $stories->add($story);
+
+            $storyChildren = new ArrayCollection();
+            $stories = new ArrayCollection(array_merge($stories->toArray(), $storyChildren->toArray()));
+        }
+
+        $this->storyImageRepository->populateStories($stories, $query->languageId);
+
+        $this->storyThemeRepository->populateStories($stories, $query->languageId);
 
         return $story;
     }

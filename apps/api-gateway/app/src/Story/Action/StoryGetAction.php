@@ -30,6 +30,7 @@ final class StoryGetAction extends AbstractAction
     {
         $query = new StoryGetQuery();
         $query->id = (string) $request->attributes->get('id');
+        $query->languageId = $request->get('current-language')->getId();
 
         return $this->responder->render([
             'story' => $this->handler->setQuery($query)->handle(),

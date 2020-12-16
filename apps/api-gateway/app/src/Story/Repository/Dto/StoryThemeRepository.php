@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Repository\Dto;
 
 use App\Repository\Dto\AbstractRepository;
+use App\Story\Model\Dto\Story;
 use App\Story\Model\Dto\StoryImage;
 use App\Story\Model\Dto\StoryThemeFull;
 use App\Story\Model\Dto\StoryThemeFullParent;
@@ -59,6 +60,22 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
         return $storyThemes;
     }
 
+    public function findChildrenIds(): array
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('storyTheme.id as id')
+            ->from('sty_story_theme', 'storyTheme')
+            ->where($qb->expr()->isNotNull('storyTheme.parent_id'))
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        return array_map(function ($data) {
+            return $data['id'];
+        }, $datas);
+    }
+
     public function populateStoryImages(Collection $storyImages, string $languageId): void
     {
         $storyImageIds = StoryImage::extractIds($storyImages);
@@ -98,19 +115,42 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
         }
     }
 
-    public function findChildrenIds(): array
+    public function populateStories(Collection $stories, string $languageId): void
     {
+        $storyIds = Story::extractIds($stories);
+
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyTheme.id as id')
-            ->from('sty_story_theme', 'storyTheme')
-            ->where($qb->expr()->isNotNull('storyTheme.parent_id'))
+        $qb->select('storyHasStoryTheme.story_id as story_id')
+            ->from('sty_story_has_story_theme', 'storyHasStoryTheme')
+            ->addSelect('storyTheme.id as id')
+            ->join('storyHasStoryTheme', 'sty_story_theme', 'storyTheme', $qb->expr()->andX(
+                $qb->expr()->eq('storyTheme.id', 'storyHasStoryTheme.story_theme_id'),
+                $qb->expr()->in('storyHasStoryTheme.story_id', ':story_ids')
+            ))
+            ->setParameter('story_ids', $storyIds, Connection::PARAM_STR_ARRAY)
+            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
+            ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
+                $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
+                $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
+            ))
+            ->setParameter('language_id', $languageId)
+            ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
+                $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
+            ))
+            ->orderBy('storyThemeParent.position', Criteria::ASC)
+            ->addOrderBy('storyTheme.position', Criteria::ASC)
         ;
 
         $datas = $qb->execute()->fetchAll();
 
-        return array_map(function ($data) {
-            return $data['id'];
-        }, $datas);
+        foreach ($datas as $data) {
+            foreach ($stories as $story) {
+                if ($story->getId() === strval($data['story_id'])) {
+                    $storyTheme = new StoryThemeMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
+                    $story->addStoryTheme($storyTheme);
+                }
+            }
+        }
     }
 }

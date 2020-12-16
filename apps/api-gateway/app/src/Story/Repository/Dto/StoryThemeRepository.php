@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 final class StoryThemeRepository extends AbstractRepository implements StoryThemeRepositoryInterface
 {
@@ -22,18 +23,9 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyTheme.id as id', 'storyTheme.parent_id as parent_id')
-            ->from('sty_story_theme', 'storyTheme')
-            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
-            ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
-                $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
-                $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
-            ))
-            ->setParameter('language_id', $query->languageId)
-            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
-            ->setParameter('story_theme_activated', true)
-            ->orderBy('storyTheme.position', Criteria::ASC)
-        ;
+        $this->createBaseQueryBuilder($qb, $query->languageId);
+
+        $qb->orderBy('storyTheme.position', Criteria::ASC);
 
         $datas = $qb->execute()->fetchAll();
 
@@ -89,25 +81,17 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
 
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyImageHasStoryTheme.story_image_id as story_image_id')
-            ->from('sty_story_image_has_story_theme', 'storyImageHasStoryTheme')
-            ->addSelect('storyTheme.id as id')
-            ->join('storyImageHasStoryTheme', 'sty_story_theme', 'storyTheme', $qb->expr()->andX(
-                $qb->expr()->eq('storyTheme.id', 'storyImageHasStoryTheme.story_theme_id'),
+        $this->createBaseQueryBuilder($qb, $languageId);
+
+        $qb->addSelect('storyImageHasStoryTheme.story_image_id as story_image_id')
+            ->join('storyTheme', 'sty_story_image_has_story_theme', 'storyImageHasStoryTheme', $qb->expr()->andX(
+                $qb->expr()->eq('storyImageHasStoryTheme.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->in('storyImageHasStoryTheme.story_image_id', ':story_image_ids')
             ))
             ->setParameter('story_image_ids', $storyImageIds, Connection::PARAM_STR_ARRAY)
-            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
-            ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
-                $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
-                $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
-            ))
-            ->setParameter('language_id', $languageId)
             ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
             ))
-            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
-            ->setParameter('story_theme_activated', true)
             ->orderBy('storyThemeParent.position', Criteria::ASC)
             ->addOrderBy('storyTheme.position', Criteria::ASC)
         ;
@@ -130,25 +114,17 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
 
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyHasStoryTheme.story_id as story_id')
-            ->from('sty_story_has_story_theme', 'storyHasStoryTheme')
-            ->addSelect('storyTheme.id as id')
-            ->join('storyHasStoryTheme', 'sty_story_theme', 'storyTheme', $qb->expr()->andX(
-                $qb->expr()->eq('storyTheme.id', 'storyHasStoryTheme.story_theme_id'),
+        $this->createBaseQueryBuilder($qb, $languageId);
+
+        $qb->addSelect('storyHasStoryTheme.story_id as story_id')
+            ->join('storyTheme', 'sty_story_has_story_theme', 'storyHasStoryTheme', $qb->expr()->andX(
+                $qb->expr()->eq('storyHasStoryTheme.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->in('storyHasStoryTheme.story_id', ':story_ids')
             ))
             ->setParameter('story_ids', $storyIds, Connection::PARAM_STR_ARRAY)
-            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
-            ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
-                $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
-                $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
-            ))
-            ->setParameter('language_id', $languageId)
             ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
             ))
-            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
-            ->setParameter('story_theme_activated', true)
             ->orderBy('storyThemeParent.position', Criteria::ASC)
             ->addOrderBy('storyTheme.position', Criteria::ASC)
         ;
@@ -163,5 +139,20 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 }
             }
         }
+    }
+
+    private function createBaseQueryBuilder(QueryBuilder $qb, string $languageId): void
+    {
+        $qb->select('storyTheme.id as id', 'storyTheme.parent_id as parent_id')
+            ->from('sty_story_theme', 'storyTheme')
+            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
+            ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
+                $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
+                $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
+            ))
+            ->setParameter('language_id', $languageId)
+            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
+            ->setParameter('story_theme_activated', true)
+        ;
     }
 }

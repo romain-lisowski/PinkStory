@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class StoryImageRepository extends AbstractRepository implements StoryImageRepositoryInterface
@@ -30,18 +31,9 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyImage.id as id')
-            ->from('sty_story_image', 'storyImage')
-            ->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
-            ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->andX(
-                $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
-                $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
-            ))
-            ->setParameter('language_id', $query->languageId)
-            ->where($qb->expr()->eq('storyImage.activated', ':story_image_activated'))
-            ->setParameter('story_image_activated', true)
-            ->orderBy('storyImage.created_at', Criteria::DESC)
-        ;
+        $this->createBaseQueryBuilder($qb, $query->languageId);
+
+        $qb->orderBy('storyImage.created_at', Criteria::DESC);
 
         if (count($query->storyThemeIds) > 0) {
             $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
@@ -80,22 +72,14 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
 
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyImage.id as id')
-            ->from('sty_story_image', 'storyImage')
-            ->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
-            ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->andX(
-                $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
-                $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
-            ))
-            ->setParameter('language_id', $languageId)
-            ->addSelect('story.id as story_id')
+        $this->createBaseQueryBuilder($qb, $languageId);
+
+        $qb->addSelect('story.id as story_id')
             ->join('storyImage', 'sty_story', 'story', $qb->expr()->andX(
                 $qb->expr()->eq('story.story_image_id', 'storyImage.id'),
                 $qb->expr()->in('story.id', ':story_ids')
             ))
             ->setParameter('story_ids', $storyIds, Connection::PARAM_STR_ARRAY)
-            ->where($qb->expr()->eq('storyImage.activated', ':story_image_activated'))
-            ->setParameter('story_image_activated', true)
         ;
 
         $datas = $qb->execute()->fetchAll();
@@ -108,5 +92,20 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 }
             }
         }
+    }
+
+    private function createBaseQueryBuilder(QueryBuilder $qb, string $languageId): void
+    {
+        $qb->select('storyImage.id as id')
+            ->from('sty_story_image', 'storyImage')
+            ->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
+            ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->andX(
+                $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
+                $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
+            ))
+            ->setParameter('language_id', $languageId)
+            ->where($qb->expr()->eq('storyImage.activated', ':story_image_activated'))
+            ->setParameter('story_image_activated', true)
+        ;
     }
 }

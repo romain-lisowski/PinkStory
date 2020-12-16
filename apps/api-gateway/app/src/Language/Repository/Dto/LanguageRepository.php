@@ -10,6 +10,7 @@ use App\Language\Query\LanguageSearchQuery;
 use App\Repository\Dto\AbstractRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\NoResultException;
 
 final class LanguageRepository extends AbstractRepository implements LanguageRepositoryInterface
@@ -18,13 +19,9 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('id', 'title', 'locale')
-            ->from('lng_language', 'language')
-            ->where($qb->expr()->eq('activated', ':activated'))
-            ->setParameter('activated', true)
-        ;
+        $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->eq('locale', ':locale'))
+        $qb->andWhere($qb->expr()->eq('locale', ':locale'))
             ->setParameter('locale', $locale)
         ;
 
@@ -41,11 +38,7 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('id', 'title', 'locale')
-            ->from('lng_language')
-            ->where($qb->expr()->eq('activated', ':activated'))
-            ->setParameter('activated', true)
-        ;
+        $this->createBaseQueryBuilder($qb);
 
         $languageDatas = $qb->execute()->fetchAll();
 
@@ -74,5 +67,14 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
         return array_map(function ($data) {
             return $data['id'];
         }, $datas);
+    }
+
+    private function createBaseQueryBuilder(QueryBuilder $qb): void
+    {
+        $qb->select('id', 'title', 'locale')
+            ->from('lng_language')
+            ->where($qb->expr()->eq('activated', ':activated'))
+            ->setParameter('activated', true)
+        ;
     }
 }

@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Language\Model\Entity;
+namespace App\Language\Model\Dto;
 
 use App\Language\Model\LanguageableTrait as ModelLanguageableTrait;
 use App\Language\Model\LanguageInterface;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 trait LanguageableTrait
 {
     use ModelLanguageableTrait;
 
-    abstract public function setLanguage(LanguageInterface $language): self;
-
-    abstract public function updateLanguage(LanguageInterface $language): self;
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    private LanguageInterface $language;
 }

@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace App\Story\Model\Dto;
 
 use App\Language\Model\Dto\Language;
+use App\Language\Model\Dto\LanguageableTrait;
+use App\Language\Model\LanguageableInterface;
+use App\User\Model\Dto\User;
 use App\User\Model\Dto\UserEditableTrait;
 use App\User\Model\UserEditableInterface;
-use App\User\Model\UserInterface;
 use DateTime;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class StoryFull extends Story implements UserEditableInterface
+final class StoryFull extends Story implements UserEditableInterface, LanguageableInterface
 {
     use UserEditableTrait;
+    use LanguageableTrait;
 
     /**
      * @Serializer\Groups({"serializer"})
@@ -35,17 +38,7 @@ final class StoryFull extends Story implements UserEditableInterface
      */
     private DateTime $createdAt;
 
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private Language $language;
-
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private UserInterface $user;
-
-    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', DateTime $createdAt, Language $language, UserInterface $user)
+    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', DateTime $createdAt, User $user, Language $language)
     {
         parent::__construct($id);
 
@@ -75,10 +68,5 @@ final class StoryFull extends Story implements UserEditableInterface
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
-    }
-
-    public function getLanguage(): Language
-    {
-        return $this->language;
     }
 }

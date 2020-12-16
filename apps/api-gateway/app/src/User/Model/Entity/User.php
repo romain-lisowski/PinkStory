@@ -9,6 +9,7 @@ use App\File\Model\ImageableTrait;
 use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
+use App\Language\Model\LanguageInterface;
 use App\Model\Entity\AbstractEntity;
 use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryRating;
@@ -19,6 +20,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -127,7 +129,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
-    private Language $language;
+    private LanguageInterface $language;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\Story", mappedBy="user", cascade={"remove"})
@@ -411,17 +413,23 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         return 'user';
     }
 
-    public function setLanguage(Language $language): self
+    public function setLanguage(LanguageInterface $language): self
     {
+        if (!$language instanceof Language) {
+            throw new InvalidArgumentException();
+        }
+
         $this->language = $language;
         $language->addUser($this);
 
         return $this;
     }
 
-    public function updateLanguage(Language $language): self
+    public function updateLanguage(LanguageInterface $language): self
     {
-        $this->language->removeUser($this);
+        if ($this->language instanceof Language) {
+            $this->language->removeUser($this);
+        }
 
         $this->setLanguage($language);
 

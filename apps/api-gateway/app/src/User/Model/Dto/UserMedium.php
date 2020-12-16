@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace App\User\Model\Dto;
 
 use App\Language\Model\Dto\Language;
+use App\Language\Model\Dto\LanguageableTrait;
+use App\Language\Model\LanguageableInterface;
+use DateTime;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class UserMedium extends User
+class UserMedium extends User implements LanguageableInterface
 {
+    use LanguageableTrait;
+
     /**
      * @Serializer\Groups({"serializer"})
      */
@@ -22,15 +27,15 @@ final class UserMedium extends User
     /**
      * @Serializer\Groups({"serializer"})
      */
-    private Language $language;
+    private DateTime $createdAt;
 
-    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', Language $language)
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', DateTime $createdAt, Language $language)
     {
         parent::__construct($id, $imageDefined);
 
-        $this->user = $this;
         $this->name = $name;
         $this->nameSlug = $nameSlug;
+        $this->createdAt = $createdAt;
         $this->language = $language;
     }
 
@@ -44,8 +49,8 @@ final class UserMedium extends User
         return $this->nameSlug;
     }
 
-    public function getLanguage(): Language
+    public function getCreatedAt(): DateTime
     {
-        return $this->language;
+        return $this->createdAt;
     }
 }

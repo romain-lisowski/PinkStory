@@ -21,8 +21,9 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyTheme.id as id', 'storyTheme.parent_id as parent_id', 'storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
+        $qb->select('storyTheme.id as id', 'storyTheme.parent_id as parent_id')
             ->from('sty_story_theme', 'storyTheme')
+            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
             ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
@@ -64,13 +65,15 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
 
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyTheme.id as id', 'storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug', 'storyImageHasStoryTheme.story_image_id as story_image_id')
+        $qb->select('storyImageHasStoryTheme.story_image_id as story_image_id')
             ->from('sty_story_image_has_story_theme', 'storyImageHasStoryTheme')
+            ->addSelect('storyTheme.id as id')
             ->join('storyImageHasStoryTheme', 'sty_story_theme', 'storyTheme', $qb->expr()->andX(
                 $qb->expr()->eq('storyTheme.id', 'storyImageHasStoryTheme.story_theme_id'),
                 $qb->expr()->in('storyImageHasStoryTheme.story_image_id', ':story_image_ids')
             ))
             ->setParameter('story_image_ids', $storyImageIds, Connection::PARAM_STR_ARRAY)
+            ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
             ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->andX(
                 $qb->expr()->eq('storyThemeTranslation.story_theme_id', 'storyTheme.id'),
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')

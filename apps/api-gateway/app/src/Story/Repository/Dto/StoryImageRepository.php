@@ -27,8 +27,9 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
-        $qb->select('storyImage.id as id', 'storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
+        $qb->select('storyImage.id as id')
             ->from('sty_story_image', 'storyImage')
+            ->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
             ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->andX(
                 $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
                 $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')

@@ -6,21 +6,14 @@ namespace App\User\Model\Dto;
 
 use App\Language\Model\Dto\Language;
 use App\User\Model\UserEditableInterface;
+use App\User\Model\UserEditableTrait;
+use DateTime;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class UserFull extends User implements UserEditableInterface
+final class UserFull extends UserMedium implements UserEditableInterface
 {
+    // Not use dto one, to avoid circular reference with serializer.
     use UserEditableTrait;
-
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private string $name;
-
-    /**
-     * @Serializer\Groups({"serializer"})
-     */
-    private string $nameSlug;
 
     /**
      * @Serializer\Groups({"serializer"})
@@ -28,38 +21,22 @@ final class UserFull extends User implements UserEditableInterface
     private string $email;
 
     /**
+     * Cause we don't use dto one.
+     *
      * @Serializer\Groups({"serializer"})
      */
-    private Language $language;
+    private bool $editable = false;
 
-    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '', Language $language)
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '', DateTime $createdAt, Language $language)
     {
-        parent::__construct($id, $imageDefined);
+        parent::__construct($id, $imageDefined, $name, $nameSlug, $createdAt, $language);
 
         $this->user = $this;
-        $this->name = $name;
-        $this->nameSlug = $nameSlug;
         $this->email = $email;
-        $this->language = $language;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getNameSlug(): string
-    {
-        return $this->nameSlug;
     }
 
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    public function getLanguage(): Language
-    {
-        return $this->language;
     }
 }

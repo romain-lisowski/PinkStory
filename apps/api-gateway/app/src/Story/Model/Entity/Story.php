@@ -7,6 +7,7 @@ namespace App\Story\Model\Entity;
 use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
+use App\Language\Model\LanguageInterface;
 use App\Model\Entity\AbstractEntity;
 use App\Model\Entity\DepthableInterface;
 use App\Model\Entity\DepthableTrait;
@@ -69,7 +70,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="stories")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
-    private Language $language;
+    private LanguageInterface $language;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Model\Entity\Story", inversedBy="children")
@@ -183,17 +184,23 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         return $this;
     }
 
-    public function setLanguage(Language $language): self
+    public function setLanguage(LanguageInterface $language): self
     {
+        if (!$language instanceof Language) {
+            throw new InvalidArgumentException();
+        }
+
         $this->language = $language;
         $language->addStory($this);
 
         return $this;
     }
 
-    public function updateLanguage(Language $language): self
+    public function updateLanguage(LanguageInterface $language): self
     {
-        $this->language->removeStory($this);
+        if ($this->language instanceof Language) {
+            $this->language->removeStory($this);
+        }
 
         $this->setLanguage($language);
 

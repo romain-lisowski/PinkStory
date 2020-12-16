@@ -6,9 +6,11 @@ namespace App\Story\Model\Entity;
 
 use App\Language\Model\Entity\AbstractTranslation;
 use App\Language\Model\Entity\Language;
+use App\Language\Model\LanguageInterface;
 use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,7 +47,7 @@ class StoryImageTranslation extends AbstractTranslation implements EditableInter
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="storyImageTranslations")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
-    private Language $language;
+    private LanguageInterface $language;
 
     public function __construct(string $title = '', StoryImage $storyImage, Language $language)
     {
@@ -101,17 +103,23 @@ class StoryImageTranslation extends AbstractTranslation implements EditableInter
         return $this;
     }
 
-    public function setLanguage(Language $language): self
+    public function setLanguage(LanguageInterface $language): self
     {
+        if (!$language instanceof Language) {
+            throw new InvalidArgumentException();
+        }
+
         $this->language = $language;
         $language->addStoryImageTranslation($this);
 
         return $this;
     }
 
-    public function updateLanguage(Language $language): self
+    public function updateLanguage(LanguageInterface $language): self
     {
-        $this->language->removeStoryImageTranslation($this);
+        if ($this->language instanceof Language) {
+            $this->language->removeStoryImageTranslation($this);
+        }
 
         $this->setLanguage($language);
 

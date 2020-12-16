@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Language\Model\Entity;
 
-interface LanguageableInterface
+use App\Language\Model\LanguageableInterface as ModelLanguageableInterface;
+use App\Language\Model\LanguageInterface;
+
+interface LanguageableInterface extends ModelLanguageableInterface
 {
-    public function getLanguage(): Language;
+    public function setLanguage(LanguageInterface $language): self;
 
-    public function setLanguage(Language $language): self;
-
-    public function updateLanguage(Language $language): self;
+    public function updateLanguage(LanguageInterface $language): self;
 }

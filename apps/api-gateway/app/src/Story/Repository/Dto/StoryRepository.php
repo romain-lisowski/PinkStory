@@ -15,6 +15,7 @@ use App\User\Model\Dto\UserMedium;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
@@ -105,6 +106,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $qb->where($qb->expr()->eq('story.parent_id', ':story_parent_id'))
             ->setParameter('story_parent_id', $parentId)
+            ->orderBy('story.position', Criteria::ASC)
         ;
 
         $datas = $qb->execute()->fetchAll();

@@ -16,13 +16,15 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class StoryRepository extends AbstractRepository implements StoryRepositoryInterface
 {
+    private StoryRatingRepositoryInterface $storyRatingRepository;
     private StoryImageRepositoryInterface $storyImageRepository;
     private StoryThemeRepositoryInterface $storyThemeRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, StoryImageRepositoryInterface $storyImageRepository, StoryThemeRepositoryInterface $storyThemeRepository)
+    public function __construct(EntityManagerInterface $entityManager, StoryRatingRepositoryInterface $storyRatingRepository, StoryImageRepositoryInterface $storyImageRepository, StoryThemeRepositoryInterface $storyThemeRepository)
     {
         parent::__construct($entityManager);
 
+        $this->storyRatingRepository = $storyRatingRepository;
         $this->storyImageRepository = $storyImageRepository;
         $this->storyThemeRepository = $storyThemeRepository;
     }
@@ -59,6 +61,8 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             $storyChildren = new ArrayCollection();
             $stories = new ArrayCollection(array_merge($stories->toArray(), $storyChildren->toArray()));
         }
+
+        $this->storyRatingRepository->populateStories($stories);
 
         $this->storyImageRepository->populateStories($stories, $query->languageId);
 

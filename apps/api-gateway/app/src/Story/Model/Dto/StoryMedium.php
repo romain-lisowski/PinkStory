@@ -40,6 +40,13 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
      */
     private DateTime $createdAt;
 
+    private array $rates;
+
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    private float $rate;
+
     /**
      * @Serializer\Groups({"serializer"})
      */
@@ -60,6 +67,8 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
         $this->createdAt = $createdAt;
         $this->user = $user;
         $this->language = $language;
+        $this->rates = [];
+        $this->rate = 0;
         $this->storyImage = null;
         $this->storyThemes = new ArrayCollection();
     }
@@ -82,6 +91,19 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    public function getRate(): float
+    {
+        return $this->rate;
+    }
+
+    public function addRate(int $rate): self
+    {
+        $this->rates[] = $rate;
+        $this->rate = round(array_sum($this->rates) / count($this->rates), 1);
+
+        return $this;
     }
 
     public function getStoryImage(): ?StoryImage

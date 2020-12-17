@@ -8,7 +8,7 @@ use App\Language\Model\Dto\Language;
 use DateTime;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-final class UserFull extends UserMedium
+class UserFull extends UserMedium
 {
     /**
      * @Serializer\Groups({"serializer"})

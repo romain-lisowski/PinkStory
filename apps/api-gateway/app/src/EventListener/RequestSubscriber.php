@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use App\Language\Model\Dto\CurrentLanguage;
 use App\Language\Repository\Dto\LanguageRepositoryInterface;
 use App\User\Security\UserSecurityManagerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -50,9 +51,11 @@ final class RequestSubscriber implements EventSubscriberInterface
             $currentReadingLanguages = new ArrayCollection([$currentLanguage]);
         }
 
-        $request->attributes->set('current-language', $currentLanguage);
-        $request->setLocale($currentLanguage->getLocale());
-        $request->attributes->set('current-reading-languages', $currentReadingLanguages);
-        $request->query->remove('_locale');
+        if ($currentLanguage instanceof CurrentLanguage) {
+            $request->setLocale($currentLanguage->getLocale());
+            $request->attributes->set('current-language', $currentLanguage);
+            $request->attributes->set('current-reading-languages', $currentReadingLanguages);
+            $request->query->remove('_locale');
+        }
     }
 }

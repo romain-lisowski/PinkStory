@@ -5,33 +5,26 @@ declare(strict_types=1);
 namespace App\User\Model\Dto;
 
 use App\Language\Model\Dto\CurrentLanguage;
+use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class CurrentUser extends User implements UserInterface
+final class CurrentUser extends UserFull implements UserInterface
 {
     private string $secret;
 
     private string $role;
 
-    private CurrentLanguage $language;
-
-    public function __construct(string $id = '', bool $imageDefined = false, string $secret = '', string $role = '', CurrentLanguage $language)
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '', string $secret = '', string $role = '', DateTime $createdAt, CurrentLanguage $language)
     {
-        parent::__construct($id, $imageDefined);
+        parent::__construct($id, $imageDefined, $name, $nameSlug, $email, $createdAt, $language);
 
         $this->secret = $secret;
         $this->role = $role;
-        $this->language = $language;
     }
 
     public function getSecret(): string
     {
         return $this->secret;
-    }
-
-    public function getLanguage(): CurrentLanguage
-    {
-        return $this->language;
     }
 
     public function getRoles(): array
@@ -51,7 +44,7 @@ final class CurrentUser extends User implements UserInterface
 
     public function getUsername(): string
     {
-        return $this->getId();
+        return $this->getEmail();
     }
 
     public function eraseCredentials()

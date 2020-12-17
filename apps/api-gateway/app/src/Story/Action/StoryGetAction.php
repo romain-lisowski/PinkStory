@@ -32,8 +32,8 @@ final class StoryGetAction extends AbstractAction
         $query->id = (string) $request->attributes->get('id');
         $query->languageId = $request->get('current-language')->getId();
 
-        return $this->responder->render([
-            'story' => $this->handler->setQuery($query)->handle(),
-        ]);
+        return $this->responder->render(
+            $this->handler->setQuery($query)->handle()
+        );
     }
 }

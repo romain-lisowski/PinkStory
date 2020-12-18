@@ -52,21 +52,6 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
         return $languages;
     }
 
-    public function findIds(): array
-    {
-        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
-
-        $qb->select('id')
-            ->from('lng_language')
-        ;
-
-        $datas = $qb->execute()->fetchAll();
-
-        return array_map(function ($data) {
-            return $data['id'];
-        }, $datas);
-    }
-
     private function createBaseQueryBuilder(QueryBuilder $qb): void
     {
         $qb->select('id', 'title', 'locale')

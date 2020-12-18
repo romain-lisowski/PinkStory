@@ -6,30 +6,23 @@ namespace App\Story\Query;
 
 use App\Form\AbstractFormType;
 use App\Query\PaginableInterface;
-use App\Story\Repository\Dto\StoryThemeRepositoryInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class StoryImageSearchQueryFormType extends AbstractFormType
 {
-    private StoryThemeRepositoryInterface $storyThemeRepository;
-
-    public function __construct(StoryThemeRepositoryInterface $storyThemeRepository)
-    {
-        $this->storyThemeRepository = $storyThemeRepository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('story_theme_ids', ChoiceType::class, [
+            ->add('story_theme_ids', CollectionType::class, [
                 'property_path' => 'storyThemeIds',
+                'entry_type' => TextType::class,
                 'required' => false,
-                'multiple' => true,
-                'choices' => $this->storyThemeRepository->findChildrenIds(),
+                'allow_add' => true,
             ])
             ->add('limit', IntegerType::class, [
                 'required' => false,

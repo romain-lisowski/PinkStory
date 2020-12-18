@@ -13,6 +13,4 @@ interface LanguageRepositoryInterface
     public function getCurrentByLocale(string $locale): CurrentLanguage;
 
     public function getBySearch(LanguageSearchQuery $query): Collection;
-
-    public function findIds(): array;
 }

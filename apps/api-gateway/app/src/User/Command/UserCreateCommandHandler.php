@@ -9,6 +9,7 @@ use App\Language\Repository\Entity\LanguageRepositoryInterface;
 use App\User\Message\UserCreateMessage;
 use App\User\Model\Entity\User;
 use App\User\Model\UserRole;
+use App\User\Model\UserStatus;
 use App\Validator\ValidatorManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -37,7 +38,7 @@ final class UserCreateCommandHandler extends AbstractCommandHandler
 
         $language = $this->languageRepository->findOne($this->command->languageId);
 
-        $user = new User($this->command->name, $this->command->email, UserRole::ROLE_USER, $language);
+        $user = new User($this->command->name, $this->command->email, UserRole::ROLE_USER, UserStatus::ACTIVATED, $language);
         $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
 
         $this->validatorManager->validate($user);

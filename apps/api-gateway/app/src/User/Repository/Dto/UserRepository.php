@@ -9,6 +9,7 @@ use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserFull;
+use App\User\Model\UserStatus;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\NoResultException;
@@ -66,6 +67,8 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
             ->from('usr_user', 'u')
             ->addSelect('language.id as language_id')
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
+            ->where($qb->expr()->eq('u.status', ':user_status'))
+            ->setParameter('user_status', UserStatus::ACTIVATED)
         ;
     }
 }

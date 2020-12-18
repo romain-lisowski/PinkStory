@@ -15,6 +15,7 @@ use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryRating;
 use App\User\Model\UserInterface as ModelUserInterface;
 use App\User\Model\UserRole;
+use App\User\Model\UserStatus;
 use App\User\Validator\Constraints as AppUserAssert;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -119,6 +120,12 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     private string $role;
 
     /**
+     * @Assert\NotBlank
+     * @ORM\Column(name="status", type="string", length=255)
+     */
+    private string $status;
+
+    /**
      * @Assert\NotNull
      * @ORM\Column(name="image_defined", type="boolean")
      */
@@ -142,7 +149,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
      */
     private Collection $storyRatings;
 
-    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER, Language $language)
+    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER, string $status = UserStatus::ACTIVATED, Language $language)
     {
         parent::__construct();
 
@@ -159,6 +166,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         $this->passwordForgottenSecretCreatedAt = new DateTime();
         $this->secret = Uuid::v4()->toRfc4122();
         $this->role = UserRole::ROLE_USER;
+        $this->status = UserStatus::ACTIVATED;
         $this->imageDefined = false;
         $this->stories = new ArrayCollection();
         $this->storyRatings = new ArrayCollection();
@@ -167,6 +175,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         $this->setName($name)
             ->setEmail($email)
             ->setRole($role)
+            ->setStatus($status)
             ->setLanguage($language)
         ;
     }
@@ -367,9 +376,35 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         return $this->role;
     }
 
-    public function setRole($role): self
+    public function setRole(string $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function updateRole(string $role): self
+    {
+        $this->setRole($role);
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function updateStatus(string $status): self
+    {
+        $this->setStatus($status);
 
         return $this;
     }

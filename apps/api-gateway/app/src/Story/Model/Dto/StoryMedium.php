@@ -93,6 +93,14 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
         return $this->createdAt;
     }
 
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    public function getStoryRatingsTotal(): int
+    {
+        return count($this->rates);
+    }
+
     public function getRate(): ?float
     {
         return $this->rate;

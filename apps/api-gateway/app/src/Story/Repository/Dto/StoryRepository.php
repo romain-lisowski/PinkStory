@@ -17,6 +17,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
@@ -105,6 +106,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ->from('sty_story', 'story')
         ;
 
+        $qb->andWhere($qb->expr()->in('story.language_id', ':story_language_id'))
+            ->setParameter('story_language_id', $query->readingLanguageIds, Connection::PARAM_STR_ARRAY)
+        ;
+
         $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
 
         $data = $qb->execute()->fetch();
@@ -117,6 +122,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $this->createBaseQueryBuilder($qb, $query->languageId);
+
+        $qb->andWhere($qb->expr()->in('story.language_id', ':story_language_id'))
+            ->setParameter('story_language_id', $query->readingLanguageIds, Connection::PARAM_STR_ARRAY)
+        ;
 
         if (StorySearchQuery::ORDER_POPULAR === $query->order) {
             $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();

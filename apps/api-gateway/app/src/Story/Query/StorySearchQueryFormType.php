@@ -41,6 +41,10 @@ final class StorySearchQueryFormType extends AbstractFormType
                 'required' => false,
                 'empty_data' => strval(PaginableInterface::OFFSET),
             ])
+            ->add('user_id', TextType::class, [
+                'property_path' => 'userId',
+                'required' => false,
+            ])
             ->add('order', TextType::class, [
                 'required' => false,
                 'empty_data' => strval(StorySearchQuery::ORDER_POPULAR),

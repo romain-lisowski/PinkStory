@@ -110,6 +110,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ->setParameter('story_language_id', $query->readingLanguageIds, Connection::PARAM_STR_ARRAY)
         ;
 
+        if (null !== $query->userId) {
+            $qb->andWhere($qb->expr()->eq('story.user_id', ':user_id'))
+                ->setParameter('user_id', $query->userId)
+            ;
+        }
+
         $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
 
         $data = $qb->execute()->fetch();
@@ -126,6 +132,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $qb->andWhere($qb->expr()->in('story.language_id', ':story_language_id'))
             ->setParameter('story_language_id', $query->readingLanguageIds, Connection::PARAM_STR_ARRAY)
         ;
+
+        if (null !== $query->userId) {
+            $qb->andWhere($qb->expr()->eq('story.user_id', ':user_id'))
+                ->setParameter('user_id', $query->userId)
+            ;
+        }
 
         if (StorySearchQuery::ORDER_POPULAR === $query->order) {
             $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();

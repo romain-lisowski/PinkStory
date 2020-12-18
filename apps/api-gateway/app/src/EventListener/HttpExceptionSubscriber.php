@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Exception\HasErrorsExceptionInterface;
-use App\Responder\ExceptionResponderInterface;
+use App\Responder\ResponderInterface;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -18,9 +18,9 @@ use Throwable;
 final class HttpExceptionSubscriber implements EventSubscriberInterface
 {
     private TranslatorInterface $translator;
-    private ExceptionResponderInterface $responder;
+    private ResponderInterface $responder;
 
-    public function __construct(TranslatorInterface $translator, ExceptionResponderInterface $responder)
+    public function __construct(TranslatorInterface $translator, ResponderInterface $responder)
     {
         $this->translator = $translator;
         $this->responder = $responder;

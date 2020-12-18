@@ -11,6 +11,7 @@ use App\Story\Model\Dto\StoryFullChild;
 use App\Story\Model\Dto\StoryFullParent;
 use App\Story\Model\Dto\StoryMedium;
 use App\Story\Query\StoryGetQuery;
+use App\Story\Query\StorySearchQuery;
 use App\User\Model\Dto\UserMedium;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -94,6 +95,65 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $this->storyThemeRepository->populateStories($stories, $query->languageId);
 
         return $story;
+    }
+
+    public function countBySearch(StorySearchQuery $query): int
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('count(story.id) as total')
+            ->from('sty_story', 'story')
+        ;
+
+        $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
+
+        $data = $qb->execute()->fetch();
+
+        return intval($data['total']);
+    }
+
+    public function getBySearch(StorySearchQuery $query): Collection
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, $query->languageId);
+
+        if (StorySearchQuery::ORDER_POPULAR === $query->order) {
+            $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+            $subQb->select('avg(rate)')
+                ->from('sty_story_rating', 'storyRating')
+                ->where($subQb->expr()->eq('storyRating.story_id', 'story.id'))
+            ;
+            $qb->addSelect('coalesce(('.$subQb->getSQL().'), 0) as story_rate');
+
+            $qb->orderBy('story_rate', $query->sort);
+            $qb->addOrderBy('story.created_at', Criteria::DESC);
+        } elseif (StorySearchQuery::ORDER_CREATED_AT === $query->order) {
+            $qb->orderBy('story.created_at', $query->sort);
+        }
+
+        $qb->setMaxResults($query->limit)
+            ->setFirstResult($query->offset)
+        ;
+
+        $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
+
+        $datas = $qb->execute()->fetchAll();
+
+        $stories = new ArrayCollection();
+
+        foreach ($datas as $data) {
+            $story = $this->populateMedium($data);
+            $stories->add($story);
+        }
+
+        $this->storyRatingRepository->populateStories($stories);
+
+        $this->storyImageRepository->populateStories($stories, $query->languageId);
+
+        $this->storyThemeRepository->populateStories($stories, $query->languageId);
+
+        return $stories;
     }
 
     private function getChildren(string $parentId): Collection
@@ -186,6 +246,26 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         }
 
         return $this->populateMedium($data);
+    }
+
+    private function filterSearchQueryBuilderByStoryThemes(QueryBuilder $qb, array $storyThemeIds = [])
+    {
+        if (count($storyThemeIds) > 0) {
+            $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+            $subQb->select('story_theme_id')
+                ->from('sty_story_has_story_theme', 'storyHasStoryTheme')
+                ->where($subQb->expr()->eq('storyHasStoryTheme.story_id', 'story.id'))
+            ;
+
+            $i = 0;
+            foreach ($storyThemeIds as $storyThemeId) {
+                $qb->andWhere($qb->expr()->in(':story_theme_id_'.$i, $subQb->getSQL()))
+                    ->setParameter('story_theme_id_'.$i, $storyThemeId)
+                ;
+
+                ++$i;
+            }
+        }
     }
 
     private function createBaseQueryBuilder(QueryBuilder $qb): void

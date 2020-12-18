@@ -7,7 +7,6 @@ namespace App\Story\Query;
 use App\Query\AbstractQueryHandler;
 use App\Story\Repository\Dto\StoryImageRepositoryInterface;
 use App\Validator\ValidatorManagerInterface;
-use Doctrine\Common\Collections\Collection;
 
 final class StoryImageSearchQueryHandler extends AbstractQueryHandler
 {
@@ -20,10 +19,13 @@ final class StoryImageSearchQueryHandler extends AbstractQueryHandler
         $this->validatorManager = $validatorManager;
     }
 
-    public function handle(): Collection
+    public function handle(): array
     {
         $this->validatorManager->validate($this->query);
 
-        return $this->storyImageRepository->getBySearch($this->query);
+        return [
+            'story-images-total' => $this->storyImageRepository->countBySearch($this->query),
+            'story-images' => $this->storyImageRepository->getBySearch($this->query),
+        ];
     }
 }

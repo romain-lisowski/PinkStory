@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Story\Query;
 
 use App\Form\AbstractFormType;
+use App\Model\PaginableInterface;
 use App\Story\Repository\Dto\StoryThemeRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,6 +30,14 @@ final class StoryImageSearchQueryFormType extends AbstractFormType
                 'required' => false,
                 'multiple' => true,
                 'choices' => $this->storyThemeRepository->findChildrenIds(),
+            ])
+            ->add('limit', IntegerType::class, [
+                'required' => false,
+                'empty_data' => strval(PaginableInterface::LIMIT),
+            ])
+            ->add('offset', IntegerType::class, [
+                'required' => false,
+                'empty_data' => strval(PaginableInterface::OFFSET),
             ])
         ;
     }

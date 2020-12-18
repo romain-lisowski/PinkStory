@@ -36,8 +36,8 @@ final class StoryImageSearchAction extends AbstractAction
 
         $this->formManager->initForm($query)->handleRequest($request);
 
-        return $this->responder->render([
-            'story-images' => $this->handler->setQuery($query)->handle(),
-        ]);
+        return $this->responder->render(
+            $this->handler->setQuery($query)->handle(),
+        );
     }
 }

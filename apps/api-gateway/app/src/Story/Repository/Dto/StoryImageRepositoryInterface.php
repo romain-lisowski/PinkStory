@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\Collection;
 
 interface StoryImageRepositoryInterface
 {
+    public function countBySearch(StoryImageSearchQuery $query): int;
+
     public function getBySearch(StoryImageSearchQuery $query): Collection;
 
     public function populateStories(Collection $stories, string $languageId): void;

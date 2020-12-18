@@ -27,30 +27,33 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
         $this->storyThemeRepository = $storyThemeRepository;
     }
 
+    public function countBySearch(StoryImageSearchQuery $query): int
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('count(storyImage.id) as total')
+            ->from('sty_story_image', 'storyImage')
+        ;
+
+        $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
+
+        $data = $qb->execute()->fetch();
+
+        return intval($data['total']);
+    }
+
     public function getBySearch(StoryImageSearchQuery $query): Collection
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
         $this->createBaseQueryBuilder($qb, $query->languageId);
 
-        $qb->orderBy('storyImage.created_at', Criteria::DESC);
+        $qb->orderBy('storyImage.created_at', Criteria::DESC)
+            ->setMaxResults($query->limit)
+            ->setFirstResult($query->offset)
+        ;
 
-        if (count($query->storyThemeIds) > 0) {
-            $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
-            $subQb->select('story_theme_id')
-                ->from('sty_story_image_has_story_theme', 'storyImageHasStoryTheme')
-                ->where($subQb->expr()->eq('storyImageHasStoryTheme.story_image_id', 'storyImage.id'))
-            ;
-
-            $i = 0;
-            foreach ($query->storyThemeIds as $storyThemeId) {
-                $qb->andWhere($qb->expr()->in(':story_theme_id_'.$i, $subQb->getSQL()))
-                    ->setParameter('story_theme_id_'.$i, $storyThemeId)
-                ;
-
-                ++$i;
-            }
-        }
+        $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
 
         $datas = $qb->execute()->fetchAll();
 
@@ -90,6 +93,26 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                     $storyImage = new StoryImageMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
                     $story->setStoryImage($storyImage);
                 }
+            }
+        }
+    }
+
+    private function filterSearchQueryBuilderByStoryThemes(QueryBuilder $qb, array $storyThemeIds = [])
+    {
+        if (count($storyThemeIds) > 0) {
+            $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+            $subQb->select('story_theme_id')
+                ->from('sty_story_image_has_story_theme', 'storyImageHasStoryTheme')
+                ->where($subQb->expr()->eq('storyImageHasStoryTheme.story_image_id', 'storyImage.id'))
+            ;
+
+            $i = 0;
+            foreach ($storyThemeIds as $storyThemeId) {
+                $qb->andWhere($qb->expr()->in(':story_theme_id_'.$i, $subQb->getSQL()))
+                    ->setParameter('story_theme_id_'.$i, $storyThemeId)
+                ;
+
+                ++$i;
             }
         }
     }

@@ -39,7 +39,7 @@ final class StoryGetQueryHandler extends AbstractQueryHandler
 
         return [
             'story' => $story,
-            'current-story-rating' => $currentStoryRating,
+            'current_story_rating' => $currentStoryRating,
         ];
     }
 }

@@ -32,7 +32,7 @@ final class StoryThemeSearchAction extends AbstractAction
         $query->languageId = $request->get('current-language')->getId();
 
         return $this->responder->render([
-            'story-themes' => $this->handler->setQuery($query)->handle(),
+            'story_themes' => $this->handler->setQuery($query)->handle(),
         ]);
     }
 }

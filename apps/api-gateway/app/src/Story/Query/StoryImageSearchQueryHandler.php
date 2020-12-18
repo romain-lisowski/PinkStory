@@ -24,8 +24,8 @@ final class StoryImageSearchQueryHandler extends AbstractQueryHandler
         $this->validatorManager->validate($this->query);
 
         return [
-            'story-images-total' => $this->storyImageRepository->countBySearch($this->query),
-            'story-images' => $this->storyImageRepository->getBySearch($this->query),
+            'story_images_total' => $this->storyImageRepository->countBySearch($this->query),
+            'story_images' => $this->storyImageRepository->getBySearch($this->query),
         ];
     }
 }

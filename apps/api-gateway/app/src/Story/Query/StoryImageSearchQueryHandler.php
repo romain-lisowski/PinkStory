@@ -24,6 +24,6 @@ final class StoryImageSearchQueryHandler extends AbstractQueryHandler
     {
         $this->validatorManager->validate($this->query);
 
-        return $this->storyImageRepository->search($this->query);
+        return $this->storyImageRepository->getBySearch($this->query);
     }
 }

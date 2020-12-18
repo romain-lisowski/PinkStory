@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\User\Repository\Dto;
 
 use App\User\Model\Dto\CurrentUser;
-use App\User\Model\Dto\UserFull;
+use App\User\Model\Dto\UserForUpdate;
 
 interface UserRepositoryInterface
 {
-    public function findCurrent(string $id): CurrentUser;
+    public function getCurrent(string $id): CurrentUser;
 
-    public function findOne(string $id): UserFull;
+    public function getOneForUpdate(string $id): UserForUpdate;
 }

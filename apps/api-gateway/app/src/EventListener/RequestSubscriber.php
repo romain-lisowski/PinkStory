@@ -43,9 +43,9 @@ final class RequestSubscriber implements EventSubscriberInterface
             $currentReadingLanguages = new ArrayCollection([$currentLanguage]);
         } else {
             try {
-                $currentLanguage = $this->languageRepository->findCurrentByLocale($request->query->get('_locale', 'en'));
+                $currentLanguage = $this->languageRepository->getCurrentByLocale($request->query->get('_locale', 'en'));
             } catch (UnexpectedResultException $e) {
-                $currentLanguage = $this->languageRepository->findCurrentByLocale('en');
+                $currentLanguage = $this->languageRepository->getCurrentByLocale('en');
             }
 
             $currentReadingLanguages = new ArrayCollection([$currentLanguage]);

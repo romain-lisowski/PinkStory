@@ -6,14 +6,14 @@ namespace App\Story\Repository\Dto;
 
 use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\Story;
-use App\Story\Model\Dto\StoryRating;
+use App\Story\Model\Dto\StoryRatingForUpdate;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 final class StoryRatingRepository extends AbstractRepository implements StoryRatingRepositoryInterface
 {
-    public function getOneForStoryAndUser(string $storyId, string $userId): ?StoryRating
+    public function getOneForUpdate(string $storyId, string $userId): ?StoryRatingForUpdate
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -33,7 +33,7 @@ final class StoryRatingRepository extends AbstractRepository implements StoryRat
             return null;
         }
 
-        return new StoryRating(intval($data['rate']));
+        return new StoryRatingForUpdate(intval($data['rate']));
     }
 
     public function populateStories(Collection $stories): void

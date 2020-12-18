@@ -15,7 +15,7 @@ use Doctrine\ORM\NoResultException;
 
 final class LanguageRepository extends AbstractRepository implements LanguageRepositoryInterface
 {
-    public function findCurrentByLocale(string $locale): CurrentLanguage
+    public function getCurrentByLocale(string $locale): CurrentLanguage
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -34,7 +34,7 @@ final class LanguageRepository extends AbstractRepository implements LanguageRep
         return new CurrentLanguage(strval($data['id']), strval($data['title']), strval($data['locale']));
     }
 
-    public function search(LanguageSearchQuery $query): Collection
+    public function getBySearch(LanguageSearchQuery $query): Collection
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 

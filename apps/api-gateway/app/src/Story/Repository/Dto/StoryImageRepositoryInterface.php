@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface StoryImageRepositoryInterface
 {
-    public function search(StoryImageSearchQuery $query): Collection;
+    public function getBySearch(StoryImageSearchQuery $query): Collection;
 
     public function populateStories(Collection $stories, string $languageId): void;
 }

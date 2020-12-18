@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface StoryThemeRepositoryInterface
 {
-    public function search(StoryThemeSearchQuery $query): Collection;
+    public function getBySearch(StoryThemeSearchQuery $query): Collection;
 
     public function findChildrenIds(): array;
 

@@ -10,9 +10,9 @@ use Doctrine\Common\Collections\Collection;
 
 interface LanguageRepositoryInterface
 {
-    public function findCurrentByLocale(string $locale): CurrentLanguage;
+    public function getCurrentByLocale(string $locale): CurrentLanguage;
 
-    public function search(LanguageSearchQuery $query): Collection;
+    public function getBySearch(LanguageSearchQuery $query): Collection;
 
     public function findIds(): array;
 }

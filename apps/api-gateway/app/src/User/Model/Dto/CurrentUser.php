@@ -8,18 +8,29 @@ use App\Language\Model\Dto\CurrentLanguage;
 use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class CurrentUser extends UserFull implements UserInterface
+final class CurrentUser extends UserMedium implements UserInterface
 {
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    private string $email;
+
     private string $secret;
 
     private string $role;
 
     public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '', string $secret = '', string $role = '', DateTime $createdAt, CurrentLanguage $language)
     {
-        parent::__construct($id, $imageDefined, $name, $nameSlug, $email, $createdAt, $language);
+        parent::__construct($id, $imageDefined, $name, $nameSlug, $createdAt, $language);
 
+        $this->email = $email;
         $this->secret = $secret;
         $this->role = $role;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 
     public function getSecret(): string

@@ -8,7 +8,7 @@ use App\Language\Model\Dto\CurrentLanguage;
 use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
-use App\User\Model\Dto\UserFull;
+use App\User\Model\Dto\UserForUpdate;
 use App\User\Model\UserStatus;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -16,7 +16,7 @@ use Doctrine\ORM\NoResultException;
 
 final class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-    public function findCurrent(string $id): CurrentUser
+    public function getCurrent(string $id): CurrentUser
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -36,10 +36,10 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 
         $currentLanguage = new CurrentLanguage(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
 
-        return new CurrentUser(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_email']), strval($data['user_secret']), strval($data['user_role']), new DateTime($data['user_created_at']), $currentLanguage);
+        return new CurrentUser(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_email']), strval($data['user_secret']), strval($data['user_role']), new DateTime(strval($data['user_created_at'])), $currentLanguage);
     }
 
-    public function findOne(string $id): UserFull
+    public function getOneForUpdate(string $id): UserForUpdate
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -58,7 +58,7 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 
         $language = new LanguageMedium(strval($data['language_id']));
 
-        return new UserFull(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_email']), new DateTime($data['user_created_at']), $language);
+        return new UserForUpdate(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_email']), new DateTime(strval($data['user_created_at'])), $language);
     }
 
     private function createBaseQueryBuilder(QueryBuilder $qb): void

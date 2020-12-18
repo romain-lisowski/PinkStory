@@ -34,7 +34,7 @@ final class StoryGetQueryHandler extends AbstractQueryHandler
         $currentStoryRating = null;
 
         if (null !== $this->userSecurityManager->getCurrentUser()) {
-            $currentStoryRating = $this->storyRatingRepository->getOneForStoryAndUser($this->query->id, $this->userSecurityManager->getCurrentUser()->getId());
+            $currentStoryRating = $this->storyRatingRepository->getOneForUpdate($this->query->id, $this->userSecurityManager->getCurrentUser()->getId());
         }
 
         return [

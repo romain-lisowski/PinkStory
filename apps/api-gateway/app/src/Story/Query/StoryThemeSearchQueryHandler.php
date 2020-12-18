@@ -24,6 +24,6 @@ final class StoryThemeSearchQueryHandler extends AbstractQueryHandler
     {
         $this->validatorManager->validate($this->query);
 
-        return $this->storyThemeRepository->search($this->query);
+        return $this->storyThemeRepository->getBySearch($this->query);
     }
 }

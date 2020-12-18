@@ -61,7 +61,7 @@ final class UserAuthenticator extends AbstractAuthenticator
                 throw new InvalidTokenException();
             }
 
-            $user = $this->userRepository->findCurrent($payload->user_id);
+            $user = $this->userRepository->getCurrent($payload->user_id);
 
             if (null === $user
                 || $user->getId() !== $payload->sub

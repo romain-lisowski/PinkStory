@@ -54,12 +54,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $stories = new ArrayCollection();
 
         $userLanguage = new LanguageMedium(strval($data['user_language_id']));
-        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime($data['user_created_at']), $userLanguage);
+        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $userLanguage);
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
         if (null === $data['story_parent_id']) {
-            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime($data['story_created_at']), $user, $language);
+            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
             $stories->add($story);
 
             $storyChildren = $this->getChildren($story->getId());
@@ -83,7 +83,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
                 $stories->add($storyNext);
             }
 
-            $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime($data['story_created_at']), $user, $language, $storyParent, $storyPrevious, $storyNext);
+            $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language, $storyParent, $storyPrevious, $storyNext);
             $stories->add($story);
         }
 
@@ -204,10 +204,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
     private function populateMedium(array $data): StoryMedium
     {
         $userLanguage = new LanguageMedium(strval($data['user_language_id']));
-        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime($data['user_created_at']), $userLanguage);
+        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $userLanguage);
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        return new StoryMedium(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime($data['story_created_at']), $user, $language);
+        return new StoryMedium(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
     }
 }

@@ -27,7 +27,7 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
         $this->storyThemeRepository = $storyThemeRepository;
     }
 
-    public function search(StoryImageSearchQuery $query): Collection
+    public function getBySearch(StoryImageSearchQuery $query): Collection
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 

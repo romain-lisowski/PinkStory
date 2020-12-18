@@ -19,7 +19,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 final class StoryThemeRepository extends AbstractRepository implements StoryThemeRepositoryInterface
 {
-    public function search(StoryThemeSearchQuery $query): Collection
+    public function getBySearch(StoryThemeSearchQuery $query): Collection
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 

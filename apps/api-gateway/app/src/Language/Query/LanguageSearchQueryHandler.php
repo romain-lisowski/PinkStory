@@ -24,6 +24,6 @@ final class LanguageSearchQueryHandler extends AbstractQueryHandler
     {
         $this->validatorManager->validate($this->query);
 
-        return $this->languageRepository->search($this->query);
+        return $this->languageRepository->getBySearch($this->query);
     }
 }

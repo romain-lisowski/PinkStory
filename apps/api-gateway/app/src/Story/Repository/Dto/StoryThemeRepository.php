@@ -60,12 +60,7 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
 
         $qb->select('id')
             ->from('sty_story_theme')
-            ->where($qb->expr()->andX(
-                $qb->expr()->isNotNull('parent_id'),
-                $qb->expr()->eq('activated', ':activated')
-            ))
-            ->setParameter('activated', true)
-
+            ->where($qb->expr()->isNotNull('parent_id'))
         ;
 
         $datas = $qb->execute()->fetchAll();
@@ -151,8 +146,6 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 $qb->expr()->eq('storyThemeTranslation.language_id', ':language_id')
             ))
             ->setParameter('language_id', $languageId)
-            ->where($qb->expr()->eq('storyTheme.activated', ':story_theme_activated'))
-            ->setParameter('story_theme_activated', true)
         ;
     }
 }

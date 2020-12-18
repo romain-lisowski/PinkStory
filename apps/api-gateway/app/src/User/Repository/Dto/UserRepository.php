@@ -66,8 +66,6 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
             ->from('usr_user', 'u')
             ->addSelect('language.id as language_id')
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
-            ->where($qb->expr()->eq('u.activated', ':user_activated'))
-            ->setParameter('user_activated', true)
         ;
     }
 }

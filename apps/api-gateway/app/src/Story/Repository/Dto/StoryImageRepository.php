@@ -104,8 +104,6 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
             ))
             ->setParameter('language_id', $languageId)
-            ->where($qb->expr()->eq('storyImage.activated', ':story_image_activated'))
-            ->setParameter('story_image_activated', true)
         ;
     }
 }

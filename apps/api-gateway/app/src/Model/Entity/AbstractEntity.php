@@ -10,17 +10,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\MappedSuperclass
  */
-abstract class AbstractEntity implements EntityInterface, IdentifiableInterface, ActivatableInterface, TimestampableInterface
+abstract class AbstractEntity implements EntityInterface, IdentifiableInterface, TimestampableInterface
 {
     use IdentifiableTrait;
-    use ActivatableTrait;
     use TimestampableTrait;
 
     public function __construct()
     {
         // init zero values
         $this->id = '';
-        $this->activated = true;
         $this->createdAt = new DateTime();
         $this->lastUpdatedAt = new DateTime();
 

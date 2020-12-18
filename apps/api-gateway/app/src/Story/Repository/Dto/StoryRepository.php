@@ -198,8 +198,6 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ->join('story', 'usr_user', 'u', $qb->expr()->eq('u.id', 'story.user_id'))
             ->addSelect('u_language.id as user_language_id')
             ->join('u', 'lng_language', 'u_language', $qb->expr()->eq('u_language.id', 'u.language_id'))
-            ->where($qb->expr()->eq('story.activated', ':story_activated'))
-            ->setParameter('story_activated', true)
         ;
     }
 

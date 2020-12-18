@@ -9,7 +9,7 @@ use App\Handler\HandlerableTrait;
 use App\Query\QueryInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserReadForUpdateQuery implements QueryInterface, HandlerableInterface
+final class UserGetForUpdateQuery implements QueryInterface, HandlerableInterface
 {
     use HandlerableTrait;
 

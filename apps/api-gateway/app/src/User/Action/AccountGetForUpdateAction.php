@@ -6,8 +6,8 @@ namespace App\User\Action;
 
 use App\Action\AbstractAction;
 use App\Responder\ResponderInterface;
-use App\User\Query\UserReadForUpdateQuery;
-use App\User\Query\UserReadForUpdateQueryHandler;
+use App\User\Query\UserGetForUpdateQuery;
+use App\User\Query\UserGetForUpdateQueryHandler;
 use App\User\Security\UserSecurityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
  * @IsGranted("ROLE_USER")
  * @Route("/account/update", name="account_update", methods={"GET"})
  */
-final class AccountReadForUpdateAction extends AbstractAction
+final class AccountGetForUpdateAction extends AbstractAction
 {
     private ResponderInterface $responder;
-    private UserReadForUpdateQueryHandler $handler;
+    private UserGetForUpdateQueryHandler $handler;
     private UserSecurityManagerInterface $userSecurityManager;
 
-    public function __construct(ResponderInterface $responder, UserReadForUpdateQueryHandler $handler, UserSecurityManagerInterface $userSecurityManager)
+    public function __construct(ResponderInterface $responder, UserGetForUpdateQueryHandler $handler, UserSecurityManagerInterface $userSecurityManager)
     {
         $this->responder = $responder;
         $this->handler = $handler;
@@ -33,7 +33,7 @@ final class AccountReadForUpdateAction extends AbstractAction
 
     public function run(Request $request): Response
     {
-        $query = new UserReadForUpdateQuery();
+        $query = new UserGetForUpdateQuery();
         $query->id = $this->userSecurityManager->getCurrentUser()->getId();
 
         return $this->responder->render([

@@ -11,7 +11,7 @@ use App\User\Model\Dto\UserForUpdate;
 use App\User\Repository\Dto\UserRepositoryInterface;
 use App\Validator\ValidatorManagerInterface;
 
-final class UserReadForUpdateQueryHandler extends AbstractQueryHandler
+final class UserGetForUpdateQueryHandler extends AbstractQueryHandler
 {
     private AuthorizationManagerInterface $authorizationManager;
     private UserRepositoryInterface $userRepository;

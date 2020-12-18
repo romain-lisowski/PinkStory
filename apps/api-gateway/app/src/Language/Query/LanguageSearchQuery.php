@@ -12,6 +12,6 @@ use App\Query\QueryInterface;
 
 final class LanguageSearchQuery implements QueryInterface, HandlerableInterface, FormableInterface
 {
-    use FormableTrait;
     use HandlerableTrait;
+    use FormableTrait;
 }

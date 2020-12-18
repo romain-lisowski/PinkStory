@@ -15,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserUpdatePasswordCommand implements CommandInterface, HandlerableInterface, FormableInterface
 {
-    use FormableTrait;
     use HandlerableTrait;
+    use FormableTrait;
 
     /**
      * @Assert\NotBlank

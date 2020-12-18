@@ -14,8 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserCreateCommand implements CommandInterface, HandlerableInterface, FormableInterface
 {
-    use FormableTrait;
     use HandlerableTrait;
+    use FormableTrait;
 
     /**
      * @Assert\NotBlank

@@ -1,12 +1,12 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-email') }}
+      {{ t('update-email') }}
     </p>
     <form class="flex flex-col" @submit.prevent="processForm">
       <input
         v-model="email"
-        :placeholder="$t('new-email')"
+        :placeholder="t('new-email')"
         type="email"
         name="email"
         class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
@@ -15,7 +15,7 @@
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "update-email": "Email",
@@ -48,4 +48,4 @@ export default {
     "update": "Modifier"
   }
 }
-</i18n>
+</i18n> -->

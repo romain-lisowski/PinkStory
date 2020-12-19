@@ -13,7 +13,7 @@
       </span>
 
       <span class="block mt-1 text-sm sm:text-base">
-        {{ $t('write-by') }} {{ story.author
+        {{ t('write-by') }} {{ story.author
         }}<span v-if="story.gender === 'female'">&#9792;</span
         ><span v-else>&#9794;</span>
       </span>
@@ -23,7 +23,7 @@
       <span class="flex justify-between mt-1">
         <UiRatingStars :rating="story.rating" class="flex-1" />
         <span class="text-base sm:text-lg mr-2 sm:mt-2">
-          {{ story.nbComments }} {{ $t('comments') }}
+          {{ story.nbComments }} {{ t('comments') }}
         </span>
       </span>
     </a>
@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "write-by": "Par",
@@ -55,4 +55,4 @@ export default {
     "read-more" : "Lire la suite"
   }
 }
-</i18n>
+</i18n> -->

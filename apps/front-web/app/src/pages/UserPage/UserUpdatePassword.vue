@@ -1,12 +1,12 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-password') }}
+      {{ t('update-password') }}
     </p>
     <form class="flex flex-col" @submit.prevent="processForm">
       <input
         v-model="passwordOld"
-        :placeholder="$t('current-password')"
+        :placeholder="t('current-password')"
         type="password"
         name="password-old"
         :autocomplete="'current-password'"
@@ -14,7 +14,7 @@
       />
       <input
         v-model="passwordNew"
-        :placeholder="$t('new-password')"
+        :placeholder="t('new-password')"
         type="password"
         name="password-new"
         :autocomplete="'new-password'"
@@ -22,7 +22,7 @@
       />
       <input
         v-model="passwordNewConfirm"
-        :placeholder="$t('confirm-new-password')"
+        :placeholder="t('confirm-new-password')"
         type="password"
         name="password-new-confirm"
         :autocomplete="'new-password'"
@@ -32,7 +32,7 @@
         class="mt-8 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
@@ -63,7 +63,7 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "update-password": "Mot de passe",
@@ -73,4 +73,4 @@ export default {
     "update": "Modifier"
   }
 }
-</i18n>
+</i18n> -->

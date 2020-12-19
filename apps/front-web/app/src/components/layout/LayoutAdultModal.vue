@@ -13,44 +13,50 @@
         PinkStory
       </p>
       <p class="mt-6 text-xl sm:text-2xl lg:text-4xl font-bold">
-        {{ $t('are-you-an-adult') }}
+        {{ t('are-you-an-adult') }}
       </p>
       <p class="mt-4 text-sm sm:text-base lg:text-xl">
-        {{ $t('adult-speech') }}
+        {{ t('adult-speech') }}
       </p>
       <button
         class="block mt-8 sm:py-5 py-4 px-8 text-sm sm:text-lg lg:text-xl font-light tracking-wide bg-accent rounded-lg cursor-pointer"
         @click="onIsAdult"
       >
-        {{ $t('enter') }}
+        {{ t('enter') }}
       </button>
     </div>
   </div>
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
+
 export default {
-  name: 'LayoutAdultModal',
-  data() {
-    return {
-      openAdultModal: !this.$store.state.isAdult,
+  setup() {
+    const store = useStore()
+
+    const data = reactive({
+      openAdultModal: !store.state.isAdult,
+    })
+
+    const onIsAdult = () => {
+      store.dispatch('isAdult')
+      data.openAdultModal = false
     }
-  },
-  methods: {
-    onIsAdult() {
-      this.$store.dispatch('isAdult')
-      this.openAdultModal = false
-    },
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        'are-you-an-adult': 'Avez-vous 18 ans ?',
+        'adult-speech':
+          'PinkStory est une communauté qui offre du contenu réservé aux adultes. Vous devez avoir 18 ans ou plus pour entrer',
+        enter: "J'ai 18 ans ou plus - Entrer",
+      },
+    })
+
+    return { data, onIsAdult, t }
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "are-you-an-adult": "Avez-vous 18 ans ?",
-    "adult-speech": "PinkStory est une communauté qui offre du contenu réservé aux adultes. Vous devez avoir 18 ans ou plus pour entrer",
-    "enter": "J'ai 18 ans ou plus - Entrer"
-  }
-}
-</i18n>

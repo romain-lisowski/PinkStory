@@ -1,8 +1,5 @@
-import Vue from 'vue'
 import Vuex from 'vuex'
 import ApiUsers from '@/api/ApiUsers'
-
-Vue.use(Vuex)
 
 const user = JSON.parse(localStorage.getItem('user'))
 const jwt = JSON.parse(localStorage.getItem('jwt'))
@@ -11,7 +8,7 @@ const theme = JSON.parse(localStorage.getItem('theme'))
   ? JSON.parse(localStorage.getItem('theme'))
   : 'auto'
 
-export default new Vuex.Store({
+export default Vuex.createStore({
   state: {
     user,
     jwt,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-informations') }}
+      {{ t('update-informations') }}
     </p>
     <form class="flex flex-col" @submit.prevent="processForm">
       <input
@@ -16,7 +16,7 @@
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "update-informations": "Informations",
@@ -49,4 +49,4 @@ export default {
     "update": "Modifier"
   }
 }
-</i18n>
+</i18n> -->

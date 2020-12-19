@@ -49,6 +49,7 @@ export default {
       default: false,
     },
   },
+  emits: ['close-auth-panel'],
   data() {
     return {
       displaySignUp: false,

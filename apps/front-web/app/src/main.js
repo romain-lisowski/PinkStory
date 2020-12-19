@@ -1,44 +1,16 @@
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faTimes,
-  faBars,
-  faVenusMars,
-  faHeart,
-  faChevronLeft,
-  faChevronRight,
-  faBold,
-  faItalic,
-  faUnderline,
-  faQuoteRight,
-  faHeading,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import sanitizeHTML from 'sanitize-html'
-import Vue from 'vue'
+import { createI18n } from 'vue-i18n'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/css/style.css'
-import i18n from './i18n'
 
-library.add(faTimes)
-library.add(faBars)
-library.add(faVenusMars)
-library.add(faHeart)
-library.add(faChevronLeft)
-library.add(faChevronRight)
-library.add(faBold)
-library.add(faItalic)
-library.add(faUnderline)
-library.add(faQuoteRight)
-library.add(faHeading)
+const i18n = createI18n({
+  legacy: false,
+  locale: 'fr',
+  fallbackLocale: 'fr',
+})
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.prototype.$sanitize = sanitizeHTML
-Vue.config.productionTip = false
-new Vue({
-  router,
-  store,
-  i18n,
-  render: (h) => h(App),
-}).$mount('#app')
+const app = createApp(App).use(router).use(store).use(i18n).mount('#app')
+app.config.globalProperties.$sanitize = sanitizeHTML

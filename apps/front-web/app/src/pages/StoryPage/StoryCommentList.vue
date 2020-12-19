@@ -1,6 +1,6 @@
 <template>
   <div class="w-5/6 lg:w-2/3">
-    <p class="text-3xl md:text-5xl font-bold mt-10">{{ $t('comments') }}</p>
+    <p class="text-3xl md:text-5xl font-bold mt-10">{{ t('comments') }}</p>
 
     <div v-for="comment in comments" :key="comment.id">
       <span class="flex items-center">
@@ -22,7 +22,7 @@
     <button
       class="my-12 w-full py-4 text-lg bg-accent tracking-wide rounded-lg"
     >
-      {{ $t('comment-this-chapter') }}
+      {{ t('comment-this-chapter') }}
     </button>
   </div>
 </template>
@@ -39,11 +39,11 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "comments": "Commentaires",
     "comment-this-chapter": "Commenter ce chapitre"
   }
 }
-</i18n>
+</i18n> -->

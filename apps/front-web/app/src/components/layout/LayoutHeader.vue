@@ -16,7 +16,7 @@
             :class="
               currentPage === '/' ? activeMenuClasses : inactiveMenuClasses
             "
-            >{{ $t('discover') }}</router-link
+            >{{ t('discover') }}</router-link
           >
         </li>
         <li @click="toggleMenu">
@@ -28,7 +28,7 @@
                 ? activeMenuClasses
                 : inactiveMenuClasses
             "
-            >{{ $t('search') }}</router-link
+            >{{ t('search') }}</router-link
           >
         </li>
         <li @click="toggleMenu">
@@ -38,7 +38,7 @@
             :class="
               currentPage === '/write' ? activeMenuClasses : inactiveMenuClasses
             "
-            >{{ $t('write') }}</router-link
+            >{{ t('write') }}</router-link
           >
         </li>
         <li v-show="isLoggedIn" @click="toggleMenu">
@@ -49,12 +49,12 @@
             "
             class="p-4 block"
           >
-            {{ $t('settings') }}
+            {{ t('settings') }}
           </router-link>
         </li>
         <li v-show="isLoggedIn">
           <a class="p-4 block cursor-pointer" @click="logout">
-            {{ $t('logout') }}
+            {{ t('logout') }}
           </a>
         </li>
       </ul>
@@ -86,7 +86,7 @@
               :class="
                 currentPage === '/' ? activeMenuClasses : inactiveMenuClasses
               "
-              >{{ $t('discover') }}</router-link
+              >{{ t('discover') }}</router-link
             >
           </li>
           <li class="pl-2">
@@ -98,7 +98,7 @@
                   : inactiveMenuClasses
               "
               :to="{ name: 'Search' }"
-              >{{ $t('search') }}</router-link
+              >{{ t('search') }}</router-link
             >
           </li>
           <li class="pl-2">
@@ -110,7 +110,7 @@
                   ? activeMenuClasses
                   : inactiveMenuClasses
               "
-              >{{ $t('write') }}</router-link
+              >{{ t('write') }}</router-link
             >
           </li>
           <li class="pl-2">
@@ -123,7 +123,7 @@
                   : inactiveMenuClasses
               "
             >
-              {{ $t('settings') }}
+              {{ t('settings') }}
             </router-link>
           </li>
           <li class="pl-2">
@@ -131,7 +131,7 @@
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               @click="logout"
             >
-              {{ $t('logout') }}
+              {{ t('logout') }}
             </a>
           </li>
         </ul>
@@ -180,16 +180,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { reactive, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 import Auth from '@/components/auth/Auth.vue'
 
 export default {
-  name: 'LayoutHeader',
   components: {
     Auth,
   },
-  data() {
-    return {
+  // eslint-disable-next-line no-unused-vars
+  setup(props, context) {
+    const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
+
+    const data = reactive({
       openMenu: false,
       openAuthPanel: false,
       activeMenuClasses: [
@@ -204,51 +211,75 @@ export default {
         'hover:bg-accent',
         'hover:text-primary-inverse',
       ],
+    })
+
+    const isLoggedIn = computed(() => {
+      return store.state.isLoggedIn
+    })
+
+    const getUserName = computed(() => {
+      return store.state.getUserName
+    })
+
+    const getUserProfilePicture = computed(() => {
+      return store.state.getUserProfilePicture
+    })
+
+    const currentPage = computed(() => {
+      return route.path
+    })
+
+    watch(isLoggedIn, (value) => {
+      if (value && data.openAuthPanel === true) {
+        data.onCloseAuthPanel()
+      }
+    })
+
+    const logout = () => {
+      data.openAuthPanel = false
+      data.openMenu = false
+      store.dispatch('logout')
+      if (route.path !== '/') {
+        router.push({ name: 'Home' })
+      }
+    }
+
+    const toggleMenu = () => {
+      data.openMenu = !data.openMenu
+    }
+
+    const onOpenCloseAuth = () => {
+      data.openAuthPanel = true
+    }
+
+    const onCloseAuthPanel = () => {
+      data.openAuthPanel = false
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        discover: 'Découvrir',
+        search: 'Rechercher',
+        write: 'Ecrire une histoire',
+        settings: 'Préférences',
+        logout: 'Déconnexion',
+      },
+    })
+
+    return {
+      data,
+      isLoggedIn,
+      getUserName,
+      getUserProfilePicture,
+      currentPage,
+      logout,
+      toggleMenu,
+      onOpenCloseAuth,
+      onCloseAuthPanel,
+      t,
     }
   },
-  computed: {
-    ...mapGetters(['isLoggedIn', 'getUserName', 'getUserProfilePicture']),
-    currentPage() {
-      return this.$route.path
-    },
-  },
-  watch: {
-    isLoggedIn(value) {
-      if (value && this.openAuthPanel === true) {
-        this.onCloseAuthPanel()
-      }
-    },
-  },
-  methods: {
-    logout() {
-      this.openAuthPanel = false
-      this.openMenu = false
-      this.$store.dispatch('logout')
-      if (this.$route.path !== '/') {
-        this.$router.push({ name: 'Home' })
-      }
-    },
-    toggleMenu() {
-      this.openMenu = !this.openMenu
-    },
-    onOpenCloseAuth() {
-      this.openAuthPanel = true
-    },
-    onCloseAuthPanel() {
-      this.openAuthPanel = false
-    },
-  },
+  methods: {},
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "discover": "Découvrir",
-    "search": "Rechercher",
-    "write": "Ecrire une histoire",
-    "settings": "Préférences",
-    "logout": "Déconnexion"
-  }
-}
-</i18n>

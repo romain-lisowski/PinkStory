@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-profile-picture') }}
+      {{ t('update-profile-picture') }}
     </p>
     <div class="flex justify-center my-4">
       <span v-if="getUserProfilePicture" class="relative">
@@ -10,7 +10,7 @@
           class="mt-2 text-accent underline"
           @click="deleteProfilePicture"
         >
-          {{ $t('delete-profile-picture') }}
+          {{ t('delete-profile-picture') }}
         </button>
       </span>
 
@@ -31,7 +31,7 @@
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
@@ -73,7 +73,7 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "update-profile-picture": "Image",
@@ -82,4 +82,5 @@ export default {
     "delete-profile-picture": "Supprimer"
   }
 }
-</i18n>
+</i18n> 
+-->

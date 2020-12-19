@@ -29,7 +29,7 @@
         class="inline-block mt-6 lg:mt-20 px-3 py-1 text-sm sm:text-lg md:text-2xl lg:text-xl xl:text-2xl text-primary border-2 rounded-l-full rounded-r-full"
       >
         <font-awesome-icon icon="heart" class="mr-2" />
-        {{ $t('add-to-favorites') }}
+        {{ t('add-to-favorites') }}
       </p>
     </div>
   </div>
@@ -47,10 +47,10 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "add-to-favorites": "Ajouter aux favoris"
   }
 }
-</i18n>
+</i18n> -->

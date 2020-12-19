@@ -10,27 +10,27 @@
 
     <div class="pr-8 sm:pr-12 pt-2 sm:pt-0 text-primary text-xs font-light">
       <span class="mx-1 text-xs sm:text-sm sm:font-thin font-normal"
-        >{{ $t('theme') }} :
+        >{{ t('theme') }} :
       </span>
       <span
         class="sm:mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'auto' ? activeThemeClasses : ''"
         @click="setThemeAuto"
-        >{{ $t('auto') }}</span
+        >{{ t('auto') }}</span
       >
       |
       <span
         class="sm:mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'light' ? activeThemeClasses : ''"
         @click="setThemeLight"
-        >{{ $t('light') }}</span
+        >{{ t('light') }}</span
       >
       |
       <span
         class="sm:mx-1 cursor-pointer transition-all duration-300 ease-in-out"
         :class="activeTheme === 'dark' ? activeThemeClasses : ''"
         @click="setThemeDark"
-        >{{ $t('dark') }}</span
+        >{{ t('dark') }}</span
       >
     </div>
   </footer>
@@ -92,8 +92,7 @@ export default {
   },
 }
 </script>
-
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "discover": "Découvrir",
@@ -108,4 +107,4 @@ export default {
     "dark": "Sombre"
   }
 }
-</i18n>
+</i18n> -->

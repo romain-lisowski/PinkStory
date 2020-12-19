@@ -43,7 +43,7 @@
         tag="button"
         class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light"
       >
-        {{ $t('read-now') }}
+        {{ t('read-now') }}
       </router-link>
     </div>
   </div>
@@ -79,10 +79,10 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "read-now": "Lire maintenant"
   }
 }
-</i18n>
+</i18n> -->

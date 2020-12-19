@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center items-center">
     <p class="font-bold text-4xl sm:text-5xl lg:text-5xl">
-      {{ $t('write') }}
+      {{ t('write') }}
     </p>
     <div class="w-4/5 md:w-2/3 my-10 bg-primary">
       <div class="flex flex-col gap-8 items-center justify-center">
@@ -12,7 +12,7 @@
             id="title"
             type="text"
             name="title"
-            :placeholder="$t('title')"
+            :placeholder="t('title')"
             class="my-5 p-3 w-full rounded-md bg-primary bg-opacity-100"
           />
 
@@ -76,7 +76,7 @@
             class="mt-6 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg w-full"
             type="submit"
           >
-            {{ $t('send') }}
+            {{ t('send') }}
           </button>
         </div>
       </div>
@@ -112,13 +112,13 @@ export default {
       }),
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.editor.destroy()
   },
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "write": "Ecrire une histoire",
@@ -126,4 +126,4 @@ export default {
     "send": "Envoyer"
   }
 }
-</i18n>
+</i18n> -->

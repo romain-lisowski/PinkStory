@@ -2,12 +2,12 @@
   <div class="mx-8 sm:mx-12">
     <div class="flex flex-col sm:flex-row justify-between">
       <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
-        {{ $t('latest-stories') }}
+        {{ t('latest-stories') }}
       </p>
       <a
         class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
       >
-        {{ $t('see-latest-stories') }} >
+        {{ t('see-latest-stories') }} >
       </a>
     </div>
     <StoryList />
@@ -25,11 +25,11 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "latest-stories": "Les dernières histoires",
     "see-latest-stories" : "Voir les nouvelles histoires"
   }
 }
-</i18n>
+</i18n> -->

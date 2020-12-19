@@ -6,7 +6,7 @@
     ></p>
 
     <span class="text-base sm:text-lg lg:text-xl font-bold"
-      >{{ $t('categories') }} :
+      >{{ t('categories') }} :
       <span
         class="text-base sm:text-lg lg:text-xl font-normal text-accent-highlight"
         >{{ story.categories }}</span
@@ -18,7 +18,7 @@
         <font-awesome-icon icon="chevron-left" class="text-2xl mr-1 md:mr-4" />
         <span class="flex flex-col">
           <span class="text-base sm:text-lg lg:text-xl text-left"
-            >{{ $t('chapter') }} 11</span
+            >{{ t('chapter') }} 11</span
           >
           <span class="text-sm md:text-base font-bold text-left">{{
             story.previousChapter
@@ -28,7 +28,7 @@
       <div class="flex items-center">
         <span class="flex flex-col">
           <span class="text-base sm:text-lg lg:text-xl text-right"
-            >{{ $t('chapter') }} 13</span
+            >{{ t('chapter') }} 13</span
           >
           <span class="text-sm md:text-base font-bold text-right">{{
             story.nextChapter
@@ -52,11 +52,11 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "categories": "Catégories",
     "chapter": "Chapitre"
   }
 }
-</i18n>
+</i18n> -->

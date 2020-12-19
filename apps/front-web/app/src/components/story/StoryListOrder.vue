@@ -1,26 +1,26 @@
 <template>
   <div class="mt-10 text-right">
-    {{ $t('filter-by') + ' : ' }}
+    {{ t('filter-by') + ' : ' }}
     <button
       class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
       :class="activeOrder === 'rate' ? activeClasses : inactiveClasses"
       @click="orderRate"
     >
-      {{ $t('rate') }}
+      {{ t('rate') }}
     </button>
     <button
       class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
       :class="activeOrder === 'date' ? activeClasses : inactiveClasses"
       @click="orderDate"
     >
-      {{ $t('date') }}
+      {{ t('date') }}
     </button>
     <button
       class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
       :class="activeOrder === 'random' ? activeClasses : inactiveClasses"
       @click="orderRandom"
     >
-      {{ $t('random') }}
+      {{ t('random') }}
     </button>
   </div>
 </template>
@@ -53,7 +53,7 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "filter-by": "Filtrer par",
@@ -62,4 +62,4 @@ export default {
     "random": "Aléatoire"
   }
 }
-</i18n>
+</i18n> -->

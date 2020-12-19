@@ -4,18 +4,18 @@
     <StoryTopRated />
     <StoryLatest />
     <CategoryBlock>
-      <template v-slot:header>
+      <template #header>
         <div
           class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12"
         >
           <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
-            {{ $t('categories') }}
+            {{ t('categories') }}
           </p>
           <router-link
             :to="{ name: 'Search' }"
             class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
           >
-            {{ $t('search-story') }} >
+            {{ t('search-story') }} >
           </router-link>
         </div>
       </template>
@@ -40,11 +40,11 @@ export default {
 }
 </script>
 
-<i18n>
+<!-- <i18n>
 {
   "fr": {
     "categories": "Catégories",
     "search-story": "Rechercher des histoires"
   }
 }
-</i18n>
+</i18n> -->

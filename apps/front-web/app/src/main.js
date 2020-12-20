@@ -1,4 +1,3 @@
-import sanitizeHTML from 'sanitize-html'
 import { createI18n } from 'vue-i18n'
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -12,5 +11,4 @@ const i18n = createI18n({
   fallbackLocale: 'fr',
 })
 
-const app = createApp(App).use(router).use(store).use(i18n).mount('#app')
-app.config.globalProperties.$sanitize = sanitizeHTML
+createApp(App).use(router).use(store).use(i18n).mount('#app')

@@ -13,17 +13,22 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'NotFoundPage',
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'error-404': '404',
+          'not-found': "L'histoire que vous recherchez n'existe pas.",
+          'go-to-home': 'Découvrir de nouvelles histoires',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "error-404": "404",
-    "not-found": "L'histoire que vous recherchez n'existe pas.",
-    "go-to-home": "Découvrir de nouvelles histoires"
-  }
-}
-</i18n> -->

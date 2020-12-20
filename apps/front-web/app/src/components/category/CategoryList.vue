@@ -17,7 +17,6 @@
 import CategoryListItem from '@/components/category/CategoryListItem.vue'
 
 export default {
-  name: 'CategoryList',
   components: {
     CategoryListItem,
   },

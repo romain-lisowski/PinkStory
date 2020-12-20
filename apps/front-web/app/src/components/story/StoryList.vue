@@ -10,14 +10,14 @@
 
 <script>
 import StoryListItem from '@/components/story/StoryListItem.vue'
+import { reactive } from 'vue'
 
 export default {
-  name: 'StoryList',
   components: {
     StoryListItem,
   },
-  data() {
-    return {
+  setup() {
+    const data = reactive({
       stories: {
         story1: {
           author: 'Nathalie38',
@@ -56,7 +56,9 @@ export default {
           imagePath: '2.png',
         },
       },
-    }
+    })
+
+    return { ...data }
   },
 }
 </script>

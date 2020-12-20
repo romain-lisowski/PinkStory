@@ -22,9 +22,9 @@ import StoryContent from '@/pages/StoryPage/StoryContent.vue'
 import StoryInformations from '@/pages/StoryPage/StoryInformations.vue'
 import StoryCommentList from '@/pages/StoryPage/StoryCommentList.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
+import { reactive } from 'vue'
 
 export default {
-  name: 'StoryPage',
   components: {
     StoryHeader,
     StoryHeaderBottom,
@@ -33,8 +33,8 @@ export default {
     StoryCommentList,
     StoryTopRated,
   },
-  data() {
-    return {
+  setup() {
+    const data = reactive({
       story: {
         author: 'Estelle48',
         gender: 'female',
@@ -112,7 +112,9 @@ export default {
           c'est exquis de recevoir une belle verge dans le trou de son cul, une grosse pine dans l'anus.`,
         },
       ],
-    }
+    })
+
+    return { ...data }
   },
 }
 </script>

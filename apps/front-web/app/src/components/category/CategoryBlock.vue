@@ -17,14 +17,14 @@
 
 <script>
 import CategoryList from '@/components/category/CategoryList.vue'
+import { reactive } from 'vue'
 
 export default {
-  name: 'CategoryBlock',
   components: {
     CategoryList,
   },
-  data() {
-    return {
+  setup() {
+    const data = reactive({
       categoryLists: [
         {
           type: 'Orientation',
@@ -65,7 +65,9 @@ export default {
           ],
         },
       ],
-    }
+    })
+
+    return { ...data }
   },
 }
 </script>

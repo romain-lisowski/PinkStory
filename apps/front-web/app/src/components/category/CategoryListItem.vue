@@ -9,6 +9,9 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   name: 'CategoryListItem',
   props: {
@@ -17,17 +20,20 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      active: this.$store.state.categoryFilters.includes(this.category),
+  setup(props) {
+    const store = useStore()
+
+    const data = reactive({
+      active: store.state.categoryFilters.includes(props.category),
       activeClasses: ['bg-accent', 'text-primary-inverse'],
+    })
+
+    const toggleActive = () => {
+      data.active = !data.active
+      store.dispatch('toggleFilter', { category: props.category })
     }
-  },
-  methods: {
-    toggleActive() {
-      this.active = !this.active
-      this.$store.dispatch('toggleFilter', { category: this.category })
-    },
+
+    return { data, toggleActive }
   },
 }
 </script>

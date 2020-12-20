@@ -16,62 +16,6 @@
             class="my-5 p-3 w-full rounded-md bg-primary bg-opacity-100"
           />
 
-          <editor-menu-bar
-            v-slot="{ commands, isActive }"
-            class="text-left"
-            :editor="editor"
-            :keep-in-bounds="keepInBounds"
-          >
-            <div class="menubar">
-              <button
-                class="px-2 py-1"
-                :class="{ 'bg-accent': isActive.bold() }"
-                @click="commands.bold"
-              >
-                <font-awesome-icon icon="bold" />
-              </button>
-
-              <button
-                class="px-2 py-1"
-                :class="{
-                  'bg-accent': isActive.italic(),
-                }"
-                @click="commands.italic"
-              >
-                <font-awesome-icon icon="italic" />
-              </button>
-
-              <button
-                class="px-2 py-1"
-                :class="{ 'bg-accent': isActive.underline() }"
-                @click="commands.underline"
-              >
-                <font-awesome-icon icon="underline" />
-              </button>
-
-              <button
-                class="px-2 py-1"
-                :class="{ 'bg-accent': isActive.blockquote() }"
-                @click="commands.blockquote"
-              >
-                <font-awesome-icon icon="quote-right" />
-              </button>
-
-              <button
-                class="px-2 py-1"
-                :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                @click="commands.heading({ level: 3 })"
-              >
-                <font-awesome-icon icon="heading" />
-              </button>
-            </div>
-          </editor-menu-bar>
-
-          <editor-content
-            id="editor"
-            class="p-4 bg-primary bg-opacity-100 text-left"
-            :editor="editor"
-          />
           <button
             class="mt-6 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg w-full"
             type="submit"
@@ -85,45 +29,30 @@
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-import { Bold, Italic, Underline, Blockquote, Heading } from 'tiptap-extensions'
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'WritePage',
-  components: {
-    EditorContent,
-    EditorMenuBar,
-  },
-  data() {
-    return {
+  setup() {
+    const data = reactive({
       keepInBounds: true,
-      editor: new Editor({
-        extensions: [
-          new Bold(),
-          new Italic(),
-          new Underline(),
-          new Blockquote(),
-          new Heading({
-            levels: [3],
-          }),
-        ],
-        content:
-          '<h3>Nouvelle histoire !</h3><p>Commencez à écrire une nouvelle histoire érotique fictive ou réelle ...</p>',
-      }),
-    }
-  },
-  beforeUnmount() {
-    this.editor.destroy()
+      storyContentPlaceHolder:
+        '<h3>Nouvelle histoire !</h3><p>Commencez à écrire une nouvelle histoire érotique fictive ou réelle ...</p>',
+    })
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          write: 'Ecrire une histoire',
+          title: "Titre de l'histoire",
+          send: 'Envoyer',
+        },
+      },
+    })
+
+    return { ...data, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "write": "Ecrire une histoire",
-    "title": "Titre de l'histoire",
-    "send": "Envoyer"
-  }
-}
-</i18n> -->

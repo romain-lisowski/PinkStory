@@ -40,37 +40,42 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+import { reactive } from 'vue'
 
 export default {
-  name: 'UserUpdatePassword',
-  data() {
-    return {
+  setup() {
+    const store = useStore()
+    const data = reactive({
       passwordOld: '',
       passwordNew: '',
       passwordNewConfirm: '',
-    }
-  },
-  methods: {
-    processForm() {
+    })
+
+    const processForm = () => {
       ApiUsers.updatePassword(
-        this.$store.state.jwt,
-        this.passwordOld,
-        this.passwordNew,
-        this.passwordNewConfirm
+        store.state.jwt,
+        data.passwordOld,
+        data.passwordNew,
+        data.passwordNewConfirm
       )
-    },
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-password': 'Mot de passe',
+          'current-password': 'Mot de passe actuel',
+          'new-password': 'Nouveau mot de passe',
+          'confirm-new-password': 'Confirmer nouveau mot de passe',
+          update: 'Modifier',
+        },
+      },
+    })
+
+    return { ...data, processForm, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "update-password": "Mot de passe",
-    "current-password": "Mot de passe actuel",
-    "new-password": "Nouveau mot de passe",
-    "confirm-new-password": "Confirmer nouveau mot de passe",
-    "update": "Modifier"
-  }
-}
-</i18n> -->

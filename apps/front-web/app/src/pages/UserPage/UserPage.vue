@@ -27,22 +27,26 @@ import UserUpdatePicture from '@/pages/UserPage/UserUpdatePicture.vue'
 import UserUpdateEmail from '@/pages/UserPage/UserUpdateEmail.vue'
 import UserUpdatePassword from '@/pages/UserPage/UserUpdatePassword.vue'
 import UserUpdateInformation from '@/pages/UserPage/UserUpdateInformation.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'User',
   components: {
     UserUpdatePicture,
     UserUpdateEmail,
     UserUpdatePassword,
     UserUpdateInformation,
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-profile': 'Modification du profil',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "update-profile": "Modification du profil"
-  }
-}
-</i18n> -->

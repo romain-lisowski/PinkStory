@@ -4,8 +4,8 @@
       {{ t('update-profile-picture') }}
     </p>
     <div class="flex justify-center my-4">
-      <span v-if="getUserProfilePicture" class="relative">
-        <img class="h-40 w-40 rounded-full" :src="getUserProfilePicture" />
+      <span v-if="userProfilePicture" class="relative">
+        <img class="h-40 w-40 rounded-full" :src="userProfilePicture" />
         <button
           class="mt-2 text-accent underline"
           @click="deleteProfilePicture"
@@ -17,7 +17,7 @@
       <span
         v-else
         class="h-40 w-40 flex items-center justify-center text-4xl font-bold bg-accent bg-opacity-100 rounded-full"
-        >{{ getUserName[0].toUpperCase() }}</span
+        >{{ userName[0].toUpperCase() }}</span
       >
     </div>
     <form class="flex flex-col" @submit.prevent="processForm">
@@ -38,49 +38,66 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { useStore } from 'vuex'
 import ApiUsers from '@/api/ApiUsers'
+import { useI18n } from 'vue-i18n'
+import { computed, reactive } from 'vue'
 
 export default {
-  name: 'UserUpdateProfilePicture',
-  data() {
-    return {
+  setup() {
+    const store = useStore()
+
+    const data = reactive({
       uploadProfilePicture: null,
-    }
-  },
-  computed: {
-    ...mapGetters(['getUserName', 'getUserProfilePicture']),
-  },
-  methods: {
-    uploadProfilePictureChange(event) {
+    })
+
+    const userName = computed(() => {
+      return store.getters.userName
+    })
+
+    const userProfilePicture = computed(() => {
+      return store.getters.userProfilePicture
+    })
+
+    const uploadProfilePictureChange = (event) => {
       if (event.target.files) {
         const uploadedFile = event.target.files[0]
-        this.uploadProfilePicture = uploadedFile
+        data.uploadProfilePicture = uploadedFile
       }
-    },
-    async deleteProfilePicture() {
-      await ApiUsers.deleteProfilePicture(this.$store.state.jwt)
-      this.$store.dispatch('fetchCurrentUser')
-    },
-    async processForm() {
+    }
+    const deleteProfilePicture = async () => {
+      await ApiUsers.deleteProfilePicture(store.state.jwt)
+      store.dispatch('fetchCurrentUser')
+    }
+    const processForm = async () => {
       await ApiUsers.updateProfilePicture(
-        this.$store.state.jwt,
-        this.uploadProfilePicture
+        store.state.jwt,
+        data.uploadProfilePicture
       )
-      this.$store.dispatch('fetchCurrentUser')
-    },
+      store.dispatch('fetchCurrentUser')
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-profile-picture': 'Image',
+          'new-email': 'Nouvel email',
+          update: 'Modifier',
+          'delete-profile-picture': 'Supprimer',
+        },
+      },
+    })
+
+    return {
+      ...data,
+      userName,
+      userProfilePicture,
+      uploadProfilePictureChange,
+      deleteProfilePicture,
+      processForm,
+      t,
+    }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "update-profile-picture": "Image",
-    "new-email": "Nouvel email",
-    "update": "Modifier",
-    "delete-profile-picture": "Supprimer"
-  }
-}
-</i18n> 
--->

@@ -24,29 +24,35 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
+import { useStore } from 'vuex'
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'UserUpdateInformation',
-  data() {
-    return {
-      name: this.$store.state.user.name,
-    }
-  },
-  methods: {
-    async processForm() {
+  setup() {
+    const store = useStore()
+
+    const data = reactive({
+      name: store.state.user.name,
+    })
+
+    const processForm = async () => {
       await ApiUsers.updateInformation(this.$store.state.jwt, this.name)
       this.$store.dispatch('fetchCurrentUser')
-    },
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-informations': 'Informations',
+          pseudo: 'Pseudo',
+          update: 'Modifier',
+        },
+      },
+    })
+
+    return { data, processForm, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "update-informations": "Informations",
-    "pseudo": "Pseudo",
-    "update": "Modifier"
-  }
-}
-</i18n> -->

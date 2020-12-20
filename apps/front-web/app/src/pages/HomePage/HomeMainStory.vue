@@ -41,7 +41,7 @@
       <router-link
         :to="{ name: 'Story' }"
         tag="button"
-        class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light"
+        class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 w-full sm:w-1/2 lg:w-1/4 bg-accent rounded-lg text-lg sm:text-xl font-light"
       >
         {{ t('read-now') }}
       </router-link>

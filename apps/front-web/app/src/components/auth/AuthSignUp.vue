@@ -43,7 +43,7 @@
     </button>
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="onDisplayLogin"
+      @click="onDisplayLoginBlock"
     >
       {{ t('sign-in') }}
     </a>
@@ -52,45 +52,50 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'AuthSignUp',
-  emits: ['display-login'],
-  data() {
-    return {
+  emits: ['display-login-block'],
+  setup(props, context) {
+    const data = reactive({
       name: '',
       email: '',
       password: '',
       passwordConfirm: '',
+    })
+
+    const onDisplayLoginBlock = () => {
+      context.emit('display-login-block')
     }
-  },
-  methods: {
-    processForm() {
+
+    const processForm = () => {
       ApiUsers.signUp(
-        this.name,
-        this.email,
-        this.password,
-        this.passwordConfirm
+        data.name,
+        data.email,
+        data.password,
+        data.passwordConfirm
       )
-      this.onDisplayLogin()
-    },
-    onDisplayLogin() {
-      this.$emit('display-login')
-    },
+      onDisplayLoginBlock()
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'sign-up': 'Inscription',
+          pseudo: 'Login',
+          email: 'Email',
+          password: 'Mot de passe',
+          confirm: 'Confirmer votre mot de passe',
+          submit: "S'inscrire",
+          'sign-in': 'Déjà inscrit ?',
+        },
+      },
+    })
+
+    return { ...data, processForm, onDisplayLoginBlock, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "sign-up": "Inscription",
-    "pseudo": "Login",
-    "email": "Email",
-    "password": "Mot de passe",
-    "confirm": "Confirmer votre mot de passe",
-    "submit": "S'inscrire",
-    "sign-in": "Déjà inscrit ?"
-  }
-}
-</i18n> -->

@@ -28,7 +28,7 @@
     </button>
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="onDisplaySignUp"
+      @click="onDisplaySignUpBlock"
     >
       {{ t('sign-up') }}
     </a>
@@ -36,25 +36,45 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'AuthLogin',
-  emits: ['display-sign-up'],
-  data() {
-    return {
+  emits: ['display-sign-up-block'],
+  setup(props, context) {
+    const store = useStore()
+
+    const data = reactive({
       email: '',
       password: '',
-    }
-  },
-  methods: {
-    processForm() {
-      this.$store.dispatch('login', {
+    })
+
+    const processForm = () => {
+      store.dispatch('login', {
         email: this.email,
         password: this.password,
       })
-    },
-    onDisplaySignUp() {
-      this.$emit('display-sign-up')
-    },
+    }
+
+    const onDisplaySignUpBlock = () => {
+      context.emit('display-sign-up-block')
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          login: 'Connexion',
+          email: 'Email',
+          password: 'Mot de passe',
+          submit: "S'identifier",
+          'sign-up': 'Pas encore inscrit ?',
+        },
+      },
+    })
+
+    return { ...data, processForm, onDisplaySignUpBlock, t }
   },
 }
 </script>

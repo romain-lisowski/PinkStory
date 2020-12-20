@@ -37,11 +37,16 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
+
 export default {
-  name: 'LayoutFooter',
-  data() {
-    return {
-      activeTheme: this.$store.state.theme,
+  setup() {
+    const store = useStore()
+
+    const data = reactive({
+      activeTheme: store.state.theme,
       activeThemeClasses: [
         'text-accent',
         'rounded-md',
@@ -49,62 +54,63 @@ export default {
         'px-2',
         'py-1',
       ],
-    }
-  },
-  created() {
-    if (this.activeTheme === 'light') {
-      this.setThemeLight()
-    } else if (this.activeTheme === 'dark') {
-      this.setThemeDark()
-    } else {
-      this.setThemeAuto()
-    }
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('logout')
-      this.$router.push({ name: 'Auth' })
-    },
-    setThemeLight() {
-      this.activeTheme = 'light'
-      this.$store.dispatch('updateTheme', { theme: 'light' })
+    })
+
+    const setThemeLight = () => {
+      data.activeTheme = 'light'
+      store.dispatch('updateTheme', { theme: 'light' })
       document.documentElement.classList.add('theme-light')
       document.documentElement.classList.remove('theme-dark')
-    },
-    setThemeDark() {
-      this.activeTheme = 'dark'
-      this.$store.dispatch('updateTheme', { theme: 'dark' })
+    }
+
+    const setThemeDark = () => {
+      data.activeTheme = 'dark'
+      store.dispatch('updateTheme', { theme: 'dark' })
       document.documentElement.classList.add('theme-dark')
       document.documentElement.classList.remove('theme-light')
-    },
-    setThemeAuto() {
+    }
+
+    const setThemeAuto = () => {
       if (
         window.matchMedia &&
         window.matchMedia('(prefers-color-scheme: dark)').matches
       ) {
-        this.setThemeDark()
+        setThemeDark()
       } else {
-        this.setThemeLight()
+        setThemeLight()
       }
-      this.activeTheme = 'auto'
-      this.$store.dispatch('updateTheme', { theme: 'auto' })
-    },
+      data.activeTheme = 'auto'
+      store.dispatch('updateTheme', { theme: 'auto' })
+    }
+
+    const initTheme = () => {
+      if (data.activeTheme === 'light') {
+        setThemeLight()
+      } else if (data.activeTheme === 'dark') {
+        setThemeDark()
+      } else {
+        setThemeAuto()
+      }
+    }
+    initTheme()
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          discover: 'Découvrir',
+          categories: 'Catégories',
+          write: 'Ecrire une histoire',
+          authentification: 'Authentification',
+          profile: 'Profile',
+          theme: 'Thème',
+          auto: 'Auto',
+          light: 'Claire',
+          dark: 'Sombre',
+        },
+      },
+    })
+    return { ...data, t, setThemeLight, setThemeDark, setThemeAuto }
   },
 }
 </script>
-<!-- <i18n>
-{
-  "fr": {
-    "discover": "Découvrir",
-    "categories": "Catégories",
-    "write": "Ecrire une histoire",
-    "authentification": "Authentification",
-    "profile": "Profile",
-    "logout": "Deconnexion",
-    "theme": "Thème",
-    "auto": "Auto",
-    "light": "Claire",
-    "dark": "Sombre"
-  }
-}
-</i18n> -->

@@ -56,25 +56,29 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryInformations',
   props: {
     story: {
       type: Object,
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          informations: 'Informations',
+          'reader-reviews': 'Avis des lecteurs',
+          chapters: 'Chapitres',
+          stories: 'Histoires',
+          registration: 'Inscription',
+        },
+      },
+    })
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "informations": "Informations",
-    "reader-reviews": "Avis des lecteurs",
-    "chapters": "Chapitres",
-    "stories": "Histoires",
-    "registration": "Inscription"
-  }
-}
-</i18n> -->

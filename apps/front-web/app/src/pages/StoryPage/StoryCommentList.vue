@@ -28,22 +28,26 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryCommentList',
   props: {
     comments: {
       type: Array,
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          comments: 'Commentaires',
+          'comment-this-chapter': 'Commenter ce chapitre',
+        },
+      },
+    })
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "comments": "Commentaires",
-    "comment-this-chapter": "Commenter ce chapitre"
-  }
-}
-</i18n> -->

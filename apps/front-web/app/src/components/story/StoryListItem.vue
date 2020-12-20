@@ -32,9 +32,9 @@
 
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'StoryListItem',
   components: {
     UiRatingStars,
   },
@@ -44,15 +44,18 @@ export default {
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'write-by': 'Par',
+          comments: 'avis',
+          'read-more': 'Lire la suite',
+        },
+      },
+    })
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "write-by": "Par",
-    "comments": "avis",
-    "read-more" : "Lire la suite"
-  }
-}
-</i18n> -->

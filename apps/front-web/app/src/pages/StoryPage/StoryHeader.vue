@@ -36,21 +36,26 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryHeader',
   props: {
     story: {
       type: Object,
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'add-to-favorites': 'Ajouter aux favoris',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "add-to-favorites": "Ajouter aux favoris"
-  }
-}
-</i18n> -->

@@ -16,20 +16,23 @@
 
 <script>
 import StoryList from '@/components/story/StoryList.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'StoryTopRated',
   components: {
     StoryList,
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'best-stories': 'Vous pourriez aussi aimer',
+          'see-best-stories': 'Voir les mieux notées',
+        },
+      },
+    })
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "best-stories": "Vous pourriez aussi aimer",
-    "see-best-stories": "Voir les mieux notées"
-  }
-}
-</i18n> -->

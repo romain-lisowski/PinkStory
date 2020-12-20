@@ -36,24 +36,29 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryHeaderBottom',
   props: {
     story: {
       type: Object,
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'reader-reviews': 'Avis des lecteurs',
+          comments: 'Commentaires',
+          'reading-time': 'Temps de lecture',
+          'first-publication': 'Première publication',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "reader-reviews": "Avis des lecteurs",
-    "comments": "Commentaires",
-    "reading-time": "Temps de lecture",
-    "first-publication": "Première publication"
-  }
-}
-</i18n> -->

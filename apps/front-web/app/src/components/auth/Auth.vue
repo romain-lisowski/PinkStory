@@ -18,7 +18,7 @@
     >
       <AuthLogin
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-sign-up="onDisplaySignUp"
+        @display-sign-up-block="onDisplaySignUp"
       />
     </div>
     <div
@@ -27,7 +27,7 @@
     >
       <AuthSignUp
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-login="onDisplayLogin"
+        @display-login-block="onDisplayLogin"
       />
     </div>
   </div>

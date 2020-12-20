@@ -2,7 +2,7 @@
   <div class="w-5/6 lg:w-3/4 pt-12">
     <p
       class="text-justify font-thin text-base sm:text-lg lg:text-xl tracking-wide leading-relaxed"
-      v-html="$sanitize(story.content)"
+      v-html="story.content"
     ></p>
 
     <span class="text-base sm:text-lg lg:text-xl font-bold"
@@ -41,22 +41,27 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryContent',
   props: {
     story: {
       type: Object,
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          categories: 'Catégories',
+          chapter: 'Chapitre',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "categories": "Catégories",
-    "chapter": "Chapitre"
-  }
-}
-</i18n> -->

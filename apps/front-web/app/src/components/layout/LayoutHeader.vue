@@ -14,7 +14,7 @@
             :to="{ name: 'Home' }"
             class="p-4 block"
             :class="
-              currentPage === '/' ? activeMenuClasses : inactiveMenuClasses
+              currentPageUri === '/' ? activeMenuClasses : inactiveMenuClasses
             "
             >{{ t('discover') }}</router-link
           >
@@ -24,7 +24,7 @@
             :to="{ name: 'Search' }"
             class="p-4 block"
             :class="
-              currentPage === '/search'
+              currentPageUri === '/search'
                 ? activeMenuClasses
                 : inactiveMenuClasses
             "
@@ -36,23 +36,27 @@
             :to="{ name: 'Write' }"
             class="p-4 block"
             :class="
-              currentPage === '/write' ? activeMenuClasses : inactiveMenuClasses
+              currentPageUri === '/write'
+                ? activeMenuClasses
+                : inactiveMenuClasses
             "
             >{{ t('write') }}</router-link
           >
         </li>
-        <li v-show="isLoggedIn" @click="toggleMenu">
+        <li v-show="loggedIn" @click="toggleMenu">
           <router-link
             :to="{ name: 'User' }"
             :class="
-              currentPage === '/user' ? activeMenuClasses : inactiveMenuClasses
+              currentPageUri === '/user'
+                ? activeMenuClasses
+                : inactiveMenuClasses
             "
             class="p-4 block"
           >
             {{ t('settings') }}
           </router-link>
         </li>
-        <li v-show="isLoggedIn">
+        <li v-show="loggedIn">
           <a class="p-4 block cursor-pointer" @click="logout">
             {{ t('logout') }}
           </a>
@@ -77,14 +81,14 @@
         PinkStory
       </router-link>
 
-      <nav v-show="isLoggedIn" class="hidden lg:block">
+      <nav v-show="loggedIn" class="hidden lg:block">
         <ul class="flex items-center justify-center tracking-wide">
           <li>
             <router-link
               :to="{ name: 'Home' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               :class="
-                currentPage === '/' ? activeMenuClasses : inactiveMenuClasses
+                currentPageUri === '/' ? activeMenuClasses : inactiveMenuClasses
               "
               >{{ t('discover') }}</router-link
             >
@@ -93,7 +97,7 @@
             <router-link
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               :class="
-                currentPage.includes('/search')
+                currentPageUri.includes('/search')
                   ? activeMenuClasses
                   : inactiveMenuClasses
               "
@@ -106,7 +110,7 @@
               :to="{ name: 'Write' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               :class="
-                currentPage.includes('/write')
+                currentPageUri.includes('/write')
                   ? activeMenuClasses
                   : inactiveMenuClasses
               "
@@ -118,7 +122,7 @@
               :to="{ name: 'User' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               :class="
-                currentPage.includes('/user')
+                currentPageUri.includes('/user')
                   ? activeMenuClasses
                   : inactiveMenuClasses
               "
@@ -138,7 +142,7 @@
       </nav>
 
       <button
-        v-if="isLoggedIn"
+        v-if="loggedIn"
         class="relative group mr-6 md:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
@@ -146,25 +150,25 @@
           >8</span
         >
         <span
-          v-if="getUserProfilePicture"
+          v-if="userProfilePicture"
           class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
         >
           <img
             class="w-8 md:w-12 h-8 md:h-12 rounded-xl md:rounded-2xl"
-            :src="getUserProfilePicture"
+            :src="userProfilePicture"
           />
         </span>
         <span
           v-else
           class="w-8 md:w-12 h-8 md:h-12 flex items-center justify-center font-bold bg-accent bg-opacity-100 rounded-full"
-          >{{ getUserName[0].toUpperCase() }}</span
+          >{{ userName[0].toUpperCase() }}</span
         >
       </button>
 
       <a
         v-else
         class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 rounded-lg"
-        @click="onOpenCloseAuth"
+        @click="onOpenAuthPanel"
       >
         <font-awesome-icon
           icon="venus-mars"
@@ -182,8 +186,8 @@
 <script>
 import { reactive, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 import Auth from '@/components/auth/Auth.vue'
 
 export default {
@@ -213,23 +217,23 @@ export default {
       ],
     })
 
-    const isLoggedIn = computed(() => {
-      return store.state.isLoggedIn
+    const loggedIn = computed(() => {
+      return store.state.loggedIn
     })
 
-    const getUserName = computed(() => {
-      return store.state.getUserName
+    const userName = computed(() => {
+      return store.state.userName
     })
 
-    const getUserProfilePicture = computed(() => {
-      return store.state.getUserProfilePicture
+    const userProfilePicture = computed(() => {
+      return store.state.userProfilePicture
     })
 
-    const currentPage = computed(() => {
+    const currentPageUri = computed(() => {
       return route.path
     })
 
-    watch(isLoggedIn, (value) => {
+    watch(loggedIn, (value) => {
       if (value && data.openAuthPanel === true) {
         data.onCloseAuthPanel()
       }
@@ -248,7 +252,7 @@ export default {
       data.openMenu = !data.openMenu
     }
 
-    const onOpenCloseAuth = () => {
+    const onOpenAuthPanel = () => {
       data.openAuthPanel = true
     }
 
@@ -259,23 +263,25 @@ export default {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
-        discover: 'Découvrir',
-        search: 'Rechercher',
-        write: 'Ecrire une histoire',
-        settings: 'Préférences',
-        logout: 'Déconnexion',
+        fr: {
+          discover: 'Découvrir',
+          search: 'Rechercher',
+          write: 'Ecrire une histoire',
+          settings: 'Préférences',
+          logout: 'Déconnexion',
+        },
       },
     })
 
     return {
-      data,
-      isLoggedIn,
-      getUserName,
-      getUserProfilePicture,
-      currentPage,
+      ...data,
+      loggedIn,
+      userName,
+      userProfilePicture,
+      currentPageUri,
       logout,
       toggleMenu,
-      onOpenCloseAuth,
+      onOpenAuthPanel,
       onCloseAuthPanel,
       t,
     }

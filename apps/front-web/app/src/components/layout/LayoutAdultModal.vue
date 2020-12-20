@@ -49,14 +49,16 @@ export default {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
-        'are-you-an-adult': 'Avez-vous 18 ans ?',
-        'adult-speech':
-          'PinkStory est une communauté qui offre du contenu réservé aux adultes. Vous devez avoir 18 ans ou plus pour entrer',
-        enter: "J'ai 18 ans ou plus - Entrer",
+        fr: {
+          'are-you-an-adult': 'Avez-vous 18 ans ?',
+          'adult-speech':
+            'PinkStory est une communauté qui offre du contenu réservé aux adultes. Vous devez avoir 18 ans ou plus pour entrer',
+          enter: "J'ai 18 ans ou plus - Entrer",
+        },
       },
     })
 
-    return { data, onIsAdult, t }
+    return { ...data, onIsAdult, t }
   },
 }
 </script>

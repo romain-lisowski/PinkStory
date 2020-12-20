@@ -16,20 +16,24 @@
 
 <script>
 import StoryList from '@/components/story/StoryList.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'StoryLatest',
   components: {
     StoryList,
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'latest-stories': 'Les dernières histoires',
+          'see-latest-stories': 'Voir les nouvelles histoires',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "latest-stories": "Les dernières histoires",
-    "see-latest-stories" : "Voir les nouvelles histoires"
-  }
-}
-</i18n> -->

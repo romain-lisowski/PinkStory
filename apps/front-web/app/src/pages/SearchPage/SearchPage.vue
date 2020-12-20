@@ -31,6 +31,8 @@
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryList from '@/components/story/StoryList.vue'
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'SearchPage',
@@ -39,19 +41,22 @@ export default {
     StoryListOrder,
     StoryList,
   },
-  data() {
-    return {
+
+  setup() {
+    const data = reactive({
       results: 32,
-    }
+    })
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          search: 'Rechercher par catégorie',
+          results: 'histoires correspondantes',
+        },
+      },
+    })
+
+    return { ...data, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "search": "Rechercher par catégorie",
-    "results": "histoires correspondantes"
-  }
-}
-</i18n> -->

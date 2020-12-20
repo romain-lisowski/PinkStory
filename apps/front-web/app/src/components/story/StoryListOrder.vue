@@ -26,40 +26,47 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryListOrder',
-  data() {
-    return {
-      activeOrder: this.$store.state.storyOrder,
+  setup() {
+    const store = useStore()
+    const data = reactive({
+      activeOrder: store.state.storyOrder,
       activeClasses: ['text-primary', 'bg-accent'],
       inactiveClasses: ['border'],
+    })
+
+    const changeOrder = (storyOrder) => {
+      data.activeOrder = storyOrder
+      store.dispatch('updateStoryOrder', { storyOrder })
     }
-  },
-  methods: {
-    orderRate() {
-      this.changeOrder('rate')
-    },
-    orderDate() {
-      this.changeOrder('date')
-    },
-    orderRandom() {
-      this.changeOrder('random')
-    },
-    changeOrder(storyOrder) {
-      this.activeOrder = storyOrder
-      this.$store.dispatch('updateStoryOrder', { storyOrder })
-    },
+
+    const orderRate = () => {
+      changeOrder('rate')
+    }
+    const orderDate = () => {
+      changeOrder('date')
+    }
+    const orderRandom = () => {
+      changeOrder('random')
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'filter-by': 'Filtrer par',
+          rate: 'Note',
+          date: 'Date',
+          random: 'Aléatoire',
+        },
+      },
+    })
+
+    return { ...data, orderRate, orderDate, orderRandom, changeOrder, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "filter-by": "Filtrer par",
-    "rate": "Note",
-    "date": "Date",
-    "random": "Aléatoire"
-  }
-}
-</i18n> -->

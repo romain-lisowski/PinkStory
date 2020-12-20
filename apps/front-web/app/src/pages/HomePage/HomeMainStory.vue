@@ -51,14 +51,15 @@
 
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
+import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'HomeMainStory',
   components: {
     UiRatingStars,
   },
-  data() {
-    return {
+  setup() {
+    const data = reactive({
       story: {
         author: 'Estelle48',
         gender: 'female',
@@ -74,15 +75,18 @@ export default {
         Ma grande fille Cathy est marié depuis deux ans avec Laurent,
         bel homme qu'elle a rencontré sur les bancs de la fac.`,
       },
-    }
+    })
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'read-now': 'Lire maintenant',
+        },
+      },
+    })
+
+    return { ...data, t }
   },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "read-now": "Lire maintenant"
-  }
-}
-</i18n> -->

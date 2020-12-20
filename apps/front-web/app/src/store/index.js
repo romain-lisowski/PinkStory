@@ -21,10 +21,10 @@ export default Vuex.createStore({
     isLoggedIn: (state) => {
       return state.user && state.jwt
     },
-    getUserName: (state) => {
+    userName: (state) => {
       return state.user.name
     },
-    getUserProfilePicture: (state, getters) => {
+    userProfilePicture: (state, getters) => {
       return getters.isLoggedIn && state.user.profile_picture
         ? `${
             process.env.VUE_APP_PROJECT_FILE_MANAGER_DSN +

@@ -28,23 +28,27 @@ import HomeMainStory from '@/pages/HomePage/HomeMainStory.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 import StoryLatest from '@/components/story/StoryLatest.vue'
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'HomePage',
   components: {
     HomeMainStory,
     StoryTopRated,
     StoryLatest,
     CategoryBlock,
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          categories: 'Catégories',
+          'search-story': 'Rechercher des histoires',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<!-- <i18n>
-{
-  "fr": {
-    "categories": "Catégories",
-    "search-story": "Rechercher des histoires"
-  }
-}
-</i18n> -->

@@ -194,8 +194,7 @@ export default {
   components: {
     Auth,
   },
-  // eslint-disable-next-line no-unused-vars
-  setup(props, context) {
+  setup() {
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
@@ -218,15 +217,15 @@ export default {
     })
 
     const loggedIn = computed(() => {
-      return store.state.loggedIn
+      return store.getters.isLoggedIn
     })
 
     const userName = computed(() => {
-      return store.state.userName
+      return store.getters.userName
     })
 
     const userProfilePicture = computed(() => {
-      return store.state.userProfilePicture
+      return store.getters.userProfilePicture
     })
 
     const currentPageUri = computed(() => {

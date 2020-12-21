@@ -13,7 +13,6 @@ import { reactive } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
-  name: 'CategoryListItem',
   props: {
     category: {
       type: String,
@@ -33,7 +32,7 @@ export default {
       store.dispatch('toggleFilter', { category: props.category })
     }
 
-    return { data, toggleActive }
+    return { ...data, toggleActive }
   },
 }
 </script>

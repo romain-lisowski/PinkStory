@@ -52,7 +52,7 @@ export default {
       },
     })
 
-    return { data, processForm, t }
+    return { ...data, processForm, t }
   },
 }
 </script>

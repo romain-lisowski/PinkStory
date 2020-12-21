@@ -76,7 +76,7 @@
 
       <router-link
         :to="{ name: 'Home' }"
-        class="mx-auto lg:ml-0 flex-shrink-0 text-2xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tighter"
+        class="mx-auto sm:ml-0 md:ml-6 lg:ml-0 flex-shrink-0 text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tighter"
       >
         PinkStory
       </router-link>
@@ -168,23 +168,23 @@
       <a
         v-else
         class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 rounded-lg"
-        @click="onOpenAuthPanel"
+        @click="openAuthPanel = true"
       >
         <font-awesome-icon
           icon="venus-mars"
-          class="-mt-2 lg:mt-2 mr-8 sm:mr-6 lg:mr-0 text-4xl text-accent rounded-full"
+          class="-mt-2 lg:mt-2 -ml-6 sm:ml-0 mr-3 sm:mr-6 md:mr-2 lg:-mr-2 w-10 sm:w-12 text-4xl text-accent"
         />
       </a>
       <Auth
         :open-auth-panel="openAuthPanel"
-        @close-auth-panel="onCloseAuthPanel"
+        @close-auth-panel="openAuthPanel = false"
       />
     </header>
   </div>
 </template>
 
 <script>
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed, watch, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -199,9 +199,11 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
+    const openAuthPanel = ref(false)
+
     const data = reactive({
       openMenu: false,
-      openAuthPanel: false,
+
       activeMenuClasses: [
         'bg-primary-inverse',
         'bg-opacity-5',
@@ -233,13 +235,13 @@ export default {
     })
 
     watch(loggedIn, (value) => {
-      if (value && data.openAuthPanel === true) {
-        data.onCloseAuthPanel()
+      if (value && openAuthPanel.value === true) {
+        openAuthPanel.value = false
       }
     })
 
     const logout = () => {
-      data.openAuthPanel = false
+      openAuthPanel.value = false
       data.openMenu = false
       store.dispatch('logout')
       if (route.path !== '/') {
@@ -249,14 +251,6 @@ export default {
 
     const toggleMenu = () => {
       data.openMenu = !data.openMenu
-    }
-
-    const onOpenAuthPanel = () => {
-      data.openAuthPanel = true
-    }
-
-    const onCloseAuthPanel = () => {
-      data.openAuthPanel = false
     }
 
     const { t } = useI18n({
@@ -274,17 +268,15 @@ export default {
 
     return {
       ...data,
+      openAuthPanel,
       loggedIn,
       userName,
       userProfilePicture,
       currentPageUri,
       logout,
       toggleMenu,
-      onOpenAuthPanel,
-      onCloseAuthPanel,
       t,
     }
   },
-  methods: {},
 }
 </script>

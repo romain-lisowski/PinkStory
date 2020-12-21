@@ -9,7 +9,7 @@
     <a
       class="absolute top-0 right-0 py-6 px-16 z-20 text-3xl cursor-pointer"
       @click="onCloseAuthPanel"
-      ><font-awesome-icon icon="times"
+      ><font-awesome-icon icon="times" class="h-8"
     /></a>
 
     <div
@@ -18,7 +18,7 @@
     >
       <AuthLogin
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-sign-up-block="onDisplaySignUp"
+        @display-sign-up-block="displaySignUp = true"
       />
     </div>
     <div
@@ -27,7 +27,7 @@
     >
       <AuthSignUp
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-login-block="onDisplayLogin"
+        @display-login-block="displaySignUp = false"
       />
     </div>
   </div>
@@ -36,9 +36,9 @@
 <script>
 import AuthLogin from '@/components/auth/AuthLogin.vue'
 import AuthSignUp from '@/components/auth/AuthSignUp.vue'
+import { ref } from 'vue'
 
 export default {
-  name: 'Auth',
   components: {
     AuthLogin,
     AuthSignUp,
@@ -50,29 +50,28 @@ export default {
     },
   },
   emits: ['close-auth-panel'],
-  data() {
-    return {
-      displaySignUp: false,
+  setup(props, context) {
+    // const auth = ref(null)
+
+    const displaySignUp = ref(false)
+
+    // watch(
+    //   () => props.openAuthPanel,
+    //   (value) => {
+    //     if (value === true) {
+    //       // eslint-disable-next-line vue/no-ref-as-operand
+    //       auth.focus()
+    // this.$refs.auth.focus()
+    //     }
+    //   }
+    // )
+
+    const onCloseAuthPanel = () => {
+      displaySignUp.value = false
+      context.emit('close-auth-panel')
     }
-  },
-  watch: {
-    openAuthPanel(value) {
-      if (value === true) {
-        this.$refs.auth.focus()
-      }
-    },
-  },
-  methods: {
-    onCloseAuthPanel() {
-      this.displaySignUp = false
-      this.$emit('close-auth-panel')
-    },
-    onDisplaySignUp() {
-      this.displaySignUp = true
-    },
-    onDisplayLogin() {
-      this.displaySignUp = false
-    },
+
+    return { displaySignUp, onCloseAuthPanel }
   },
 }
 </script>

@@ -51,7 +51,6 @@
 
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
-import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -59,23 +58,21 @@ export default {
     UiRatingStars,
   },
   setup() {
-    const data = reactive({
-      story: {
-        author: 'Estelle48',
-        gender: 'female',
-        date: '26/09/2020',
-        title: 'Chantage et soumission',
-        parentTitle: 'Une histoire de cul bien tapée - chapitre 12',
-        categories: 'Hétéro, Triolisme, Hard et 4 autres',
-        rating: 4.5,
-        nbComments: 5659,
-        abstract: `Cette histoire s'est passée l'an dernier et dure depuis.
+    const story = {
+      author: 'Estelle48',
+      gender: 'female',
+      date: '26/09/2020',
+      title: 'Chantage et soumission',
+      parentTitle: 'Une histoire de cul bien tapée - chapitre 12',
+      categories: 'Hétéro, Triolisme, Hard et 4 autres',
+      rating: 4.5,
+      nbComments: 5659,
+      abstract: `Cette histoire s'est passée l'an dernier et dure depuis.
         Je me présente Estelle, 48 ans, mariée avec deux grandes filles de 26 et 23 ans.
         Mon mari Marc et moi vivons dans un petit lotissement en région parisienne.
         Ma grande fille Cathy est marié depuis deux ans avec Laurent,
         bel homme qu'elle a rencontré sur les bancs de la fac.`,
-      },
-    })
+    }
 
     const { t } = useI18n({
       locale: 'fr',
@@ -86,7 +83,7 @@ export default {
       },
     })
 
-    return { ...data, t }
+    return { story, t }
   },
 }
 </script>

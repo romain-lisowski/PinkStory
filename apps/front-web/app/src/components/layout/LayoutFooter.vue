@@ -37,34 +37,31 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
 export default {
   setup() {
     const store = useStore()
-
-    const data = reactive({
-      activeTheme: store.state.theme,
-      activeThemeClasses: [
-        'text-accent',
-        'rounded-md',
-        'bg-primary',
-        'px-2',
-        'py-1',
-      ],
-    })
+    const activeTheme = ref(store.state.theme)
+    const activeThemeClasses = [
+      'text-accent',
+      'rounded-md',
+      'bg-primary',
+      'px-2',
+      'py-1',
+    ]
 
     const setThemeLight = () => {
-      data.activeTheme = 'light'
+      activeTheme.value = 'light'
       store.dispatch('updateTheme', { theme: 'light' })
       document.documentElement.classList.add('theme-light')
       document.documentElement.classList.remove('theme-dark')
     }
 
     const setThemeDark = () => {
-      data.activeTheme = 'dark'
+      activeTheme.value = 'dark'
       store.dispatch('updateTheme', { theme: 'dark' })
       document.documentElement.classList.add('theme-dark')
       document.documentElement.classList.remove('theme-light')
@@ -79,14 +76,14 @@ export default {
       } else {
         setThemeLight()
       }
-      data.activeTheme = 'auto'
+      activeTheme.value = 'auto'
       store.dispatch('updateTheme', { theme: 'auto' })
     }
 
     const initTheme = () => {
-      if (data.activeTheme === 'light') {
+      if (activeTheme.value === 'light') {
         setThemeLight()
-      } else if (data.activeTheme === 'dark') {
+      } else if (activeTheme.value === 'dark') {
         setThemeDark()
       } else {
         setThemeAuto()
@@ -110,7 +107,14 @@ export default {
         },
       },
     })
-    return { ...data, t, setThemeLight, setThemeDark, setThemeAuto }
+    return {
+      activeTheme,
+      activeThemeClasses,
+      setThemeLight,
+      setThemeDark,
+      setThemeAuto,
+      t,
+    }
   },
 }
 </script>

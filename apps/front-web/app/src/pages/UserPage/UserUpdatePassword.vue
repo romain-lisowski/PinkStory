@@ -42,23 +42,21 @@
 import ApiUsers from '@/api/ApiUsers'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 
 export default {
   setup() {
     const store = useStore()
-    const data = reactive({
-      passwordOld: '',
-      passwordNew: '',
-      passwordNewConfirm: '',
-    })
+    const passwordOld = ref(null)
+    const passwordNew = ref(null)
+    const passwordNewConfirm = ref(null)
 
     const processForm = () => {
       ApiUsers.updatePassword(
         store.state.jwt,
-        data.passwordOld,
-        data.passwordNew,
-        data.passwordNewConfirm
+        passwordOld.value,
+        passwordNew.value,
+        passwordNewConfirm.value
       )
     }
 
@@ -75,7 +73,7 @@ export default {
       },
     })
 
-    return { ...data, processForm, t }
+    return { passwordOld, passwordNew, passwordNewConfirm, processForm, t }
   },
 }
 </script>

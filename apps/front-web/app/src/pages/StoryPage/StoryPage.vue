@@ -22,7 +22,6 @@ import StoryContent from '@/pages/StoryPage/StoryContent.vue'
 import StoryInformations from '@/pages/StoryPage/StoryInformations.vue'
 import StoryCommentList from '@/pages/StoryPage/StoryCommentList.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
-import { reactive } from 'vue'
 
 export default {
   components: {
@@ -34,25 +33,24 @@ export default {
     StoryTopRated,
   },
   setup() {
-    const data = reactive({
-      story: {
-        author: 'Estelle48',
-        gender: 'female',
-        date: '26/09/2020',
-        parentTitle: 'Chantage et soumission',
-        nbChapters: 26,
-        title: 'Une histoire de cul bien tapée - chapitre 12',
-        categories: 'Hétéro, Triolisme, Hard, Candaulisme, Au bureau',
-        rating: 4.5,
-        nbComments: 5659,
-        nbStories: 43903,
-        registration: '26 sept 2020',
-        imagePath: '4.png',
-        readingTime: 20,
-        updatedAt: '13 oct 2020',
-        previousChapter: 'Ma femme, cette salope',
-        nextChapter: 'La soumise',
-        content: `<p>J'ai une très bonne amie, Caroline, qui est mariée à Marc un homme sympathique qui a créé sa boîte. Eric, mon mari, ne peut pas l'encadrer. Il faut dire que mon mari travaille dans une usine où il est responsable syndical et que les patrons, même petit, sont pour lui que des escrocs qui exploitent des gars comme lui. Bref, du coup nous avons peu l'occasion de nous voir avec Caro, ou lorsque nous déjeunons ensemble, nous le faisons sans nos maris respectifs.</p><br/>
+    const story = {
+      author: 'Estelle48',
+      gender: 'female',
+      date: '26/09/2020',
+      parentTitle: 'Chantage et soumission',
+      nbChapters: 26,
+      title: 'Une histoire de cul bien tapée - chapitre 12',
+      categories: 'Hétéro, Triolisme, Hard, Candaulisme, Au bureau',
+      rating: 4.5,
+      nbComments: 5659,
+      nbStories: 43903,
+      registration: '26 sept 2020',
+      imagePath: '4.png',
+      readingTime: 20,
+      updatedAt: '13 oct 2020',
+      previousChapter: 'Ma femme, cette salope',
+      nextChapter: 'La soumise',
+      content: `<p>J'ai une très bonne amie, Caroline, qui est mariée à Marc un homme sympathique qui a créé sa boîte. Eric, mon mari, ne peut pas l'encadrer. Il faut dire que mon mari travaille dans une usine où il est responsable syndical et que les patrons, même petit, sont pour lui que des escrocs qui exploitent des gars comme lui. Bref, du coup nous avons peu l'occasion de nous voir avec Caro, ou lorsque nous déjeunons ensemble, nous le faisons sans nos maris respectifs.</p><br/>
 
           <p>Il y a deux mois, ils ont déménagé à 3 heures de route de chez nous et du coup nous ne nous voyons plus du tout. Elle me manque beaucoup car nous étions très proches, alors quand elle nous a invité à venir passer le week-end dans leur nouvelle maison, j'ai dit oui tout de suite.
           Bien évidemment, Eric n'était pas content mais j'avais envie et besoin de revoir mon amie. Du coup il a accepté pour me faire plaisir.</p><br/>
@@ -94,27 +92,26 @@ export default {
 
           <p>On s'installa au salon et je pris soin de tirer un peu sur les pans de ma robe au moment de m'asseoir afin de ne pas dévoiler mon intimité. Caro, elle, n'avait pas pris autant de précautions et sa robe dévoila ses cuisses jusque très haut. Marc nous servit une coupe Champagne et on trinqua à ce week-end fort sympathique.</p><br/>
           L'ambiance était très bonne et chaleureuse et même nos maris respectifs semblaient se plaire à discuter ensemble.</p><br/>`,
-      },
-      comments: [
-        {
-          author: 'Romain Lisowski',
-          postDate: 'Il y a 24 jours',
-          content: `Estelle est une magicienne de l'écriture, et ce récit est absolument bandant. 
+    }
+    const comments = [
+      {
+        author: 'Romain Lisowski',
+        postDate: 'Il y a 24 jours',
+        content: `Estelle est une magicienne de l'écriture, et ce récit est absolument bandant. 
             Un apprentissage des plaisirs intenses des plus excitants... Un récit très jouissif, hyper affolant... J'ai adorée...`,
-        },
-        {
-          author: 'Julie594',
-          postDate: 'Il y a 24 jours',
-          content: `Belle histoire. Je pense que pour une femme si une double pénétration en con et en cul est agréable, 
+      },
+      {
+        author: 'Julie594',
+        postDate: 'Il y a 24 jours',
+        content: `Belle histoire. Je pense que pour une femme si une double pénétration en con et en cul est agréable, 
           la double pénétration dans son trou du cul est bien meilleure, 
           en effet ressentir deux grosses bites glisser tendrement dans le trou du cul c'est extraordinaire.
           Oui c'est bon,bon,bon,bon, super bon, c'est vraiment un délice, 
           c'est exquis de recevoir une belle verge dans le trou de son cul, une grosse pine dans l'anus.`,
-        },
-      ],
-    })
+      },
+    ]
 
-    return { ...data }
+    return { story, comments }
   },
 }
 </script>

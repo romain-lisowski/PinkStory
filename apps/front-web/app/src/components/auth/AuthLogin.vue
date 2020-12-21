@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
@@ -44,16 +44,13 @@ export default {
   emits: ['display-sign-up-block'],
   setup(props, context) {
     const store = useStore()
-
-    const data = reactive({
-      email: '',
-      password: '',
-    })
+    const email = ref(null)
+    const password = ref(null)
 
     const processForm = () => {
       store.dispatch('login', {
-        email: this.email,
-        password: this.password,
+        email: email.value,
+        password: password.value,
       })
     }
 
@@ -74,7 +71,7 @@ export default {
       },
     })
 
-    return { ...data, processForm, onDisplaySignUpBlock, t }
+    return { email, password, processForm, onDisplaySignUpBlock, t }
   },
 }
 </script>

@@ -23,20 +23,17 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
 export default {
   setup() {
     const store = useStore()
-
-    const data = reactive({
-      email: store.state.user.email,
-    })
+    const email = ref(store.state.user.email)
 
     const processForm = async () => {
-      await ApiUsers.updateEmail(store.state.jwt, data.email)
+      await ApiUsers.updateEmail(store.state.jwt, email.value)
       store.dispatch('fetchCurrentUser')
     }
 
@@ -51,7 +48,7 @@ export default {
       },
     })
 
-    return { ...data, processForm, t }
+    return { email, processForm, t }
   },
 }
 </script>

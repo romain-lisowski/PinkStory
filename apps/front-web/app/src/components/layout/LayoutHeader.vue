@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import { reactive, computed, watch, ref } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -200,23 +200,19 @@ export default {
     const router = useRouter()
 
     const openAuthPanel = ref(false)
-
-    const data = reactive({
-      openMenu: false,
-
-      activeMenuClasses: [
-        'bg-primary-inverse',
-        'bg-opacity-5',
-        'text-primary',
-        'hover:text-primary',
-      ],
-      inactiveMenuClasses: [
-        'text-accent',
-        'bg-opacity-100',
-        'hover:bg-accent',
-        'hover:text-primary-inverse',
-      ],
-    })
+    const openMenu = ref(false)
+    const activeMenuClasses = [
+      'bg-primary-inverse',
+      'bg-opacity-5',
+      'text-primary',
+      'hover:text-primary',
+    ]
+    const inactiveMenuClasses = [
+      'text-accent',
+      'bg-opacity-100',
+      'hover:bg-accent',
+      'hover:text-primary-inverse',
+    ]
 
     const loggedIn = computed(() => {
       return store.getters.isLoggedIn
@@ -242,7 +238,7 @@ export default {
 
     const logout = () => {
       openAuthPanel.value = false
-      data.openMenu = false
+      openMenu.value = false
       store.dispatch('logout')
       if (route.path !== '/') {
         router.push({ name: 'Home' })
@@ -250,7 +246,7 @@ export default {
     }
 
     const toggleMenu = () => {
-      data.openMenu = !data.openMenu
+      openMenu.value = !openMenu.value
     }
 
     const { t } = useI18n({
@@ -267,8 +263,10 @@ export default {
     })
 
     return {
-      ...data,
       openAuthPanel,
+      openMenu,
+      activeMenuClasses,
+      inactiveMenuClasses,
       loggedIn,
       userName,
       userProfilePicture,

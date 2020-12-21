@@ -29,21 +29,18 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
 export default {
   setup() {
     const store = useStore()
-
-    const data = reactive({
-      openAdultModal: !store.state.isAdult,
-    })
+    const openAdultModal = ref(!store.state.isAdult)
 
     const onIsAdult = () => {
       store.dispatch('isAdult')
-      data.openAdultModal = false
+      openAdultModal.value = false
     }
 
     const { t } = useI18n({
@@ -58,7 +55,7 @@ export default {
       },
     })
 
-    return { ...data, onIsAdult, t }
+    return { openAdultModal, onIsAdult, t }
   },
 }
 </script>

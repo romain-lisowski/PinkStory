@@ -41,20 +41,16 @@
 import { useStore } from 'vuex'
 import ApiUsers from '@/api/ApiUsers'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 
 export default {
   setup() {
     const store = useStore()
-
-    const data = reactive({
-      uploadProfilePicture: null,
-    })
+    const uploadProfilePicture = ref(null)
 
     const userName = computed(() => {
       return store.getters.userName
     })
-
     const userProfilePicture = computed(() => {
       return store.getters.userProfilePicture
     })
@@ -62,7 +58,7 @@ export default {
     const uploadProfilePictureChange = (event) => {
       if (event.target.files) {
         const uploadedFile = event.target.files[0]
-        data.uploadProfilePicture = uploadedFile
+        uploadProfilePicture.value = uploadedFile
       }
     }
     const deleteProfilePicture = async () => {
@@ -72,7 +68,7 @@ export default {
     const processForm = async () => {
       await ApiUsers.updateProfilePicture(
         store.state.jwt,
-        data.uploadProfilePicture
+        uploadProfilePicture.value
       )
       store.dispatch('fetchCurrentUser')
     }
@@ -83,16 +79,16 @@ export default {
         fr: {
           'update-profile-picture': 'Image',
           'new-email': 'Nouvel email',
-          update: 'Modifier',
           'delete-profile-picture': 'Supprimer',
+          update: 'Modifier',
         },
       },
     })
 
     return {
-      ...data,
       userName,
       userProfilePicture,
+      uploadProfilePicture,
       uploadProfilePictureChange,
       deleteProfilePicture,
       processForm,

@@ -25,16 +25,13 @@
 <script>
 import ApiUsers from '@/api/ApiUsers'
 import { useStore } from 'vuex'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
   setup() {
     const store = useStore()
-
-    const data = reactive({
-      name: store.state.user.name,
-    })
+    const name = ref(store.state.user.name)
 
     const processForm = async () => {
       await ApiUsers.updateInformation(this.$store.state.jwt, this.name)
@@ -52,7 +49,7 @@ export default {
       },
     })
 
-    return { ...data, processForm, t }
+    return { name, processForm, t }
   },
 }
 </script>

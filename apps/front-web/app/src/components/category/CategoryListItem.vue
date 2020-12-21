@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -21,18 +21,15 @@ export default {
   },
   setup(props) {
     const store = useStore()
-
-    const data = reactive({
-      active: store.state.categoryFilters.includes(props.category),
-      activeClasses: ['bg-accent', 'text-primary-inverse'],
-    })
+    const active = ref(store.state.categoryFilters.includes(props.category))
+    const activeClasses = ['bg-accent', 'text-primary-inverse']
 
     const toggleActive = () => {
-      data.active = !data.active
+      active.value = !active.value
       store.dispatch('toggleFilter', { category: props.category })
     }
 
-    return { ...data, toggleActive }
+    return { active, activeClasses, toggleActive }
   },
 }
 </script>

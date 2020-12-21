@@ -52,19 +52,16 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'AuthSignUp',
   emits: ['display-login-block'],
   setup(props, context) {
-    const data = reactive({
-      name: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
-    })
+    const name = ref(null)
+    const email = ref(null)
+    const password = ref(null)
+    const passwordConfirm = ref(null)
 
     const onDisplayLoginBlock = () => {
       context.emit('display-login-block')
@@ -72,10 +69,10 @@ export default {
 
     const processForm = () => {
       ApiUsers.signUp(
-        data.name,
-        data.email,
-        data.password,
-        data.passwordConfirm
+        name.value,
+        email.value,
+        password.value,
+        passwordConfirm.value
       )
       onDisplayLoginBlock()
     }
@@ -95,7 +92,15 @@ export default {
       },
     })
 
-    return { ...data, processForm, onDisplayLoginBlock, t }
+    return {
+      name,
+      email,
+      password,
+      passwordConfirm,
+      processForm,
+      onDisplayLoginBlock,
+      t,
+    }
   },
 }
 </script>

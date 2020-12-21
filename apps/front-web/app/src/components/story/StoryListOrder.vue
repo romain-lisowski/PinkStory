@@ -2,22 +2,22 @@
   <div class="mt-10 text-right">
     {{ t('filter-by') + ' : ' }}
     <button
-      class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
-      :class="activeOrder === 'rate' ? activeClasses : inactiveClasses"
+      class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
+      :class="activeOrder === 'rate' ? activeClasses : ''"
       @click="orderRate"
     >
       {{ t('rate') }}
     </button>
     <button
-      class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
-      :class="activeOrder === 'date' ? activeClasses : inactiveClasses"
+      class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
+      :class="activeOrder === 'date' ? activeClasses : ''"
       @click="orderDate"
     >
       {{ t('date') }}
     </button>
     <button
-      class="ml-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in"
-      :class="activeOrder === 'random' ? activeClasses : inactiveClasses"
+      class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
+      :class="activeOrder === 'random' ? activeClasses : ''"
       @click="orderRandom"
     >
       {{ t('random') }}
@@ -26,21 +26,18 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
 
 export default {
   setup() {
     const store = useStore()
-    const data = reactive({
-      activeOrder: store.state.storyOrder,
-      activeClasses: ['text-primary', 'bg-accent'],
-      inactiveClasses: ['border'],
-    })
+    const activeOrder = ref(store.state.storyOrder)
+    const activeClasses = ['text-primary', 'bg-accent', 'border-accent']
 
     const changeOrder = (storyOrder) => {
-      data.activeOrder = storyOrder
+      activeOrder.value = storyOrder
       store.dispatch('updateStoryOrder', { storyOrder })
     }
 
@@ -66,7 +63,15 @@ export default {
       },
     })
 
-    return { ...data, orderRate, orderDate, orderRandom, changeOrder, t }
+    return {
+      activeOrder,
+      activeClasses,
+      orderRate,
+      orderDate,
+      orderRandom,
+      changeOrder,
+      t,
+    }
   },
 }
 </script>

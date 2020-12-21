@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@/plugins/font-awesome'
 import { createI18n } from 'vue-i18n'
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -11,4 +12,9 @@ const i18n = createI18n({
   fallbackLocale: 'fr',
 })
 
-createApp(App).use(router).use(store).use(i18n).mount('#app')
+createApp(App)
+  .use(router)
+  .use(store)
+  .use(i18n)
+  .component('font-awesome-icon', FontAwesomeIcon)
+  .mount('#app')

@@ -6,12 +6,10 @@ namespace App\Model\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 trait PositionableTrait
 {
     /**
-     * @Assert\NotBlank
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
     private ?int $position;

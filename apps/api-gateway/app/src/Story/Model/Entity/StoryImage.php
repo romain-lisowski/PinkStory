@@ -128,7 +128,17 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
             throw new StoryThemeDepthException();
         }
 
-        new StoryImageHasStoryTheme($this, $storyTheme);
+        $exists = false;
+
+        foreach ($this->getStoryImageHasStoryThemes() as $storyImageHasStoryTheme) {
+            if ($storyImageHasStoryTheme->getStoryTheme()->getId() === $storyTheme->getId()) {
+                $exists = true;
+            }
+        }
+
+        if (false === $exists) {
+            new StoryImageHasStoryTheme($this, $storyTheme);
+        }
 
         return $this;
     }

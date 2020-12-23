@@ -6,10 +6,12 @@ namespace App\Story\Repository\Dto;
 
 use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
+use App\Story\Model\Dto\StoryForUpdate;
 use App\Story\Model\Dto\StoryFull;
 use App\Story\Model\Dto\StoryFullChild;
 use App\Story\Model\Dto\StoryFullParent;
 use App\Story\Model\Dto\StoryMedium;
+use App\Story\Query\StoryGetForUpdateQuery;
 use App\Story\Query\StoryGetQuery;
 use App\Story\Query\StorySearchQuery;
 use App\User\Model\Dto\UserMedium;
@@ -88,6 +90,41 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language, $storyParent, $storyPrevious, $storyNext);
             $stories->add($story);
         }
+
+        $this->storyRatingRepository->populateStories($stories);
+
+        $this->storyImageRepository->populateStories($stories, $query->languageId);
+
+        $this->storyThemeRepository->populateStories($stories, $query->languageId);
+
+        return $story;
+    }
+
+    public function getOneForUpdate(StoryGetForUpdateQuery $query): StoryForUpdate
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb);
+
+        $qb->andWhere($qb->expr()->eq('story.id', ':story_id'))
+            ->setParameter('story_id', $query->id)
+        ;
+
+        $data = $qb->execute()->fetch();
+
+        if (false === $data) {
+            throw new NoResultException();
+        }
+
+        $stories = new ArrayCollection();
+
+        $userLanguage = new LanguageMedium(strval($data['user_language_id']));
+        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $userLanguage);
+
+        $language = new LanguageMedium(strval($data['story_language_id']));
+
+        $story = new StoryForUpdate(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        $stories->add($story);
 
         $this->storyRatingRepository->populateStories($stories);
 

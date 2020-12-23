@@ -4,6 +4,7 @@ exception:
     error: An error occured.
     image_upload: An error occured during image upload.
     invalid_ssl_key: The SSL key is not valid.
+    position_update: An error occured during position update.
 
 file:
     exception:

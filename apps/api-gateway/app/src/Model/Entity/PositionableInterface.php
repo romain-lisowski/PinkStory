@@ -17,4 +17,6 @@ interface PositionableInterface
     public function updatePosition(?int $position): self;
 
     public static function resetPosition(Collection $positionnedItems): void;
+
+    public static function updatePositions(Collection $positionnedItems, Collection $newPositionnedItemIds): void;
 }

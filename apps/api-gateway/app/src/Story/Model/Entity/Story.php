@@ -264,6 +264,8 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         foreach ($this->getStoryHasStoryThemes() as $storyHasStoryTheme) {
             if ($storyHasStoryTheme->getStoryTheme()->getId() === $storyTheme->getId()) {
                 $exists = true;
+
+                break;
             }
         }
 

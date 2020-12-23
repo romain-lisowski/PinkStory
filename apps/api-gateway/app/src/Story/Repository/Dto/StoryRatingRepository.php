@@ -55,6 +55,8 @@ final class StoryRatingRepository extends AbstractRepository implements StoryRat
             foreach ($stories as $story) {
                 if ($story->getId() === strval($data['story_id'])) {
                     $story->addRate(intval($data['rate']));
+
+                    break;
                 }
             }
         }

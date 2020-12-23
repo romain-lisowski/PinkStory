@@ -32,7 +32,6 @@
 import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'WritePage',
   setup() {
     const storyContentPlaceHolder =
       '<h3>Nouvelle histoire !</h3><p>Commencez à écrire une nouvelle histoire érotique fictive ou réelle ...</p>'

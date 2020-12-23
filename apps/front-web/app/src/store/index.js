@@ -8,11 +8,11 @@ try {
   localStorage.removeItem('jwt')
 }
 
-let user = null
+let userLoggedIn = null
 try {
-  user = JSON.parse(localStorage.getItem('user'))
+  userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn'))
 } catch (e) {
-  localStorage.removeItem('user')
+  localStorage.removeItem('userLoggedIn')
 }
 
 let isAdult = null
@@ -31,8 +31,8 @@ try {
 
 export default Vuex.createStore({
   state: {
-    user,
     jwt,
+    userLoggedIn,
     theme,
     isAdult,
     categoryFilters: [],
@@ -40,15 +40,11 @@ export default Vuex.createStore({
   },
   getters: {
     isLoggedIn: (state) => {
-      return state.user && state.jwt
-    },
-    userName: (state) => {
-      return state.user.name
-    },
-    userImage: (state, getters) => {
-      return getters.isLoggedIn && state.user.image_url
-        ? state.user.image_url
-        : null
+      return (
+        typeof state.userLoggedIn === 'object' &&
+        state.userLoggedIn !== null &&
+        state.jwt !== 'undefined'
+      )
     },
   },
   actions: {
@@ -57,23 +53,29 @@ export default Vuex.createStore({
 
       if (responseLogin.ok) {
         const jwt = responseLogin.token
-        localStorage.setItem('jwt', JSON.stringify(jwt))
 
-        dispatch('fetchCurrentUser')
-        commit('LOGIN_SUCCESS', { user, jwt })
+        dispatch('fetchCurrentUser', jwt)
+        if (userLoggedIn) {
+          localStorage.setItem('jwt', JSON.stringify(jwt))
+          commit('SET_JWT', jwt)
+        }
       } else {
-        commit('LOGIN_FAILURE')
+        commit('SET_JWT', null)
       }
     },
-    async fetchCurrentUser({ commit }) {
-      const { user } = await ApiUsers.getCurrentUser(jwt)
-      commit('SET_USER', user)
-      localStorage.setItem('user', JSON.stringify(user))
+    async fetchCurrentUser({ commit }, jwt) {
+      const responseUserLoggedIn = await ApiUsers.getCurrentUser(jwt)
 
-      return user
+      if (responseUserLoggedIn.ok) {
+        const userLoggedIn = responseUserLoggedIn.user
+        commit('SET_USER_LOGGED_IN', userLoggedIn)
+        localStorage.setItem('userLoggedIn', JSON.stringify(userLoggedIn))
+      } else {
+        commit('SET_USER_LOGGED_IN', null)
+      }
     },
     logout({ commit }) {
-      localStorage.removeItem('user')
+      localStorage.removeItem('userLoggedIn')
       localStorage.removeItem('jwt')
       commit('LOGOUT')
     },
@@ -97,19 +99,14 @@ export default Vuex.createStore({
     },
   },
   mutations: {
-    SET_USER(state, user) {
-      state.user = user
-    },
-    LOGIN_SUCCESS(state, { email, name, jwt }) {
-      state.user = { email, name }
+    SET_JWT(state, jwt) {
       state.jwt = jwt
     },
-    LOGIN_FAILURE(state) {
-      state.user = null
-      state.jwt = null
+    SET_USER_LOGGED_IN(state, userLoggedIn) {
+      state.userLoggedIn = userLoggedIn
     },
     LOGOUT(state) {
-      state.user = null
+      state.userLoggedIn = null
       state.jwt = null
     },
     SET_THEME(state, theme) {

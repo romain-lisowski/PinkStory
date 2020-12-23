@@ -45,7 +45,7 @@
             >{{ t('write') }}</router-link
           >
         </li>
-        <li v-show="loggedIn" @click="openMenu = !openMenu">
+        <li v-show="isLoggedIn" @click="openMenu = !openMenu">
           <router-link
             :to="{ name: 'User' }"
             :class="
@@ -58,8 +58,8 @@
             {{ t('settings') }}
           </router-link>
         </li>
-        <li v-show="loggedIn">
-          <a class="p-4 block cursor-pointer" @click="logout">
+        <li v-show="isLoggedIn">
+          <a class="p-4 block hover:bg-accent cursor-pointer" @click="logout">
             {{ t('logout') }}
           </a>
         </li>
@@ -83,7 +83,7 @@
         PinkStory
       </router-link>
 
-      <nav v-show="loggedIn" class="hidden lg:block">
+      <nav v-show="isLoggedIn" class="hidden lg:block">
         <ul class="flex items-center justify-center tracking-wide">
           <li>
             <router-link
@@ -144,7 +144,7 @@
       </nav>
 
       <button
-        v-if="loggedIn"
+        v-if="isLoggedIn"
         class="relative group mr-6 md:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
@@ -152,18 +152,18 @@
           >8</span
         >
         <span
-          v-if="userImage"
+          v-if="userLoggedIn.image"
           class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
         >
           <img
             class="w-8 md:w-12 h-8 md:h-12 rounded-xl md:rounded-2xl"
-            :src="userImage"
+            :src="userLoggedIn.image"
           />
         </span>
         <span
           v-else
           class="w-10 sm:w-12 h-10 sm:h-12 flex items-center justify-center font-bold bg-accent bg-opacity-100 rounded-full"
-          >{{ userName[0].toUpperCase() }}</span
+          >{{ userLoggedIn.name[0].toUpperCase() }}</span
         >
       </button>
 
@@ -217,21 +217,18 @@ export default {
       'hover:text-primary-inverse',
     ]
 
-    const loggedIn = computed(() => {
+    const isLoggedIn = computed(() => {
       return store.getters.isLoggedIn
     })
-    const userName = computed(() => {
-      return store.getters.userName
-    })
-    const userImage = computed(() => {
-      return store.getters.userImage
+    const userLoggedIn = computed(() => {
+      return store.state.userLoggedIn
     })
     const currentPageUri = computed(() => {
       return route.path
     })
 
-    watch(loggedIn, (value) => {
-      if (value && openAuthPanel.value === true) {
+    watch(isLoggedIn, (value) => {
+      if (value && openAuthPanel.value) {
         openAuthPanel.value = false
       }
     })
@@ -263,9 +260,8 @@ export default {
       openMenu,
       activeMenuClasses,
       inactiveMenuClasses,
-      loggedIn,
-      userName,
-      userImage,
+      isLoggedIn,
+      userLoggedIn,
       currentPageUri,
       logout,
       t,

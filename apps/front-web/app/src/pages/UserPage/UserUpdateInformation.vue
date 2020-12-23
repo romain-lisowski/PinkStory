@@ -12,6 +12,9 @@
         :autocomplete="'nickname'"
         class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
       />
+      <select>
+        <option></option>
+      </select>
       <button
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
@@ -31,10 +34,14 @@ import { useI18n } from 'vue-i18n'
 export default {
   setup() {
     const store = useStore()
-    const name = ref(store.state.user.name)
+    const name = ref(store.state.userLoggedIn.name)
+    const language = ref(store.state.userLoggedIn.language)
 
     const processForm = async () => {
-      await ApiUsers.updateInformation(store.state.jwt, name.value)
+      await ApiUsers.updateInformation(store.state.jwt, {
+        name: name.value,
+        language: language.value,
+      })
       store.dispatch('fetchCurrentUser')
     }
 

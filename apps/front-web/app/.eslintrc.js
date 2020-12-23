@@ -6,7 +6,7 @@ module.exports = {
     es2020: true,
   },
   extends: [
-    'plugin:vue/recommended',
+    'plugin:vue/vue3-recommended',
     '@vue/airbnb',
     'prettier',
     'prettier/vue',
@@ -20,6 +20,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'import/prefer-default-export': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-alert': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

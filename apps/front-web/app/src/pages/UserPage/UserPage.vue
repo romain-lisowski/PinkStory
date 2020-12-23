@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center items-center">
     <p class="mt-32 font-bold text-4xl sm:text-5xl lg:text-5xl">
-      {{ $t('update-profile') }}
+      {{ t('update-profile') }}
     </p>
     <div class="w-3/4 sm:w-2/3 md:w-1/2 xl:w-1/3 my-10">
       <div class="flex flex-col gap-8 items-center justify-center">
@@ -27,22 +27,26 @@ import UserUpdatePicture from '@/pages/UserPage/UserUpdatePicture.vue'
 import UserUpdateEmail from '@/pages/UserPage/UserUpdateEmail.vue'
 import UserUpdatePassword from '@/pages/UserPage/UserUpdatePassword.vue'
 import UserUpdateInformation from '@/pages/UserPage/UserUpdateInformation.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'User',
   components: {
     UserUpdatePicture,
     UserUpdateEmail,
     UserUpdatePassword,
     UserUpdateInformation,
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-profile': 'Modification du profil',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "update-profile": "Modification du profil"
-  }
-}
-</i18n>

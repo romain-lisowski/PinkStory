@@ -26,31 +26,39 @@
       </h1>
 
       <p
-        class="inline-block mt-6 lg:mt-20 px-3 py-1 text-sm sm:text-lg md:text-2xl lg:text-xl xl:text-2xl text-primary border-2 rounded-l-full rounded-r-full"
+        class="inline-block mt-6 lg:mt-20 px-3 py-1 text-sm sm:text-lg md:text-2xl lg:text-xl xl:text-2xl text-primary bg-opacity-100 border-2 hover:bg-accent rounded-l-full rounded-r-full cursor-pointer transition-all duration-300 ease-in"
       >
-        <font-awesome-icon icon="heart" class="mr-2" />
-        {{ $t('add-to-favorites') }}
+        <font-awesome-icon
+          icon="heart"
+          class="mr-2 -mt-1 w-4 sm:w-6 inline-block"
+        />
+        <span class="inline-block">{{ t('add-to-favorites') }}</span>
       </p>
     </div>
   </div>
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+
 export default {
-  name: 'StoryHeader',
   props: {
     story: {
       type: Object,
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'add-to-favorites': 'Ajouter aux favoris',
+        },
+      },
+    })
+
+    return { t }
+  },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "add-to-favorites": "Ajouter aux favoris"
-  }
-}
-</i18n>

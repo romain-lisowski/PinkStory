@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-informations') }}
+      {{ t('update-informations') }}
     </p>
     <form class="flex flex-col" @submit.prevent="processForm">
       <input
@@ -16,7 +16,7 @@
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
@@ -24,29 +24,32 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'UserUpdateInformation',
-  data() {
-    return {
-      name: this.$store.state.user.name,
+  setup() {
+    const store = useStore()
+    const name = ref(store.state.user.name)
+
+    const processForm = async () => {
+      await ApiUsers.updateInformation(store.state.jwt, name.value)
+      store.dispatch('fetchCurrentUser')
     }
-  },
-  methods: {
-    async processForm() {
-      await ApiUsers.updateInformation(this.$store.state.jwt, this.name)
-      this.$store.dispatch('fetchCurrentUser')
-    },
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-informations': 'Informations',
+          pseudo: 'Pseudo',
+          update: 'Modifier',
+        },
+      },
+    })
+
+    return { name, processForm, t }
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "update-informations": "Informations",
-    "pseudo": "Pseudo",
-    "update": "Modifier"
-  }
-}
-</i18n>

@@ -13,7 +13,7 @@
       </span>
 
       <span class="block mt-1 text-sm sm:text-base">
-        {{ $t('write-by') }} {{ story.author
+        {{ t('write-by') }} {{ story.author
         }}<span v-if="story.gender === 'female'">&#9792;</span
         ><span v-else>&#9794;</span>
       </span>
@@ -23,7 +23,7 @@
       <span class="flex justify-between mt-1">
         <UiRatingStars :rating="story.rating" class="flex-1" />
         <span class="text-base sm:text-lg mr-2 sm:mt-2">
-          {{ story.nbComments }} {{ $t('comments') }}
+          {{ story.nbComments }} {{ t('comments') }}
         </span>
       </span>
     </a>
@@ -32,9 +32,9 @@
 
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'StoryListItem',
   components: {
     UiRatingStars,
   },
@@ -44,15 +44,18 @@ export default {
       required: true,
     },
   },
+  setup() {
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'write-by': 'Par',
+          comments: 'avis',
+          'read-more': 'Lire la suite',
+        },
+      },
+    })
+    return { t }
+  },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "write-by": "Par",
-    "comments": "avis",
-    "read-more" : "Lire la suite"
-  }
-}
-</i18n>

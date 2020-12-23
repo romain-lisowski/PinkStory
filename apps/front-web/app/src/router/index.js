@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 import HomePage from '@/pages/HomePage/HomePage.vue'
 import UserPage from '@/pages/UserPage/UserPage.vue'
@@ -7,8 +6,6 @@ import StoryPage from '@/pages/StoryPage/StoryPage.vue'
 import WritePage from '@/pages/WritePage/WritePage.vue'
 import SearchPage from '@/pages/SearchPage/SearchPage.vue'
 import NotFound from '@/pages/NotFoundPage/NotFoundPage.vue'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
@@ -43,17 +40,15 @@ const routes = [
     },
   },
   {
-    path: '/404',
+    path: '/:catchAll(.*)',
     component: NotFound,
-  },
-  {
-    path: '*',
-    redirect: '/404',
   },
 ]
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+
+  // scroll on last position
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       return { selector: to.hash }
@@ -63,19 +58,20 @@ const router = new VueRouter({
     }
     return { x: 0, y: 0 }
   },
-  base: process.env.BASE_URL,
+
   routes,
 })
 
 router.beforeEach((to, from, next) => {
+  // Check if route requires authentification
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.state.jwt || !store.state.user) {
-      next({ name: 'Auth' })
+      next({ name: 'Home' })
     } else {
       next()
     }
   } else {
-    next() // does not require auth
+    next()
   }
 })
 

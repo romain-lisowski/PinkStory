@@ -41,9 +41,9 @@
       <router-link
         :to="{ name: 'Story' }"
         tag="button"
-        class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 bg-accent rounded-lg text-lg sm:text-xl font-light"
+        class="block m-1 mt-8 mx-0 sm:py-5 py-4 px-8 w-full sm:w-1/2 lg:w-1/4 bg-accent rounded-lg text-lg sm:text-xl font-light"
       >
-        {{ $t('read-now') }}
+        {{ t('read-now') }}
       </router-link>
     </div>
   </div>
@@ -51,38 +51,39 @@
 
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'HomeMainStory',
   components: {
     UiRatingStars,
   },
-  data() {
-    return {
-      story: {
-        author: 'Estelle48',
-        gender: 'female',
-        date: '26/09/2020',
-        title: 'Chantage et soumission',
-        parentTitle: 'Une histoire de cul bien tapée - chapitre 12',
-        categories: 'Hétéro, Triolisme, Hard et 4 autres',
-        rating: 4.5,
-        nbComments: 5659,
-        abstract: `Cette histoire s'est passée l'an dernier et dure depuis.
+  setup() {
+    const story = {
+      author: 'Estelle48',
+      gender: 'female',
+      date: '26/09/2020',
+      title: 'Chantage et soumission',
+      parentTitle: 'Une histoire de cul bien tapée - chapitre 12',
+      categories: 'Hétéro, Triolisme, Hard et 4 autres',
+      rating: 4.5,
+      nbComments: 5659,
+      abstract: `Cette histoire s'est passée l'an dernier et dure depuis.
         Je me présente Estelle, 48 ans, mariée avec deux grandes filles de 26 et 23 ans.
         Mon mari Marc et moi vivons dans un petit lotissement en région parisienne.
         Ma grande fille Cathy est marié depuis deux ans avec Laurent,
         bel homme qu'elle a rencontré sur les bancs de la fac.`,
-      },
     }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'read-now': 'Lire maintenant',
+        },
+      },
+    })
+
+    return { story, t }
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "read-now": "Lire maintenant"
-  }
-}
-</i18n>

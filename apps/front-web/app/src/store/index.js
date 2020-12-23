@@ -1,17 +1,35 @@
-import Vue from 'vue'
 import Vuex from 'vuex'
 import ApiUsers from '@/api/ApiUsers'
 
-Vue.use(Vuex)
+let jwt = null
+try {
+  jwt = JSON.parse(localStorage.getItem('jwt'))
+} catch (e) {
+  localStorage.removeItem('jwt')
+}
 
-const user = JSON.parse(localStorage.getItem('user'))
-const jwt = JSON.parse(localStorage.getItem('jwt'))
-const isAdult = JSON.parse(localStorage.getItem('isAdult'))
-const theme = JSON.parse(localStorage.getItem('theme'))
-  ? JSON.parse(localStorage.getItem('theme'))
-  : 'auto'
+let user = null
+try {
+  user = JSON.parse(localStorage.getItem('user'))
+} catch (e) {
+  localStorage.removeItem('user')
+}
 
-export default new Vuex.Store({
+let isAdult = null
+try {
+  isAdult = JSON.parse(localStorage.getItem('isAdult'))
+} catch (e) {
+  localStorage.removeItem('isAdult')
+}
+
+let theme = null
+try {
+  theme = JSON.parse(localStorage.getItem('theme'))
+} catch (e) {
+  localStorage.removeItem('theme')
+}
+
+export default Vuex.createStore({
   state: {
     user,
     jwt,
@@ -24,40 +42,35 @@ export default new Vuex.Store({
     isLoggedIn: (state) => {
       return state.user && state.jwt
     },
-    getUserName: (state) => {
+    userName: (state) => {
       return state.user.name
     },
-    getUserProfilePicture: (state, getters) => {
-      return getters.isLoggedIn && state.user.profile_picture
-        ? `${
-            process.env.VUE_APP_PROJECT_FILE_MANAGER_DSN +
-            process.env.VUE_APP_PROJECT_FILE_MANAGER_IMAGE_DIR +
-            process.env.VUE_APP_PROJECT_FILE_MANAGER_IMAGE_USER_DIR
-          }/${state.user.profile_picture}`
+    userImage: (state, getters) => {
+      return getters.isLoggedIn && state.user.image_url
+        ? state.user.image_url
         : null
     },
   },
   actions: {
-    async fetchCurrentUser({ commit }) {
-      const responseCurrent = await ApiUsers.current(jwt)
-      const { user } = responseCurrent
-      commit('SET_USER', user)
-      localStorage.setItem('user', JSON.stringify(user))
-
-      return user
-    },
     async login({ commit, dispatch }, { email, password }) {
-      // get jwt
       const responseLogin = await ApiUsers.login(email, password)
+
       if (responseLogin.ok) {
         const jwt = responseLogin.token
         localStorage.setItem('jwt', JSON.stringify(jwt))
-        // get user informations
+
         dispatch('fetchCurrentUser')
         commit('LOGIN_SUCCESS', { user, jwt })
       } else {
         commit('LOGIN_FAILURE')
       }
+    },
+    async fetchCurrentUser({ commit }) {
+      const { user } = await ApiUsers.getCurrentUser(jwt)
+      commit('SET_USER', user)
+      localStorage.setItem('user', JSON.stringify(user))
+
+      return user
     },
     logout({ commit }) {
       localStorage.removeItem('user')

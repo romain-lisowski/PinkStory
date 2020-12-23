@@ -9,25 +9,27 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
-  name: 'CategoryListItem',
   props: {
     category: {
       type: String,
       required: true,
     },
   },
-  data() {
-    return {
-      active: this.$store.state.categoryFilters.includes(this.category),
-      activeClasses: ['bg-accent', 'text-primary-inverse'],
+  setup(props) {
+    const store = useStore()
+    const active = ref(store.state.categoryFilters.includes(props.category))
+    const activeClasses = ['bg-accent', 'text-primary-inverse']
+
+    const toggleActive = () => {
+      active.value = !active.value
+      store.dispatch('toggleFilter', { category: props.category })
     }
-  },
-  methods: {
-    toggleActive() {
-      this.active = !this.active
-      this.$store.dispatch('toggleFilter', { category: this.category })
-    },
+
+    return { active, activeClasses, toggleActive }
   },
 }
 </script>

@@ -1,23 +1,23 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-profile-picture') }}
+      {{ t('update-profile-picture') }}
     </p>
     <div class="flex justify-center my-4">
-      <span v-if="getUserProfilePicture" class="relative">
-        <img class="h-40 w-40 rounded-full" :src="getUserProfilePicture" />
+      <span v-if="userImage" class="relative">
+        <img class="h-40 w-40 rounded-full" :src="userImage" />
         <button
           class="mt-2 text-accent underline"
           @click="deleteProfilePicture"
         >
-          {{ $t('delete-profile-picture') }}
+          {{ t('delete-profile-picture') }}
         </button>
       </span>
 
       <span
         v-else
         class="h-40 w-40 flex items-center justify-center text-4xl font-bold bg-accent bg-opacity-100 rounded-full"
-        >{{ getUserName[0].toUpperCase() }}</span
+        >{{ userName[0].toUpperCase() }}</span
       >
     </div>
     <form class="flex flex-col" @submit.prevent="processForm">
@@ -25,61 +25,72 @@
         type="file"
         name="picture"
         class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
-        @change="uploadProfilePictureChange"
+        @change="uploadUserImageChanged"
       />
       <button
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { useStore } from 'vuex'
 import ApiUsers from '@/api/ApiUsers'
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
 
 export default {
-  name: 'UserUpdateProfilePicture',
-  data() {
-    return {
-      uploadProfilePicture: null,
-    }
-  },
-  computed: {
-    ...mapGetters(['getUserName', 'getUserProfilePicture']),
-  },
-  methods: {
-    uploadProfilePictureChange(event) {
+  setup() {
+    const store = useStore()
+    const uploadProfilePicture = ref(null)
+
+    const userName = computed(() => {
+      return store.getters.userName
+    })
+    const userImage = computed(() => {
+      return store.getters.userImage
+    })
+
+    const uploadUserImageChanged = (event) => {
       if (event.target.files) {
         const uploadedFile = event.target.files[0]
-        this.uploadProfilePicture = uploadedFile
+        uploadProfilePicture.value = uploadedFile
       }
-    },
-    async deleteProfilePicture() {
-      await ApiUsers.deleteProfilePicture(this.$store.state.jwt)
-      this.$store.dispatch('fetchCurrentUser')
-    },
-    async processForm() {
-      await ApiUsers.updateProfilePicture(
-        this.$store.state.jwt,
-        this.uploadProfilePicture
-      )
-      this.$store.dispatch('fetchCurrentUser')
-    },
+    }
+    const deleteProfilePicture = async () => {
+      await ApiUsers.deleteimage(store.state.jwt)
+      store.dispatch('fetchCurrentUser')
+    }
+    const processForm = async () => {
+      await ApiUsers.updateImage(store.state.jwt, uploadProfilePicture.value)
+      store.dispatch('fetchCurrentUser')
+    }
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-profile-picture': 'Image',
+          'new-email': 'Nouvel email',
+          'delete-profile-picture': 'Supprimer',
+          update: 'Modifier',
+        },
+      },
+    })
+
+    return {
+      userName,
+      userImage,
+      uploadProfilePicture,
+      uploadUserImageChanged,
+      deleteProfilePicture,
+      processForm,
+      t,
+    }
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "update-profile-picture": "Image",
-    "new-email": "Nouvel email",
-    "update": "Modifier",
-    "delete-profile-picture": "Supprimer"
-  }
-}
-</i18n>

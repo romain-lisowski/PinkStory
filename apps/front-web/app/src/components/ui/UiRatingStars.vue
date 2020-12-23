@@ -23,7 +23,6 @@
 
 <script>
 export default {
-  name: 'UiRatingStars',
   props: {
     rating: {
       type: Number,

@@ -1,12 +1,12 @@
 <template>
   <div>
     <p class="font-bold text-2xl sm:text-3xl lg:text-4xl text-accent">
-      {{ $t('update-email') }}
+      {{ t('update-email') }}
     </p>
     <form class="flex flex-col" @submit.prevent="processForm">
       <input
         v-model="email"
-        :placeholder="$t('new-email')"
+        :placeholder="t('new-email')"
         type="email"
         name="email"
         class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
@@ -15,7 +15,7 @@
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
-        {{ $t('update') }}
+        {{ t('update') }}
       </button>
     </form>
   </div>
@@ -23,29 +23,32 @@
 
 <script>
 import ApiUsers from '@/api/ApiUsers'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 
 export default {
-  name: 'UserUpdateEmail',
-  data() {
-    return {
-      email: this.$store.state.user.email,
+  setup() {
+    const store = useStore()
+    const email = ref(store.state.user.email)
+
+    const processForm = async () => {
+      await ApiUsers.updateEmail(store.state.jwt, email.value)
+      store.dispatch('fetchCurrentUser')
     }
-  },
-  methods: {
-    async processForm() {
-      await ApiUsers.updateEmail(this.$store.state.jwt, this.email)
-      this.$store.dispatch('fetchCurrentUser')
-    },
+
+    const { t } = useI18n({
+      locale: 'fr',
+      messages: {
+        fr: {
+          'update-email': 'Email',
+          'new-email': 'Nouvel email',
+          update: 'Modifier',
+        },
+      },
+    })
+
+    return { email, processForm, t }
   },
 }
 </script>
-
-<i18n>
-{
-  "fr": {
-    "update-email": "Email",
-    "new-email": "Nouvel email",
-    "update": "Modifier"
-  }
-}
-</i18n>

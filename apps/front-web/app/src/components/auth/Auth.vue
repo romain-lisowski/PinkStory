@@ -4,12 +4,12 @@
     :class="!openAuthPanel ? '-translate-y-full' : ''"
     class="flex flex-row absolute justify-center items-center inset-0 w-full h-screen p-10 bg-primary bg-opacity-100 transform transition-transform duration-300 ease-in-out z-20"
     tabindex="0"
-    @keyup.esc="onCloseAuthPanel"
+    @keyup.esc="onClickCloseAuthPanel"
   >
     <a
-      class="absolute top-0 right-0 py-6 px-16 z-20 text-3xl cursor-pointer"
-      @click="onCloseAuthPanel"
-      ><font-awesome-icon icon="times"
+      class="absolute top-0 right-0 py-8 px-12 z-20 text-3xl cursor-pointer"
+      @click="onClickCloseAuthPanel"
+      ><font-awesome-icon icon="times" class="h-8"
     /></a>
 
     <div
@@ -18,7 +18,7 @@
     >
       <AuthLogin
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-sign-up="onDisplaySignUp"
+        @display-sign-up-block="displaySignUp = true"
       />
     </div>
     <div
@@ -27,7 +27,7 @@
     >
       <AuthSignUp
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-login="onDisplayLogin"
+        @display-login-block="displaySignUp = false"
       />
     </div>
   </div>
@@ -36,9 +36,9 @@
 <script>
 import AuthLogin from '@/components/auth/AuthLogin.vue'
 import AuthSignUp from '@/components/auth/AuthSignUp.vue'
+import { ref } from 'vue'
 
 export default {
-  name: 'Auth',
   components: {
     AuthLogin,
     AuthSignUp,
@@ -49,29 +49,30 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      displaySignUp: false,
+  emits: ['close-auth-panel'],
+  setup(props, context) {
+    // const auth = ref(null)
+
+    const displaySignUp = ref(false)
+
+    // TODO: focus on panel open
+    // watch(
+    //   () => props.openAuthPanel,
+    //   (value) => {
+    //     if (value === true) {
+    //       // eslint-disable-next-line vue/no-ref-as-operand
+    //       auth.focus()
+    // this.$refs.auth.focus()
+    //     }
+    //   }
+    // )
+
+    const onClickCloseAuthPanel = () => {
+      displaySignUp.value = false
+      context.emit('close-auth-panel')
     }
-  },
-  watch: {
-    openAuthPanel(value) {
-      if (value === true) {
-        this.$refs.auth.focus()
-      }
-    },
-  },
-  methods: {
-    onCloseAuthPanel() {
-      this.displaySignUp = false
-      this.$emit('close-auth-panel')
-    },
-    onDisplaySignUp() {
-      this.displaySignUp = true
-    },
-    onDisplayLogin() {
-      this.displaySignUp = false
-    },
+
+    return { displaySignUp, onClickCloseAuthPanel }
   },
 }
 </script>

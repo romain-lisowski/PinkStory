@@ -44,9 +44,11 @@ export default {
     const orderRate = () => {
       changeOrder('rate')
     }
+
     const orderDate = () => {
       changeOrder('date')
     }
+
     const orderRandom = () => {
       changeOrder('random')
     }

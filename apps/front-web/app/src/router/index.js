@@ -48,6 +48,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
 
+  // scroll on last position
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       return { selector: to.hash }
@@ -62,14 +63,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // Check if route requires authentification
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.state.jwt || !store.state.user) {
-      next({ name: 'Auth' })
+      next({ name: 'Home' })
     } else {
       next()
     }
   } else {
-    next() // does not require auth
+    next()
   }
 })
 

@@ -4,8 +4,8 @@
       {{ t('update-profile-picture') }}
     </p>
     <div class="flex justify-center my-4">
-      <span v-if="userProfilePicture" class="relative">
-        <img class="h-40 w-40 rounded-full" :src="userProfilePicture" />
+      <span v-if="userImage" class="relative">
+        <img class="h-40 w-40 rounded-full" :src="userImage" />
         <button
           class="mt-2 text-accent underline"
           @click="deleteProfilePicture"
@@ -25,7 +25,7 @@
         type="file"
         name="picture"
         class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
-        @change="uploadProfilePictureChange"
+        @change="uploadUserImageChanged"
       />
       <button
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
@@ -51,25 +51,22 @@ export default {
     const userName = computed(() => {
       return store.getters.userName
     })
-    const userProfilePicture = computed(() => {
-      return store.getters.userProfilePicture
+    const userImage = computed(() => {
+      return store.getters.userImage
     })
 
-    const uploadProfilePictureChange = (event) => {
+    const uploadUserImageChanged = (event) => {
       if (event.target.files) {
         const uploadedFile = event.target.files[0]
         uploadProfilePicture.value = uploadedFile
       }
     }
     const deleteProfilePicture = async () => {
-      await ApiUsers.deleteProfilePicture(store.state.jwt)
+      await ApiUsers.deleteimage(store.state.jwt)
       store.dispatch('fetchCurrentUser')
     }
     const processForm = async () => {
-      await ApiUsers.updateProfilePicture(
-        store.state.jwt,
-        uploadProfilePicture.value
-      )
+      await ApiUsers.updateImage(store.state.jwt, uploadProfilePicture.value)
       store.dispatch('fetchCurrentUser')
     }
 
@@ -87,9 +84,9 @@ export default {
 
     return {
       userName,
-      userProfilePicture,
+      userImage,
       uploadProfilePicture,
-      uploadProfilePictureChange,
+      uploadUserImageChanged,
       deleteProfilePicture,
       processForm,
       t,

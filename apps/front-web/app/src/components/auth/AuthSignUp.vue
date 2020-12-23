@@ -43,7 +43,7 @@
     </button>
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="onDisplayLoginBlock"
+      @click="onClickDisplayLoginBlock"
     >
       {{ t('sign-in') }}
     </a>
@@ -63,7 +63,7 @@ export default {
     const password = ref(null)
     const passwordConfirm = ref(null)
 
-    const onDisplayLoginBlock = () => {
+    const onClickDisplayLoginBlock = () => {
       context.emit('display-login-block')
     }
 
@@ -74,7 +74,7 @@ export default {
         password.value,
         passwordConfirm.value
       )
-      onDisplayLoginBlock()
+      onClickDisplayLoginBlock()
     }
 
     const { t } = useI18n({
@@ -98,7 +98,7 @@ export default {
       password,
       passwordConfirm,
       processForm,
-      onDisplayLoginBlock,
+      onClickDisplayLoginBlock,
       t,
     }
   },

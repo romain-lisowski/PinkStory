@@ -12,7 +12,7 @@ import {
   faQuoteRight,
   faHeading,
 } from '@fortawesome/free-solid-svg-icons'
-import FontAwesomeIcon from '@/libs/FontAwesomeIcon.vue'
+import FontAwesomeIcon from '@/components/lib/FontAwesomeIcon.vue'
 
 library.add(faTimes)
 library.add(faBars)
@@ -26,5 +26,4 @@ library.add(faUnderline)
 library.add(faQuoteRight)
 library.add(faHeading)
 
-// eslint-disable-next-line import/prefer-default-export
 export { FontAwesomeIcon }

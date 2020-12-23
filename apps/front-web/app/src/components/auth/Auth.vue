@@ -4,11 +4,11 @@
     :class="!openAuthPanel ? '-translate-y-full' : ''"
     class="flex flex-row absolute justify-center items-center inset-0 w-full h-screen p-10 bg-primary bg-opacity-100 transform transition-transform duration-300 ease-in-out z-20"
     tabindex="0"
-    @keyup.esc="onCloseAuthPanel"
+    @keyup.esc="onClickCloseAuthPanel"
   >
     <a
-      class="absolute top-0 right-0 py-6 px-16 z-20 text-3xl cursor-pointer"
-      @click="onCloseAuthPanel"
+      class="absolute top-0 right-0 py-8 px-12 z-20 text-3xl cursor-pointer"
+      @click="onClickCloseAuthPanel"
       ><font-awesome-icon icon="times" class="h-8"
     /></a>
 
@@ -55,6 +55,7 @@ export default {
 
     const displaySignUp = ref(false)
 
+    // TODO: focus on panel open
     // watch(
     //   () => props.openAuthPanel,
     //   (value) => {
@@ -66,12 +67,12 @@ export default {
     //   }
     // )
 
-    const onCloseAuthPanel = () => {
+    const onClickCloseAuthPanel = () => {
       displaySignUp.value = false
       context.emit('close-auth-panel')
     }
 
-    return { displaySignUp, onCloseAuthPanel }
+    return { displaySignUp, onClickCloseAuthPanel }
   },
 }
 </script>

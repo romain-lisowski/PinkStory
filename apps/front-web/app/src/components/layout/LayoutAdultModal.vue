@@ -20,7 +20,7 @@
       </p>
       <button
         class="block mt-8 sm:py-5 py-4 px-8 text-sm sm:text-lg lg:text-xl font-light tracking-wide bg-accent rounded-lg cursor-pointer"
-        @click="onIsAdult"
+        @click="onClickIsAdult"
       >
         {{ t('enter') }}
       </button>
@@ -38,7 +38,7 @@ export default {
     const store = useStore()
     const openAdultModal = ref(!store.state.isAdult)
 
-    const onIsAdult = () => {
+    const onClickIsAdult = () => {
       store.dispatch('isAdult')
       openAdultModal.value = false
     }
@@ -55,7 +55,7 @@ export default {
       },
     })
 
-    return { openAdultModal, onIsAdult, t }
+    return { openAdultModal, onClickIsAdult, t }
   },
 }
 </script>

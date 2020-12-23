@@ -31,7 +31,6 @@
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryList from '@/components/story/StoryList.vue'
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -43,7 +42,7 @@ export default {
   },
 
   setup() {
-    const results = ref(32)
+    const results = 32
     const { t } = useI18n({
       locale: 'fr',
       messages: {

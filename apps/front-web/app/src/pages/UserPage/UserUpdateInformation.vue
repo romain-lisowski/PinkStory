@@ -34,8 +34,8 @@ export default {
     const name = ref(store.state.user.name)
 
     const processForm = async () => {
-      await ApiUsers.updateInformation(this.$store.state.jwt, this.name)
-      this.$store.dispatch('fetchCurrentUser')
+      await ApiUsers.updateInformation(store.state.jwt, name.value)
+      store.dispatch('fetchCurrentUser')
     }
 
     const { t } = useI18n({

@@ -1,3 +1,5 @@
+import ApiLanguage from '@/api/ApiLanguage'
+
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
@@ -6,7 +8,7 @@ export default {
     formData.append('email', email)
     formData.append('password', password)
 
-    const response = await fetch(`${baseUrl}/users/login?_method=POST`, {
+    const response = await fetch(`${baseUrl}/account/login?_method=POST`, {
       method: 'POST',
       body: formData,
     })
@@ -22,7 +24,7 @@ export default {
     formData.append('password[first]', password)
     formData.append('password[second]', passwordConfirm)
 
-    const response = await fetch(`${baseUrl}/users/signup?_method=POST`, {
+    const response = await fetch(`${baseUrl}/account/signup?_method=POST`, {
       method: 'POST',
       body: formData,
     })
@@ -31,8 +33,8 @@ export default {
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async current(jwt) {
-    const response = await fetch(`${baseUrl}/users/current`, {
+  async getCurrentUser(jwt) {
+    const response = await fetch(`${baseUrl}/account`, {
       headers: { Authorization: `Bearer ${jwt}` },
     })
 
@@ -46,7 +48,7 @@ export default {
     formData.append('email[second]', email)
 
     const response = await fetch(
-      `${baseUrl}/users/update-email?_method=PATCH`,
+      `${baseUrl}/account/update-email?_method=PATCH`,
       {
         method: 'POST',
         body: formData,
@@ -65,7 +67,7 @@ export default {
     formData.append('password[second]', passwordNewConfirm)
 
     const response = await fetch(
-      `${baseUrl}/users/update-password?_method=PATCH`,
+      `${baseUrl}/account/update-password?_method=PATCH`,
       {
         method: 'POST',
         body: formData,
@@ -78,11 +80,14 @@ export default {
   },
 
   async updateInformation(jwt, name) {
+    const { languages } = await ApiLanguage.search(jwt)
+
     const formData = new FormData()
     formData.append('name', name)
+    formData.append('language_id', languages[1].id)
 
     const response = await fetch(
-      `${baseUrl}/users/update-information?_method=PATCH`,
+      `${baseUrl}/account/update-information?_method=PATCH`,
       {
         method: 'POST',
         body: formData,
@@ -94,12 +99,12 @@ export default {
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async updateProfilePicture(jwt, file) {
+  async updateImage(jwt, file) {
     const formData = new FormData()
-    formData.append('profile_picture', file)
+    formData.append('image', file)
 
     const response = await fetch(
-      `${baseUrl}/users/update-profile-picture?_method=PATCH`,
+      `${baseUrl}/account/update-image?_method=PATCH`,
       {
         method: 'POST',
         body: formData,
@@ -111,8 +116,8 @@ export default {
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async deleteProfilePicture(jwt) {
-    const response = await fetch(`${baseUrl}/users/remove-profile-picture`, {
+  async deleteImage(jwt) {
+    const response = await fetch(`${baseUrl}/account/delete-image`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${jwt}` },
     })

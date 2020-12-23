@@ -4,12 +4,14 @@
       class="lg:hidden absolute right-100 h-screen w-full text-xl bg-primary overflow-y-scroll z-20 transform transition-transform duration-300 ease-in-out"
       :class="!openMenu ? '' : 'translate-x-full'"
     >
-      <a class="block py-4 pr-8 text-right cursor-pointer" @click="toggleMenu"
-        ><font-awesome-icon icon="times"
+      <a
+        class="flex justify-end py-4 pr-8 cursor-pointer"
+        @click="openMenu = !openMenu"
+        ><font-awesome-icon icon="times" class="h-8"
       /></a>
 
       <ul class="text-center font-bold">
-        <li @click="toggleMenu">
+        <li @click="openMenu = !openMenu">
           <router-link
             :to="{ name: 'Home' }"
             class="p-4 block"
@@ -19,7 +21,7 @@
             >{{ t('discover') }}</router-link
           >
         </li>
-        <li @click="toggleMenu">
+        <li @click="openMenu = !openMenu">
           <router-link
             :to="{ name: 'Search' }"
             class="p-4 block"
@@ -31,7 +33,7 @@
             >{{ t('search') }}</router-link
           >
         </li>
-        <li @click="toggleMenu">
+        <li @click="openMenu = !openMenu">
           <router-link
             :to="{ name: 'Write' }"
             class="p-4 block"
@@ -43,7 +45,7 @@
             >{{ t('write') }}</router-link
           >
         </li>
-        <li v-show="loggedIn" @click="toggleMenu">
+        <li v-show="loggedIn" @click="openMenu = !openMenu">
           <router-link
             :to="{ name: 'User' }"
             :class="
@@ -68,15 +70,15 @@
       class="fixed top-0 w-full h-16 lg:h-20 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 flex items-center justify-center bg-primary bg-opacity-75 border-b border-primary-inverse border-opacity-5 z-10"
     >
       <a
-        class="ml-6 md:ml-0 lg:hidden text-2xl cursor-pointer"
-        @click="toggleMenu"
+        class="ml-6 md:ml-0 pt-2 lg:hidden text-2xl cursor-pointer"
+        @click="openMenu = !openMenu"
       >
-        <font-awesome-icon icon="bars"
+        <font-awesome-icon icon="bars" class="h-8"
       /></a>
 
       <router-link
         :to="{ name: 'Home' }"
-        class="mx-auto sm:ml-0 md:ml-6 lg:ml-0 flex-shrink-0 text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tighter"
+        class="mx-auto lg:ml-0 flex-shrink-0 text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-bold text-accent hover:text-accent-highlight tracking-tighter"
       >
         PinkStory
       </router-link>
@@ -150,17 +152,17 @@
           >8</span
         >
         <span
-          v-if="userProfilePicture"
+          v-if="userImage"
           class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
         >
           <img
             class="w-8 md:w-12 h-8 md:h-12 rounded-xl md:rounded-2xl"
-            :src="userProfilePicture"
+            :src="userImage"
           />
         </span>
         <span
           v-else
-          class="w-8 md:w-12 h-8 md:h-12 flex items-center justify-center font-bold bg-accent bg-opacity-100 rounded-full"
+          class="w-10 sm:w-12 h-10 sm:h-12 flex items-center justify-center font-bold bg-accent bg-opacity-100 rounded-full"
           >{{ userName[0].toUpperCase() }}</span
         >
       </button>
@@ -201,6 +203,7 @@ export default {
 
     const openAuthPanel = ref(false)
     const openMenu = ref(false)
+
     const activeMenuClasses = [
       'bg-primary-inverse',
       'bg-opacity-5',
@@ -217,15 +220,12 @@ export default {
     const loggedIn = computed(() => {
       return store.getters.isLoggedIn
     })
-
     const userName = computed(() => {
       return store.getters.userName
     })
-
-    const userProfilePicture = computed(() => {
-      return store.getters.userProfilePicture
+    const userImage = computed(() => {
+      return store.getters.userImage
     })
-
     const currentPageUri = computed(() => {
       return route.path
     })
@@ -243,10 +243,6 @@ export default {
       if (route.path !== '/') {
         router.push({ name: 'Home' })
       }
-    }
-
-    const toggleMenu = () => {
-      openMenu.value = !openMenu.value
     }
 
     const { t } = useI18n({
@@ -269,10 +265,9 @@ export default {
       inactiveMenuClasses,
       loggedIn,
       userName,
-      userProfilePicture,
+      userImage,
       currentPageUri,
       logout,
-      toggleMenu,
       t,
     }
   },

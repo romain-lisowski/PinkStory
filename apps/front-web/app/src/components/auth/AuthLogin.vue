@@ -28,7 +28,7 @@
     </button>
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="onDisplaySignUpBlock"
+      @click="onClickDisplaySignUpBlock"
     >
       {{ t('sign-up') }}
     </a>
@@ -54,7 +54,7 @@ export default {
       })
     }
 
-    const onDisplaySignUpBlock = () => {
+    const onClickDisplaySignUpBlock = () => {
       context.emit('display-sign-up-block')
     }
 
@@ -71,7 +71,7 @@ export default {
       },
     })
 
-    return { email, password, processForm, onDisplaySignUpBlock, t }
+    return { email, password, processForm, onClickDisplaySignUpBlock, t }
   },
 }
 </script>

@@ -51,7 +51,7 @@ trait PositionableTrait
         return $this;
     }
 
-    public static function resetPosition(Collection $positionnedItems): void
+    public static function resetPositions(Collection $positionnedItems): void
     {
         $position = 1;
         $positionnedItems = $positionnedItems->toArray();

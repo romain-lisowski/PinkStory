@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @IsGranted("ROLE_USER")
- * @Route("/account/update", name="account_update", methods={"GET"})
+ * @Route("/account/update", name="account_update_get", methods={"GET"})
  */
 final class AccountGetForUpdateAction extends AbstractAction
 {

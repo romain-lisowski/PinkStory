@@ -10,7 +10,7 @@
         {{ t('see-latest-stories') }} >
       </a>
     </div>
-    <StoryList />
+    <StoryList :order="order" :sort="sort" />
   </div>
 </template>
 
@@ -23,6 +23,8 @@ export default {
     StoryList,
   },
   setup() {
+    const order = 'ORDER_CREATED_AT'
+    const sort = 'DESC'
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -33,7 +35,7 @@ export default {
       },
     })
 
-    return { t }
+    return { order, sort, t }
   },
 }
 </script>

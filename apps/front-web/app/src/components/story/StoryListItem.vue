@@ -5,7 +5,7 @@
     <a>
       <img
         class="w-full h-48 sm:h-64 object-cover object-top rounded-2xl opacity-90"
-        :src="require(`@/assets/images/${story.imagePath}`)"
+        :src="story.story_image.image_url"
       />
 
       <span class="block font-semibold text-xl sm:text-2xl leading-tight mt-4">
@@ -13,18 +13,15 @@
       </span>
 
       <span class="block mt-1 text-sm sm:text-base">
-        {{ t('write-by') }} {{ story.author
-        }}<span v-if="story.gender === 'female'">&#9792;</span
+        {{ t('write-by') }} {{ story.user.name
+        }}<span v-if="'TODO: gender' === 'female'">&#9792;</span
         ><span v-else>&#9794;</span>
       </span>
       <span class="block mt-1 text-lg sm:text-xl text-accent">
-        {{ story.categories }}
+        {{ storyCategories }}
       </span>
-      <span class="flex justify-between mt-1">
-        <UiRatingStars :rating="story.rating" class="flex-1" />
-        <span class="text-base sm:text-lg mr-2 sm:mt-2">
-          {{ story.nbComments }} {{ t('comments') }}
-        </span>
+      <span class="flex justify-start mt-1">
+        <UiRatingStars :rating="story.rate" />
       </span>
     </a>
   </li>
@@ -33,6 +30,7 @@
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -44,18 +42,21 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const storyCategories = computed(() => {
+      const themes = props.story.story_themes.map((theme) => theme.title)
+      return themes.join(', ')
+    })
     const { t } = useI18n({
       locale: 'fr',
       messages: {
         fr: {
           'write-by': 'Par',
-          comments: 'avis',
           'read-more': 'Lire la suite',
         },
       },
     })
-    return { t }
+    return { storyCategories, t }
   },
 }
 </script>

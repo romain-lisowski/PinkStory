@@ -16,6 +16,8 @@
         {{ t('write-by') }} {{ story.user.name
         }}<span v-if="'TODO: gender' === 'female'">&#9792;</span
         ><span v-else>&#9794;</span>
+        <span class="mx-2 font-normal">|</span>
+        <span>{{ story.created_at }}</span>
       </span>
       <span class="block mt-1 text-lg sm:text-xl text-accent">
         {{ storyCategories }}

@@ -33,10 +33,10 @@ export default {
     })
 
     onMounted(async () => {
-      const responseSearchStories = await ApiStories.search(
-        props.order,
-        props.sort
-      )
+      const responseSearchStories = await ApiStories.search({
+        order: props.order,
+        sort: props.sort,
+      })
 
       if (responseSearchStories.ok) {
         data.stories = responseSearchStories.stories

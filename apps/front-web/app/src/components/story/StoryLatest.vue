@@ -24,7 +24,7 @@ export default {
   },
   setup() {
     const order = 'ORDER_CREATED_AT'
-    const sort = 'DESC'
+    const sort = 'ASC'
     const { t } = useI18n({
       locale: 'fr',
       messages: {

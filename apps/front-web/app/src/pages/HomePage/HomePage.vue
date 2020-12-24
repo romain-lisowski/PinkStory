@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HomeMainStory />
+    <HomeStoryMain />
     <StoryTopRated />
     <StoryLatest />
     <CategoryBlock>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import HomeMainStory from '@/pages/HomePage/HomeMainStory.vue'
+import HomeStoryMain from '@/pages/HomePage/HomeStoryMain.vue'
 import StoryTopRated from '@/components/story/StoryTopRated.vue'
 import StoryLatest from '@/components/story/StoryLatest.vue'
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
@@ -32,7 +32,7 @@ import { useI18n } from 'vue-i18n'
 
 export default {
   components: {
-    HomeMainStory,
+    HomeStoryMain,
     StoryTopRated,
     StoryLatest,
     CategoryBlock,

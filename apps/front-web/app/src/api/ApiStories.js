@@ -3,20 +3,15 @@ import { useStore } from 'vuex'
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
-  async search(order, sort) {
+  async search(params = {}) {
     const store = useStore()
-    const { jwt } = store.state
-    const params = {
-      _locale: 'fr',
-      order,
-      sort,
-    }
-
     const url = new URL(`${baseUrl}/story/search`)
-    url.search = new URLSearchParams(params).toString()
+    const queryParams = params
+    queryParams._locale = 'fr'
+    url.search = new URLSearchParams(queryParams).toString()
 
     const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${jwt}` },
+      headers: { Authorization: `Bearer ${store.state.jwt}` },
     })
 
     const responseJson = await response.json()

@@ -46,7 +46,7 @@ export default {
     }
 
     const orderDate = () => {
-      changeOrder('CREATED_AT')
+      changeOrder('ORDER_CREATED_AT')
     }
 
     const orderRandom = () => {

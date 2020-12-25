@@ -64,6 +64,10 @@ export default {
       await searchStories()
     })
 
+    watch(props.searchOrder, async () => {
+      await searchStories()
+    })
+
     onMounted(async () => {
       await searchStories()
     })

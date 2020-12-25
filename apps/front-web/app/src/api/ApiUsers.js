@@ -1,4 +1,4 @@
-import ApiLanguage from '@/api/ApiLanguage'
+import ApiLanguages from '@/api/ApiLanguages'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
@@ -80,7 +80,7 @@ export default {
   },
 
   async updateInformation(jwt, name) {
-    const { languages } = await ApiLanguage.search(jwt)
+    const { languages } = await ApiLanguages.search(jwt)
 
     const formData = new FormData()
     formData.append('name', name)

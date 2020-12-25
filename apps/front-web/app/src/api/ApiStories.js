@@ -7,7 +7,7 @@ export default {
     searchParams.append('_locale', 'fr')
 
     // transform categoryIds into story_theme_ids[]
-    if (params.categoryIds !== null && params.categoryIds.length > 0) {
+    if (params.categoryIds && params.categoryIds.length > 0) {
       params.categoryIds.forEach((categoryId) => {
         searchParams.append('story_theme_ids[]', categoryId)
       })

@@ -59,6 +59,7 @@ import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
 import ApiStories from '@/api/ApiStories'
 import { computed, onMounted, reactive } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   components: {
@@ -70,7 +71,8 @@ export default {
     })
 
     onMounted(async () => {
-      const responseSearchStories = await ApiStories.search({
+      const store = useStore()
+      const responseSearchStories = await ApiStories.search(store.state.jwt, {
         order: 'ORDER_POPULAR',
         sort: 'DESC',
         limit: 1,

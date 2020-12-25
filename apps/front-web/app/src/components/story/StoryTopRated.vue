@@ -10,7 +10,7 @@
         {{ t('see-best-stories') }} ></a
       >
     </div>
-    <StoryList :order="order" :sort="sort" />
+    <StoryList :search-order="searchOrder" :search-sort="searchSort" />
   </div>
 </template>
 
@@ -23,8 +23,8 @@ export default {
     StoryList,
   },
   setup() {
-    const order = 'ORDER_POPULAR'
-    const sort = 'DESC'
+    const searchOrder = 'ORDER_POPULAR'
+    const searchSort = 'DESC'
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -34,7 +34,7 @@ export default {
         },
       },
     })
-    return { order, sort, t }
+    return { searchOrder, searchSort, t }
   },
 }
 </script>

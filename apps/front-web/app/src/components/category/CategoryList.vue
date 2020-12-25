@@ -8,7 +8,7 @@
       :key="index"
       class="py-3"
     >
-      <CategoryListItem :category-title="category.title" />
+      <CategoryListItem :category="category" />
     </div>
   </div>
 </template>

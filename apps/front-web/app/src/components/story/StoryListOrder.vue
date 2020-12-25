@@ -3,21 +3,21 @@
     {{ t('filter-by') + ' : ' }}
     <button
       class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
-      :class="activeOrder === 'rate' ? activeClasses : ''"
+      :class="activeOrder === 'ORDER_POPULAR' ? activeClasses : ''"
       @click="orderRate"
     >
       {{ t('rate') }}
     </button>
     <button
       class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
-      :class="activeOrder === 'date' ? activeClasses : ''"
+      :class="activeOrder === 'ORDER_CREATED_AT' ? activeClasses : ''"
       @click="orderDate"
     >
       {{ t('date') }}
     </button>
     <button
       class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
-      :class="activeOrder === 'random' ? activeClasses : ''"
+      :class="activeOrder === null ? activeClasses : ''"
       @click="orderRandom"
     >
       {{ t('random') }}
@@ -33,24 +33,24 @@ import { ref } from 'vue'
 export default {
   setup() {
     const store = useStore()
-    const activeOrder = ref(store.state.storyOrder)
+    const activeOrder = ref(store.state.searchOrder)
     const activeClasses = ['text-primary', 'bg-accent', 'border-accent']
 
-    const changeOrder = (storyOrder) => {
-      activeOrder.value = storyOrder
-      store.dispatch('updateStoryOrder', { storyOrder })
+    const changeOrder = (searchOrder) => {
+      activeOrder.value = searchOrder
+      store.dispatch('updateSearchOrder', { searchOrder })
     }
 
     const orderRate = () => {
-      changeOrder('rate')
+      changeOrder('ORDER_POPULAR')
     }
 
     const orderDate = () => {
-      changeOrder('date')
+      changeOrder('CREATED_AT')
     }
 
     const orderRandom = () => {
-      changeOrder('random')
+      changeOrder(null)
     }
 
     const { t } = useI18n({

@@ -16,13 +16,16 @@
         <p
           class="block pt-2 sm:pt-4 xl:pt-6 w-full text-lg sm:text-xl xl:text-2xl text-center text-accent"
         >
-          {{ results + ' ' + t('results') }}
+          {{ nbResults + ' ' + t('results') }}
         </p>
       </template>
     </CategoryBlock>
     <div class="mx-8">
       <StoryListOrder />
-      <StoryList />
+      <StoryList
+        :search-order="searchOrder"
+        :search-category-ids="searchCategoryIds"
+      />
     </div>
   </div>
 </template>
@@ -32,6 +35,8 @@ import CategoryBlock from '@/components/category/CategoryBlock.vue'
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryList from '@/components/story/StoryList.vue'
 import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   name: 'SearchPage',
@@ -42,7 +47,11 @@ export default {
   },
 
   setup() {
-    const results = 32
+    const store = useStore()
+    const nbResults = 32
+    const searchCategoryIds = ref(store.state.searchCategoryIds)
+    const searchOrder = ref(store.state.searchOrder)
+
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -53,7 +62,7 @@ export default {
       },
     })
 
-    return { results, t }
+    return { nbResults, searchCategoryIds, searchOrder, t }
   },
 }
 </script>

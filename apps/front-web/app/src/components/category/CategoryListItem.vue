@@ -4,7 +4,7 @@
     class="rounded-xl py-2 px-4 sm:py-3 sm:px-6 border bg-white text-sm sm:text-md xl:text-xl text-gray-600 bg-opacity-100 cursor-pointer transition-all duration-300 ease-in"
     @click="toggleActive"
   >
-    {{ categoryTitle }}
+    {{ category.title }}
   </span>
 </template>
 
@@ -14,21 +14,23 @@ import { useStore } from 'vuex'
 
 export default {
   props: {
-    categoryTitle: {
-      type: String,
+    category: {
+      type: Object,
       required: true,
     },
   },
   setup(props) {
     const store = useStore()
     const active = ref(
-      store.state.categoryFilters.includes(props.categoryTitle)
+      store.state.searchCategoryIds.includes(props.category.id)
     )
     const activeClasses = ['bg-accent', 'text-primary-inverse']
 
     const toggleActive = () => {
       active.value = !active.value
-      store.dispatch('toggleFilter', { category: props.categoryTitle })
+      store.dispatch('toggleSearchCategory', {
+        categoryId: props.category.id,
+      })
     }
 
     return { active, activeClasses, toggleActive }

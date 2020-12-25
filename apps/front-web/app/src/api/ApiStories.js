@@ -1,17 +1,22 @@
-import { useStore } from 'vuex'
-
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
-  async search(params = {}) {
-    const store = useStore()
+  async search(jwt, params = {}) {
     const url = new URL(`${baseUrl}/story/search`)
-    const queryParams = params
-    queryParams._locale = 'fr'
-    url.search = new URLSearchParams(queryParams).toString()
+    const searchParams = new URLSearchParams(params)
+    searchParams.append('_locale', 'fr')
 
+    // transform categoryIds into story_theme_ids[]
+    if (params.categoryIds !== null && params.categoryIds.length > 0) {
+      params.categoryIds.forEach((categoryId) => {
+        searchParams.append('story_theme_ids[]', categoryId)
+      })
+    }
+    searchParams.delete('categoryIds')
+
+    url.search = searchParams.toString()
     const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${store.state.jwt}` },
+      headers: { Authorization: `Bearer ${jwt}` },
     })
 
     const responseJson = await response.json()

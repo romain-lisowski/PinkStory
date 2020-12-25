@@ -35,8 +35,8 @@ export default Vuex.createStore({
     userLoggedIn,
     theme,
     isAdult,
-    categoryFilters: [],
-    storyOrder: 'rate',
+    searchCategoryIds: [],
+    searchOrder: 'ORDER_POPULAR',
   },
   getters: {
     isLoggedIn: (state) => {
@@ -87,15 +87,15 @@ export default Vuex.createStore({
       commit('IS_ADULT')
       localStorage.setItem('isAdult', true)
     },
-    toggleFilter({ state, commit }, { category }) {
-      if (!state.categoryFilters.includes(category)) {
-        commit('ADD_CATEGORY_FILTER', category)
+    toggleSearchCategory({ state, commit }, { categoryId }) {
+      if (!state.searchCategoryIds.includes(categoryId)) {
+        commit('ADD_SEARCH_CATEGORY', categoryId)
       } else {
-        commit('REMOVE_CATEGORY_FILTER', category)
+        commit('REMOVE_SEARCH_CATEGORY', categoryId)
       }
     },
-    updateStoryOrder({ commit }, { storyOrder }) {
-      commit('SET_STORY_ORDER', storyOrder)
+    updateSearchOrder({ commit }, { searchOrder }) {
+      commit('SET_SEARCH_ORDER', searchOrder)
     },
   },
   mutations: {
@@ -115,17 +115,17 @@ export default Vuex.createStore({
     IS_ADULT(state) {
       state.isAdult = true
     },
-    ADD_CATEGORY_FILTER(state, category) {
-      state.categoryFilters.push(category)
+    ADD_SEARCH_CATEGORY(state, categoryId) {
+      state.searchCategoryIds.push(categoryId)
     },
-    REMOVE_CATEGORY_FILTER(state, category) {
-      const index = state.categoryFilters.indexOf(category)
+    REMOVE_SEARCH_CATEGORY(state, categoryId) {
+      const index = state.searchCategoryIds.indexOf(categoryId)
       if (index > -1) {
-        state.categoryFilters.splice(index, 1)
+        state.searchCategoryIds.splice(index, 1)
       }
     },
-    SET_STORY_ORDER(state, storyOrder) {
-      state.storyOrder = storyOrder
+    SET_SEARCH_ORDER(state, searchOrder) {
+      state.searchOrder = searchOrder
     },
   },
 })

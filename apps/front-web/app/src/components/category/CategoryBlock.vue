@@ -11,8 +11,6 @@
         :key="index"
         :category-list="categoryList"
       />
-
-      <slot name="footer"></slot>
     </div>
   </div>
 </template>

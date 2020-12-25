@@ -1,4 +1,5 @@
 <template>
+  <StoryListOrder :nb-results="data.nbResults" />
   <ul class="flex flex-wrap -mx-6 mt-4 sm:mt-6 xl:mt-8 pt-2 pl-2 text-left">
     <StoryListItem
       v-for="(story, index) in data.stories"
@@ -9,6 +10,7 @@
 </template>
 
 <script>
+import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryListItem from '@/components/story/StoryListItem.vue'
 import ApiStories from '@/api/ApiStories'
 import { onMounted, reactive, watch } from 'vue'
@@ -16,6 +18,7 @@ import { useStore } from 'vuex'
 
 export default {
   components: {
+    StoryListOrder,
     StoryListItem,
   },
   props: {
@@ -40,6 +43,7 @@ export default {
     const store = useStore()
     const data = reactive({
       stories: [],
+      nbResults: 0,
     })
 
     const searchStories = async () => {
@@ -57,6 +61,7 @@ export default {
 
       if (responseSearchStories.ok) {
         data.stories = responseSearchStories.stories
+        data.nbResults = responseSearchStories.stories_total
       }
     }
 

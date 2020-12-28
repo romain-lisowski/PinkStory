@@ -5,66 +5,44 @@
   >
     <div class="mx-12">
       <slot name="header"></slot>
+
       <CategoryList
-        v-for="(categoryList, index) in categoryLists"
+        v-for="(categoryList, index) in data.categoryLists"
         :key="index"
         :category-list="categoryList"
       />
-      <slot name="footer"></slot>
     </div>
   </div>
 </template>
 
 <script>
 import CategoryList from '@/components/category/CategoryList.vue'
+import ApiStoryThemes from '@/api/ApiStoryThemes'
+import { useStore } from 'vuex'
+import { onMounted, reactive } from 'vue'
 
 export default {
   components: {
     CategoryList,
   },
   setup() {
-    const categoryLists = [
-      {
-        type: 'Orientation',
-        categories: ['Hétéro', 'Gay', 'Lesbien', 'Bisexuel', 'LGBT+'],
-      },
-      {
-        type: 'Nombre',
-        categories: ['Solitaire', 'Couple', 'Triolisme', 'Groupe'],
-      },
-      {
-        type: 'Pratique',
-        categories: [
-          'Masturbation',
-          'Sex oral',
-          'Sodomie',
-          'Jeu érotique',
-          'Domination',
-          'Soumission',
-          'Autres BDSM',
-          'Jeux de rôles',
-        ],
-      },
-      {
-        type: 'Moeurs',
-        categories: ['Fétichisme', 'Echangisme', 'Libertinage'],
-      },
-      {
-        type: 'Âge',
-        categories: ['Jeune', 'Milf/Dilf', 'Mature'],
-      },
-      {
-        type: 'Lieu',
-        categories: [
-          'A la maison',
-          'Au bureau',
-          'Dans un lieu public',
-          'En pleine nature',
-        ],
-      },
-    ]
+    const store = useStore()
+    const data = reactive({
+      categoryLists: [],
+    })
 
-    return { categoryLists }
+    onMounted(async () => {
+      const responseSearchStoryThemes = await ApiStoryThemes.search(
+        'fr',
+        store.state.jwt
+      )
+
+      if (responseSearchStoryThemes.ok) {
+        data.categoryLists = responseSearchStoryThemes.story_themes
+      }
+    })
+
+    return { data }
   },
 }
 </script>

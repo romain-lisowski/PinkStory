@@ -1,7 +1,8 @@
 <template>
+  <StoryListOrder :nb-results="data.nbResults" />
   <ul class="flex flex-wrap -mx-6 mt-4 sm:mt-6 xl:mt-8 pt-2 pl-2 text-left">
     <StoryListItem
-      v-for="(story, index) in stories"
+      v-for="(story, index) in data.stories"
       :key="index"
       :story="story"
     />
@@ -9,53 +10,74 @@
 </template>
 
 <script>
+import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryListItem from '@/components/story/StoryListItem.vue'
+import ApiStories from '@/api/ApiStories'
+import { onMounted, reactive, watch } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   components: {
+    StoryListOrder,
     StoryListItem,
   },
-  setup() {
-    const stories = {
-      story1: {
-        author: 'Nathalie38',
-        gender: 'female',
-        title: 'Une autre histoire',
-        categories: 'Bisexuel, Soft et 3 autres',
-        rating: 4,
-        nbComments: 1454,
-        imagePath: '4.png',
-      },
-      story2: {
-        author: 'Gypsie',
-        gender: 'male',
-        title: 'La meilleure amie de ma femme',
-        categories: 'Fantasme, Fellation et 2 autres',
-        rating: 3.5,
-        nbComments: 432,
-        imagePath: '7.png',
-      },
-      story3: {
-        author: 'Annizette',
-        gender: 'female',
-        title: "L'initiation",
-        categories: 'Soumission, Hard et 5 autres',
-        rating: 4,
-        nbComments: 2304,
-        imagePath: '5.jpg',
-      },
-      story4: {
-        author: 'Sammy592',
-        gender: 'male',
-        title: 'Ma femme timide, baisée',
-        categories: 'Candaulisme, Sodomie, Réel',
-        rating: 4.5,
-        nbComments: 5659,
-        imagePath: '2.png',
-      },
+  props: {
+    searchOrder: {
+      type: String,
+      default: 'ORDER_POPULAR',
+    },
+    searchSort: {
+      type: String,
+      default: 'DESC',
+    },
+    searchLimit: {
+      type: Number,
+      default: 6,
+    },
+    searchCategoryIds: {
+      type: Array,
+      default: null,
+    },
+  },
+  setup(props) {
+    const store = useStore()
+    const data = reactive({
+      stories: [],
+      nbResults: 0,
+    })
+
+    const searchStories = async () => {
+      const queryParams = {
+        order: props.searchOrder,
+        sort: props.searchSort,
+        limit: props.searchLimit,
+        categoryIds: props.searchCategoryIds,
+      }
+
+      const responseSearchStories = await ApiStories.search(
+        store.state.jwt,
+        queryParams
+      )
+
+      if (responseSearchStories.ok) {
+        data.stories = responseSearchStories.stories
+        data.nbResults = responseSearchStories.stories_total
+      }
     }
 
-    return { stories }
+    watch(props.searchCategoryIds, async () => {
+      await searchStories()
+    })
+
+    watch(props.searchOrder, async () => {
+      await searchStories()
+    })
+
+    onMounted(async () => {
+      await searchStories()
+    })
+
+    return { data }
   },
 }
 </script>

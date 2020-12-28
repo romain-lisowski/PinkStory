@@ -6,10 +6,11 @@ namespace App\User\Repository\Dto;
 
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserForUpdate;
+use App\User\Query\UserGetForUpdateQuery;
 
 interface UserRepositoryInterface
 {
     public function getCurrent(string $id): CurrentUser;
 
-    public function getOneForUpdate(string $id): UserForUpdate;
+    public function getOneForUpdate(UserGetForUpdateQuery $query): UserForUpdate;
 }

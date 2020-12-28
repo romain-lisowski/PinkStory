@@ -10,6 +10,7 @@ use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserForUpdate;
 use App\User\Model\UserStatus;
+use App\User\Query\UserGetForUpdateQuery;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\NoResultException;
@@ -39,7 +40,7 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
         return new CurrentUser(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_secret']), strval($data['user_role']), new DateTime(strval($data['user_created_at'])), $currentLanguage);
     }
 
-    public function getOneForUpdate(string $id): UserForUpdate
+    public function getOneForUpdate(UserGetForUpdateQuery $query): UserForUpdate
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -47,7 +48,7 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 
         $qb->addSelect('u.email as user_email')
             ->andWhere($qb->expr()->eq('u.id', ':user_id'))
-            ->setParameter('user_id', $id)
+            ->setParameter('user_id', $query->id)
         ;
 
         $data = $qb->execute()->fetch();

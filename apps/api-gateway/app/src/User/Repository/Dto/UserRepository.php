@@ -9,8 +9,10 @@ use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserForUpdate;
+use App\User\Model\Dto\UserFull;
 use App\User\Model\UserStatus;
 use App\User\Query\UserGetForUpdateQuery;
+use App\User\Query\UserGetQuery;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\NoResultException;
@@ -38,6 +40,27 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
         $currentLanguage = new CurrentLanguage(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
 
         return new CurrentUser(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_secret']), strval($data['user_role']), new DateTime(strval($data['user_created_at'])), $currentLanguage);
+    }
+
+    public function getOne(UserGetQuery $query): UserFull
+    {
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb);
+
+        $qb->andWhere($qb->expr()->eq('u.id', ':user_id'))
+            ->setParameter('user_id', $query->id)
+        ;
+
+        $data = $qb->execute()->fetch();
+
+        if (false === $data) {
+            throw new NoResultException();
+        }
+
+        $language = new LanguageMedium(strval($data['language_id']));
+
+        return new UserFull(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $language);
     }
 
     public function getOneForUpdate(UserGetForUpdateQuery $query): UserForUpdate

@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
@@ -44,21 +43,18 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     use LanguageableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
      */
     private string $name;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="name_slug", type="string", length=255)
      */
     private string $nameSlug;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @AppUserAssert\Email
      * @ORM\Column(name="email", type="string", length=255, unique=true)
@@ -132,7 +128,6 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     private bool $imageDefined;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */

@@ -11,7 +11,6 @@ use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,14 +23,12 @@ class StoryImageTranslation extends AbstractTranslation implements EditableInter
     use EditableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title_slug", type="string", length=255)
      */

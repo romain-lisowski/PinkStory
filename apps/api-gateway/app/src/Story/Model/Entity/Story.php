@@ -22,7 +22,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,35 +37,30 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     use PositionableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title_slug", type="string", length=255)
      */
     private string $titleSlug;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="content", type="text")
      */
     private string $content;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\User\Model\Entity\User", inversedBy="stories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private UserInterface $user;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="stories")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
@@ -85,7 +79,6 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     private Collection $children;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Story\Model\Entity\StoryImage", inversedBy="stories")
      * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id")
      */

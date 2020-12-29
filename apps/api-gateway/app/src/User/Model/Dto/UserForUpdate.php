@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Model\Dto;
 
 use App\Language\Model\Dto\Language;
+use App\User\Model\UserGender;
 use DateTime;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -15,9 +16,9 @@ final class UserForUpdate extends UserMedium
      */
     private string $email;
 
-    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $email = '', DateTime $createdAt, Language $language)
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $gender = UserGender::UNDEFINED, string $email = '', DateTime $createdAt, Language $language)
     {
-        parent::__construct($id, $imageDefined, $name, $nameSlug, $createdAt, $language);
+        parent::__construct($id, $imageDefined, $name, $nameSlug, $gender, $createdAt, $language);
 
         $this->email = $email;
     }

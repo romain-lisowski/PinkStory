@@ -44,6 +44,7 @@ final class UserUpdateInformationCommandHandler extends AbstractCommandHandler
         $language = $this->languageRepository->findOne($this->command->languageId);
 
         $user->rename($this->command->name);
+        $user->updateGender($this->command->gender);
         $user->updateLanguage($language);
         $user->updateLastUpdatedAt();
 

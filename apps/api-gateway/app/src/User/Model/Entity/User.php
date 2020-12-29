@@ -13,6 +13,7 @@ use App\Language\Model\LanguageInterface;
 use App\Model\Entity\AbstractEntity;
 use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryRating;
+use App\User\Model\UserGender;
 use App\User\Model\UserInterface as ModelUserInterface;
 use App\User\Model\UserRole;
 use App\User\Model\UserStatus;
@@ -53,6 +54,13 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
      * @ORM\Column(name="name_slug", type="string", length=255)
      */
     private string $nameSlug;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserGender", "getChoices"})
+     * @ORM\Column(name="gender", type="string", length=255)
+     */
+    private string $gender;
 
     /**
      * @Assert\NotBlank
@@ -144,13 +152,14 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
      */
     private Collection $storyRatings;
 
-    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER, string $status = UserStatus::ACTIVATED, Language $language)
+    public function __construct(string $name = '', string $gender = UserGender::UNDEFINED, string $email = '', string $role = UserRole::ROLE_USER, string $status = UserStatus::ACTIVATED, Language $language)
     {
         parent::__construct();
 
         // init zero values
         $this->name = '';
         $this->nameSlug = '';
+        $this->gender = UserGender::UNDEFINED;
         $this->email = '';
         $this->emailValidated = false;
         $this->emailValidationCode = sprintf('%06d', random_int(0, 999999));
@@ -168,6 +177,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
         // init values
         $this->setName($name)
+            ->setGender($gender)
             ->setEmail($email)
             ->setRole($role)
             ->setStatus($status)
@@ -200,6 +210,25 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     public function getNameSlug(): string
     {
         return $this->nameSlug;
+    }
+
+    public function getGender(): string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function updateGender(string $gender): self
+    {
+        $this->setGender($gender);
+
+        return $this;
     }
 
     public function getEmail(): string

@@ -28,6 +28,12 @@ final class UserUpdateInformationCommand implements CommandInterface, Handlerabl
 
     /**
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserGender", "getChoices"})
+     */
+    public string $gender = '';
+
+    /**
+     * @Assert\NotBlank
      */
     public string $languageId = '';
 }

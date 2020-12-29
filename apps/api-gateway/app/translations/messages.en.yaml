@@ -30,5 +30,12 @@ user:
         password_match: The passwords must match.
         password_strenght: The password is not complex enough.
 
+user_gender:
+    value:
+        undefined: Undefined
+        male: Man
+        female: Woman
+        other: Other
+
 validator:
     exception: The validator reports errors.

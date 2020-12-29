@@ -37,5 +37,18 @@ user_gender:
         female: Woman
         other: Other
 
+user_role:
+    value:
+        role_god: God
+        role_admin: Admin
+        role_moderator: Moderator
+        role_editor: Editor
+        role_user: User
+
+user_status:
+    value:
+        activated: Activated
+        blocked: Blocked
+
 validator:
     exception: The validator reports errors.

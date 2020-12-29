@@ -18,9 +18,9 @@ final class StoryFullParent extends StoryFull
      */
     private Collection $children;
 
-    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', DateTime $createdAt, User $user, Language $language)
+    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', string $extract = '', DateTime $createdAt, User $user, Language $language)
     {
-        parent::__construct($id, $title, $titleSlug, $content, $createdAt, $user, $language);
+        parent::__construct($id, $title, $titleSlug, $content, $extract, $createdAt, $user, $language);
 
         $this->children = new ArrayCollection();
     }

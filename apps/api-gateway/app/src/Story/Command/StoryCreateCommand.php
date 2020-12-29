@@ -26,6 +26,14 @@ final class StoryCreateCommand implements CommandInterface, HandlerableInterface
      */
     public string $content = '';
 
+    /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 140
+     * )
+     */
+    public string $extract = '';
+
     public ?string $storyImageId = null;
 
     public ?string $parentId = null;

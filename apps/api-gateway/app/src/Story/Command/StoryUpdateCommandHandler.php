@@ -49,6 +49,7 @@ final class StoryUpdateCommandHandler extends AbstractCommandHandler
 
         $story->updateTitle($this->command->title);
         $story->updateContent($this->command->content);
+        $story->updateExtract($this->command->extract);
 
         if (null !== $this->command->storyImageId) {
             $storyImage = $this->storyImageRepository->findOne($this->command->storyImageId);

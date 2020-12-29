@@ -55,6 +55,15 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     private string $content;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 140
+     * )
+     * @ORM\Column(name="extract", type="text")
+     */
+    private string $extract;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\User\Model\Entity\User", inversedBy="stories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
@@ -94,7 +103,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
      */
     private Collection $storyRatings;
 
-    public function __construct(string $title = '', string $content = '', User $user, Language $language, ?Story $parent = null, ?int $position = null, ?StoryImage $storyImage = null)
+    public function __construct(string $title = '', string $content = '', string $extract = '', User $user, Language $language, ?Story $parent = null, ?int $position = null, ?StoryImage $storyImage = null)
     {
         parent::__construct();
 
@@ -102,6 +111,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         $this->title = '';
         $this->titleSlug = '';
         $this->content = '';
+        $this->extract = '';
         $this->parent = null;
         $this->position = $position;
         $this->children = new ArrayCollection();
@@ -112,6 +122,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         // init values
         $this->setTitle($title)
             ->setContent($content)
+            ->setExtract($extract)
             ->setUser($user)
             ->setLanguage($language)
             ->setParent($parent)
@@ -161,6 +172,25 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     public function updateContent(string $content): self
     {
         $this->setContent($content);
+
+        return $this;
+    }
+
+    public function getExtract(): string
+    {
+        return $this->extract;
+    }
+
+    public function setExtract(string $extract): self
+    {
+        $this->extract = $extract;
+
+        return $this;
+    }
+
+    public function updateExtract(string $extract): self
+    {
+        $this->setExtract($extract);
 
         return $this;
     }

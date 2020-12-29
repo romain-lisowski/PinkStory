@@ -45,7 +45,8 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->andWhere($qb->expr()->eq('story.id', ':story_id'))
+        $qb->addSelect('story.content as story_content')
+            ->andWhere($qb->expr()->eq('story.id', ':story_id'))
             ->setParameter('story_id', $query->id)
         ;
 
@@ -63,7 +64,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $language = new LanguageMedium(strval($data['story_language_id']));
 
         if (null === $data['story_parent_id']) {
-            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
             $stories->add($story);
 
             $storyChildren = $this->getChildren($story->getId());
@@ -87,7 +88,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
                 $stories->add($storyNext);
             }
 
-            $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language, $storyParent, $storyPrevious, $storyNext);
+            $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language, $storyParent, $storyPrevious, $storyNext);
             $stories->add($story);
         }
 
@@ -106,7 +107,8 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->andWhere($qb->expr()->eq('story.id', ':story_id'))
+        $qb->addSelect('story.content as story_content')
+            ->andWhere($qb->expr()->eq('story.id', ':story_id'))
             ->setParameter('story_id', $query->id)
         ;
 
@@ -123,7 +125,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        $story = new StoryForUpdate(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        $story = new StoryForUpdate(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
         $stories->add($story);
 
         $this->storyRatingRepository->populateStories($stories);
@@ -328,7 +330,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
     private function createBaseQueryBuilder(QueryBuilder $qb): void
     {
-        $qb->select('story.id as story_id', 'story.title as story_title', 'story.title_slug as story_title_slug', 'story.content as story_content', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
+        $qb->select('story.id as story_id', 'story.title as story_title', 'story.title_slug as story_title_slug', 'story.extract as story_extract', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
             ->from('sty_story', 'story')
             ->addSelect('story_language.id as story_language_id')
             ->join('story', 'lng_language', 'story_language', $qb->expr()->eq('story_language.id', 'story.language_id'))
@@ -346,6 +348,6 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        return new StoryMedium(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        return new StoryMedium(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
     }
 }

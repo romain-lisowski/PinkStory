@@ -33,7 +33,7 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
     /**
      * @Serializer\Groups({"serializer"})
      */
-    private string $content;
+    private string $extract;
 
     /**
      * @Serializer\Groups({"serializer"})
@@ -57,13 +57,13 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
      */
     private Collection $storyThemes;
 
-    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', DateTime $createdAt, User $user, Language $language)
+    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $extract = '', DateTime $createdAt, User $user, Language $language)
     {
         parent::__construct($id);
 
         $this->title = $title;
         $this->titleSlug = $titleSlug;
-        $this->content = $content;
+        $this->extract = $extract;
         $this->createdAt = $createdAt;
         $this->user = $user;
         $this->language = $language;
@@ -83,9 +83,9 @@ class StoryMedium extends Story implements UserEditableInterface, LanguageableIn
         return $this->titleSlug;
     }
 
-    public function getContent(): string
+    public function getExtract(): string
     {
-        return $this->content;
+        return $this->extract;
     }
 
     public function getCreatedAt(): DateTime

@@ -63,7 +63,7 @@ final class StoryCreateCommandHandler extends AbstractCommandHandler
             $this->authorizationManager->isGranted(EditableInterface::UPDATE, $storyParent);
         }
 
-        $story = new Story($this->command->title, $this->command->content, $user, $language, $storyParent, null, $storyImage);
+        $story = new Story($this->command->title, $this->command->content, $this->command->extract, $user, $language, $storyParent, null, $storyImage);
 
         foreach ($this->command->storyThemeIds as $storyThemeId) {
             $storyTheme = $this->storyThemeRepository->findOne($storyThemeId);

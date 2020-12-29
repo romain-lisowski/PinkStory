@@ -16,6 +16,7 @@ final class StoryCreateCommandFormType extends AbstractFormType
         $builder
             ->add('title', TextType::class)
             ->add('content', TextType::class)
+            ->add('extract', TextType::class)
             ->add('story_image_id', TextType::class, [
                 'property_path' => 'storyImageId',
                 'required' => false,

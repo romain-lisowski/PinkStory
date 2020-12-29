@@ -119,12 +119,14 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
     /**
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserRole", "getChoices"})
      * @ORM\Column(name="role", type="string", length=255)
      */
     private string $role;
 
     /**
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserStatus", "getChoices"})
      * @ORM\Column(name="status", type="string", length=255)
      */
     private string $status;

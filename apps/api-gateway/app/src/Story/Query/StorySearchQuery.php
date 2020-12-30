@@ -20,6 +20,9 @@ final class StorySearchQuery implements QueryInterface, HandlerableInterface, Fo
     use FormableTrait;
     use PaginableTrait;
 
+    public const TYPE_MIXED = 'TYPE_MIXED';
+    public const TYPE_PARENT = 'TYPE_PARENT';
+    public const TYPE_CHILD = 'TYPE_CHILD';
     public const ORDER_POPULAR = 'ORDER_POPULAR';
     public const ORDER_CREATED_AT = 'ORDER_CREATED_AT';
 
@@ -39,6 +42,11 @@ final class StorySearchQuery implements QueryInterface, HandlerableInterface, Fo
     public array $readingLanguageIds = [];
 
     public ?string $userId = null;
+
+    /**
+     * @Assert\NotBlank
+     */
+    public string $type = self::TYPE_MIXED;
 
     /**
      * @Assert\NotBlank

@@ -155,6 +155,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ;
         }
 
+        if (StorySearchQuery::TYPE_PARENT === $query->type) {
+            $qb->andWhere($qb->expr()->isNull('story.parent_id'));
+        } elseif (StorySearchQuery::TYPE_CHILD === $query->type) {
+            $qb->andWhere($qb->expr()->isNotNull('story.parent_id'));
+        }
+
         $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
 
         $data = $qb->execute()->fetch();
@@ -176,6 +182,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             $qb->andWhere($qb->expr()->eq('story.user_id', ':user_id'))
                 ->setParameter('user_id', $query->userId)
             ;
+        }
+
+        if (StorySearchQuery::TYPE_PARENT === $query->type) {
+            $qb->andWhere($qb->expr()->isNull('story.parent_id'));
+        } elseif (StorySearchQuery::TYPE_CHILD === $query->type) {
+            $qb->andWhere($qb->expr()->isNotNull('story.parent_id'));
         }
 
         if (StorySearchQuery::ORDER_POPULAR === $query->order) {

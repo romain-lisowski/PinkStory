@@ -37,6 +37,10 @@ final class StorySearchQueryFormType extends AbstractFormType
                 'property_path' => 'userId',
                 'required' => false,
             ])
+            ->add('type', TextType::class, [
+                'required' => false,
+                'empty_data' => strval(StorySearchQuery::TYPE_MIXED),
+            ])
             ->add('order', TextType::class, [
                 'required' => false,
                 'empty_data' => strval(StorySearchQuery::ORDER_POPULAR),

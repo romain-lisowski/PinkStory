@@ -7,10 +7,14 @@ namespace App\User\Model\Entity;
 use App\Language\Model\Entity\Language;
 use App\Model\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table(name="usr_user_has_reading_language")
+ * @ORM\Table(name="usr_user_has_reading_language", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_USER_HAS_READING_LANGUAGE", columns={"user_id", "language_id"})})
  * @ORM\Entity(repositoryClass="App\User\Repository\Entity\UserHasReadingLanguageRepository")
+ * @UniqueEntity(
+ *      fields = {"user", "language"}
+ * )
  */
 class UserHasReadingLanguage extends AbstractEntity
 {

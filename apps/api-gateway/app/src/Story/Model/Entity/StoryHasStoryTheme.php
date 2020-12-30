@@ -6,10 +6,14 @@ namespace App\Story\Model\Entity;
 
 use App\Model\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table(name="sty_story_has_story_theme")
+ * @ORM\Table(name="sty_story_has_story_theme", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_STORY_HAS_STORY_THEME", columns={"story_id", "story_theme_id"})})
  * @ORM\Entity(repositoryClass="App\Story\Repository\Entity\StoryHasStoryThemeRepository")
+ * @UniqueEntity(
+ *      fields = {"story", "storyTheme"}
+ * )
  */
 class StoryHasStoryTheme extends AbstractEntity
 {

@@ -11,12 +11,16 @@ use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="sty_story_image_translation")
+ * @ORM\Table(name="sty_story_image_translation", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_STORY_IMAGE_TRANSLATION", columns={"story_image_id", "language_id"})})
  * @ORM\Entity(repositoryClass="App\Story\Repository\Entity\StoryImageTranslationRepository")
+ * @UniqueEntity(
+ *      fields = {"storyImage", "language"}
+ * )
  */
 class StoryImageTranslation extends AbstractTranslation implements EditableInterface
 {

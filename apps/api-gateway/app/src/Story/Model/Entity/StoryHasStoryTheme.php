@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Story\Model\Entity;
 
 use App\Model\Entity\AbstractEntity;
+use App\User\Model\Entity\UserEditableInterface;
+use App\User\Model\Entity\UserEditableTrait;
+use App\User\Model\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -15,8 +18,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      fields = {"story", "storyTheme"}
  * )
  */
-class StoryHasStoryTheme extends AbstractEntity
+class StoryHasStoryTheme extends AbstractEntity implements UserEditableInterface
 {
+    use UserEditableTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Model\Entity\Story", inversedBy="storyHasStoryThemes")
      * @ORM\JoinColumn(name="story_id", referencedColumnName="id", nullable=false)
@@ -62,6 +67,16 @@ class StoryHasStoryTheme extends AbstractEntity
         $this->storyTheme = $storyTheme;
         $storyTheme->addStoryHasStoryTheme($this);
 
+        return $this;
+    }
+
+    public function getUser(): UserInterface
+    {
+        return $this->story->getUser();
+    }
+
+    public function setUser(UserInterface $user): self
+    {
         return $this;
     }
 }

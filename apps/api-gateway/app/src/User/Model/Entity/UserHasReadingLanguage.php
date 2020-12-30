@@ -6,7 +6,9 @@ namespace App\User\Model\Entity;
 
 use App\Language\Model\Entity\Language;
 use App\Model\Entity\AbstractEntity;
+use App\User\Model\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -16,13 +18,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      fields = {"user", "language"}
  * )
  */
-class UserHasReadingLanguage extends AbstractEntity
+class UserHasReadingLanguage extends AbstractEntity implements UserEditableInterface
 {
+    use UserEditableTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="App\User\Model\Entity\User", inversedBy="userHasReadingLanguages")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private User $user;
+    private UserInterface $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="userHasReadingLanguages")
@@ -45,8 +49,12 @@ class UserHasReadingLanguage extends AbstractEntity
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(UserInterface $user): self
     {
+        if (!$user instanceof User) {
+            throw new InvalidArgumentException();
+        }
+
         $this->user = $user;
         $user->addUserHasReadingLanguage($this);
 

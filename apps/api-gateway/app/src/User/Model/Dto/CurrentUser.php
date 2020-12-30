@@ -7,10 +7,13 @@ namespace App\User\Model\Dto;
 use App\Language\Model\Dto\CurrentLanguage;
 use App\User\Model\UserGender;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class CurrentUser extends UserMedium implements UserInterface
+final class CurrentUser extends UserMedium implements UserInterface, UserReadingLanguageableInterface
 {
+    use UserReadingLanguageableTrait;
+
     private string $secret;
 
     private string $role;
@@ -21,6 +24,7 @@ final class CurrentUser extends UserMedium implements UserInterface
 
         $this->secret = $secret;
         $this->role = $role;
+        $this->readingLanguages = new ArrayCollection();
     }
 
     public function getSecret(): string

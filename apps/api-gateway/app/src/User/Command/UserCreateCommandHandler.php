@@ -40,6 +40,7 @@ final class UserCreateCommandHandler extends AbstractCommandHandler
 
         $user = new User($this->command->name, $this->command->gender, $this->command->email, UserRole::ROLE_USER, UserStatus::ACTIVATED, $language);
         $user->updatePassword($this->passwordEncoder->encodePassword($user, $this->command->password));
+        $user->addReadingLanguage($language);
 
         $this->validatorManager->validate($user);
 

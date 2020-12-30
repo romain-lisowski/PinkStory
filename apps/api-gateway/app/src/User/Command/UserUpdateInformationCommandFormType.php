@@ -7,6 +7,7 @@ namespace App\User\Command;
 use App\Form\AbstractFormType;
 use App\User\Model\UserGender;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,12 @@ final class UserUpdateInformationCommandFormType extends AbstractFormType
             ])
             ->add('language_id', TextType::class, [
                 'property_path' => 'languageId',
+            ])
+            ->add('reading_language_ids', CollectionType::class, [
+                'property_path' => 'readingLanguageIds',
+                'entry_type' => TextType::class,
+                'required' => false,
+                'allow_add' => true,
             ])
         ;
     }

@@ -40,7 +40,7 @@ final class RequestSubscriber implements EventSubscriberInterface
 
         if (null !== $this->userSecurityManager->getCurrentUser()) {
             $currentLanguage = $this->userSecurityManager->getCurrentUser()->getLanguage();
-            $currentReadingLanguages = new ArrayCollection([$currentLanguage]);
+            $currentReadingLanguages = $this->userSecurityManager->getCurrentUser()->getReadingLanguages();
         } else {
             try {
                 $currentLanguage = $this->languageRepository->getCurrentByLocale($request->query->get('_locale', 'en'));
@@ -53,9 +53,10 @@ final class RequestSubscriber implements EventSubscriberInterface
 
         if ($currentLanguage instanceof CurrentLanguage) {
             $request->setLocale($currentLanguage->getLocale());
-            $request->attributes->set('current-language', $currentLanguage);
-            $request->attributes->set('current-reading-languages', $currentReadingLanguages);
-            $request->query->remove('_locale');
         }
+
+        $request->attributes->set('current-language', $currentLanguage);
+        $request->attributes->set('current-reading-languages', $currentReadingLanguages);
+        $request->query->remove('_locale');
     }
 }

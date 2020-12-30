@@ -34,7 +34,7 @@ final class StorySearchQuery implements QueryInterface, HandlerableInterface, Fo
     public string $languageId = '';
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotNull
      */
     public array $readingLanguageIds = [];
 

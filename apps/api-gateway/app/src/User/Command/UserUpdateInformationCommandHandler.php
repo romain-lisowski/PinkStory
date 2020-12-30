@@ -46,6 +46,7 @@ final class UserUpdateInformationCommandHandler extends AbstractCommandHandler
         $user->rename($this->command->name);
         $user->updateGender($this->command->gender);
         $user->updateLanguage($language);
+        $user->updateReadingLanguages($this->command->readingLanguageIds, $this->languageRepository);
         $user->updateLastUpdatedAt();
 
         $this->validatorManager->validate($user);

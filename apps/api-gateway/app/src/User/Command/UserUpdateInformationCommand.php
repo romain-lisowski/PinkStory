@@ -36,4 +36,9 @@ final class UserUpdateInformationCommand implements CommandInterface, Handlerabl
      * @Assert\NotBlank
      */
     public string $languageId = '';
+
+    /**
+     * @Assert\NotNull
+     */
+    public array $readingLanguageIds = [];
 }

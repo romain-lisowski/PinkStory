@@ -28,21 +28,33 @@ final class UserFixture extends Fixture
 
         $user = new User('Yannis', UserGender::MALE, 'hello@yannissgarra.com', UserRole::ROLE_GOD, UserStatus::ACTIVATED, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
+        $user->addReadingLanguage($this->getReference('language-english'))
+            ->addReadingLanguage($this->getReference('language-french'))
+        ;
         $manager->persist($user);
         $this->addReference('user-yannis', $user);
 
         $user = new User('Romain', UserGender::MALE, 'romain.lisowski@gmail.com', UserRole::ROLE_GOD, UserStatus::ACTIVATED, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
+        $user->addReadingLanguage($this->getReference('language-english'))
+            ->addReadingLanguage($this->getReference('language-french'))
+        ;
         $manager->persist($user);
         $this->addReference('user-romain', $user);
 
         $user = new User('Leslie', UserGender::FEMALE, 'leslie.akindou@gmail.com', UserRole::ROLE_MODERATOR, UserStatus::ACTIVATED, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
+        $user->addReadingLanguage($this->getReference('language-english'))
+            ->addReadingLanguage($this->getReference('language-french'))
+        ;
         $manager->persist($user);
         $this->addReference('user-leslie', $user);
 
         $user = new User('Juliette', UserGender::FEMALE, 'contact@julietteverdurand.com', UserRole::ROLE_EDITOR, UserStatus::ACTIVATED, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
+        $user->addReadingLanguage($this->getReference('language-english'))
+            ->addReadingLanguage($this->getReference('language-french'))
+        ;
         $manager->persist($user);
         $this->addReference('user-juliette', $user);
 

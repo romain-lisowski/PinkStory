@@ -10,6 +10,7 @@ use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
 use App\Language\Model\LanguageInterface;
+use App\Language\Repository\Entity\LanguageRepositoryInterface;
 use App\Model\Entity\AbstractEntity;
 use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryRating;
@@ -144,6 +145,11 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     private LanguageInterface $language;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\User\Model\Entity\UserHasReadingLanguage", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $userHasReadingLanguages;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\Story", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"title" = "ASC"})
      */
@@ -174,6 +180,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         $this->role = UserRole::ROLE_USER;
         $this->status = UserStatus::ACTIVATED;
         $this->imageDefined = false;
+        $this->userHasReadingLanguages = new ArrayCollection();
         $this->stories = new ArrayCollection();
         $this->storyRatings = new ArrayCollection();
 
@@ -515,6 +522,63 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
     public function eraseCredentials(): void
     {
+    }
+
+    public function getUserHasReadingLanguages(): Collection
+    {
+        return $this->userHasReadingLanguages;
+    }
+
+    public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+
+        return $this;
+    }
+
+    public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+
+        return $this;
+    }
+
+    public function addReadingLanguage(Language $language): self
+    {
+        $exists = false;
+
+        foreach ($this->getUserHasReadingLanguages() as $userHasReadingLanguage) {
+            if ($userHasReadingLanguage->getLanguage()->getId() === $language->getId()) {
+                $exists = true;
+
+                break;
+            }
+        }
+
+        if (false === $exists) {
+            new UserHasReadingLanguage($this, $language);
+        }
+
+        return $this;
+    }
+
+    public function cleanReadingLanguages(array $readingLanguageIds)
+    {
+        foreach ($this->userHasReadingLanguages as $userHasReadingLanguage) {
+            if (false === in_array($userHasReadingLanguage->getLanguage()->getId(), $readingLanguageIds)) {
+                $this->removeUserHasReadingLanguage($userHasReadingLanguage);
+            }
+        }
+    }
+
+    public function updateReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository)
+    {
+        foreach ($readingLanguageIds as $readingLanguageId) {
+            $readingLanguage = $languageRepository->findOne($readingLanguageId);
+            $this->addReadingLanguage($readingLanguage);
+        }
+
+        $this->cleanReadingLanguages($readingLanguageIds);
     }
 
     public function getStories(): Collection

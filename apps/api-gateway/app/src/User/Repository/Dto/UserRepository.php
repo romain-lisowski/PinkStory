@@ -6,6 +6,7 @@ namespace App\User\Repository\Dto;
 
 use App\Language\Model\Dto\CurrentLanguage;
 use App\Language\Model\Dto\LanguageMedium;
+use App\Language\Repository\Dto\LanguageRepositoryInterface;
 use App\Repository\Dto\AbstractRepository;
 use App\User\Model\Dto\CurrentUser;
 use App\User\Model\Dto\UserForUpdate;
@@ -15,10 +16,20 @@ use App\User\Query\UserGetForUpdateQuery;
 use App\User\Query\UserGetQuery;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 
 final class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
+    private LanguageRepositoryInterface $languageRepository;
+
+    public function __construct(EntityManagerInterface $entityManager, LanguageRepositoryInterface $languageRepository)
+    {
+        parent::__construct($entityManager);
+
+        $this->languageRepository = $languageRepository;
+    }
+
     public function getCurrent(string $id): CurrentUser
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
@@ -39,7 +50,11 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 
         $currentLanguage = new CurrentLanguage(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
 
-        return new CurrentUser(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), strval($data['user_secret']), strval($data['user_role']), new DateTime(strval($data['user_created_at'])), $currentLanguage);
+        $user = new CurrentUser(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), strval($data['user_secret']), strval($data['user_role']), new DateTime(strval($data['user_created_at'])), $currentLanguage);
+
+        $this->languageRepository->populateUserReadingLanguages($user);
+
+        return $user;
     }
 
     public function getOne(UserGetQuery $query): UserFull
@@ -82,7 +97,11 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
 
         $language = new LanguageMedium(strval($data['language_id']));
 
-        return new UserForUpdate(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), strval($data['user_email']), new DateTime(strval($data['user_created_at'])), $language);
+        $user = new UserForUpdate(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), strval($data['user_email']), new DateTime(strval($data['user_created_at'])), $language);
+
+        $this->languageRepository->populateUserReadingLanguages($user);
+
+        return $user;
     }
 
     private function createBaseQueryBuilder(QueryBuilder $qb): void

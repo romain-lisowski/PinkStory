@@ -61,16 +61,7 @@ final class StoryUpdateCommandHandler extends AbstractCommandHandler
             $story->updateLanguage($language);
         }
 
-        foreach ($this->command->storyThemeIds as $storyThemeId) {
-            $storyTheme = $this->storyThemeRepository->findOne($storyThemeId);
-            $story->addStoryTheme($storyTheme);
-        }
-
-        foreach ($story->getStoryHasStoryThemes() as $storyHasStoryTheme) {
-            if (false === in_array($storyHasStoryTheme->getStoryTheme()->getId(), $this->command->storyThemeIds)) {
-                $story->removeStoryHasStoryTheme($storyHasStoryTheme);
-            }
-        }
+        $story->updateStoryThemes($this->command->storyThemeIds, $this->storyThemeRepository);
 
         $story->updateLastUpdatedAt();
 

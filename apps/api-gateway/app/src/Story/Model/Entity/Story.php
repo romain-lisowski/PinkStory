@@ -14,6 +14,7 @@ use App\Model\Entity\DepthableTrait;
 use App\Model\Entity\PositionableInterface;
 use App\Model\Entity\PositionableTrait;
 use App\Story\Exception\StoryThemeDepthException;
+use App\Story\Repository\Entity\StoryThemeRepositoryInterface;
 use App\User\Model\Entity\User;
 use App\User\Model\Entity\UserEditableInterface;
 use App\User\Model\Entity\UserEditableTrait;
@@ -295,6 +296,36 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         if (false === $exists) {
             new StoryHasStoryTheme($this, $storyTheme);
         }
+
+        return $this;
+    }
+
+    public function addStoryThemes(array $storyThemeIds, StoryThemeRepositoryInterface $storyThemeRepository): self
+    {
+        foreach ($storyThemeIds as $storyThemeId) {
+            $storyTheme = $storyThemeRepository->findOne($storyThemeId);
+            $this->addStoryTheme($storyTheme);
+        }
+
+        return $this;
+    }
+
+    public function cleanStoryThemes(array $storyThemeIds): self
+    {
+        foreach ($this->storyHasStoryThemes as $storyHasStoryTheme) {
+            if (false === in_array($storyHasStoryTheme->getStoryTheme()->getId(), $storyThemeIds)) {
+                $this->removeStoryHasStoryTheme($storyHasStoryTheme);
+            }
+        }
+
+        return $this;
+    }
+
+    public function updateStoryThemes(array $storyThemeIds, StoryThemeRepositoryInterface $storyThemeRepository): self
+    {
+        $this->addStoryThemes($storyThemeIds, $storyThemeRepository)
+            ->cleanStoryThemes($storyThemeIds)
+        ;
 
         return $this;
     }

@@ -562,23 +562,34 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         return $this;
     }
 
-    public function cleanReadingLanguages(array $readingLanguageIds)
-    {
-        foreach ($this->userHasReadingLanguages as $userHasReadingLanguage) {
-            if (false === in_array($userHasReadingLanguage->getLanguage()->getId(), $readingLanguageIds)) {
-                $this->removeUserHasReadingLanguage($userHasReadingLanguage);
-            }
-        }
-    }
-
-    public function updateReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository)
+    public function addReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
     {
         foreach ($readingLanguageIds as $readingLanguageId) {
             $readingLanguage = $languageRepository->findOne($readingLanguageId);
             $this->addReadingLanguage($readingLanguage);
         }
 
-        $this->cleanReadingLanguages($readingLanguageIds);
+        return $this;
+    }
+
+    public function cleanReadingLanguages(array $readingLanguageIds): self
+    {
+        foreach ($this->userHasReadingLanguages as $userHasReadingLanguage) {
+            if (false === in_array($userHasReadingLanguage->getLanguage()->getId(), $readingLanguageIds)) {
+                $this->removeUserHasReadingLanguage($userHasReadingLanguage);
+            }
+        }
+
+        return $this;
+    }
+
+    public function updateReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
+    {
+        $this->addReadingLanguages($readingLanguageIds, $languageRepository)
+            ->cleanReadingLanguages($readingLanguageIds)
+        ;
+
+        return $this;
     }
 
     public function getStories(): Collection

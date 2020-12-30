@@ -64,11 +64,7 @@ final class StoryCreateCommandHandler extends AbstractCommandHandler
         }
 
         $story = new Story($this->command->title, $this->command->content, $this->command->extract, $user, $language, $storyParent, null, $storyImage);
-
-        foreach ($this->command->storyThemeIds as $storyThemeId) {
-            $storyTheme = $this->storyThemeRepository->findOne($storyThemeId);
-            $story->addStoryTheme($storyTheme);
-        }
+        $story->addStoryThemes($this->command->storyThemeIds, $this->storyThemeRepository);
 
         $this->validatorManager->validate($story);
 

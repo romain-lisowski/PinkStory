@@ -23,7 +23,6 @@ final class StoryCreateCommandFormType extends AbstractFormType
             ])
             ->add('language_id', TextType::class, [
                 'property_path' => 'languageId',
-                'required' => false,
             ])
             ->add('story_theme_ids', CollectionType::class, [
                 'property_path' => 'storyThemeIds',

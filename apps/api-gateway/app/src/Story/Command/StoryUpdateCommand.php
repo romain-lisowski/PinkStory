@@ -41,7 +41,10 @@ final class StoryUpdateCommand implements CommandInterface, HandlerableInterface
 
     public ?string $storyImageId = null;
 
-    public ?string $languageId = null;
+    /**
+     * @Assert\NotBlank
+     */
+    public string $languageId = '';
 
     /**
      * @Assert\NotNull

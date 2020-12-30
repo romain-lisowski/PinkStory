@@ -38,7 +38,10 @@ final class StoryCreateCommand implements CommandInterface, HandlerableInterface
 
     public ?string $parentId = null;
 
-    public ?string $languageId = null;
+    /**
+     * @Assert\NotBlank
+     */
+    public string $languageId = '';
 
     /**
      * @Assert\NotBlank

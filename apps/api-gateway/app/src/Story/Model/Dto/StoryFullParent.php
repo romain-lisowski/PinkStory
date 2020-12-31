@@ -36,4 +36,12 @@ final class StoryFullParent extends StoryFull
 
         return $this;
     }
+
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    public function getChildrenTotal(): int
+    {
+        return count($this->children);
+    }
 }

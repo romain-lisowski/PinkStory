@@ -6,11 +6,14 @@ namespace App\Story\Repository\Dto;
 
 use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
+use App\Story\Model\Dto\Story;
 use App\Story\Model\Dto\StoryForUpdate;
 use App\Story\Model\Dto\StoryFull;
 use App\Story\Model\Dto\StoryFullChild;
 use App\Story\Model\Dto\StoryFullParent;
 use App\Story\Model\Dto\StoryMedium;
+use App\Story\Model\Dto\StoryMediumChild;
+use App\Story\Model\Dto\StoryMediumParent;
 use App\Story\Query\StoryGetForUpdateQuery;
 use App\Story\Query\StoryGetQuery;
 use App\Story\Query\StorySearchQuery;
@@ -97,6 +100,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $this->storyImageRepository->populateStories($stories, $query->languageId);
 
         $this->storyThemeRepository->populateStories($stories, $query->languageId);
+
+        $this->populateStoryMediumParents($stories);
+
+        $this->populateStoryMediumChildren($stories);
 
         return $story;
     }
@@ -195,6 +202,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             $subQb->select('avg(rate)')
                 ->from('sty_story_rating', 'storyRating')
                 ->where($subQb->expr()->eq('storyRating.story_id', 'story.id'))
+                ->groupBy('story_id')
             ;
             $qb->addSelect('coalesce(('.$subQb->getSQL().'), 0) as story_rate');
 
@@ -224,6 +232,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $this->storyImageRepository->populateStories($stories, $query->languageId);
 
         $this->storyThemeRepository->populateStories($stories, $query->languageId);
+
+        $this->populateStoryMediumParents($stories);
+
+        $this->populateStoryMediumChildren($stories);
 
         return $stories;
     }
@@ -360,6 +372,77 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        return new StoryMedium(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        if (null === $data['story_parent_id']) {
+            return new StoryMediumParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        }
+
+        return new StoryMediumChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
+    }
+
+    private function populateStoryMediumParents(Collection $stories): void
+    {
+        $storyMediumParents = $stories->filter(function ($story) {
+            return $story instanceof StoryMediumParent;
+        });
+        $storyMediumParentIds = Story::extractIds($storyMediumParents);
+
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('count(id) as total', 'parent_id')
+            ->from('sty_story')
+            ->where($qb->expr()->in('parent_id', ':story_id'))
+            ->setParameter('story_id', $storyMediumParentIds, Connection::PARAM_STR_ARRAY)
+            ->groupBy('parent_id')
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        foreach ($datas as $data) {
+            foreach ($storyMediumParents as $storyMediumParent) {
+                if ($storyMediumParent->getId() === strval($data['parent_id'])) {
+                    $storyMediumParent->setChildrenTotal(intval($data['total']));
+
+                    break;
+                }
+            }
+        }
+    }
+
+    private function populateStoryMediumChildren(Collection $stories): void
+    {
+        $storyMediumChildren = $stories->filter(function ($story) {
+            return $story instanceof StoryMediumChild;
+        });
+        $storyMediumChildIds = Story::extractIds($storyMediumChildren);
+
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb);
+
+        $qb->addSelect('child_story.id as child_story_id')
+            ->join('story', 'sty_story', 'child_story', $qb->expr()->andX(
+                $qb->expr()->eq('child_story.parent_id', 'story.id'),
+                $qb->expr()->in('child_story.id', ':story_id')
+            ))
+            ->setParameter('story_id', $storyMediumChildIds, Connection::PARAM_STR_ARRAY)
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        $storyParents = new ArrayCollection();
+
+        foreach ($datas as $data) {
+            foreach ($storyMediumChildren as $storyMediumChild) {
+                if ($storyMediumChild->getId() === strval($data['child_story_id'])) {
+                    $storyParent = $this->populateMedium($data);
+                    $storyMediumChild->setParent($storyParent);
+                    $storyParents->add($storyParent);
+
+                    break;
+                }
+            }
+        }
+
+        $this->populateStoryMediumParents($storyParents);
     }
 }

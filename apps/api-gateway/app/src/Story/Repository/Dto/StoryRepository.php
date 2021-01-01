@@ -390,8 +390,8 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $qb->select('count(id) as total', 'parent_id')
             ->from('sty_story')
-            ->where($qb->expr()->in('parent_id', ':story_id'))
-            ->setParameter('story_id', $storyMediumParentIds, Connection::PARAM_STR_ARRAY)
+            ->where($qb->expr()->in('parent_id', ':parent_ids'))
+            ->setParameter('parent_ids', $storyMediumParentIds, Connection::PARAM_STR_ARRAY)
             ->groupBy('parent_id')
         ;
 
@@ -402,7 +402,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
                 if ($storyMediumParent->getId() === strval($data['parent_id'])) {
                     $storyMediumParent->setChildrenTotal(intval($data['total']));
 
-                    break;
+                    // no break here cause there are multiple clone of same parent story
                 }
             }
         }

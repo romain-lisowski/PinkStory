@@ -21,7 +21,7 @@ final class UserFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $user = new User('PinkStory', UserGender::UNDEFINED, 'hello@pinkstory.io', UserRole::ROLE_GOD, UserStatus::ACTIVATED, $this->getReference('language-french'));
+        $user = new User('Pinkstory', UserGender::UNDEFINED, 'hello@pinkstory.io', UserRole::ROLE_GOD, UserStatus::ACTIVATED, $this->getReference('language-french'));
         $user->updatePassword($this->passwordEncoder->encodePassword($user, '@Password2!'));
         $manager->persist($user);
         $this->addReference('user-pinkstory', $user);

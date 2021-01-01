@@ -1,5 +1,5 @@
 {
-  "name": "PinkStory - API Gateway",
+  "name": "Pinkstory - API Gateway",
   "dockerComposeFile": "../../../docker-compose.yml",
   "service": "api-gateway-symfony",
   "workspaceFolder": "/www/api-gateway",

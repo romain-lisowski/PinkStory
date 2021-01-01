@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Provider;
+namespace App\Mercure\Security;
 
 use App\Exception\InvalidSSLKeyException;
 use DateTime;

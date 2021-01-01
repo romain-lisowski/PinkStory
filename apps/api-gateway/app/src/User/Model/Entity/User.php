@@ -506,7 +506,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
     public function getUsername(): string
     {
-        return $this->email;
+        return $this->getId();
     }
 
     public function getRoles(): array

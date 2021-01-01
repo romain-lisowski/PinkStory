@@ -6,29 +6,30 @@ namespace App\User\Security;
 
 use App\User\Exception\InvalidTokenException;
 use App\User\Exception\NoTokenProvidedException;
-use App\User\Repository\Dto\UserRepositoryInterface;
+use App\User\Model\Dto\CurrentUser;
 use Exception;
 use Firebase\JWT\JWT;
+use LogicException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 
 final class UserAuthenticator extends AbstractAuthenticator
 {
     private ParameterBagInterface $params;
-    private UserRepositoryInterface $userRepository;
 
-    public function __construct(ParameterBagInterface $params, UserRepositoryInterface $userRepository)
+    public function __construct(ParameterBagInterface $params)
     {
         $this->params = $params;
-        $this->userRepository = $userRepository;
     }
 
     /**
@@ -55,24 +56,41 @@ final class UserAuthenticator extends AbstractAuthenticator
 
             $payload = JWT::decode($token, file_get_contents($this->params->get('jwt_public_key')), [$this->params->get('jwt_algorithm')]);
 
-            if ($payload->app_secret !== $this->params->get('app_secret')
-                || $payload->iss !== $this->params->get('project_name')
-                || $payload->aud !== $this->params->get('project_name')) {
-                throw new InvalidTokenException();
-            }
+            $passport = new SelfValidatingPassport(new UserBadge($payload->user_id));
+            $passport->setAttribute('payload_app_secret', $payload->app_secret);
+            $passport->setAttribute('payload_iss', $payload->iss);
+            $passport->setAttribute('payload_aud', $payload->aud);
+            $passport->setAttribute('payload_sub', $payload->sub);
+            $passport->setAttribute('payload_user_secret', $payload->user_secret);
 
-            $user = $this->userRepository->getCurrent($payload->user_id);
-
-            if (null === $user
-                || $user->getId() !== $payload->sub
-                || $user->getSecret() !== $payload->user_secret) {
-                throw new UsernameNotFoundException();
-            }
-
-            return new SelfValidatingPassport($user);
+            return $passport;
         } catch (Exception $e) {
             throw new AuthenticationException('', 0, new InvalidTokenException());
         }
+    }
+
+    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+    {
+        if (!$passport instanceof UserPassportInterface) {
+            throw new LogicException(sprintf('Passport does not contain a user, overwrite "createAuthenticatedToken()" in "%s" to create a custom authenticated token.', \get_class($this)));
+        }
+
+        if (!$passport instanceof Passport) {
+            throw new LogicException('Passport is not valid.');
+        }
+
+        $user = $passport->getUser();
+
+        if (!$user instanceof CurrentUser
+            || $passport->getAttribute('payload_app_secret') !== $this->params->get('app_secret')
+            || $passport->getAttribute('payload_iss') !== $this->params->get('project_name')
+            || $passport->getAttribute('payload_aud') !== $this->params->get('project_name')
+            || $passport->getAttribute('payload_sub') !== $user->getId()
+            || $passport->getAttribute('payload_user_secret') !== $user->getSecret()) {
+            throw new AuthenticationException('', 0, new InvalidTokenException());
+        }
+
+        return parent::createAuthenticatedToken($passport, $firewallName);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

@@ -1,0 +1,19 @@
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation
+
+language_action:
+    resource: ../../src/Language/Action/
+    type: annotation
+
+story_action:
+    resource: ../../src/Story/Presentation/Action/
+    type: annotation
+
+user_action:
+    resource: ../../src/User/Action/
+    type: annotation
+
+mercure_action:
+    resource: ../../src/Mercure/Action/
+    type: annotation

@@ -15,6 +15,9 @@ form:
     exception:
         invalid_form: The form is not valid.
 
+responder:
+    exception: Some errors occured during rendering process.
+
 story:
     exception:
         story_theme_depth: Only child theme can be linked.
@@ -51,4 +54,4 @@ user_status:
         blocked: Blocked
 
 validator:
-    exception: The validator reports errors.
+    exception: Some errors occured during validation process.

@@ -1,0 +1,33 @@
+{
+  "name": "Pinkstory - API Gateway",
+  "dockerComposeFile": "../../../docker-compose.yml",
+  "service": "api-gateway-symfony",
+  "workspaceFolder": "/www/api-gateway",
+  "shutdownAction": "none",
+  "extensions": [
+    "bmewburn.vscode-intelephense-client",
+    "mehedidracula.php-namespace-resolver",
+    "phproberto.vscode-php-getters-setters",
+    "junstyle.php-cs-fixer",
+    "neilbrayfield.php-docblocker"
+  ],
+  "settings": {
+    "editor.quickSuggestions": { "comments": true },
+    "php.suggest.basic": false,
+    "intelephense.files.exclude": [
+      "**/.git/**",
+      "**/.svn/**",
+      "**/.hg/**",
+      "**/CVS/**",
+      "**/.DS_Store/**",
+      "**/node_modules/**",
+      "**/bower_components/**",
+      "**/vendor/**/{Test,test,Tests,tests}/**/*Test.php"
+    ],
+    "php-cs-fixer.rules": "@PhpCsFixer",
+    "[php]": {
+      "editor.defaultFormatter": "junstyle.php-cs-fixer",
+      "editor.formatOnSave": true
+    }
+  }
+}

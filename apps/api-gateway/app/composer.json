@@ -1,6 +1,8 @@
 {
+    "name": "pinkstory/pinkstory",
     "type": "project",
     "license": "proprietary",
+    "description": "Pinkstory is about porno.",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {

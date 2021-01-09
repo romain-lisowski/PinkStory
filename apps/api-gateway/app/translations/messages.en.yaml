@@ -1,0 +1,3 @@
+validator:
+    exception:
+        validation_failed: Some errors occured during validation process.

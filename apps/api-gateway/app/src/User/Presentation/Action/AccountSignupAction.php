@@ -7,6 +7,7 @@ namespace App\User\Presentation\Action;
 use App\Common\Presentation\Http\ResponderInterface;
 use App\User\Domain\Command\UserCreateCommand;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -14,17 +15,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class AccountSignupAction
 {
+    private MessageBusInterface $bus;
     private ResponderInterface $responder;
 
-    public function __construct(ResponderInterface $responder)
+    public function __construct(MessageBusInterface $commandBus, ResponderInterface $responder)
     {
+        $this->bus = $commandBus;
         $this->responder = $responder;
     }
 
     public function __invoke(UserCreateCommand $command): Response
     {
-        return $this->responder->render([
-            'command' => $command,
-        ]);
+        $this->bus->dispatch($command);
+
+        return $this->responder->render();
     }
 }

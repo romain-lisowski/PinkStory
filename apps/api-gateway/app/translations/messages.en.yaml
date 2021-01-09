@@ -1,3 +1,8 @@
+http:
+    message_param_converter:
+        exception:
+            message_conversion_failed: Some errors occured during message conversion process.
+
 validator:
     exception:
         validation_failed: Some errors occured during validation process.

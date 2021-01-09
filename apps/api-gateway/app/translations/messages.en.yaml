@@ -6,3 +6,8 @@ http:
 validator:
     exception:
         validation_failed: Some errors occured during validation process.
+
+user:
+    validator:
+        constraint:
+            password_strenght_min: The password is not complex enough.

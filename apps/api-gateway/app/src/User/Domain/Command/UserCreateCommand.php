@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Domain\Command;
 
 use App\Common\Infrastructure\Messenger\MessageInterface;
+use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserCreateCommand implements MessageInterface
@@ -26,6 +27,7 @@ final class UserCreateCommand implements MessageInterface
 
     /**
      * @Assert\NotBlank
+     * @AppUserAssert\PasswordStrenght
      */
     private string $password;
 

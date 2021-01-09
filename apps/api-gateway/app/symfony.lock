@@ -1,4 +1,7 @@
 {
+    "bjeavons/zxcvbn-php": {
+        "version": "1.2.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },

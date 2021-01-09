@@ -22,6 +22,7 @@ final class UserCreateCommand implements MessageInterface
 
     /**
      * @Assert\NotBlank
+     * @AppUserAssert\Email
      */
     private string $email;
 

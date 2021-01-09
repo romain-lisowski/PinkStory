@@ -10,4 +10,5 @@ validator:
 user:
     validator:
         constraint:
+            invalid_email: The email address is not valid.
             password_strenght_min: The password is not complex enough.

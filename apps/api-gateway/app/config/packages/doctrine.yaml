@@ -9,3 +9,16 @@ doctrine:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Common/Domain/Model'
+                prefix: 'App\Common\Domain\Model'
+                alias: App
+            App\User:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/User/Domain/Model'
+                prefix: 'App\User\Domain\Model'
+                alias: App

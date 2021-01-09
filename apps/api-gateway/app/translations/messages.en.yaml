@@ -8,6 +8,13 @@ validator:
         validation_failed: Some errors occured during validation process.
 
 user:
+    field:
+        user_gender:
+            value:
+                undefined: Undefined
+                male: Man
+                female: Woman
+                other: Other
     validator:
         constraint:
             invalid_email: The email address is not valid.

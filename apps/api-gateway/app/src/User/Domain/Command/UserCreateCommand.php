@@ -12,6 +12,7 @@ final class UserCreateCommand implements CommandInterface
 {
     /**
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Domain\Model\UserGender", "getChoices"})
      */
     private string $gender;
 

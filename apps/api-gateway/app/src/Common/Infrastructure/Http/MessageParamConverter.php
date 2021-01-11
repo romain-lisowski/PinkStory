@@ -47,6 +47,12 @@ final class MessageParamConverter implements ParamConverterInterface
                 if ('security.user.id' === $value) {
                     $content[$field] = $this->security->getUser()->getId();
                 }
+
+                $enumMatches = [];
+                if (1 === preg_match('/^enum\.([\\\\\w+]+)::(\w+)$/', $value, $enumMatches)) {
+                    $class = new ReflectionClass($enumMatches[1]);
+                    $content[$field] = $class->getConstant($enumMatches[2]);
+                }
             }
 
             $command = $this->serializer->deserialize(json_encode($content), $configuration->getClass(), JsonEncoder::FORMAT);
@@ -81,10 +87,24 @@ final class MessageParamConverter implements ParamConverterInterface
                 foreach (array_keys($options['mapping']) as $field) {
                     $mappingResolver->setDefault($field, '');
                     $mappingResolver->setAllowedTypes($field, 'string');
-                    $mappingResolver->setAllowedValues($field, [
-                        'request.attribute.'.$field,
-                        'security.user.id',
-                    ]);
+                    $mappingResolver->setAllowedValues($field, function ($value) use ($field) {
+                        if ('request.attribute.'.$field === $value) {
+                            return true;
+                        }
+
+                        if ('security.user.id' === $value) {
+                            return true;
+                        }
+
+                        $enumMatches = [];
+                        if (1 === preg_match('/^enum\.([\\\\\w+]+)::(\w+)$/', $value, $enumMatches)) {
+                            $class = new ReflectionClass($enumMatches[1]);
+
+                            return $class->hasConstant($enumMatches[2]);
+                        }
+
+                        return false;
+                    });
                 }
             }
         });

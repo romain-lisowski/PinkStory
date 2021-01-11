@@ -6,12 +6,14 @@ namespace App\User\Presentation\Action;
 
 use App\Common\Presentation\Http\ResponderInterface;
 use App\User\Domain\Command\UserCreateCommand;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/signup", name="account_signup", methods={"POST"})
+ * @ParamConverter("command", options={"mapping": {"role" = "enum.App\User\Domain\Model\UserRole::USER", "status" = "enum.App\User\Domain\Model\UserStatus::ACTIVATED"}})
  */
 final class AccountSignupAction
 {

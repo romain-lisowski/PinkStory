@@ -13,7 +13,7 @@ abstract class AbstractEnum
 
     public static function getChoices(): array
     {
-        return array_keys(static::getConstants());
+        return array_values(static::getConstants());
     }
 
     public static function getReadingChoices(TranslatorInterface $translator): array

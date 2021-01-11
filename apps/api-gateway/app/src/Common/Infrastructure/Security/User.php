@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Security;
 
-use Symfony\Component\Validator\Constraints\Uuid;
-
 final class User
 {
-    private Uuid $id;
+    private string $id;
 
-    public function __construct(Uuid $id)
+    public function __construct(string $id)
     {
         $this->id = $id;
     }
 
-    public function getId(): Uuid
+    public function getId(): string
     {
         return $this->id;
     }

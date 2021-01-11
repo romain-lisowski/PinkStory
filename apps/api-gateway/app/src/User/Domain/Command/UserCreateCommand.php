@@ -33,12 +33,26 @@ final class UserCreateCommand implements CommandInterface
      */
     private string $password;
 
-    public function __construct(string $gender, string $name, string $email, string $password)
+    /**
+     * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Domain\Model\UserRole", "getChoices"})
+     */
+    private string $role;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Domain\Model\UserStatus", "getChoices"})
+     */
+    private string $status;
+
+    public function __construct(string $gender, string $name, string $email, string $password, string $role, string $status)
     {
         $this->gender = $gender;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+        $this->role = $role;
+        $this->status = $status;
     }
 
     public function getGender(): string
@@ -59,5 +73,15 @@ final class UserCreateCommand implements CommandInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }

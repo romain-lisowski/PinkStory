@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Domain\Model;
 
+use App\Common\Domain\Model\AbstractEntity;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,103 +19,63 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User
+class User extends AbstractEntity
 {
     /**
-     * @ORM\Id()
-     * @ORM\Column(name="id", type="uuid", unique=true)
-     * @Assert\NotBlank
-     * @Assert\Uuid
-     */
-    private string $id;
-
-    /**
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="gender", type="string")
      * @Assert\NotBlank
      * @Assert\Choice(callback={"App\User\Domain\Model\UserGender", "getChoices"})
      */
     private string $gender;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string")
      * @Assert\NotBlank
      */
     private string $name;
 
     /**
-     * @ORM\Column(name="name_slug", type="string", length=255)
+     * @ORM\Column(name="name_slug", type="string")
      * @Assert\NotBlank
      */
     private string $nameSlug;
 
     /**
-     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @ORM\Column(name="email", type="string", unique=true)
      * @Assert\NotBlank
      * @AppUserAssert\Email
      */
     private string $email;
 
     /**
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string")
      * @Assert\NotBlank
      */
     private string $password;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="role", type="string")
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Domain\Model\UserRole", "getChoices"})
      */
-    private DateTime $createdAt;
+    private string $role;
 
     /**
-     * @ORM\Column(name="last_updated_at", type="datetime")
+     * @ORM\Column(name="status", type="string")
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Domain\Model\UserStatus", "getChoices"})
      */
-    private DateTime $lastUpdatedAt;
-
-    public function __construct()
-    {
-        // init values
-        $this->generateId()
-            ->setCreatedAt(new DateTime())
-            ->updateLastUpdatedAt()
-        ;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function setId(string $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function generateId(): self
-    {
-        $this->setId(Uuid::v4()->toRfc4122());
-
-        return $this;
-    }
+    private string $status;
 
     public function getGender(): string
     {
         return $this->gender;
     }
 
-    public function setGender(string $gender): self
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
     public function updateGender(string $gender): self
     {
         $this->setGender($gender);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -126,19 +85,10 @@ class User
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        $slugger = new AsciiSlugger();
-        $this->nameSlug = $slugger->slug($name)->lower()->toString();
-
-        return $this;
-    }
-
     public function rename(string $name): self
     {
         $this->setName($name);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -153,16 +103,10 @@ class User
         return $this->email;
     }
 
-    public function setEmail(string $email): self
-    {
-        $this->email = (new UnicodeString($email))->lower()->toString();
-
-        return $this;
-    }
-
     public function updateEmail(string $email): self
     {
         $this->setEmail($email);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -172,47 +116,81 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function updatePassword(string $password): self
+    {
+        $this->setPassword($password);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function updateRole(string $role): self
+    {
+        $this->setRole($role);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function updateStatus(string $status): self
+    {
+        $this->setStatus($status);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    private function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    private function setName(string $name): self
+    {
+        $this->name = $name;
+
+        $slugger = new AsciiSlugger();
+        $this->nameSlug = $slugger->slug($name)->lower()->toString();
+
+        return $this;
+    }
+
+    private function setEmail(string $email): self
+    {
+        $this->email = (new UnicodeString($email))->lower()->toString();
+
+        return $this;
+    }
+
+    private function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function updatePassword(string $password): self
+    private function setRole(string $role): self
     {
-        $this->setPassword($password);
+        $this->role = $role;
 
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    private function setStatus(string $status): self
     {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTime $date): self
-    {
-        $this->createdAt = $date;
-
-        return $this;
-    }
-
-    public function getLastUpdatedAt(): DateTime
-    {
-        return $this->lastUpdatedAt;
-    }
-
-    public function setLastUpdatedAt(DateTime $date): self
-    {
-        $this->lastUpdatedAt = $date;
-
-        return $this;
-    }
-
-    public function updateLastUpdatedAt(): self
-    {
-        $this->setLastUpdatedAt(new DateTime());
+        $this->status = $status;
 
         return $this;
     }

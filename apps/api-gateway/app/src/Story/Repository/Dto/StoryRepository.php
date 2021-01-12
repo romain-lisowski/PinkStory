@@ -6,11 +6,14 @@ namespace App\Story\Repository\Dto;
 
 use App\Language\Model\Dto\LanguageMedium;
 use App\Repository\Dto\AbstractRepository;
+use App\Story\Model\Dto\Story;
 use App\Story\Model\Dto\StoryForUpdate;
 use App\Story\Model\Dto\StoryFull;
 use App\Story\Model\Dto\StoryFullChild;
 use App\Story\Model\Dto\StoryFullParent;
 use App\Story\Model\Dto\StoryMedium;
+use App\Story\Model\Dto\StoryMediumChild;
+use App\Story\Model\Dto\StoryMediumParent;
 use App\Story\Query\StoryGetForUpdateQuery;
 use App\Story\Query\StoryGetQuery;
 use App\Story\Query\StorySearchQuery;
@@ -45,7 +48,8 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->andWhere($qb->expr()->eq('story.id', ':story_id'))
+        $qb->addSelect('story.content as story_content')
+            ->andWhere($qb->expr()->eq('story.id', ':story_id'))
             ->setParameter('story_id', $query->id)
         ;
 
@@ -58,12 +62,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $stories = new ArrayCollection();
 
         $userLanguage = new LanguageMedium(strval($data['user_language_id']));
-        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $userLanguage);
+        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), new DateTime(strval($data['user_created_at'])), $userLanguage);
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
         if (null === $data['story_parent_id']) {
-            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+            $story = new StoryFullParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
             $stories->add($story);
 
             $storyChildren = $this->getChildren($story->getId());
@@ -87,7 +91,7 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
                 $stories->add($storyNext);
             }
 
-            $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language, $storyParent, $storyPrevious, $storyNext);
+            $story = new StoryFullChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language, $storyParent, $storyPrevious, $storyNext);
             $stories->add($story);
         }
 
@@ -96,6 +100,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $this->storyImageRepository->populateStories($stories, $query->languageId);
 
         $this->storyThemeRepository->populateStories($stories, $query->languageId);
+
+        $this->populateStoryMediumParents($stories);
+
+        $this->populateStoryMediumChildren($stories);
 
         return $story;
     }
@@ -106,7 +114,8 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->andWhere($qb->expr()->eq('story.id', ':story_id'))
+        $qb->addSelect('story.content as story_content')
+            ->andWhere($qb->expr()->eq('story.id', ':story_id'))
             ->setParameter('story_id', $query->id)
         ;
 
@@ -119,11 +128,11 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $stories = new ArrayCollection();
 
         $userLanguage = new LanguageMedium(strval($data['user_language_id']));
-        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $userLanguage);
+        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), new DateTime(strval($data['user_created_at'])), $userLanguage);
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        $story = new StoryForUpdate(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        $story = new StoryForUpdate(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
         $stories->add($story);
 
         $this->storyRatingRepository->populateStories($stories);
@@ -153,6 +162,12 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ;
         }
 
+        if (StorySearchQuery::TYPE_PARENT === $query->type) {
+            $qb->andWhere($qb->expr()->isNull('story.parent_id'));
+        } elseif (StorySearchQuery::TYPE_CHILD === $query->type) {
+            $qb->andWhere($qb->expr()->isNotNull('story.parent_id'));
+        }
+
         $this->filterSearchQueryBuilderByStoryThemes($qb, $query->storyThemeIds);
 
         $data = $qb->execute()->fetch();
@@ -176,11 +191,18 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
             ;
         }
 
+        if (StorySearchQuery::TYPE_PARENT === $query->type) {
+            $qb->andWhere($qb->expr()->isNull('story.parent_id'));
+        } elseif (StorySearchQuery::TYPE_CHILD === $query->type) {
+            $qb->andWhere($qb->expr()->isNotNull('story.parent_id'));
+        }
+
         if (StorySearchQuery::ORDER_POPULAR === $query->order) {
             $subQb = $this->getEntityManager()->getConnection()->createQueryBuilder();
             $subQb->select('avg(rate)')
                 ->from('sty_story_rating', 'storyRating')
                 ->where($subQb->expr()->eq('storyRating.story_id', 'story.id'))
+                ->groupBy('story_id')
             ;
             $qb->addSelect('coalesce(('.$subQb->getSQL().'), 0) as story_rate');
 
@@ -210,6 +232,10 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
         $this->storyImageRepository->populateStories($stories, $query->languageId);
 
         $this->storyThemeRepository->populateStories($stories, $query->languageId);
+
+        $this->populateStoryMediumParents($stories);
+
+        $this->populateStoryMediumChildren($stories);
 
         return $stories;
     }
@@ -328,11 +354,11 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
 
     private function createBaseQueryBuilder(QueryBuilder $qb): void
     {
-        $qb->select('story.id as story_id', 'story.title as story_title', 'story.title_slug as story_title_slug', 'story.content as story_content', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
+        $qb->select('story.id as story_id', 'story.title as story_title', 'story.title_slug as story_title_slug', 'story.extract as story_extract', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
             ->from('sty_story', 'story')
             ->addSelect('story_language.id as story_language_id')
             ->join('story', 'lng_language', 'story_language', $qb->expr()->eq('story_language.id', 'story.language_id'))
-            ->addSelect('u.id as user_id', 'u.image_defined as user_image_defined', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.created_at as user_created_at')
+            ->addSelect('u.id as user_id', 'u.image_defined as user_image_defined', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.gender as user_gender', 'u.created_at as user_created_at')
             ->join('story', 'usr_user', 'u', $qb->expr()->eq('u.id', 'story.user_id'))
             ->addSelect('u_language.id as user_language_id')
             ->join('u', 'lng_language', 'u_language', $qb->expr()->eq('u_language.id', 'u.language_id'))
@@ -342,10 +368,81 @@ final class StoryRepository extends AbstractRepository implements StoryRepositor
     private function populateMedium(array $data): StoryMedium
     {
         $userLanguage = new LanguageMedium(strval($data['user_language_id']));
-        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), new DateTime(strval($data['user_created_at'])), $userLanguage);
+        $user = new UserMedium(strval($data['user_id']), boolval($data['user_image_defined']), strval($data['user_name']), strval($data['user_name_slug']), strval($data['user_gender']), new DateTime(strval($data['user_created_at'])), $userLanguage);
 
         $language = new LanguageMedium(strval($data['story_language_id']));
 
-        return new StoryMedium(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_content']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        if (null === $data['story_parent_id']) {
+            return new StoryMediumParent(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
+        }
+
+        return new StoryMediumChild(strval($data['story_id']), strval($data['story_title']), strval($data['story_title_slug']), strval($data['story_extract']), new DateTime(strval($data['story_created_at'])), $user, $language);
+    }
+
+    private function populateStoryMediumParents(Collection $stories): void
+    {
+        $storyMediumParents = $stories->filter(function ($story) {
+            return $story instanceof StoryMediumParent;
+        });
+        $storyMediumParentIds = Story::extractIds($storyMediumParents);
+
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $qb->select('count(id) as total', 'parent_id')
+            ->from('sty_story')
+            ->where($qb->expr()->in('parent_id', ':parent_ids'))
+            ->setParameter('parent_ids', $storyMediumParentIds, Connection::PARAM_STR_ARRAY)
+            ->groupBy('parent_id')
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        foreach ($datas as $data) {
+            foreach ($storyMediumParents as $storyMediumParent) {
+                if ($storyMediumParent->getId() === strval($data['parent_id'])) {
+                    $storyMediumParent->setChildrenTotal(intval($data['total']));
+
+                    // no break here cause there are multiple clone of same parent story
+                }
+            }
+        }
+    }
+
+    private function populateStoryMediumChildren(Collection $stories): void
+    {
+        $storyMediumChildren = $stories->filter(function ($story) {
+            return $story instanceof StoryMediumChild;
+        });
+        $storyMediumChildIds = Story::extractIds($storyMediumChildren);
+
+        $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb);
+
+        $qb->addSelect('child_story.id as child_story_id')
+            ->join('story', 'sty_story', 'child_story', $qb->expr()->andX(
+                $qb->expr()->eq('child_story.parent_id', 'story.id'),
+                $qb->expr()->in('child_story.id', ':story_id')
+            ))
+            ->setParameter('story_id', $storyMediumChildIds, Connection::PARAM_STR_ARRAY)
+        ;
+
+        $datas = $qb->execute()->fetchAll();
+
+        $storyParents = new ArrayCollection();
+
+        foreach ($datas as $data) {
+            foreach ($storyMediumChildren as $storyMediumChild) {
+                if ($storyMediumChild->getId() === strval($data['child_story_id'])) {
+                    $storyParent = $this->populateMedium($data);
+                    $storyMediumChild->setParent($storyParent);
+                    $storyParents->add($storyParent);
+
+                    break;
+                }
+            }
+        }
+
+        $this->populateStoryMediumParents($storyParents);
     }
 }

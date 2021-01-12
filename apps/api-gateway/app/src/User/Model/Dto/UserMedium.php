@@ -9,6 +9,7 @@ use App\Language\Model\Dto\LanguageableTrait;
 use App\Language\Model\LanguageableInterface;
 use App\User\Model\UserEditableInterface;
 use App\User\Model\UserEditableTrait;
+use App\User\Model\UserGender;
 use DateTime;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -31,6 +32,16 @@ class UserMedium extends User implements UserEditableInterface, LanguageableInte
     /**
      * @Serializer\Groups({"serializer"})
      */
+    private string $gender;
+
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
+    private string $genderReading;
+
+    /**
+     * @Serializer\Groups({"serializer"})
+     */
     private DateTime $createdAt;
 
     /**
@@ -40,13 +51,15 @@ class UserMedium extends User implements UserEditableInterface, LanguageableInte
      */
     private bool $editable = false;
 
-    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', DateTime $createdAt, Language $language)
+    public function __construct(string $id = '', bool $imageDefined = false, string $name = '', string $nameSlug = '', string $gender = UserGender::UNDEFINED, DateTime $createdAt, Language $language)
     {
         parent::__construct($id, $imageDefined);
 
         $this->user = $this;
         $this->name = $name;
         $this->nameSlug = $nameSlug;
+        $this->gender = $gender;
+        $this->genderReading = '';
         $this->createdAt = $createdAt;
         $this->language = $language;
     }
@@ -59,6 +72,26 @@ class UserMedium extends User implements UserEditableInterface, LanguageableInte
     public function getNameSlug(): string
     {
         return $this->nameSlug;
+    }
+
+    public function getGender(): string
+    {
+        return $this->gender;
+    }
+
+    public function getGenderReading(): string
+    {
+        return $this->genderReading;
+    }
+
+    /**
+     * Used for normalizer (during serialization).
+     */
+    public function setGenderReading(string $genderReading): self
+    {
+        $this->genderReading = $genderReading;
+
+        return $this;
     }
 
     public function getCreatedAt(): DateTime

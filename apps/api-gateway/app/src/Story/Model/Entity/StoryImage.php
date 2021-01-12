@@ -12,6 +12,7 @@ use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use App\Model\Entity\AbstractEntity;
 use App\Story\Exception\StoryThemeDepthException;
+use App\Story\Repository\Entity\StoryThemeRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -133,12 +134,44 @@ class StoryImage extends AbstractEntity implements ImageableInterface, Translata
         foreach ($this->getStoryImageHasStoryThemes() as $storyImageHasStoryTheme) {
             if ($storyImageHasStoryTheme->getStoryTheme()->getId() === $storyTheme->getId()) {
                 $exists = true;
+
+                break;
             }
         }
 
         if (false === $exists) {
             new StoryImageHasStoryTheme($this, $storyTheme);
         }
+
+        return $this;
+    }
+
+    public function addStoryThemes(array $storyThemeIds, StoryThemeRepositoryInterface $storyThemeRepository): self
+    {
+        foreach ($storyThemeIds as $storyThemeId) {
+            $storyTheme = $storyThemeRepository->findOne($storyThemeId);
+            $this->addStoryTheme($storyTheme);
+        }
+
+        return $this;
+    }
+
+    public function cleanStoryThemes(array $storyThemeIds): self
+    {
+        foreach ($this->storyImageHasStoryThemes as $storyImageHasStoryTheme) {
+            if (false === in_array($storyImageHasStoryTheme->getStoryTheme()->getId(), $storyThemeIds)) {
+                $this->removeStoryImageHasStoryTheme($storyImageHasStoryTheme);
+            }
+        }
+
+        return $this;
+    }
+
+    public function updateStoryThemes(array $storyThemeIds, StoryThemeRepositoryInterface $storyThemeRepository): self
+    {
+        $this->addStoryThemes($storyThemeIds, $storyThemeRepository)
+            ->cleanStoryThemes($storyThemeIds)
+        ;
 
         return $this;
     }

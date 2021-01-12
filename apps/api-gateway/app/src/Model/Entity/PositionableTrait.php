@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use App\Exception\PositionUpdateException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -50,7 +51,7 @@ trait PositionableTrait
         return $this;
     }
 
-    public static function resetPosition(Collection $positionnedItems): void
+    public static function resetPositions(Collection $positionnedItems): void
     {
         $position = 1;
         $positionnedItems = $positionnedItems->toArray();
@@ -63,5 +64,33 @@ trait PositionableTrait
             $positionnedItem->updatePosition($position);
             ++$position;
         }, $positionnedItems);
+    }
+
+    public static function updatePositions(Collection $positionnedItems, Collection $newPositionnedItemIds): void
+    {
+        foreach ($positionnedItems as $positionnedItem) {
+            if (!$positionnedItem instanceof PositionableInterface || !$positionnedItem instanceof IdentifiableInterface) {
+                throw new PositionUpdateException();
+            }
+
+            $position = 1;
+            $foundItem = false;
+
+            foreach ($newPositionnedItemIds as $newPositionnedItemId) {
+                if ($positionnedItem->getId() === (string) $newPositionnedItemId) {
+                    $positionnedItem->updatePosition($position);
+
+                    $foundItem = true;
+
+                    break;
+                }
+
+                ++$position;
+            }
+
+            if (false === $foundItem) {
+                throw new PositionUpdateException();
+            }
+        }
     }
 }

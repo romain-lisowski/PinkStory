@@ -4,6 +4,7 @@ exception:
     error: An error occured.
     image_upload: An error occured during image upload.
     invalid_ssl_key: The SSL key is not valid.
+    position_update: An error occured during position update.
 
 file:
     exception:
@@ -28,6 +29,26 @@ user:
         invalid_email: The email address is not valid.
         password_match: The passwords must match.
         password_strenght: The password is not complex enough.
+
+user_gender:
+    value:
+        undefined: Undefined
+        male: Man
+        female: Woman
+        other: Other
+
+user_role:
+    value:
+        role_god: God
+        role_admin: Admin
+        role_moderator: Moderator
+        role_editor: Editor
+        role_user: User
+
+user_status:
+    value:
+        activated: Activated
+        blocked: Blocked
 
 validator:
     exception: The validator reports errors.

@@ -49,28 +49,10 @@ final class StoryUpdateCommandHandler extends AbstractCommandHandler
 
         $story->updateTitle($this->command->title);
         $story->updateContent($this->command->content);
-
-        if (null !== $this->command->storyImageId) {
-            $storyImage = $this->storyImageRepository->findOne($this->command->storyImageId);
-            $story->updateStoryImage($storyImage);
-        }
-
-        if (null !== $this->command->languageId) {
-            $language = $this->languageRepository->findOne($this->command->languageId);
-            $story->updateLanguage($language);
-        }
-
-        foreach ($this->command->storyThemeIds as $storyThemeId) {
-            $storyTheme = $this->storyThemeRepository->findOne($storyThemeId);
-            $story->addStoryTheme($storyTheme);
-        }
-
-        foreach ($story->getStoryHasStoryThemes() as $storyHasStoryTheme) {
-            if (false === in_array($storyHasStoryTheme->getStoryTheme()->getId(), $this->command->storyThemeIds)) {
-                $story->removeStoryHasStoryTheme($storyHasStoryTheme);
-            }
-        }
-
+        $story->updateExtract($this->command->extract);
+        $story->updateStoryImage(null !== $this->command->storyImageId ? $this->storyImageRepository->findOne($this->command->storyImageId) : null);
+        $story->updateLanguage($this->languageRepository->findOne($this->command->languageId));
+        $story->updateStoryThemes($this->command->storyThemeIds, $this->storyThemeRepository);
         $story->updateLastUpdatedAt();
 
         $this->validatorManager->validate($story);

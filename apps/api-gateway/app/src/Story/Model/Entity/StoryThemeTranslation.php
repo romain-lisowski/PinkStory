@@ -11,27 +11,28 @@ use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
-use Symfony\Component\Serializer\Annotation as Serializer;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="sty_story_theme_translation")
+ * @ORM\Table(name="sty_story_theme_translation", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_STORY_THEME_TRANSLATION", columns={"story_theme_id", "language_id"})})
  * @ORM\Entity(repositoryClass="App\Story\Repository\Entity\StoryThemeTranslationRepository")
+ * @UniqueEntity(
+ *      fields = {"storyTheme", "language"}
+ * )
  */
 class StoryThemeTranslation extends AbstractTranslation implements EditableInterface
 {
     use EditableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title_slug", type="string", length=255)
      */

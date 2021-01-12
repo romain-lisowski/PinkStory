@@ -38,12 +38,10 @@ final class StoryCreateAction extends AbstractAction
     public function run(Request $request): Response
     {
         $command = new StoryCreateCommand();
-        $command->parentId = $request->attributes->get('parent_id') ?: null;
+        $command->parentId = $request->attributes->get('parent_id');
         $command->userId = $this->userSecurityManager->getCurrentUser()->getId();
 
         $this->formManager->initForm($command)->handleRequest($request);
-
-        $command->languageId = $command->languageId ?: $request->get('current-language')->getId();
 
         $this->handler->setCommand($command)->handle();
 

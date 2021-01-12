@@ -26,9 +26,9 @@ final class StoryFullChild extends StoryFull
      */
     private ?StoryMedium $next;
 
-    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', DateTime $createdAt, User $user, Language $language, StoryMedium $parent, ?StoryMedium $previous = null, ?StoryMedium $next = null)
+    public function __construct(string $id = '', string $title = '', string $titleSlug = '', string $content = '', string $extract = '', DateTime $createdAt, User $user, Language $language, StoryMedium $parent, ?StoryMedium $previous = null, ?StoryMedium $next = null)
     {
-        parent::__construct($id, $title, $titleSlug, $content, $createdAt, $user, $language);
+        parent::__construct($id, $title, $titleSlug, $content, $extract, $createdAt, $user, $language);
 
         $this->parent = $parent;
         $this->previous = $previous;

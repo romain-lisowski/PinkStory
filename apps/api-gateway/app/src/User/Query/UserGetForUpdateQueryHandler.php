@@ -28,7 +28,7 @@ final class UserGetForUpdateQueryHandler extends AbstractQueryHandler
     {
         $this->validatorManager->validate($this->query);
 
-        $user = $this->userRepository->getOneForUpdate($this->query->id);
+        $user = $this->userRepository->getOneForUpdate($this->query);
 
         $this->authorizationManager->isGranted(EditableInterface::UPDATE, $user);
 

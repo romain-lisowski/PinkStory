@@ -25,4 +25,18 @@ final class StoryRepository extends ServiceEntityRepository implements StoryRepo
 
         return $qb->getQuery()->getSingleResult();
     }
+
+    public function findOneParent(string $id): Story
+    {
+        $qb = $this->createQueryBuilder('story');
+
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('story.id', ':story_id'),
+            $qb->expr()->isNull('story.parent')
+        ))
+            ->setParameter('story_id', $id)
+        ;
+
+        return $qb->getQuery()->getSingleResult();
+    }
 }

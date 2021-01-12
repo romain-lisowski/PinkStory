@@ -10,9 +10,11 @@ use App\Language\Model\Entity\Language;
 use App\Language\Model\Entity\LanguageableInterface;
 use App\Language\Model\Entity\LanguageableTrait;
 use App\Language\Model\LanguageInterface;
+use App\Language\Repository\Entity\LanguageRepositoryInterface;
 use App\Model\Entity\AbstractEntity;
 use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryRating;
+use App\User\Model\UserGender;
 use App\User\Model\UserInterface as ModelUserInterface;
 use App\User\Model\UserRole;
 use App\User\Model\UserStatus;
@@ -24,7 +26,6 @@ use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Uid\Uuid;
@@ -44,21 +45,25 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     use LanguageableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
      */
     private string $name;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="name_slug", type="string", length=255)
      */
     private string $nameSlug;
 
     /**
-     * @Serializer\Groups({"serializer"})
+     * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserGender", "getChoices"})
+     * @ORM\Column(name="gender", type="string", length=255)
+     */
+    private string $gender;
+
+    /**
      * @Assert\NotBlank
      * @AppUserAssert\Email
      * @ORM\Column(name="email", type="string", length=255, unique=true)
@@ -115,12 +120,14 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
     /**
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserRole", "getChoices"})
      * @ORM\Column(name="role", type="string", length=255)
      */
     private string $role;
 
     /**
      * @Assert\NotBlank
+     * @Assert\Choice(callback={"App\User\Model\UserStatus", "getChoices"})
      * @ORM\Column(name="status", type="string", length=255)
      */
     private string $status;
@@ -132,11 +139,15 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     private bool $imageDefined;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
     private LanguageInterface $language;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\User\Model\Entity\UserHasReadingLanguage", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $userHasReadingLanguages;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\Story", mappedBy="user", cascade={"remove"})
@@ -149,13 +160,14 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
      */
     private Collection $storyRatings;
 
-    public function __construct(string $name = '', string $email = '', string $role = UserRole::ROLE_USER, string $status = UserStatus::ACTIVATED, Language $language)
+    public function __construct(string $name = '', string $gender = UserGender::UNDEFINED, string $email = '', string $role = UserRole::ROLE_USER, string $status = UserStatus::ACTIVATED, Language $language)
     {
         parent::__construct();
 
         // init zero values
         $this->name = '';
         $this->nameSlug = '';
+        $this->gender = UserGender::UNDEFINED;
         $this->email = '';
         $this->emailValidated = false;
         $this->emailValidationCode = sprintf('%06d', random_int(0, 999999));
@@ -168,11 +180,13 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
         $this->role = UserRole::ROLE_USER;
         $this->status = UserStatus::ACTIVATED;
         $this->imageDefined = false;
+        $this->userHasReadingLanguages = new ArrayCollection();
         $this->stories = new ArrayCollection();
         $this->storyRatings = new ArrayCollection();
 
         // init values
         $this->setName($name)
+            ->setGender($gender)
             ->setEmail($email)
             ->setRole($role)
             ->setStatus($status)
@@ -205,6 +219,25 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
     public function getNameSlug(): string
     {
         return $this->nameSlug;
+    }
+
+    public function getGender(): string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function updateGender(string $gender): self
+    {
+        $this->setGender($gender);
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -473,7 +506,7 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
     public function getUsername(): string
     {
-        return $this->email;
+        return $this->getId();
     }
 
     public function getRoles(): array
@@ -489,6 +522,74 @@ class User extends AbstractEntity implements UserInterface, ModelUserInterface, 
 
     public function eraseCredentials(): void
     {
+    }
+
+    public function getUserHasReadingLanguages(): Collection
+    {
+        return $this->userHasReadingLanguages;
+    }
+
+    public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+
+        return $this;
+    }
+
+    public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+
+        return $this;
+    }
+
+    public function addReadingLanguage(Language $language): self
+    {
+        $exists = false;
+
+        foreach ($this->getUserHasReadingLanguages() as $userHasReadingLanguage) {
+            if ($userHasReadingLanguage->getLanguage()->getId() === $language->getId()) {
+                $exists = true;
+
+                break;
+            }
+        }
+
+        if (false === $exists) {
+            new UserHasReadingLanguage($this, $language);
+        }
+
+        return $this;
+    }
+
+    public function addReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
+    {
+        foreach ($readingLanguageIds as $readingLanguageId) {
+            $readingLanguage = $languageRepository->findOne($readingLanguageId);
+            $this->addReadingLanguage($readingLanguage);
+        }
+
+        return $this;
+    }
+
+    public function cleanReadingLanguages(array $readingLanguageIds): self
+    {
+        foreach ($this->userHasReadingLanguages as $userHasReadingLanguage) {
+            if (false === in_array($userHasReadingLanguage->getLanguage()->getId(), $readingLanguageIds)) {
+                $this->removeUserHasReadingLanguage($userHasReadingLanguage);
+            }
+        }
+
+        return $this;
+    }
+
+    public function updateReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
+    {
+        $this->addReadingLanguages($readingLanguageIds, $languageRepository)
+            ->cleanReadingLanguages($readingLanguageIds)
+        ;
+
+        return $this;
     }
 
     public function getStories(): Collection

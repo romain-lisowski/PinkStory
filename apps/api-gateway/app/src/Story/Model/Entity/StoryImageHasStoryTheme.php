@@ -8,10 +8,14 @@ use App\Model\EditableInterface;
 use App\Model\EditableTrait;
 use App\Model\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table(name="sty_story_image_has_story_theme")
+ * @ORM\Table(name="sty_story_image_has_story_theme", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_STORY_IMAGE_HAS_STORY_THEME", columns={"story_image_id", "story_theme_id"})})
  * @ORM\Entity(repositoryClass="App\Story\Repository\Entity\StoryImageHasStoryThemeRepository")
+ * @UniqueEntity(
+ *      fields = {"storyImage", "storyTheme"}
+ * )
  */
 class StoryImageHasStoryTheme extends AbstractEntity implements EditableInterface
 {

@@ -47,6 +47,8 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
             foreach ($storyThemes as $storyTheme) {
                 if ($storyThemeChildTmp['parent_id'] === $storyTheme->getId()) {
                     $storyTheme->addChild($storyThemeChildTmp['story_theme']);
+
+                    break;
                 }
             }
         }
@@ -82,6 +84,8 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 if ($storyImage->getId() === strval($data['story_image_id'])) {
                     $storyTheme = new StoryThemeMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
                     $storyImage->addStoryTheme($storyTheme);
+
+                    break;
                 }
             }
         }
@@ -115,6 +119,8 @@ final class StoryThemeRepository extends AbstractRepository implements StoryThem
                 if ($story->getId() === strval($data['story_id'])) {
                     $storyTheme = new StoryThemeMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
                     $story->addStoryTheme($storyTheme);
+
+                    break;
                 }
             }
         }

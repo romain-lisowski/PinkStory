@@ -3,6 +3,9 @@ security:
     encoders:
         App\User\Model\Entity\User:
             algorithm: sodium
+    providers:
+        user_provider:
+            id: App\User\Security\UserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

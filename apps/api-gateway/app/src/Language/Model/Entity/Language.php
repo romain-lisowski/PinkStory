@@ -14,6 +14,7 @@ use App\Story\Model\Entity\Story;
 use App\Story\Model\Entity\StoryImageTranslation;
 use App\Story\Model\Entity\StoryThemeTranslation;
 use App\User\Model\Entity\User;
+use App\User\Model\Entity\UserHasReadingLanguage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,6 +52,11 @@ class Language extends AbstractEntity implements LanguageInterface, ImageableInt
     private Collection $users;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\User\Model\Entity\UserHasReadingLanguage", mappedBy="language")
+     */
+    private Collection $userHasReadingLanguages;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Model\Entity\Story", mappedBy="language")
      */
     private Collection $stories;
@@ -73,6 +79,7 @@ class Language extends AbstractEntity implements LanguageInterface, ImageableInt
         $this->title = '';
         $this->locale = '';
         $this->users = new ArrayCollection();
+        $this->userHasReadingLanguages = new ArrayCollection();
         $this->stories = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
         $this->storyImageTranslations = new ArrayCollection();
@@ -142,6 +149,25 @@ class Language extends AbstractEntity implements LanguageInterface, ImageableInt
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getUserHasReadingLanguages(): Collection
+    {
+        return $this->userHasReadingLanguages;
+    }
+
+    public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+
+        return $this;
+    }
+
+    public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
 
         return $this;
     }

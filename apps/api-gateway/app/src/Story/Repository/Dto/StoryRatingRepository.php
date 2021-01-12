@@ -7,13 +7,14 @@ namespace App\Story\Repository\Dto;
 use App\Repository\Dto\AbstractRepository;
 use App\Story\Model\Dto\Story;
 use App\Story\Model\Dto\StoryRatingForUpdate;
+use App\Story\Query\StoryRatingGetForUpdateQuery;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 final class StoryRatingRepository extends AbstractRepository implements StoryRatingRepositoryInterface
 {
-    public function getOneForUpdate(string $storyId, string $userId): ?StoryRatingForUpdate
+    public function getOneForUpdate(StoryRatingGetForUpdateQuery $query): ?StoryRatingForUpdate
     {
         $qb = $this->getEntityManager()->getConnection()->createQueryBuilder();
 
@@ -23,8 +24,8 @@ final class StoryRatingRepository extends AbstractRepository implements StoryRat
             $qb->expr()->eq('story_id', ':story_id'),
             $qb->expr()->eq('user_id', ':user_id')
         ))
-            ->setParameter('story_id', $storyId)
-            ->setParameter('user_id', $userId)
+            ->setParameter('story_id', $query->storyId)
+            ->setParameter('user_id', $query->userId)
         ;
 
         $data = $qb->execute()->fetch();
@@ -55,6 +56,8 @@ final class StoryRatingRepository extends AbstractRepository implements StoryRat
             foreach ($stories as $story) {
                 if ($story->getId() === strval($data['story_id'])) {
                     $story->addRate(intval($data['rate']));
+
+                    break;
                 }
             }
         }

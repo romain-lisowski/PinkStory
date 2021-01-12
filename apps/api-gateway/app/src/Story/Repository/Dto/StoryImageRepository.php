@@ -92,6 +92,8 @@ final class StoryImageRepository extends AbstractRepository implements StoryImag
                 if ($story->getId() === strval($data['story_id'])) {
                     $storyImage = new StoryImageMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
                     $story->setStoryImage($storyImage);
+
+                    break;
                 }
             }
         }

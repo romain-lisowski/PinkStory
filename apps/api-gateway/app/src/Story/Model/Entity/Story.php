@@ -14,6 +14,7 @@ use App\Model\Entity\DepthableTrait;
 use App\Model\Entity\PositionableInterface;
 use App\Model\Entity\PositionableTrait;
 use App\Story\Exception\StoryThemeDepthException;
+use App\Story\Repository\Entity\StoryThemeRepositoryInterface;
 use App\User\Model\Entity\User;
 use App\User\Model\Entity\UserEditableInterface;
 use App\User\Model\Entity\UserEditableTrait;
@@ -22,7 +23,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
-use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,35 +38,39 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     use PositionableTrait;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private string $title;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="title_slug", type="string", length=255)
      */
     private string $titleSlug;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @Assert\NotBlank
      * @ORM\Column(name="content", type="text")
      */
     private string $content;
 
     /**
-     * @Serializer\Groups({"serializer"})
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max = 140
+     * )
+     * @ORM\Column(name="extract", type="text")
+     */
+    private string $extract;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\User\Model\Entity\User", inversedBy="stories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private UserInterface $user;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Language\Model\Entity\Language", inversedBy="stories")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
      */
@@ -85,7 +89,6 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     private Collection $children;
 
     /**
-     * @Serializer\Groups({"serializer"})
      * @ORM\ManyToOne(targetEntity="App\Story\Model\Entity\StoryImage", inversedBy="stories")
      * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id")
      */
@@ -101,7 +104,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
      */
     private Collection $storyRatings;
 
-    public function __construct(string $title = '', string $content = '', User $user, Language $language, ?Story $parent = null, ?int $position = null, ?StoryImage $storyImage = null)
+    public function __construct(string $title = '', string $content = '', string $extract = '', User $user, Language $language, ?Story $parent = null, ?int $position = null, ?StoryImage $storyImage = null)
     {
         parent::__construct();
 
@@ -109,6 +112,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         $this->title = '';
         $this->titleSlug = '';
         $this->content = '';
+        $this->extract = '';
         $this->parent = null;
         $this->position = $position;
         $this->children = new ArrayCollection();
@@ -119,6 +123,7 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         // init values
         $this->setTitle($title)
             ->setContent($content)
+            ->setExtract($extract)
             ->setUser($user)
             ->setLanguage($language)
             ->setParent($parent)
@@ -168,6 +173,25 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
     public function updateContent(string $content): self
     {
         $this->setContent($content);
+
+        return $this;
+    }
+
+    public function getExtract(): string
+    {
+        return $this->extract;
+    }
+
+    public function setExtract(string $extract): self
+    {
+        $this->extract = $extract;
+
+        return $this;
+    }
+
+    public function updateExtract(string $extract): self
+    {
+        $this->setExtract($extract);
 
         return $this;
     }
@@ -264,12 +288,44 @@ class Story extends AbstractEntity implements UserEditableInterface, Languageabl
         foreach ($this->getStoryHasStoryThemes() as $storyHasStoryTheme) {
             if ($storyHasStoryTheme->getStoryTheme()->getId() === $storyTheme->getId()) {
                 $exists = true;
+
+                break;
             }
         }
 
         if (false === $exists) {
             new StoryHasStoryTheme($this, $storyTheme);
         }
+
+        return $this;
+    }
+
+    public function addStoryThemes(array $storyThemeIds, StoryThemeRepositoryInterface $storyThemeRepository): self
+    {
+        foreach ($storyThemeIds as $storyThemeId) {
+            $storyTheme = $storyThemeRepository->findOne($storyThemeId);
+            $this->addStoryTheme($storyTheme);
+        }
+
+        return $this;
+    }
+
+    public function cleanStoryThemes(array $storyThemeIds): self
+    {
+        foreach ($this->storyHasStoryThemes as $storyHasStoryTheme) {
+            if (false === in_array($storyHasStoryTheme->getStoryTheme()->getId(), $storyThemeIds)) {
+                $this->removeStoryHasStoryTheme($storyHasStoryTheme);
+            }
+        }
+
+        return $this;
+    }
+
+    public function updateStoryThemes(array $storyThemeIds, StoryThemeRepositoryInterface $storyThemeRepository): self
+    {
+        $this->addStoryThemes($storyThemeIds, $storyThemeRepository)
+            ->cleanStoryThemes($storyThemeIds)
+        ;
 
         return $this;
     }

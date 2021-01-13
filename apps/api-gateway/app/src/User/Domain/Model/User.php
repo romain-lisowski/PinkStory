@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Domain\Model;
 
 use App\Common\Domain\Model\AbstractEntity;
+use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -116,9 +117,9 @@ class User extends AbstractEntity
         return $this->password;
     }
 
-    public function updatePassword(string $password): self
+    public function updatePassword(string $plainPassword, UserPasswordEncoderInterface $passwordEncoder): self
     {
-        $this->setPassword($password);
+        $this->setPassword($plainPassword, $passwordEncoder);
         $this->updateLastUpdatedAt();
 
         return $this;
@@ -174,9 +175,9 @@ class User extends AbstractEntity
         return $this;
     }
 
-    private function setPassword(string $password): self
+    private function setPassword(string $plainPassword, UserPasswordEncoderInterface $passwordEncoder): self
     {
-        $this->password = $password;
+        $this->password = $passwordEncoder->encodePassword($plainPassword);
 
         return $this;
     }

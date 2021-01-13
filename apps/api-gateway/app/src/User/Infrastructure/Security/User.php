@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Infrastructure\Security;
+namespace App\User\Infrastructure\Security;
 
-use App\Common\Domain\Security\UserInterface as DomainUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class User implements DomainUserInterface, UserInterface
+final class User implements UserInterface
 {
     /**
      * @Assert\NotBlank

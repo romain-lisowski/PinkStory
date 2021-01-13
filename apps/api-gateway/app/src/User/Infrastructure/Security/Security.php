@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Infrastructure\Security;
+namespace App\User\Infrastructure\Security;
 
-use App\Common\Domain\Security\SecurityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class Security implements SecurityInterface

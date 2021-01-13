@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Infrastructure\Security;
+namespace App\User\Infrastructure\Security;
 
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\NoResultException;

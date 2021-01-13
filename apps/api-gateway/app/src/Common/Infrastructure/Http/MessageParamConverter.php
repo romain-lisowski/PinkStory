@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Http;
 
-use App\Common\Domain\Security\SecurityInterface;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Infrastructure\Messenger\MessageInterface;
+use App\User\Infrastructure\Security\SecurityInterface;
 use ReflectionClass;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;

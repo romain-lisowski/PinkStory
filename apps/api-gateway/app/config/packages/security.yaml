@@ -1,9 +1,12 @@
 security:
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\User\Domain\Model\User:
+            algorithm: sodium
     providers:
         user_provider:
-            id: App\Common\Infrastructure\Security\UserProvider
+            id: App\User\Infrastructure\Security\UserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -11,7 +14,7 @@ security:
         main:
             stateless: true
             custom_authenticators:
-                - App\Common\Infrastructure\Security\TokenAuthenticator
+                - App\User\Infrastructure\Security\TokenAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

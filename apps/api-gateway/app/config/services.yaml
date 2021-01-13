@@ -18,9 +18,9 @@ services:
         exclude:
             - '../src/Kernel.php'
             - '../src/**/*Exception.php'
-            - '../src/Infrastructure/Security/User.php'
             - '../src/*/Domain/Command/*Command.php'
             - '../src/*/Domain/Model'
+            - '../src/User/Infrastructure/Security/User.php'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

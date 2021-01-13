@@ -3,11 +3,6 @@ http:
         exception:
             message_conversion_failed: Some errors occured during message conversion process.
 
-security:
-    token_authenticator:
-        exception:
-            invalid_token: Invalid token provided.
-
 validator:
     exception:
         validation_failed: Some errors occured during validation process.
@@ -31,6 +26,10 @@ user:
             value:
                 activated: Activated
                 blocked: Blocked
+    security:
+        token_authenticator:
+            exception:
+                invalid_token: Invalid token provided.
     validator:
         constraint:
             invalid_email: The email address is not valid.

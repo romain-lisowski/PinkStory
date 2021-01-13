@@ -17,7 +17,7 @@ services:
         resource: '../src/'
         exclude:
             - '../src/Kernel.php'
-            - '../src/Common/Domain/Model'
+            - '../src/**/*Exception.php'
             - '../src/Infrastructure/Security/User.php'
             - '../src/*/Domain/Command/*Command.php'
             - '../src/*/Domain/Model'

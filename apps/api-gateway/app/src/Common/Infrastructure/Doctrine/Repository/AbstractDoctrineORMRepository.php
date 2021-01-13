@@ -6,24 +6,17 @@ namespace App\Common\Infrastructure\Doctrine\Repository;
 
 use App\Common\Domain\Model\AbstractEntity;
 use App\Common\Domain\Repository\RepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-abstract class AbstractDoctrineORMRepository implements RepositoryInterface
+abstract class AbstractDoctrineORMRepository extends ServiceEntityRepository implements RepositoryInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function persist(AbstractEntity $entity): void
     {
-        $this->entityManager->persist($entity);
+        $this->getEntityManager()->persist($entity);
     }
 
     public function flush(): void
     {
-        $this->entityManager->flush();
+        $this->getEntityManager()->flush();
     }
 }

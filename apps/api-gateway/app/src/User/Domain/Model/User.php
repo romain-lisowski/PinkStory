@@ -13,7 +13,7 @@ use Symfony\Component\String\UnicodeString;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\User\Infrastructure\Doctrine\Repository\UserDoctrineORMRepository")
  * @ORM\Table(name="usr_user")
  * @UniqueEntity(
  *      fields = {"email"}

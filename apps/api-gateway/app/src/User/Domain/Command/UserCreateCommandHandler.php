@@ -26,12 +26,12 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
     public function __invoke(UserCreateCommand $command): void
     {
         $user = (new User())
-            ->updateGender($command->getGender())
-            ->rename($command->getName())
-            ->updateEmail($command->getEmail())
-            ->updatePassword($command->getPassword(), $this->passwordEncoder)
-            ->updateRole($command->getRole())
-            ->updateStatus($command->getStatus())
+            ->setGender($command->getGender())
+            ->setName($command->getName())
+            ->setEmail($command->getEmail())
+            ->setPassword($command->getPassword(), $this->passwordEncoder)
+            ->setRole($command->getRole())
+            ->setStatus($command->getStatus())
         ;
 
         $this->validator->validate($user);

@@ -73,6 +73,13 @@ class User extends AbstractEntity
         return $this->gender;
     }
 
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
     public function updateGender(string $gender): self
     {
         $this->setGender($gender);
@@ -86,7 +93,17 @@ class User extends AbstractEntity
         return $this->name;
     }
 
-    public function rename(string $name): self
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        $slugger = new AsciiSlugger();
+        $this->nameSlug = $slugger->slug($name)->lower()->toString();
+
+        return $this;
+    }
+
+    public function updateName(string $name): self
     {
         $this->setName($name);
         $this->updateLastUpdatedAt();
@@ -104,6 +121,13 @@ class User extends AbstractEntity
         return $this->email;
     }
 
+    public function setEmail(string $email): self
+    {
+        $this->email = (new UnicodeString($email))->lower()->toString();
+
+        return $this;
+    }
+
     public function updateEmail(string $email): self
     {
         $this->setEmail($email);
@@ -115,6 +139,13 @@ class User extends AbstractEntity
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setPassword(string $plainPassword, UserPasswordEncoderInterface $passwordEncoder): self
+    {
+        $this->password = $passwordEncoder->encodePassword($plainPassword);
+
+        return $this;
     }
 
     public function updatePassword(string $plainPassword, UserPasswordEncoderInterface $passwordEncoder): self
@@ -130,6 +161,13 @@ class User extends AbstractEntity
         return $this->role;
     }
 
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     public function updateRole(string $role): self
     {
         $this->setRole($role);
@@ -143,55 +181,17 @@ class User extends AbstractEntity
         return $this->status;
     }
 
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function updateStatus(string $status): self
     {
         $this->setStatus($status);
         $this->updateLastUpdatedAt();
-
-        return $this;
-    }
-
-    private function setGender(string $gender): self
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    private function setName(string $name): self
-    {
-        $this->name = $name;
-
-        $slugger = new AsciiSlugger();
-        $this->nameSlug = $slugger->slug($name)->lower()->toString();
-
-        return $this;
-    }
-
-    private function setEmail(string $email): self
-    {
-        $this->email = (new UnicodeString($email))->lower()->toString();
-
-        return $this;
-    }
-
-    private function setPassword(string $plainPassword, UserPasswordEncoderInterface $passwordEncoder): self
-    {
-        $this->password = $passwordEncoder->encodePassword($plainPassword);
-
-        return $this;
-    }
-
-    private function setRole(string $role): self
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    private function setStatus(string $status): self
-    {
-        $this->status = $status;
 
         return $this;
     }

@@ -5,10 +5,7 @@
       <div
         class="py-8 px-6 md:p-8 lg:p-12 bg-primary-inverse bg-opacity-5 rounded-xl"
       >
-        <img
-          class="mx-auto w-32 md:w-48 object-cover rounded-2xl"
-          :src="require(`@/assets/images/${story.imagePath}`)"
-        />
+        <img class="mx-auto w-32 md:w-48 object-cover rounded-2xl" />
         <p class="py-4 text-xl md:text-2xl font-bold">
           {{ story.parentTitle }}
         </p>
@@ -33,7 +30,6 @@
       >
         <img
           class="mx-auto p-1/2 md:p-1 w-24 md:w-32 border-2 border-accent rounded-full"
-          :src="require('@/assets/images/profil.jpg')"
         />
         <p class="py-4 text-xl md:text-2xl font-bold">{{ story.author }}</p>
         <div class="flex">

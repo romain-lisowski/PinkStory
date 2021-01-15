@@ -5,7 +5,7 @@ export default {
     const response = await fetch(
       `${baseUrl}/story-theme/search?_locale=${locale}`,
       {
-        headers: { Authorization: `Bearer ${jwt}` },
+        headers: { Authorization: jwt ? `Bearer ${jwt}` : null },
       }
     )
 

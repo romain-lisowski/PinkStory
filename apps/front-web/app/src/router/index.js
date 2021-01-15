@@ -14,9 +14,10 @@ const routes = [
     component: HomePage,
   },
   {
-    path: '/story',
+    path: '/story/:storyId',
     name: 'Story',
     component: StoryPage,
+    props: true,
   },
   {
     path: '/search',

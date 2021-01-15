@@ -16,7 +16,23 @@ export default {
 
     url.search = searchParams.toString()
     const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${jwt}` },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
+      },
+    })
+
+    const responseJson = await response.json()
+    return { ok: response.ok, status: response.status, ...responseJson }
+  },
+
+  async get(jwt, storyId) {
+    const url = new URL(`${baseUrl}/story/${storyId}`)
+    const searchParams = new URLSearchParams()
+    searchParams.append('_locale', 'fr')
+    url.search = searchParams.toString()
+
+    const response = await fetch(url, {
+      headers: { Authorization: jwt ? `Bearer ${jwt}` : null },
     })
 
     const responseJson = await response.json()

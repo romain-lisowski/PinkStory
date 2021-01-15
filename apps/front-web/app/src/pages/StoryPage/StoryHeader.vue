@@ -10,14 +10,11 @@
     <div
       class="absolute pt-32 lg:pt-48 w-full h-128 sm:h-256 lg:h-screen bg-primary bg-opacity-50"
     >
-      <img
-        class="mx-auto w-1/3 sm:w-1/3 lg:w-1/4 object-cover rounded-2xl"
-        :src="require(`@/assets/images/${story.imagePath}`)"
-      />
+      <img class="mx-auto w-1/3 sm:w-1/3 lg:w-1/4 object-cover rounded-2xl" />
       <h2
         class="mt-8 lg:mt-20 text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-primary tracking-tighter leading-none"
       >
-        {{ story.parentTitle }}
+        story.parentTitle
       </h2>
       <h1
         class="mt-2 sm:mt-0 text-xl sm:text-3xl md:text-3xl lg:text-3xl xl:text-4xl text-primary"
@@ -39,6 +36,7 @@
 </template>
 
 <script>
+import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -48,7 +46,12 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const data = reactive({})
+    data.imageUrl = computed(() => {
+      return props.story.story_image.image_url
+    })
+
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -58,7 +61,7 @@ export default {
       },
     })
 
-    return { t }
+    return { data, t }
   },
 }
 </script>

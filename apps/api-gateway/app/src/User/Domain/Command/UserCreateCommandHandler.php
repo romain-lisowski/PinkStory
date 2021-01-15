@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\User\Domain\Command;
 
+use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
-use App\Common\Infrastructure\Messenger\CommandHandlerInterface;
 use App\User\Domain\Model\User;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\Security\UserPasswordEncoderInterface;

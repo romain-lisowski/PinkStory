@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Http;
 
+use App\Common\Domain\Message\MessageInterface;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
-use App\Common\Infrastructure\Messenger\MessageInterface;
 use App\User\Infrastructure\Security\SecurityInterface;
 use ReflectionClass;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;

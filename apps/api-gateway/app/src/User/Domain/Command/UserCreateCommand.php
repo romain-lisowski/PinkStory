@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Domain\Command;
 
-use App\Common\Infrastructure\Messenger\CommandInterface;
+use App\Common\Domain\Command\CommandInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 

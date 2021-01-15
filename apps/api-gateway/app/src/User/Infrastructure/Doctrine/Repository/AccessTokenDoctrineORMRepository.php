@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\User\Infrastructure\Doctrine\Repository;
+
+use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineORMRepository;
+use App\User\Domain\Model\AccessToken;
+use App\User\Domain\Repository\AccessTokenRepositoryInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
+final class AccessTokenDoctrineORMRepository extends AbstractDoctrineORMRepository implements AccessTokenRepositoryInterface
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, AccessToken::class);
+    }
+
+    public function findOne(string $id): AccessToken
+    {
+        $qb = $this->createQueryBuilder('accessToken');
+
+        $qb->where($qb->expr()->eq('accessToken.id', ':accessToken_id'))
+            ->setParameter('accessToken_id', $id)
+        ;
+
+        return $qb->getQuery()->getSingleResult();
+    }
+}

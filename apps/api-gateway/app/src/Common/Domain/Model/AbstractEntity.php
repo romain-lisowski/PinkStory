@@ -64,7 +64,7 @@ abstract class AbstractEntity
         return $this->lastUpdatedAt;
     }
 
-    protected function updateLastUpdatedAt(): self
+    public function updateLastUpdatedAt(): self
     {
         $this->setLastUpdatedAt(new DateTime());
 

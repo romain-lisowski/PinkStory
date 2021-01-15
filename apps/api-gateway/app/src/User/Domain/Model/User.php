@@ -7,6 +7,8 @@ namespace App\User\Domain\Model;
 use App\Common\Domain\Model\AbstractEntity;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -67,6 +69,19 @@ class User extends AbstractEntity
      * @Assert\Choice(callback={"App\User\Domain\Model\UserStatus", "getChoices"})
      */
     private string $status;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\User\Domain\Model\AccessToken", mappedBy="user", cascade={"remove"})
+     */
+    private Collection $accessTokens;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // init values
+        $this->accessTokens = new ArrayCollection();
+    }
 
     public function getGender(): string
     {
@@ -192,6 +207,25 @@ class User extends AbstractEntity
     {
         $this->setStatus($status);
         $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getAccessTokens(): Collection
+    {
+        return $this->accessTokens;
+    }
+
+    public function addAccessToken(AccessToken $accessToken): self
+    {
+        $this->accessTokens[] = $accessToken;
+
+        return $this;
+    }
+
+    public function removeAccessToken(AccessToken $accessToken): self
+    {
+        $this->accessTokens->removeElement($accessToken);
 
         return $this;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Security;
 
+use App\User\Domain\Repository\AccessTokenRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -15,8 +16,15 @@ use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Throwable;
 
-final class TokenAuthenticator extends AbstractAuthenticator
+final class AccessTokenAuthenticator extends AbstractAuthenticator
 {
+    private AccessTokenRepositoryInterface $accessTokenRepository;
+
+    public function __construct(AccessTokenRepositoryInterface $accessTokenRepository)
+    {
+        $this->accessTokenRepository = $accessTokenRepository;
+    }
+
     /**
      * Called on every request to decide if this authenticator should be
      * used for the request. Returning `false` will cause this authenticator
@@ -32,9 +40,13 @@ final class TokenAuthenticator extends AbstractAuthenticator
     public function authenticate(Request $request): PassportInterface
     {
         try {
-            $token = substr($request->headers->get('Authorization'), 7);
+            $accessTokenId = substr($request->headers->get('Authorization'), 7);
 
-            return new SelfValidatingPassport(new UserBadge($token));
+            $accessToken = $this->accessTokenRepository->findOne($accessTokenId);
+            $accessToken->updateLastUpdatedAt();
+            $this->accessTokenRepository->flush();
+
+            return new SelfValidatingPassport(new UserBadge($accessToken->getUser()->getId()));
         } catch (Throwable $e) {
             throw new AuthenticationException('', 0, new InvalidTokenException());
         }

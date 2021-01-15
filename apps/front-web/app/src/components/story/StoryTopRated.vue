@@ -10,7 +10,9 @@
         {{ t('see-best-stories') }} ></a
       >
     </div>
-    <StoryList :search-order="searchOrder" :search-sort="searchSort" />
+    <StoryList :search-order="searchOrder" :search-sort="searchSort">
+      <template #StoryListOrder>&nbsp;</template>
+    </StoryList>
   </div>
 </template>
 

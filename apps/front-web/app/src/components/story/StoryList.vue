@@ -1,5 +1,7 @@
 <template>
-  <StoryListOrder :nb-results="data.nbResults" />
+  <slot name="StoryListOrder">
+    <StoryListOrder :nb-results="data.nbResults" />
+  </slot>
   <ul class="flex flex-wrap -mx-6 mt-4 sm:mt-6 xl:mt-8 pt-2 pl-2 text-left">
     <StoryListItem
       v-for="(story, index) in data.stories"

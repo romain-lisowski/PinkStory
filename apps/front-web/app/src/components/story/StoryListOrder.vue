@@ -19,13 +19,6 @@
       >
         {{ t('date') }}
       </button>
-      <button
-        class="ml-4 px-4 py-3 border rounded-lg transition-all duration-300 ease-in"
-        :class="activeOrder === null ? activeClasses : ''"
-        @click="orderRandom"
-      >
-        {{ t('random') }}
-      </button>
     </span>
   </div>
 </template>
@@ -60,10 +53,6 @@ export default {
       changeOrder('ORDER_CREATED_AT')
     }
 
-    const orderRandom = () => {
-      changeOrder(null)
-    }
-
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -72,7 +61,6 @@ export default {
           'filter-by': 'Filtrer par',
           rate: 'Note',
           date: 'Date',
-          random: 'Aléatoire',
         },
       },
     })
@@ -82,7 +70,6 @@ export default {
       activeClasses,
       orderRate,
       orderDate,
-      orderRandom,
       changeOrder,
       t,
     }

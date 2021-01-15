@@ -6,44 +6,42 @@
         class="py-8 px-6 md:p-8 lg:p-12 bg-primary-inverse bg-opacity-5 rounded-xl"
       >
         <img class="mx-auto w-32 md:w-48 object-cover rounded-2xl" />
-        <p class="py-4 text-xl md:text-2xl font-bold">
-          {{ story.parentTitle }}
-        </p>
+        <p class="py-4 text-xl md:text-2xl font-bold">story.parentTitle</p>
         <div class="flex">
           <div class="flex flex-col pr-6 border-r-2">
             <span class="text-base md:text-lg">{{ t('reader-reviews') }}</span>
             <span class="text-xl md:text-2xl font-bold"
-              >{{ story.rating }} / 5</span
+              >{{ story.rate }} / 5</span
             >
           </div>
           <div class="flex flex-col pl-6">
             <span class="text-base md:text-lg">{{ t('chapters') }}</span>
-            <span class="text-xl md:text-2xl font-bold">{{
-              story.nbChapters
-            }}</span>
+            <span class="text-xl md:text-2xl font-bold">99</span>
           </div>
         </div>
       </div>
 
       <div
+        v-if="story.user"
         class="py-6 px-8 md:p-8 lg:p-12 bg-primary-inverse bg-opacity-5 rounded-xl"
       >
         <img
           class="mx-auto p-1/2 md:p-1 w-24 md:w-32 border-2 border-accent rounded-full"
+          :src="require('@/assets/images/profil.jpg')"
         />
-        <p class="py-4 text-xl md:text-2xl font-bold">{{ story.author }}</p>
+        <p class="py-4 text-xl md:text-2xl font-bold">
+          {{ story.user.name }}
+        </p>
         <div class="flex">
           <div class="flex flex-col pr-6 border-r-2">
             <span class="text-base md:text-lg">{{ t('registration') }}</span>
             <span class="text-xl md:text-2xl font-bold">{{
-              story.registration
+              story.user.created_at
             }}</span>
           </div>
           <div class="flex flex-col pl-6">
             <span class="text-base md:text-lg">{{ t('stories') }}</span>
-            <span class="text-xl md:text-2xl font-bold">{{
-              story.nbStories
-            }}</span>
+            <span class="text-xl md:text-2xl font-bold">99</span>
           </div>
         </div>
       </div>

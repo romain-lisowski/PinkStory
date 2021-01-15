@@ -9,38 +9,45 @@
       >{{ t('categories') }} :
       <span
         class="text-base sm:text-lg lg:text-xl font-normal text-accent-highlight"
-        >{{ story.categories }}</span
+        >{{ data.storyCategories }}</span
       >
     </span>
 
     <div class="flex justify-between w-full my-12">
       <div class="flex items-center">
-        <font-awesome-icon icon="chevron-left" class="text-2xl mr-1 md:mr-4" />
+        <font-awesome-icon
+          icon="chevron-left"
+          class="h-8 text-2xl mr-1 md:mr-4"
+        />
         <span class="flex flex-col">
           <span class="text-base sm:text-lg lg:text-xl text-left"
-            >{{ t('chapter') }} 11</span
+            >{{ t('chapter') }} 98</span
           >
-          <span class="text-sm md:text-base font-bold text-left">{{
+          <span class="text-sm md:text-base font-bold text-left">
             story.previousChapter
-          }}</span>
+          </span>
         </span>
       </div>
       <div class="flex items-center">
         <span class="flex flex-col">
           <span class="text-base sm:text-lg lg:text-xl text-right"
-            >{{ t('chapter') }} 13</span
+            >{{ t('chapter') }} 99</span
           >
-          <span class="text-sm md:text-base font-bold text-right">{{
+          <span class="text-sm md:text-base font-bold text-right">
             story.nextChapter
-          }}</span>
+          </span>
         </span>
-        <font-awesome-icon icon="chevron-right" class="text-2xl ml-1 md:ml-2" />
+        <font-awesome-icon
+          icon="chevron-right"
+          class="h-8 text-2xl ml-1 md:ml-2"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { computed, onMounted, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -50,7 +57,18 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const data = reactive({})
+    onMounted(() => {
+      data.storyCategories = computed(() => {
+        let themes = []
+        if (props.story.story_themes) {
+          themes = props.story.story_themes.map((theme) => theme.title)
+        }
+        return themes.join(', ')
+      })
+    })
+
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -61,7 +79,7 @@ export default {
       },
     })
 
-    return { t }
+    return { data, t }
   },
 }
 </script>

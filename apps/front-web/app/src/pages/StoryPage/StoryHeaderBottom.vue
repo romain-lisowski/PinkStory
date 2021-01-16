@@ -23,7 +23,7 @@
         t('first-publication')
       }}</span>
       <span class="mt-1 md:mt-0 text-base sm:text-2xl lg:text-4xl font-bold">{{
-        story.created_at
+        createdAtFormatted
       }}</span>
     </li>
   </ul>
@@ -31,6 +31,8 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import dayJs from 'dayjs'
 
 export default {
   props: {
@@ -40,7 +42,11 @@ export default {
       default: () => ({ rate: 0, content: '', created_at: null }),
     },
   },
-  setup() {
+  setup(props) {
+    const createdAtFormatted = computed(() => {
+      return dayJs(props.story.created_at).format('DD/MM/YYYY HH:mm')
+    })
+
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -52,7 +58,7 @@ export default {
       },
     })
 
-    return { t }
+    return { createdAtFormatted, t }
   },
 }
 </script>

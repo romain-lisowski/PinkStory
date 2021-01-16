@@ -20,7 +20,7 @@
       >
         18+
         <span class="mx-2 font-normal">|</span>
-        {{ data.story.created_at }}
+        {{ data.createdAtFormatted }}
         <span class="mx-2 font-normal">|</span>
         <span>{{ data.userName }}</span>
         <span v-if="'TODO: gender' === 'female'">&#9792;</span
@@ -55,6 +55,7 @@ import { useI18n } from 'vue-i18n'
 import ApiStories from '@/api/ApiStories'
 import { computed, onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
+import dayJs from 'dayjs'
 
 export default {
   components: {
@@ -88,6 +89,10 @@ export default {
 
       data.imageUrl = computed(() => {
         return data.story.story_image.image_url
+      })
+
+      data.createdAtFormatted = computed(() => {
+        return dayJs(data.story.created_at).format('DD/MM/YYYY HH:mm')
       })
     })
 

@@ -17,7 +17,7 @@
         }}<span v-if="'TODO: gender' === 'female'">&#9792;</span
         ><span v-else>&#9794;</span>
         <span class="mx-2 font-normal">|</span>
-        <span>{{ story.created_at }}</span>
+        <span>{{ createdAtFormatted }}</span>
       </span>
       <span class="block mt-1 text-lg sm:text-xl text-accent">
         {{ storyCategories }}
@@ -33,6 +33,7 @@
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
+import dayJs from 'dayjs'
 
 export default {
   components: {
@@ -45,6 +46,10 @@ export default {
     },
   },
   setup(props) {
+    const createdAtFormatted = computed(() => {
+      return dayJs(props.story.created_at).format('DD/MM/YYYY HH:mm')
+    })
+
     const storyCategories = computed(() => {
       const themes = props.story.story_themes.map((theme) => theme.title)
       return themes.join(', ')
@@ -58,7 +63,7 @@ export default {
         },
       },
     })
-    return { storyCategories, t }
+    return { createdAtFormatted, storyCategories, t }
   },
 }
 </script>

@@ -36,7 +36,7 @@
           <div class="flex flex-col pr-6 border-r-2">
             <span class="text-base md:text-lg">{{ t('registration') }}</span>
             <span class="text-xl md:text-2xl font-bold">{{
-              story.user.created_at
+              createdAtFormatted
             }}</span>
           </div>
           <div class="flex flex-col pl-6">
@@ -50,7 +50,9 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import dayJs from 'dayjs'
 
 export default {
   props: {
@@ -59,7 +61,11 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const createdAtFormatted = computed(() => {
+      return dayJs(props.story.created_at).format('DD/MM/YYYY HH:mm')
+    })
+
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -72,7 +78,7 @@ export default {
         },
       },
     })
-    return { t }
+    return { createdAtFormatted, t }
   },
 }
 </script>

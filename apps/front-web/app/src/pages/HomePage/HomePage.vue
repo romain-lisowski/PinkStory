@@ -1,8 +1,23 @@
 <template>
   <div>
     <HomeStoryMain />
-    <StoryListTopRated />
-    <StoryListLatest />
+    <StoryList
+      :search-order="'ORDER_POPULAR'"
+      :search-sort="'DESC'"
+      :title="t('top-rated-title')"
+      :link="t('top-rated-link')"
+    >
+      <template #StoryListOrder>&nbsp;</template>
+    </StoryList>
+    <StoryList
+      :search-order="'ORDER_CREATED_AT'"
+      :search-sort="'DESC'"
+      :title="t('latest-stories-title')"
+      :link="t('latest-stories-link')"
+    >
+      <template #StoryListOrder>&nbsp;</template>
+    </StoryList>
+
     <CategoryBlock>
       <template #header>
         <div
@@ -25,16 +40,14 @@
 
 <script>
 import HomeStoryMain from '@/pages/HomePage/HomeStoryMain.vue'
-import StoryListTopRated from '@/components/story/StoryListTopRated.vue'
-import StoryListLatest from '@/components/story/StoryListLatest.vue'
+import StoryList from '@/components/story/StoryList.vue'
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
   components: {
     HomeStoryMain,
-    StoryListTopRated,
-    StoryListLatest,
+    StoryList,
     CategoryBlock,
   },
   setup() {
@@ -42,6 +55,10 @@ export default {
       locale: 'fr',
       messages: {
         fr: {
+          'top-rated-title': 'Vous pourriez aussi aimer',
+          'top-rated-link': 'Voir les mieux notées',
+          'latest-stories-title': 'Les dernières histoires',
+          'latest-stories-link': 'Voir les nouvelles histoires',
           categories: 'Catégories',
           'search-story': 'Rechercher des histoires',
         },

@@ -35,7 +35,7 @@
       <p
         class="sm:w-4/5 xl:w-2/3 mt-8 text-base sm:text-xl xl:text-2xl text-justify sm:text-left w-full leading-6 sm:leading-8 xl:leading-10"
       >
-        Extract
+        {{ data.extract }}
       </p>
 
       <router-link

@@ -149,7 +149,7 @@
       >
         <span
           class="absolute top-0 right-0 px-1 md:px-1 bg-primary-inverse group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"
-          >8</span
+          >99</span
         >
         <span
           v-if="userLoggedIn.image"

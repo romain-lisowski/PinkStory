@@ -23,7 +23,6 @@
         :story="story"
       />
     </ul>
-    >
   </div>
 </template>
 

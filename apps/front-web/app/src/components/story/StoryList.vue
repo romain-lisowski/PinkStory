@@ -69,11 +69,12 @@ export default {
     const data = reactive({
       stories: [],
       nbResults: 0,
+      searchOrder: props.searchOrder,
     })
 
     const searchStories = async () => {
       const queryParams = {
-        order: props.searchOrder,
+        order: data.searchOrder,
         sort: props.searchSort,
         limit: props.searchLimit,
         categoryIds: props.searchCategoryIds,
@@ -94,11 +95,16 @@ export default {
       return props.title !== null
     })
 
-    watch(props.searchCategoryIds, async () => {
+    const storeSearchOrder = computed(() => {
+      return store.state.searchOrder
+    })
+
+    watch(storeSearchOrder, async (value) => {
+      data.searchOrder = value
       await searchStories()
     })
 
-    watch(props.searchOrder, async () => {
+    watch(props.searchCategoryIds, async () => {
       await searchStories()
     })
 
@@ -106,7 +112,7 @@ export default {
       await searchStories()
     })
 
-    return { data }
+    return { data, searchStories }
   },
 }
 </script>

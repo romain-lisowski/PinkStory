@@ -34,3 +34,7 @@ services:
         App\Common\Domain\Command\CommandHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: command.bus }
+
+    App\Common\Infrastructure\Http\RequestBodyParamConverter:
+        tags: 
+            - { name: 'request.param_converter', converter: 'request_body' }

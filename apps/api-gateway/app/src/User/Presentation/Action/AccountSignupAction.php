@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/signup", name="account_signup", methods={"POST"})
- * @ParamConverter("command", options={"mapping": {"role" = "enum.App\User\Domain\Model\UserRole::USER", "status" = "enum.App\User\Domain\Model\UserStatus::ACTIVATED"}})
+ * @ParamConverter("command", converter="request_body", options={"mapping": {"role" = "enum.App\User\Domain\Model\UserRole::USER", "status" = "enum.App\User\Domain\Model\UserStatus::ACTIVATED"}})
  */
 final class AccountSignupAction
 {

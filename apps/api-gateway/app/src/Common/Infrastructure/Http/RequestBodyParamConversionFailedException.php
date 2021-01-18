@@ -7,9 +7,9 @@ namespace App\Common\Infrastructure\Http;
 use Exception;
 use Throwable;
 
-final class MessageConversionFailedException extends Exception
+final class RequestBodyParamConversionFailedException extends Exception
 {
-    protected $message = 'http.message_param_converter.exception.message_conversion_failed';
+    protected $message = 'http.request_body_param_converter.exception.request_body_param_conversion_failed';
 
     public function __construct(Throwable $e)
     {

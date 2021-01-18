@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Http;
 
-use App\Common\Domain\Message\MessageInterface;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Infrastructure\Security\SecurityInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class MessageParamConverter implements ParamConverterInterface
+final class RequestBodyParamConverter implements ParamConverterInterface
 {
     private SerializerInterface $serializer;
     private SecurityInterface $security;
@@ -55,29 +54,19 @@ final class MessageParamConverter implements ParamConverterInterface
                 }
             }
 
-            $command = $this->serializer->deserialize(json_encode($content), $configuration->getClass(), JsonEncoder::FORMAT);
+            $object = $this->serializer->deserialize(json_encode($content), $configuration->getClass(), JsonEncoder::FORMAT);
 
-            $this->validator->validate($command);
+            $this->validator->validate($object);
 
-            $request->attributes->set($configuration->getName(), $command);
+            $request->attributes->set($configuration->getName(), $object);
         } catch (ExceptionInterface | ValidationFailedException $e) {
-            throw new MessageConversionFailedException($e);
+            throw new RequestBodyParamConversionFailedException($e);
         }
     }
 
-    public function supports(ParamConverter $configuration)
+    public function supports(ParamConverter $configuration): bool
     {
-        if (null === $configuration->getClass()) {
-            return false;
-        }
-
-        $class = new ReflectionClass($configuration->getClass());
-
-        if (false === $class->implementsInterface(MessageInterface::class)) {
-            return false;
-        }
-
-        return true;
+        return null !== $configuration->getClass() && 'request_body' === $configuration->getConverter();
     }
 
     private function configureOptions(OptionsResolver $resolver, array $options): void

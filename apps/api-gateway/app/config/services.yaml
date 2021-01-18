@@ -19,6 +19,7 @@ services:
             - '../src/Kernel.php'
             - '../src/**/*Exception.php'
             - '../src/*/Domain/Command/*Command.php'
+            - '../src/*/Domain/Event/*Event.php'
             - '../src/*/Domain/Model'
             - '../src/User/Infrastructure/Security/User.php'
 
@@ -34,6 +35,9 @@ services:
         App\Common\Domain\Command\CommandHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: command.bus }
+        App\Common\Domain\Event\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
 
     App\Common\Infrastructure\Http\RequestBodyParamConverter:
         tags: 

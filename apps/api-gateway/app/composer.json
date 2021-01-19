@@ -16,6 +16,8 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.8",
         "egulias/email-validator": "^2",
+        "imagine/imagine": "^1.2",
+        "league/flysystem-bundle": "^2.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.2.*",

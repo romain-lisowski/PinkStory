@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\User\Domain\Model;
 
+use App\Common\Domain\File\ImageableInterface;
+use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
@@ -22,8 +24,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity
+class User extends AbstractEntity implements ImageableInterface
 {
+    use ImageableTrait;
+
     /**
      * @ORM\Column(name="gender", type="string")
      * @Assert\NotBlank
@@ -55,6 +59,12 @@ class User extends AbstractEntity
      * @Assert\NotBlank
      */
     private string $password;
+
+    /**
+     * @Assert\NotNull
+     * @ORM\Column(name="image_defined", type="boolean")
+     */
+    private bool $imageDefined;
 
     /**
      * @ORM\Column(name="role", type="string")
@@ -171,6 +181,26 @@ class User extends AbstractEntity
         return $this;
     }
 
+    public function isImageDefined(): bool
+    {
+        return $this->imageDefined;
+    }
+
+    public function setImageDefined(bool $imageDefined): self
+    {
+        $this->imageDefined = $imageDefined;
+
+        return $this;
+    }
+
+    public function updateImageDefined(bool $imageDefined): self
+    {
+        $this->setImageDefined($imageDefined);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
     public function getRole(): string
     {
         return $this->role;
@@ -228,5 +258,15 @@ class User extends AbstractEntity
         $this->accessTokens->removeElement($accessToken);
 
         return $this;
+    }
+
+    public function hasImage(): bool
+    {
+        return $this->isImageDefined();
+    }
+
+    public function getImageBasePath(): string
+    {
+        return 'user';
     }
 }

@@ -4,6 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    project_name: '%env(resolve:PROJECT_NAME)%'
+    app_secret: '%env(resolve:APP_SECRET)%'
+    project_api_gateway_dsn: '%env(resolve:PROJECT_API_GATEWAY_DSN)%'
+    project_front_web_dsn: '%env(resolve:PROJECT_FRONT_WEB_DSN)%'
+    project_image_storage_dsn: '%env(resolve:PROJECT_IMAGE_STORAGE_DSN)%'
 
 services:
     # default configuration for services in *this* file

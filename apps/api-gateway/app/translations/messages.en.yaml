@@ -1,3 +1,7 @@
+file:
+    exception:
+        image_upload: An error occured during image upload.
+
 http:
     request_body_param_converter:
         exception:

@@ -6,6 +6,7 @@ namespace App\User\Domain\Command;
 
 use App\Common\Domain\Command\CommandInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserCreateCommand implements CommandInterface
@@ -34,6 +35,13 @@ final class UserCreateCommand implements CommandInterface
     private string $password;
 
     /**
+     * @Assert\File(
+     *      mimeTypes = {"image/jpeg", "image/png"},
+     * )
+     */
+    private ?File $image;
+
+    /**
      * @Assert\NotBlank
      * @Assert\Choice(callback={"App\User\Domain\Model\UserRole", "getChoices"})
      */
@@ -45,12 +53,13 @@ final class UserCreateCommand implements CommandInterface
      */
     private string $status;
 
-    public function __construct(string $gender, string $name, string $email, string $password, string $role, string $status)
+    public function __construct(string $gender, string $name, string $email, string $password, ?File $image = null, string $role, string $status)
     {
         $this->gender = $gender;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+        $this->image = $image;
         $this->role = $role;
         $this->status = $status;
     }
@@ -73,6 +82,11 @@ final class UserCreateCommand implements CommandInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function getImage(): ?File
+    {
+        return $this->image;
     }
 
     public function getRole(): string

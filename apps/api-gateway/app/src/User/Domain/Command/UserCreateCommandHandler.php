@@ -51,6 +51,15 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
         $this->userRepository->persist($user);
         $this->userRepository->flush();
 
-        $this->eventBus->dispatch(new UserCreatedEvent($user->getId(), $command));
+        $this->eventBus->dispatch(new UserCreatedEvent(
+            $user->getId(),
+            $user->getGender(),
+            $user->getName(),
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getImagePath(),
+            $user->getRole(),
+            $user->getStatus()
+        ));
     }
 }

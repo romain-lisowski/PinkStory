@@ -1,6 +1,6 @@
 <template>
   <li
-    class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4 p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-in"
+    class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4 p-4 rounded-2xl cursor-pointer"
   >
     <a>
       <img
@@ -48,7 +48,7 @@ export default {
   },
   setup(props) {
     const createdAtFormatted = computed(() => {
-      return dayJs(props.story.created_at).format('DD/MM/YYYY HH:mm')
+      return dayJs(props.story.created_at).format('DD/MM/YYYY HH[h]mm')
     })
 
     const storyCategories = computed(() => {

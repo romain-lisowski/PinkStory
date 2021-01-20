@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav
-      class="lg:hidden absolute right-100 h-screen w-full text-xl bg-primary overflow-y-scroll z-20 transform transition-transform duration-300 ease-in-out"
+      class="lg:hidden right-100 fixed h-screen w-full text-xl bg-primary overflow-y-scroll z-20 transform transition-transform duration-300 ease-in-out"
       :class="!openMenu ? '' : 'translate-x-full'"
     >
       <a
@@ -149,7 +149,7 @@
       >
         <span
           class="absolute top-0 right-0 px-1 md:px-1 bg-primary-inverse group-hover:bg-accent-highlight rounded-full leading-snug text-xxs md:text-xs text-primary-inverse font-bold"
-          >99</span
+          >1</span
         >
         <span
           v-if="userLoggedIn.image"

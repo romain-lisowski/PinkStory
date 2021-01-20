@@ -62,8 +62,12 @@ export default {
     },
   },
   setup(props) {
+    const storyRateFormatted = computed(() => {
+      return props.story.rate ? `${props.story.rate} / 5` : '-'
+    })
+
     const createdAtFormatted = computed(() => {
-      return dayJs(props.story.created_at).format('DD/MM/YYYY HH:mm')
+      return dayJs(props.story.created_at).format('DD/MM/YYYY HH[h]mm')
     })
 
     const { t } = useI18n({
@@ -78,7 +82,7 @@ export default {
         },
       },
     })
-    return { createdAtFormatted, t }
+    return { storyRateFormatted, createdAtFormatted, t }
   },
 }
 </script>

@@ -7,15 +7,15 @@
         t('reader-reviews')
       }}</span>
       <span class="mt-1 md:mt-0 text-base sm:text-2xl lg:text-4xl font-bold"
-        >{{ story.rate }} / 5</span
-      >
+        >{{ storyRateFormatted }}
+      </span>
     </li>
     <li class="flex flex-col px-2 sm:px-8 border-r">
       <span class="text-xs sm:text-base lg:text-xl">{{
         t('reading-time')
       }}</span>
       <span class="mt-1 md:mt-0 text-base sm:text-2xl lg:text-4xl font-bold"
-        >99 min</span
+        >-</span
       >
     </li>
     <li class="flex flex-col pl-2 sm:pl-8">
@@ -43,8 +43,12 @@ export default {
     },
   },
   setup(props) {
+    const storyRateFormatted = computed(() => {
+      return props.story.rate ? `${props.story.rate} / 5` : '-'
+    })
+
     const createdAtFormatted = computed(() => {
-      return dayJs(props.story.created_at).format('DD/MM/YYYY HH:mm')
+      return dayJs(props.story.created_at).format('DD/MM/YYYY HH[h]mm')
     })
 
     const { t } = useI18n({
@@ -58,7 +62,7 @@ export default {
       },
     })
 
-    return { createdAtFormatted, t }
+    return { storyRateFormatted, createdAtFormatted, t }
   },
 }
 </script>

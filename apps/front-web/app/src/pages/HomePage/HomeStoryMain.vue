@@ -71,7 +71,7 @@ export default {
       const store = useStore()
       const responseSearchStories = await ApiStories.search(store.state.jwt, {
         order: 'ORDER_POPULAR',
-        sort: 'DESC',
+        sort: 'ASC',
         limit: 1,
       })
 
@@ -93,7 +93,7 @@ export default {
       })
 
       data.createdAtFormatted = computed(() => {
-        return dayJs(data.story.created_at).format('DD/MM/YYYY HH:mm')
+        return dayJs(data.story.created_at).format('DD/MM/YYYY HH[h]mm')
       })
     })
 

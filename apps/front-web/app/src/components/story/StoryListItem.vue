@@ -14,7 +14,8 @@
 
       <span class="block mt-1 text-sm sm:text-base">
         {{ t('write-by') }} {{ story.user.name
-        }}<span v-if="'TODO: gender' === 'female'">&#9792;</span
+        }}<span v-if="story.user && story.user.gender === 'FEMALE'"
+          >&#9792;</span
         ><span v-else>&#9794;</span>
         <span class="mx-2 font-normal">|</span>
         <span>{{ createdAtFormatted }}</span>

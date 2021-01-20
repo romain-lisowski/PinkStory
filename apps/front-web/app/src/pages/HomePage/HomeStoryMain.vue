@@ -23,7 +23,8 @@
         {{ data.createdAtFormatted }}
         <span class="mx-2 font-normal">|</span>
         <span>{{ data.userName }}</span>
-        <span v-if="'TODO: gender' === 'female'">&#9792;</span
+        <span v-if="data.story.user && data.story.user.gender === 'FEMALE'"
+          >&#9792;</span
         ><span v-else class="font-medium">&#9794;</span>
       </p>
       <p class="mt-2 text-xl sm:text-3xl xl:text-4xl text-left text-accent">

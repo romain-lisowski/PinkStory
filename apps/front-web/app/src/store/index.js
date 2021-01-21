@@ -36,7 +36,7 @@ export default Vuex.createStore({
     theme,
     isAdult,
     searchCategoryIds: [],
-    searchOrder: 'ORDER_POPULAR',
+    searchOrder: '',
   },
   getters: {
     isLoggedIn: (state) => {

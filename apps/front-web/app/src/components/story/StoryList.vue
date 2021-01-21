@@ -53,7 +53,7 @@ export default {
     },
     searchCategoryIds: {
       type: Array,
-      default: null,
+      default: () => [],
     },
     title: {
       type: String,
@@ -100,8 +100,10 @@ export default {
     })
 
     watch(storeSearchOrder, async (value) => {
-      data.searchOrder = value
-      await searchStories()
+      if (value) {
+        data.searchOrder = value
+        await searchStories()
+      }
     })
 
     watch(props.searchCategoryIds, async () => {

@@ -38,7 +38,7 @@ export default {
   emits: ['change-order'],
   setup() {
     const store = useStore()
-    const activeOrder = ref(store.state.searchOrder)
+    const activeOrder = ref(store.state.searchOrder || 'ORDER_POPULAR')
     const activeClasses = ['text-primary', 'bg-accent', 'border-accent']
 
     const changeOrder = async (searchOrder) => {

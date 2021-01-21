@@ -37,6 +37,7 @@ export default Vuex.createStore({
     isAdult,
     searchCategoryIds: [],
     searchOrder: '',
+    showLoadingOverlay: false,
   },
   getters: {
     isLoggedIn: (state) => {
@@ -97,6 +98,12 @@ export default Vuex.createStore({
     updateSearchOrder({ commit }, { searchOrder }) {
       commit('SET_SEARCH_ORDER', searchOrder)
     },
+    showLoadingOverlay({ commit }) {
+      commit('SHOW_LOADING_OVERLAY')
+    },
+    hideLoadingOverlay({ commit }) {
+      commit('HIDE_LOADING_OVERLAY')
+    },
   },
   mutations: {
     SET_JWT(state, jwt) {
@@ -126,6 +133,12 @@ export default Vuex.createStore({
     },
     SET_SEARCH_ORDER(state, searchOrder) {
       state.searchOrder = searchOrder
+    },
+    SHOW_LOADING_OVERLAY(state) {
+      state.showLoadingOverlay = true
+    },
+    HIDE_LOADING_OVERLAY(state) {
+      state.showLoadingOverlay = false
     },
   },
 })

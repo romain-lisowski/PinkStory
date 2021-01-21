@@ -1,4 +1,8 @@
 import { FontAwesomeIcon } from '@/plugins/font-awesome'
+import {
+  FontAwesomeLayers,
+  FontAwesomeLayersText,
+} from '@fortawesome/vue-fontawesome'
 import { createI18n } from 'vue-i18n'
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -17,4 +21,7 @@ createApp(App)
   .use(store)
   .use(i18n)
   .component('font-awesome-icon', FontAwesomeIcon)
+  .component('font-awesome-layers', FontAwesomeLayers)
+  .component('font-awesome-layers-text', FontAwesomeLayersText)
+
   .mount('#app')

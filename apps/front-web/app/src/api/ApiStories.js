@@ -1,7 +1,11 @@
+import { useStore } from 'vuex'
+
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
   async search(jwt, params = {}) {
+    const store = useStore()
+    store.dispatch('showLoadingOverlay')
     const url = new URL(`${baseUrl}/story/search`)
     const searchParams = new URLSearchParams(params)
     searchParams.append('_locale', 'fr')
@@ -22,10 +26,13 @@ export default {
     })
 
     const responseJson = await response.json()
+    // store.dispatch('hideLoadingOverlay')
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 
   async get(jwt, storyId) {
+    const store = useStore()
+    store.dispatch('showLoadingOverlay')
     const url = new URL(`${baseUrl}/story/${storyId}`)
     const searchParams = new URLSearchParams()
     searchParams.append('_locale', 'fr')
@@ -36,6 +43,7 @@ export default {
     })
 
     const responseJson = await response.json()
+    store.dispatch('hideLoadingOverlay')
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 }

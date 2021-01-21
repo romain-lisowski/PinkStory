@@ -26,7 +26,7 @@ export default {
     })
 
     const responseJson = await response.json()
-    // store.dispatch('hideLoadingOverlay')
+    store.dispatch('hideLoadingOverlay')
     return { ok: response.ok, status: response.status, ...responseJson }
   },
 

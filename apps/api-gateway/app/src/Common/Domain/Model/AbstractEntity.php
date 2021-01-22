@@ -29,14 +29,12 @@ abstract class AbstractEntity
     /**
      * @ORM\Column(name="created_at", type="datetime")
      * @Assert\NotBlank
-     * @Assert\GreaterThan("today")
      */
     private DateTime $createdAt;
 
     /**
      * @ORM\Column(name="last_updated_at", type="datetime")
      * @Assert\NotBlank
-     * @Assert\GreaterThan("today")
      */
     private DateTime $lastUpdatedAt;
 

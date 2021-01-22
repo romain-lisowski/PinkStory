@@ -88,7 +88,7 @@ final class UserCreatedEvent implements EventInterface
         return $this->password;
     }
 
-    public function getImagePath(): string
+    public function getImagePath(): ?string
     {
         return $this->imagePath;
     }

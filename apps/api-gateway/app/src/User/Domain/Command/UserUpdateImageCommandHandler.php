@@ -7,6 +7,8 @@ namespace App\User\Domain\Command;
 use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\File\ImageManagerInterface;
+use App\Common\Domain\Model\EditableInterface;
+use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Domain\Event\UserUpdatedImageEvent;
 use App\User\Domain\Repository\UserRepositoryInterface;
@@ -14,13 +16,15 @@ use App\User\Domain\Security\UserPasswordEncoderInterface;
 
 final class UserUpdateImageCommandHandler implements CommandHandlerInterface
 {
+    private AuthorizationCheckerInterface $authorizationChecker;
     private EventBusInterface $eventBus;
     private ImageManagerInterface $imageManager;
     private UserRepositoryInterface $userRepository;
     private ValidatorInterface $validator;
 
-    public function __construct(EventBusInterface $eventBus, ImageManagerInterface $imageManager, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, ImageManagerInterface $imageManager, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
     {
+        $this->authorizationChecker = $authorizationChecker;
         $this->eventBus = $eventBus;
         $this->imageManager = $imageManager;
         $this->userRepository = $userRepository;
@@ -30,6 +34,8 @@ final class UserUpdateImageCommandHandler implements CommandHandlerInterface
     public function __invoke(UserUpdateImageCommand $command): void
     {
         $user = $this->userRepository->findOne($command->getId());
+
+        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
         $user->updateImageDefined(true);
 

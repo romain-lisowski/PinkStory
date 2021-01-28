@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"id"}
  * )
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EditableInterface
 {
     /**
      * @ORM\Id

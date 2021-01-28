@@ -38,7 +38,7 @@ final class UserProvider implements UserProviderInterface
         try {
             $user = $this->userRepository->findOne($id);
 
-            return new User($user->getId(), 'ROLE_'.$user->getRole());
+            return new User($user->getId(), User::ROLE_PREFIX.$user->getRole());
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException();
         }

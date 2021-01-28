@@ -9,6 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class User implements UserInterface
 {
+    public const ROLE_PREFIX = 'ROLE_';
+
     /**
      * @Assert\NotBlank
      * @Assert\Uuid

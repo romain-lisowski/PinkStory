@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"email"}
  * )
  */
-class User extends AbstractEntity implements ImageableInterface
+class User extends AbstractEntity implements UserableInterface, ImageableInterface
 {
     use ImageableTrait;
 
@@ -257,6 +257,11 @@ class User extends AbstractEntity implements ImageableInterface
     {
         $this->accessTokens->removeElement($accessToken);
 
+        return $this;
+    }
+
+    public function getUser(): User
+    {
         return $this;
     }
 

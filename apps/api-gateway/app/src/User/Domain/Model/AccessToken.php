@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\User\Infrastructure\Doctrine\Repository\AccessTokenDoctrineORMRepository")
  * @ORM\Table(name="usr_access_token")
  */
-class AccessToken extends AbstractEntity
+class AccessToken extends AbstractEntity implements UserableInterface
 {
     /**
      * @ORM\ManyToOne(targetEntity="App\User\Domain\Model\User", inversedBy="accessTokens")

@@ -7,11 +7,13 @@ RUN apt-get update && apt-get install -y \
         unzip \
         libpq-dev \
         libmagickwand-dev \
+        libxslt1-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install zip \
     && docker-php-ext-install pdo pdo_pgsql \
     && docker-php-ext-enable opcache \
+    && docker-php-ext-install xsl \
     ###
     # imagick
     && pecl install imagick \

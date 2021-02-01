@@ -39,32 +39,6 @@ services:
     ports:
       - 5432:5432
 
-  api-gateway-mercure:
-    image: dunglas/mercure
-    environment:
-      JWT_KEY: |-
-        -----BEGIN PUBLIC KEY-----
-        MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAq10lUS3uE1VOBnbVkQNW
-        hEvp7SCScXayprIFHHSNpzt0LL7XdZhtxGsJGOzJ5rzr7QZGPN4K75RPe2PS7DXG
-        30kg6EBUkFe8/+dw/0Xy7611Y9UcUMqVUkhpaO1xHm9vBGDTX5pcdBZjcz2LC+Hi
-        /2ERjfWmxX+TaDgvNNWd94MEFpGn+Vavu44I1tLipTByUZltKW+2UclaZ6zm6/i7
-        3CZO627pj0MDgcAdI/mhHJwRsWZX+q+cvw3wMUL6F8d0ETtoE/8ZoPrWdnKCbcQI
-        WoBEJJ7H/BfV6sABLcJ/gfxxHwnZWkL+fzb40ArLz0yJ6rCHgFZQuJAwuJiFUgCS
-        RKLopwz5fX7iL08iN33tZZNeKTOQmYxwkDISZb4MNM2hZAwYGlGHkl8nSvK0b2Of
-        s2Wixb+ox+g1Ke2zHowGoL4Cu/3Maro5kWSS0tTnR8oeaMYlkUyw3rmU5n06MN1/
-        VPV4LMw5xAJeUEQiEOL3Bhda2lO7jEmsQaIOzOAfqTNUIyucO76PIPDZCA4WWvoa
-        Ilzo8fo+84B5EjZqHVmzC08WwoJi/gFjcvTovkUoMMkBUFLX8CxcXqiOywtTmjwk
-        FzEchT24LOq3wq+pEoh7TnbQUMa4SMMPoLoO+GMQWZj/glMdbSNXs5M2nsDHQaJR
-        tsoBu+mdeBp5T62WSYtObmUCAwEAAQ==
-        -----END PUBLIC KEY-----
-      JWT_ALGORITHM: RS512
-      DEMO: 1
-      CORS_ALLOWED_ORIGINS: '*'
-      PUBLISH_ALLOWED_ORIGINS: '*'
-    ports:
-      - 3080:80
-      - 3443:443
-
   front-web-vue:
     build:
       context: ./apps/front-web/docker/vue

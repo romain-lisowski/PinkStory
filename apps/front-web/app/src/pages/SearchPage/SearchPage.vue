@@ -38,8 +38,8 @@ export default {
 
   setup() {
     const store = useStore()
-    const searchCategoryIds = ref(store.state.searchCategoryIds)
-    const searchOrder = ref(store.state.searchOrder)
+    const searchCategoryIds = ref(store.state.site.state.searchCategoryIds)
+    const searchOrder = ref(store.state.site.state.searchOrder)
 
     const { t } = useI18n({
       locale: 'fr',

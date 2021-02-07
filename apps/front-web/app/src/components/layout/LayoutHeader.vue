@@ -218,10 +218,10 @@ export default {
     ]
 
     const isLoggedIn = computed(() => {
-      return store.getters.isLoggedIn
+      return store.getters['auth/isLoggedIn']
     })
     const userLoggedIn = computed(() => {
-      return store.state.userLoggedIn
+      return store.state.auth.state.userLoggedIn
     })
     const currentPageUri = computed(() => {
       return route.path
@@ -236,7 +236,7 @@ export default {
     const logout = () => {
       openAuthPanel.value = false
       openMenu.value = false
-      store.dispatch('logout')
+      store.dispatch('auth/logout')
       if (route.path !== '/') {
         router.push({ name: 'Home' })
       }

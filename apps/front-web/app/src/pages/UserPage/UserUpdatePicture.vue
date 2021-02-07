@@ -49,7 +49,7 @@ export default {
     const uploadProfilePicture = ref(null)
 
     const userLoggedIn = computed(() => {
-      return store.state.userLoggedIn
+      return store.state.auth.state.userLoggedIn
     })
 
     const uploadUserImageChanged = (event) => {
@@ -59,12 +59,15 @@ export default {
       }
     }
     const deleteProfilePicture = async () => {
-      await ApiUsers.deleteimage(store.state.jwt)
-      store.dispatch('fetchCurrentUser')
+      await ApiUsers.deleteimage(store.state.auth.state.jwt)
+      store.dispatch('auth/fetchCurrentUser')
     }
     const processForm = async () => {
-      await ApiUsers.updateImage(store.state.jwt, uploadProfilePicture.value)
-      store.dispatch('fetchCurrentUser')
+      await ApiUsers.updateImage(
+        store.state.auth.state.jwt,
+        uploadProfilePicture.value
+      )
+      store.dispatch('auth/fetchCurrentUser')
     }
 
     const { t } = useI18n({

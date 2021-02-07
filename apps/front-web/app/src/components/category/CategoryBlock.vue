@@ -34,7 +34,7 @@ export default {
     onMounted(async () => {
       const responseSearchStoryThemes = await ApiStoryThemes.search(
         'fr',
-        store.state.jwt
+        store.state.auth.state.jwt
       )
 
       if (responseSearchStoryThemes.ok) {

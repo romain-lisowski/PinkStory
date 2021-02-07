@@ -48,7 +48,7 @@ export default {
     const password = ref(null)
 
     const processForm = () => {
-      store.dispatch('login', {
+      store.dispatch('auth/login', {
         email: email.value,
         password: password.value,
       })

@@ -53,7 +53,7 @@ export default {
 
     const processForm = () => {
       ApiUsers.updatePassword(
-        store.state.jwt,
+        store.state.auth.state.jwt,
         passwordOld.value,
         passwordNew.value,
         passwordNewConfirm.value

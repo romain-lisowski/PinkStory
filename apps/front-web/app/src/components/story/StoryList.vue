@@ -81,7 +81,7 @@ export default {
       }
 
       const responseSearchStories = await ApiStories.search(
-        store.state.jwt,
+        store.state.auth.state.jwt,
         queryParams
       )
 
@@ -96,7 +96,7 @@ export default {
     })
 
     const storeSearchOrder = computed(() => {
-      return store.state.searchOrder
+      return store.state.site.state.searchOrder
     })
 
     watch(storeSearchOrder, async (value) => {

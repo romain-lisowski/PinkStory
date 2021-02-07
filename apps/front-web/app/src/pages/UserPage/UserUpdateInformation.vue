@@ -34,15 +34,15 @@ import { useI18n } from 'vue-i18n'
 export default {
   setup() {
     const store = useStore()
-    const name = ref(store.state.userLoggedIn.name)
-    const language = ref(store.state.userLoggedIn.language)
+    const name = ref(store.state.auth.state.userLoggedIn.name)
+    const language = ref(store.state.auth.state.userLoggedIn.language)
 
     const processForm = async () => {
-      await ApiUsers.updateInformation(store.state.jwt, {
+      await ApiUsers.updateInformation(store.state.auth.state.jwt, {
         name: name.value,
         language: language.value,
       })
-      store.dispatch('fetchCurrentUser')
+      store.dispatch('auth/fetchCurrentUser')
     }
 
     const { t } = useI18n({

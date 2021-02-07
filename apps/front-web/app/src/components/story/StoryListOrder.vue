@@ -38,14 +38,16 @@ export default {
   emits: ['change-order'],
   setup() {
     const store = useStore()
-    const activeOrder = ref(store.state.searchOrder || 'ORDER_POPULAR')
+    const activeOrder = ref(
+      store.state.site.state.searchOrder || 'ORDER_POPULAR'
+    )
     const activeClasses = ['text-primary', 'bg-accent', 'border-accent']
 
     const changeOrder = async (searchOrder) => {
       if (activeOrder.value !== searchOrder) {
         activeOrder.value = searchOrder
       }
-      await store.dispatch('updateSearchOrder', { searchOrder })
+      await store.dispatch('site/updateSearchOrder', { searchOrder })
     }
 
     const orderRate = () => {

@@ -69,11 +69,14 @@ export default {
 
     onMounted(async () => {
       const store = useStore()
-      const responseSearchStories = await ApiStories.search(store.state.jwt, {
-        order: 'ORDER_POPULAR',
-        sort: 'ASC',
-        limit: 1,
-      })
+      const responseSearchStories = await ApiStories.search(
+        store.state.auth.state.jwt,
+        {
+          order: 'ORDER_POPULAR',
+          sort: 'ASC',
+          limit: 1,
+        }
+      )
 
       if (responseSearchStories.ok) {
         ;[data.story] = responseSearchStories.stories

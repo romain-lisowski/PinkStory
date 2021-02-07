@@ -17,7 +17,7 @@ export default {
     const store = useStore()
 
     const show = computed(() => {
-      return store.state.showLoadingOverlay
+      return store.getters['site/showLoadingOverlay']
     })
 
     const { t } = useI18n({

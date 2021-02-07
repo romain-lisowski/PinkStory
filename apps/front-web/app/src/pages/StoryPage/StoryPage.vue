@@ -48,7 +48,7 @@ export default {
 
     const fetchStory = async (storyId) => {
       const responseSearchStories = await ApiStories.get(
-        store.state.jwt,
+        store.state.auth.state.jwt,
         storyId
       )
 

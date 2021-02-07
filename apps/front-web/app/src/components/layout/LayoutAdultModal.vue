@@ -36,10 +36,10 @@ import { useStore } from 'vuex'
 export default {
   setup() {
     const store = useStore()
-    const openAdultModal = ref(!store.state.isAdult)
+    const openAdultModal = ref(!store.state.site.state.isAdult)
 
     const onClickIsAdult = () => {
-      store.dispatch('isAdult')
+      store.dispatch('site/isAdult')
       openAdultModal.value = false
     }
 

@@ -55,7 +55,6 @@ import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
 import ApiStories from '@/api/ApiStories'
 import { computed, onMounted, reactive } from 'vue'
-import { useStore } from 'vuex'
 import dayJs from 'dayjs'
 
 export default {
@@ -68,15 +67,11 @@ export default {
     })
 
     onMounted(async () => {
-      const store = useStore()
-      const responseSearchStories = await ApiStories.search(
-        store.state.auth.state.jwt,
-        {
-          order: 'ORDER_POPULAR',
-          sort: 'ASC',
-          limit: 1,
-        }
-      )
+      const responseSearchStories = await ApiStories.search({
+        order: 'ORDER_POPULAR',
+        sort: 'ASC',
+        limit: 1,
+      })
 
       if (responseSearchStories.ok) {
         ;[data.story] = responseSearchStories.stories

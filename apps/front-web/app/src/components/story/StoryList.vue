@@ -80,10 +80,7 @@ export default {
         categoryIds: props.searchCategoryIds,
       }
 
-      const responseSearchStories = await ApiStories.search(
-        store.state.auth.state.jwt,
-        queryParams
-      )
+      const responseSearchStories = await ApiStories.search(queryParams)
 
       if (responseSearchStories.ok) {
         data.stories = responseSearchStories.stories

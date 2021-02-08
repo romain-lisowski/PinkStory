@@ -20,8 +20,10 @@ export default {
 
   getUrlWithSearchParams(uri, searchParams) {
     const url = new URL(`${baseUrl}/${uri}`)
-    searchParams.append('_locale', 'fr')
-    url.search = searchParams.toString()
+    if (searchParams.length > 0) {
+      searchParams.append('_locale', 'fr')
+      url.search = searchParams.toString()
+    }
     return url
   },
 

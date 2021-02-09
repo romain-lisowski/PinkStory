@@ -6,12 +6,12 @@ export default {
     state.theme = theme
   },
   ADD_SEARCH_CATEGORY(state, categoryId) {
-    state.searchCategoryIds.push(categoryId)
+    state.state.searchCategoryIds.push(categoryId)
   },
   REMOVE_SEARCH_CATEGORY(state, categoryId) {
-    const index = state.searchCategoryIds.indexOf(categoryId)
+    const index = state.state.searchCategoryIds.indexOf(categoryId)
     if (index > -1) {
-      state.searchCategoryIds.splice(index, 1)
+      state.state.searchCategoryIds.splice(index, 1)
     }
   },
   SET_SEARCH_ORDER(state, searchOrder) {

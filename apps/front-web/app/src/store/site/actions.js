@@ -8,7 +8,7 @@ export default {
     localStorage.setItem('theme', JSON.stringify(theme))
   },
   toggleSearchCategory({ state, commit }, { categoryId }) {
-    if (!state.searchCategoryIds.includes(categoryId)) {
+    if (!state.state.searchCategoryIds.includes(categoryId)) {
       commit('ADD_SEARCH_CATEGORY', categoryId)
     } else {
       commit('REMOVE_SEARCH_CATEGORY', categoryId)

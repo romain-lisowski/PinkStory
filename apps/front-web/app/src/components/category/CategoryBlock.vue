@@ -18,7 +18,6 @@
 <script>
 import CategoryList from '@/components/category/CategoryList.vue'
 import ApiStoryThemes from '@/api/ApiStoryThemes'
-import { useStore } from 'vuex'
 import { onMounted, reactive } from 'vue'
 
 export default {
@@ -26,16 +25,12 @@ export default {
     CategoryList,
   },
   setup() {
-    const store = useStore()
     const data = reactive({
       categoryLists: [],
     })
 
     onMounted(async () => {
-      const responseSearchStoryThemes = await ApiStoryThemes.search(
-        'fr',
-        store.state.auth.state.jwt
-      )
+      const responseSearchStoryThemes = await ApiStoryThemes.search()
 
       if (responseSearchStoryThemes.ok) {
         data.categoryLists = responseSearchStoryThemes.story_themes

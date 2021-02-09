@@ -5,12 +5,22 @@
     </p>
 
     <input
-      v-model="name"
+      v-model="pseudo"
       :placeholder="t('pseudo')"
       type="text"
-      name="name"
+      name="pseudo"
       class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
+
+    <select
+      v-model="gender"
+      class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
+    >
+      <option v-for="(gender, index) in genders" :key="index" :value="gender">
+        {{ t(gender) }}
+      </option>
+    </select>
+
     <input
       v-model="email"
       :placeholder="t('email')"
@@ -41,6 +51,7 @@
     >
       {{ t('submit') }}
     </button>
+
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
       @click="onClickDisplayLoginBlock"
@@ -54,11 +65,14 @@
 import ApiUsers from '@/api/ApiUsers'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import genderTypes from '@/enums/genderTypes'
 
 export default {
   emits: ['display-login-block'],
   setup(props, context) {
-    const name = ref(null)
+    const genders = genderTypes
+    const pseudo = ref(null)
+    const gender = ref(genderTypes.UNDEFINED)
     const email = ref(null)
     const password = ref(null)
     const passwordConfirm = ref(null)
@@ -69,7 +83,8 @@ export default {
 
     const processForm = () => {
       ApiUsers.signUp(
-        name.value,
+        pseudo.value,
+        gender.value,
         email.value,
         password.value,
         passwordConfirm.value
@@ -82,18 +97,25 @@ export default {
       messages: {
         fr: {
           'sign-up': 'Inscription',
-          pseudo: 'Login',
+          pseudo: 'Pseudo',
+          gender: 'Genre',
           email: 'Email',
           password: 'Mot de passe',
           confirm: 'Confirmer votre mot de passe',
           submit: "S'inscrire",
           'sign-in': 'Déjà inscrit ?',
+          UNDEFINED: 'Non défini',
+          MALE: 'Homme',
+          FEMALE: 'Femme',
+          OTHER: 'Autre',
         },
       },
     })
 
     return {
-      name,
+      pseudo,
+      genders,
+      gender,
       email,
       password,
       passwordConfirm,

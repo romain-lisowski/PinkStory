@@ -12,9 +12,6 @@
         :autocomplete="'nickname'"
         class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
       />
-      <select>
-        <option></option>
-      </select>
       <button
         class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
@@ -44,6 +41,8 @@ export default {
       })
       store.dispatch('auth/fetchCurrentUser')
     }
+
+    // TODO: Gender
 
     const { t } = useI18n({
       locale: 'fr',

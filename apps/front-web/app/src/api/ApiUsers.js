@@ -1,36 +1,24 @@
 import ApiLanguages from '@/api/ApiLanguages'
+import clientApi from './clientApi'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
   async login(email, password) {
-    const formData = new FormData()
-    formData.append('email', email)
-    formData.append('password', password)
-
-    const response = await fetch(`${baseUrl}/account/login?_method=POST`, {
-      method: 'POST',
-      body: formData,
+    return clientApi.fetch('POST', 'account/login', null, {
+      email,
+      password,
     })
-
-    const responseJson = await response.json()
-    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
-  async signUp(name, email, password, passwordConfirm) {
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('email', email)
-    formData.append('password[first]', password)
-    formData.append('password[second]', passwordConfirm)
-
-    const response = await fetch(`${baseUrl}/account/signup?_method=POST`, {
-      method: 'POST',
-      body: formData,
+  async signUp(name, gender, email, password, passwordConfirm) {
+    return clientApi.fetch('POST', 'account/signup', null, {
+      name,
+      gender,
+      email,
+      'password[first]': password,
+      'password[second]': passwordConfirm,
     })
-
-    const responseJson = await response.json()
-    return { ok: response.ok, status: response.status, ...responseJson }
   },
 
   async getCurrentUser(jwt) {
@@ -80,7 +68,7 @@ export default {
   },
 
   async updateInformation(jwt, name) {
-    const { languages } = await ApiLanguages.search(jwt)
+    const { languages } = await ApiLanguages.search()
 
     const formData = new FormData()
     formData.append('name', name)

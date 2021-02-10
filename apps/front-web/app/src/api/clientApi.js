@@ -5,7 +5,9 @@ const baseUrl = process.env.VUE_APP_API_URL
 export default {
   async fetch(method, uri, queryParams = null, formParams = null, jwt = null) {
     const store = useStore()
-    store.dispatch('site/showLoadingOverlay')
+    if (store) {
+      store.dispatch('site/showLoadingOverlay')
+    }
 
     if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(method)) {
       throw new Error('Method invalid', method)
@@ -24,7 +26,10 @@ export default {
       }
     )
 
-    store.dispatch('site/hideLoadingOverlay')
+    if (store) {
+      store.dispatch('site/hideLoadingOverlay')
+    }
+
     const responseJson = await response.json()
     return { ok: response.ok, status: response.status, ...responseJson }
   },

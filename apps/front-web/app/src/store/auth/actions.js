@@ -21,7 +21,7 @@ export default {
     localStorage.removeItem('jwt')
     commit('LOGOUT')
   },
-  async fetchCurrentUser({ commit }, jwt) {
+  async fetchCurrentUser({ commit }, jwt = null) {
     const responseUserLoggedIn = await ApiUsers.getCurrentUser(jwt)
 
     if (responseUserLoggedIn.ok) {

@@ -21,13 +21,8 @@ export default {
     })
   },
 
-  async getCurrentUser(jwt) {
-    const response = await fetch(`${baseUrl}/account`, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    })
-
-    const responseJson = await response.json()
-    return { ok: response.ok, status: response.status, ...responseJson }
+  async getCurrentUser(jwt = null) {
+    return clientApi.fetch('GET', 'account', null, null, jwt)
   },
 
   async updateEmail(jwt, email) {

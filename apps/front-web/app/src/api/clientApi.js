@@ -1,22 +1,30 @@
-// import { useStore } from 'vuex'
+import { useStore } from 'vuex'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
-  async fetch(method, uri, queryParams = null, formParams = null) {
-    // const store = useStore()
-    // store.dispatch('site/showLoadingOverlay')
+  async fetch(method, uri, queryParams = null, formParams = null, jwt = null) {
+    const store = useStore()
+    store.dispatch('site/showLoadingOverlay')
+
+    if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(method)) {
+      throw new Error('Method invalid', method)
+    }
+
+    if (typeof uri !== 'string') {
+      throw new Error('Uri must be a string', uri)
+    }
 
     const response = await fetch(
       this.getUrlWithSearchParams(method, uri, queryParams),
       {
         method,
         body: this.getFormData(formParams),
-        headers: this.getHeaders(),
+        headers: this.getHeaders(jwt),
       }
     )
 
-    // store.dispatch('site/hideLoadingOverlay')
+    store.dispatch('site/hideLoadingOverlay')
     const responseJson = await response.json()
     return { ok: response.ok, status: response.status, ...responseJson }
   },
@@ -29,7 +37,9 @@ export default {
   },
 
   getSearchParams(method, queryParams) {
-    const searchParams = new URLSearchParams(queryParams)
+    const searchParams = queryParams
+      ? new URLSearchParams(queryParams)
+      : new URLSearchParams()
 
     if (queryParams) {
       this.transformArraySearchParams(queryParams, searchParams)
@@ -74,10 +84,9 @@ export default {
     return formData
   },
 
-  getHeaders() {
-    const jwt = null
-    // const store = useStore()
-    // const { jwt } = store.state.auth.state
+  getHeaders(jwtParam) {
+    const store = useStore()
+    const jwt = jwtParam || store.getters['auth/jwt']
     return { Authorization: jwt ? `Bearer ${jwt}` : null }
   },
 }

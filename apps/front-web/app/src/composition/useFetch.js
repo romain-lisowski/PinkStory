@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-// import { useStore } from 'vuex'
+import { reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
@@ -10,8 +10,7 @@ export default (
   formParams = null,
   jwt = null
 ) => {
-  const response = ref(null)
-  const error = ref(null)
+  const state = reactive({ response: null, error: null })
 
   /**
    * Transform array parameter of URLSearchParams into multiple entries
@@ -69,19 +68,17 @@ export default (
   }
 
   const getHeaders = (jwtParam) => {
-    // const store = useStore()
-    const jwt = jwtParam
-    // if (!jwt && store) {
-    //   jwt = store.getters['auth/getJwt']
-    // }
+    const store = useStore()
+    let jwt = jwtParam
+    if (!jwt) {
+      jwt = store.getters['auth/getJwt']
+    }
     return { Authorization: jwt ? `Bearer ${jwt}` : null }
   }
 
   const fetchData = async () => {
-    // const store = useStore()
-    // if (store) {
-    //   store.dispatch('site/showLoadingOverlay')
-    // }
+    const store = useStore()
+    store.dispatch('site/showLoadingOverlay')
 
     if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(method)) {
       throw new Error('Method invalid', method)
@@ -100,15 +97,13 @@ export default (
           headers: getHeaders(jwt),
         }
       )
-      response.value = await res.json()
+      state.response = await res.json()
     } catch (errors) {
-      error.value = errors
+      state.error = errors
     }
 
-    // if (store) {
-    //   store.dispatch('site/hideLoadingOverlay')
-    // }
+    store.dispatch('site/hideLoadingOverlay')
   }
 
-  return { response, error, fetchData }
+  return { ...toRefs(state), fetchData }
 }

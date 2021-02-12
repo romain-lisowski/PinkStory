@@ -1,41 +1,39 @@
 <template>
-  <div>
+  <Suspense>
     <HomeStoryMain />
-    <StoryList
-      :search-order="'ORDER_POPULAR'"
-      :search-sort="'DESC'"
-      :title="t('top-rated-title')"
-      :link="t('top-rated-link')"
-    >
-      <template #StoryListOrder>&nbsp;</template>
-    </StoryList>
-    <StoryList
-      :search-order="'ORDER_CREATED_AT'"
-      :search-sort="'DESC'"
-      :title="t('latest-stories-title')"
-      :link="t('latest-stories-link')"
-    >
-      <template #StoryListOrder>&nbsp;</template>
-    </StoryList>
+  </Suspense>
+  <StoryList
+    :search-order="'ORDER_POPULAR'"
+    :search-sort="'DESC'"
+    :title="t('top-rated-title')"
+    :link="t('top-rated-link')"
+  >
+    <template #StoryListOrder>&nbsp;</template>
+  </StoryList>
+  <StoryList
+    :search-order="'ORDER_CREATED_AT'"
+    :search-sort="'DESC'"
+    :title="t('latest-stories-title')"
+    :link="t('latest-stories-link')"
+  >
+    <template #StoryListOrder>&nbsp;</template>
+  </StoryList>
 
-    <CategoryBlock>
-      <template #header>
-        <div
-          class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12"
+  <CategoryBlock>
+    <template #header>
+      <div class="flex flex-col sm:flex-row justify-between mb-8 pt-8 sm:pt-12">
+        <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
+          {{ t('categories') }}
+        </p>
+        <router-link
+          :to="{ name: 'Search' }"
+          class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
         >
-          <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
-            {{ t('categories') }}
-          </p>
-          <router-link
-            :to="{ name: 'Search' }"
-            class="pt-2 sm:pt-4 xl:pt-6 text-lg sm:text-xl xl:text-2xl text-left sm:text-right text-accent cursor-pointer"
-          >
-            {{ t('search-story') }} >
-          </router-link>
-        </div>
-      </template>
-    </CategoryBlock>
-  </div>
+          {{ t('search-story') }} >
+        </router-link>
+      </div>
+    </template>
+  </CategoryBlock>
 </template>
 
 <script>

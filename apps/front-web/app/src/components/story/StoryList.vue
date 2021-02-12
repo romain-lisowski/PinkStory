@@ -29,7 +29,7 @@
 <script>
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryListItem from '@/components/story/StoryListItem.vue'
-import ApiStories from '@/api/ApiStories'
+// import ApiStories from '@/api/ApiStories'
 import { computed, onMounted, reactive, watch } from 'vue'
 import { useStore } from 'vuex'
 
@@ -73,19 +73,17 @@ export default {
     })
 
     const searchStories = async () => {
-      const queryParams = {
-        order: data.searchOrder,
-        sort: props.searchSort,
-        limit: props.searchLimit,
-        categoryIds: props.searchCategoryIds,
-      }
-
-      const responseSearchStories = await ApiStories.search(queryParams)
-
-      if (responseSearchStories.ok) {
-        data.stories = responseSearchStories.stories
-        data.nbResults = responseSearchStories.stories_total
-      }
+      // const queryParams = {
+      //   order: data.searchOrder,
+      //   sort: props.searchSort,
+      //   limit: props.searchLimit,
+      //   categoryIds: props.searchCategoryIds,
+      // }
+      // const responseSearchStories = await ApiStories.search(queryParams)
+      // if (responseSearchStories.ok) {
+      //   data.stories = responseSearchStories.stories
+      //   data.nbResults = responseSearchStories.stories_total
+      // }
     }
 
     data.hasTitle = computed(() => {

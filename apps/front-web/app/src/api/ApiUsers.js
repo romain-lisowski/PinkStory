@@ -1,18 +1,18 @@
 import ApiLanguages from '@/api/ApiLanguages'
-import clientApi from './clientApi'
+import fetchData from '@/composition/useFetch'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
   async login(email, password) {
-    return clientApi.fetch('POST', 'account/login', null, {
+    return fetchData('POST', 'account/login', null, {
       email,
       password,
     })
   },
 
   async signUp(name, gender, email, password, passwordConfirm) {
-    return clientApi.fetch('POST', 'account/signup', null, {
+    return fetchData('POST', 'account/signup', null, {
       name,
       gender,
       email,
@@ -22,7 +22,7 @@ export default {
   },
 
   async getCurrentUser(jwt = null) {
-    return clientApi.fetch('GET', 'account', null, null, jwt)
+    return fetchData('GET', 'account', null, null, jwt)
   },
 
   async updateEmail(jwt, email) {
@@ -30,17 +30,10 @@ export default {
     formData.append('email[first]', email)
     formData.append('email[second]', email)
 
-    const response = await fetch(
-      `${baseUrl}/account/update-email?_method=PATCH`,
-      {
-        method: 'POST',
-        body: formData,
-        headers: { Authorization: `Bearer ${jwt}` },
-      }
-    )
-
-    const responseJson = await response.json()
-    return { ok: response.ok, status: response.status, ...responseJson }
+    return fetchData('PATCH', 'account/update-email', null, {
+      "email['first']": email,
+      "email['second']": email,
+    })
   },
 
   async updatePassword(jwt, passwordOld, passwordNew, passwordNewConfirm) {

@@ -1,7 +1,7 @@
-import clientApi from './clientApi'
+import fetchData from '@/composition/useFetch'
 
 export default {
   async search() {
-    return clientApi.fetch('GET', 'story-theme/search')
+    return fetchData('GET', 'story-theme/search')
   },
 }

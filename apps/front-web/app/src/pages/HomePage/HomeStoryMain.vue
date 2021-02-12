@@ -53,48 +53,15 @@
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
-import ApiStories from '@/api/ApiStories'
-import { computed, onMounted, reactive } from 'vue'
+import useApiStoriesSearch from '@/composition/apiStories/useApiStoriesSearch'
+import { computed, reactive } from 'vue'
 import dayJs from 'dayjs'
 
 export default {
   components: {
     UiRatingStars,
   },
-  setup() {
-    const data = reactive({
-      story: [],
-    })
-
-    onMounted(async () => {
-      const responseSearchStories = await ApiStories.search({
-        order: 'ORDER_POPULAR',
-        sort: 'ASC',
-        limit: 1,
-      })
-
-      if (responseSearchStories.ok) {
-        ;[data.story] = responseSearchStories.stories
-      }
-
-      data.storyCategories = computed(() => {
-        const themes = data.story.story_themes.map((theme) => theme.title)
-        return themes.join(', ')
-      })
-
-      data.userName = computed(() => {
-        return data.story.user.name
-      })
-
-      data.imageUrl = computed(() => {
-        return data.story.story_image.image_url
-      })
-
-      data.createdAtFormatted = computed(() => {
-        return dayJs(data.story.created_at).format('DD/MM/YYYY HH[h]mm')
-      })
-    })
-
+  async setup() {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -102,6 +69,37 @@ export default {
           'read-now': 'Lire maintenant',
         },
       },
+    })
+
+    const { list, listError } = await useApiStoriesSearch({
+      order: 'ORDER_POPULAR',
+      sort: 'ASC',
+      limit: 1,
+    })
+
+    const data = reactive({
+      story: {},
+    })
+
+    if (!listError) {
+      data.story = list.stories
+    }
+
+    data.storyCategories = computed(() => {
+      const themes = data.story.story_themes.map((theme) => theme.title)
+      return themes.join(', ')
+    })
+
+    data.userName = computed(() => {
+      return data.story.user.name
+    })
+
+    data.imageUrl = computed(() => {
+      return data.story.story_image.image_url
+    })
+
+    data.createdAtFormatted = computed(() => {
+      return dayJs(data.story.created_at).format('DD/MM/YYYY HH[h]mm')
     })
 
     return { data, t }

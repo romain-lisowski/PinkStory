@@ -221,7 +221,7 @@ export default {
       return store.getters['auth/isLoggedIn']
     })
     const userLoggedIn = computed(() => {
-      return store.state.auth.state.userLoggedIn
+      return store.getters['auth/getUserLoggedIn']
     })
     const currentPageUri = computed(() => {
       return route.path

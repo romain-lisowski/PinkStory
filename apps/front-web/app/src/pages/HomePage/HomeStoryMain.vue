@@ -70,7 +70,7 @@ export default {
       },
     })
 
-    let story = null
+    let story = {}
     const { response, error } = await useApiStoriesSearch({
       order: 'ORDER_POPULAR',
       sort: 'ASC',

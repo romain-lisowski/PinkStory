@@ -1,13 +1,13 @@
 <template>
   <div>
-    <StoryHeader :story="data.story" />
+    <StoryHeader :story="story" />
 
     <div class="relative w-full">
-      <StoryHeaderBottom :story="data.story" />
+      <StoryHeaderBottom :story="story" />
 
       <div class="flex flex-col items-center">
-        <StoryContent :story="data.story" />
-        <StoryInformations :story="data.story" />
+        <StoryContent :story="story" />
+        <StoryInformations :story="story" />
         <StoryList :search-order="'ORDER_POPULAR'" :search-sort="'DESC'" />
       </div>
     </div>
@@ -20,9 +20,8 @@ import StoryHeaderBottom from '@/pages/StoryPage/StoryHeaderBottom.vue'
 import StoryContent from '@/pages/StoryPage/StoryContent.vue'
 import StoryInformations from '@/pages/StoryPage/StoryInformations.vue'
 import StoryList from '@/components/story/StoryList.vue'
-// import ApiStories from '@/api/ApiStories'
-import { onMounted, reactive, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import useApiStoriesGet from '@/composition/apiStories/useApiStoriesGet'
+import { onMounted } from 'vue'
 
 export default {
   components: {
@@ -39,32 +38,21 @@ export default {
     },
   },
   setup(props) {
-    const route = useRoute()
-    const data = reactive({
-      story: {},
-    })
+    let story = {}
 
     const fetchStory = async (storyId) => {
-      console.log(storyId)
-      // const responseSearchStories = await ApiStories.get(storyId)
+      const { response, error } = await useApiStoriesGet(storyId)
 
-      // if (responseSearchStories.ok) {
-      //   data.story = responseSearchStories.story
-      // }
+      if (!error.value) {
+        story = response.value.story
+      }
     }
 
-    onMounted(() => {
-      fetchStory(props.storyId)
+    onMounted(async () => {
+      await fetchStory(props.storyId)
     })
 
-    watch(
-      () => route.params,
-      async (newParams) => {
-        await fetchStory(newParams.storyId)
-      }
-    )
-
-    return { data }
+    return { story }
   },
 }
 </script>

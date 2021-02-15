@@ -1,4 +1,5 @@
 import useFetch from '@/composition/useFetch'
+import useLoadingOverlay from './useLoadingOverlay'
 
 export default async (params = {}) => {
   const queryParams = params
@@ -7,12 +8,13 @@ export default async (params = {}) => {
     delete queryParams.categoryIds
   }
 
-  const { response, error, fetchData } = useFetch(
+  const { response, error, isLoading, fetchData } = useFetch(
     'GET',
     'story/search',
     queryParams
   )
 
+  useLoadingOverlay(isLoading)
   await fetchData()
   return { response, error }
 }

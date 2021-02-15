@@ -10,7 +10,7 @@ export default (
   formParams = null,
   jwt = null
 ) => {
-  const state = reactive({ response: null, error: null })
+  const state = reactive({ response: null, error: null, isLoading: false })
 
   /**
    * Transform array parameter of URLSearchParams into multiple entries
@@ -77,8 +77,9 @@ export default (
   }
 
   const fetchData = async () => {
-    const store = useStore()
-    store.dispatch('site/showLoadingOverlay')
+    state.isLoading = true
+    // const store = useStore()
+    // store.dispatch('site/showLoadingOverlay')
 
     if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(method)) {
       throw new Error('Method invalid', method)
@@ -100,9 +101,11 @@ export default (
       state.response = await res.json()
     } catch (errors) {
       state.error = errors
+    } finally {
+      state.isLoading = false
     }
 
-    store.dispatch('site/hideLoadingOverlay')
+    // store.dispatch('site/hideLoadingOverlay')
   }
 
   return { ...toRefs(state), fetchData }

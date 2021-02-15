@@ -1,16 +1,13 @@
-import { toRefs, reactive } from 'vue'
 import useFetch from '@/composition/useFetch'
+import useLoadingOverlay from './useLoadingOverlay'
 
-export default (storyId) => {
-  const data = reactive({ response: null, error: null, fetching: false })
+export default async (storyId) => {
+  const { response, error, isLoading, fetchData } = useFetch(
+    'GET',
+    `story/${storyId}`
+  )
 
-  const submitted = async () => {
-    const { response, error, fetchData } = useFetch('GET', `story/${storyId}`)
-
-    fetchData()
-    data.response = response
-    data.error = error
-  }
-
-  return { submitted, ...toRefs(data) }
+  useLoadingOverlay(isLoading)
+  await fetchData()
+  return { response, error }
 }

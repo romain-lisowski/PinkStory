@@ -52,6 +52,13 @@ abstract class AbstractEntity implements EditableInterface
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
@@ -65,13 +72,6 @@ abstract class AbstractEntity implements EditableInterface
     public function updateLastUpdatedAt(): self
     {
         $this->setLastUpdatedAt(new DateTime());
-
-        return $this;
-    }
-
-    private function setId(string $id): self
-    {
-        $this->id = $id;
 
         return $this;
     }

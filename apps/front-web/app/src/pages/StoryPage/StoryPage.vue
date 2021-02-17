@@ -1,13 +1,13 @@
 <template>
   <div>
-    <StoryHeader :story="story" />
+    <StoryHeader v-if="story" :story="story" />
 
     <div class="relative w-full">
-      <StoryHeaderBottom :story="story" />
+      <StoryHeaderBottom v-if="story" :story="story" />
 
       <div class="flex flex-col items-center">
-        <StoryContent :story="story" />
-        <StoryInformations :story="story" />
+        <StoryContent v-if="story" :story="story" />
+        <StoryInformations v-if="story" :story="story" />
         <StoryList :search-order="'ORDER_POPULAR'" :search-sort="'DESC'" />
       </div>
     </div>
@@ -21,7 +21,6 @@ import StoryContent from '@/pages/StoryPage/StoryContent.vue'
 import StoryInformations from '@/pages/StoryPage/StoryInformations.vue'
 import StoryList from '@/components/story/StoryList.vue'
 import useApiStoriesGet from '@/composition/apiStories/useApiStoriesGet'
-import { onMounted } from 'vue'
 
 export default {
   components: {
@@ -37,22 +36,21 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    let story = {}
-
-    const fetchStory = async (storyId) => {
-      const { response, error } = await useApiStoriesGet(storyId)
-
-      if (!error.value) {
-        story = response.value.story
-      }
+  data() {
+    return {
+      story: null,
     }
-
-    onMounted(async () => {
-      await fetchStory(props.storyId)
-    })
-
-    return { story }
+  },
+  created() {
+    this.fetchStory(this.storyId)
+  },
+  methods: {
+    async fetchStory(storyId) {
+      const { response, error } = await useApiStoriesGet(storyId)
+      if (!error.value) {
+        this.story = response.value.story
+      }
+    },
   },
 }
 </script>

@@ -1,5 +1,5 @@
-import useFetch from '@/composition/useFetch'
-import useLoadingOverlay from './useLoadingOverlay'
+import useFetch from '@/composition/api/useFetch'
+import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 
 export default async (params = {}) => {
   const queryParams = params

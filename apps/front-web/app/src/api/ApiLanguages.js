@@ -1,4 +1,4 @@
-import fetchData from '@/composition/useFetch'
+import fetchData from '@/composition/api/useFetch'
 
 export default {
   async search() {

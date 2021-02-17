@@ -1,5 +1,5 @@
 import ApiLanguages from '@/api/ApiLanguages'
-import fetchData from '@/composition/useFetch'
+import fetchData from '@/composition/api/useFetch'
 
 const baseUrl = process.env.VUE_APP_API_URL
 

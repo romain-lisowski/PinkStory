@@ -52,7 +52,7 @@
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
-import useApiStoriesSearch from '@/composition/apiStories/useApiStoriesSearch'
+import useApiStorySearch from '@/composition/api/story/useApiStorySearch'
 import { computed } from 'vue'
 import dayJs from 'dayjs'
 
@@ -71,7 +71,7 @@ export default {
     })
 
     let story = {}
-    const { response, error } = await useApiStoriesSearch({
+    const { response, error } = await useApiStorySearch({
       order: 'ORDER_POPULAR',
       sort: 'ASC',
       limit: 1,

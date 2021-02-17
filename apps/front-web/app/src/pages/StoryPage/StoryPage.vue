@@ -20,7 +20,7 @@ import StoryHeaderBottom from '@/pages/StoryPage/StoryHeaderBottom.vue'
 import StoryContent from '@/pages/StoryPage/StoryContent.vue'
 import StoryInformations from '@/pages/StoryPage/StoryInformations.vue'
 import StoryList from '@/components/story/StoryList.vue'
-import useApiStoriesGet from '@/composition/apiStories/useApiStoriesGet'
+import useApiStoryGet from '@/composition/api/story/useApiStoryGet'
 
 export default {
   components: {
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     async fetchStory(storyId) {
-      const { response, error } = await useApiStoriesGet(storyId)
+      const { response, error } = await useApiStoryGet(storyId)
       if (!error.value) {
         this.story = response.value.story
       }

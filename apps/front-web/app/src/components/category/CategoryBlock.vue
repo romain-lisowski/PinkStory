@@ -7,7 +7,7 @@
       <slot name="header"></slot>
 
       <CategoryList
-        v-for="(categoryList, index) in data.categoryLists"
+        v-for="(categoryList, index) in categoryLists"
         :key="index"
         :category-list="categoryList"
       />
@@ -17,27 +17,28 @@
 
 <script>
 import CategoryList from '@/components/category/CategoryList.vue'
-import ApiStoryThemes from '@/api/ApiStoryThemes'
-import { onMounted, reactive } from 'vue'
+import useApiStoryThemeSearch from '@/composition/api/storyTheme/useApiStoryThemeSearch'
 
 export default {
   components: {
     CategoryList,
   },
-  setup() {
-    const data = reactive({
+  data() {
+    return {
       categoryLists: [],
-    })
+    }
+  },
+  created() {
+    this.fetchStoryThemes()
+  },
+  methods: {
+    async fetchStoryThemes() {
+      const { response, error } = await useApiStoryThemeSearch()
 
-    onMounted(async () => {
-      const responseSearchStoryThemes = await ApiStoryThemes.search()
-
-      if (responseSearchStoryThemes.ok) {
-        data.categoryLists = responseSearchStoryThemes.story_themes
+      if (!error.value) {
+        this.categoryLists = response.value.story_themes
       }
-    })
-
-    return { data }
+    },
   },
 }
 </script>

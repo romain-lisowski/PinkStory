@@ -1,9 +1,6 @@
 <template>
-  <div :class="data.hasTitle ? 'mx-8 sm:mx-12 mb-0 sm:mb-12' : ''">
-    <div
-      v-if="data.hasTitle"
-      class="flex flex-col sm:flex-row justify-between mt-16"
-    >
+  <div :class="title ? 'mx-8 sm:mx-12 mb-0 sm:mb-12' : ''">
+    <div v-if="title" class="flex flex-col sm:flex-row justify-between mt-16">
       <p class="text-3xl sm:text-4xl xl:text-5xl font-semibold text-left">
         {{ title }}
       </p>
@@ -14,11 +11,11 @@
       >
     </div>
     <slot name="StoryListOrder">
-      <StoryListOrder :nb-results="data.nbResults" />
+      <StoryListOrder :nb-results="nbResults" />
     </slot>
     <ul class="flex flex-wrap -mx-6 mt-4 sm:mt-6 xl:mt-8 pt-2 pl-2 text-left">
       <StoryListItem
-        v-for="(story, index) in data.stories"
+        v-for="(story, index) in stories"
         :key="index"
         :story="story"
       />
@@ -29,9 +26,7 @@
 <script>
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryListItem from '@/components/story/StoryListItem.vue'
-// import ApiStories from '@/api/ApiStories'
-import { computed, onMounted, reactive, watch } from 'vue'
-import { useStore } from 'vuex'
+import useApiStorySearch from '@/composition/api/story/useApiStorySearch'
 
 export default {
   components: {
@@ -64,52 +59,45 @@ export default {
       default: null,
     },
   },
-  setup(props) {
-    const store = useStore()
-    const data = reactive({
+  data() {
+    return {
       stories: [],
       nbResults: 0,
-      searchOrder: props.searchOrder,
-    })
-
-    const searchStories = async () => {
-      // const queryParams = {
-      //   order: data.searchOrder,
-      //   sort: props.searchSort,
-      //   limit: props.searchLimit,
-      //   categoryIds: props.searchCategoryIds,
-      // }
-      // const responseSearchStories = await ApiStories.search(queryParams)
-      // if (responseSearchStories.ok) {
-      //   data.stories = responseSearchStories.stories
-      //   data.nbResults = responseSearchStories.stories_total
-      // }
     }
-
-    data.hasTitle = computed(() => {
-      return props.title !== null
-    })
-
-    const storeSearchOrder = computed(() => {
-      return store.state.site.state.searchOrder
-    })
-
-    watch(storeSearchOrder, async (value) => {
+  },
+  computed: {
+    storeSearchOrder() {
+      return this.$store.state.site.state.searchOrder
+    },
+  },
+  watch: {
+    storeSearchOrder(value) {
       if (value) {
-        data.searchOrder = value
-        await searchStories()
+        // this.searchOrder = value
+        this.searchStories()
       }
-    })
+    },
+    searchCategoryIds() {
+      this.searchStories()
+    },
+  },
+  created() {
+    this.searchStories()
+  },
+  methods: {
+    async searchStories() {
+      const { response, error } = await useApiStorySearch({
+        order: this.searchOrder,
+        sort: this.searchSort,
+        limit: this.searchLimit,
+        categoryIds: this.searchCategoryIds,
+      })
 
-    watch(props.searchCategoryIds, async () => {
-      await searchStories()
-    })
-
-    onMounted(async () => {
-      await searchStories()
-    })
-
-    return { data, searchStories }
+      if (!error.value) {
+        this.stories = response.value.stories
+        this.nbResults = response.value.stories_total
+      }
+    },
   },
 }
 </script>

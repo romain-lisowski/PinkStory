@@ -31,4 +31,19 @@ final class UserDoctrineORMRepository extends AbstractDoctrineORMRepository impl
 
         return $qb->getQuery()->getSingleResult();
     }
+
+    public function findOneByEmail(string $email): User
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $qb->where($qb->expr()->andX(
+            $qb->expr()->eq('user.email', ':user_email'),
+            $qb->expr()->eq('user.status', ':user_status')
+        ))
+            ->setParameter('user_email', $email)
+            ->setParameter('user_status', UserStatus::ACTIVATED)
+        ;
+
+        return $qb->getQuery()->getSingleResult();
+    }
 }

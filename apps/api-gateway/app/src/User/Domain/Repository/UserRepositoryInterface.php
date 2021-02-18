@@ -10,4 +10,6 @@ use App\User\Domain\Model\User;
 interface UserRepositoryInterface extends RepositoryInterface
 {
     public function findOne(string $id): User;
+
+    public function findOneByEmail(string $email): User;
 }

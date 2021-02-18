@@ -23,4 +23,11 @@ final class UserPasswordEncoder implements UserPasswordEncoderInterface
 
         return $encoder->encodePassword($plainPassword, null);
     }
+
+    public function isPasswordValid(User $user, string $plainPassword): bool
+    {
+        $encoder = $this->encoderFactory->getEncoder(User::class);
+
+        return $encoder->isPasswordValid($user->getPassword(), $plainPassword, null);
+    }
 }

@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -44,6 +45,11 @@ final class RequestBodyParamConverter implements ParamConverterInterface
                 }
 
                 if ('security.user.id' === $value) {
+                    // need to be authenticated
+                    if (null === $this->security->getUser()) {
+                        throw new AccessDeniedException();
+                    }
+
                     $content[$field] = $this->security->getUser()->getId();
                 }
 

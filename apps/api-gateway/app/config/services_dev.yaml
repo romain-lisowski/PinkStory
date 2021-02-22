@@ -6,3 +6,5 @@ services:
 
     App\Fixture\:
         resource: '../fixtures'
+
+    App\Common\Infrastructure\EventListener\ExceptionListener: ~

@@ -29,7 +29,7 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_encode([]), $this->client->getResponse()->getContent());
+        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
 
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
 
@@ -46,7 +46,8 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
-        // TODO: check response body content
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($responseContent['exception']['type'], 'insufficient_authentication_exception');
 
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
 

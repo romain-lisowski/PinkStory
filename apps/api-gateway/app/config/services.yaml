@@ -5,7 +5,6 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     project_name: '%env(resolve:PROJECT_NAME)%'
-    app_secret: '%env(resolve:APP_SECRET)%'
     project_api_gateway_dsn: '%env(resolve:PROJECT_API_GATEWAY_DSN)%'
     project_front_web_dsn: '%env(resolve:PROJECT_FRONT_WEB_DSN)%'
     project_image_storage_dsn: '%env(resolve:PROJECT_IMAGE_STORAGE_DSN)%'
@@ -47,3 +46,11 @@ services:
     App\Common\Infrastructure\Http\RequestBodyParamConverter:
         tags: 
             - { name: 'request.param_converter', converter: 'request_body' }
+
+    App\Common\Infrastructure\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    App\Common\Infrastructure\Serializer\Normalizer\ValidationFailedExceptionNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 10 }

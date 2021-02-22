@@ -38,7 +38,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_encode([]), $this->client->getResponse()->getContent());
+        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
 
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
         $this->assertTrue($this->hasDataBeenFullySavedInDatabase(false));
@@ -59,7 +59,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_encode([]), $this->client->getResponse()->getContent());
+        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
 
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
         $this->assertTrue($this->hasDataBeenFullySavedInDatabase(true));
@@ -82,8 +82,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         ]));
 
         // check http response
-        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
-        // TODO: check response body content
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
+        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'gender');
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -100,8 +102,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         ]));
 
         // check http response
-        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
-        // TODO: check response body content
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
+        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'email');
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -118,8 +122,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         ]));
 
         // check http response
-        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
-        // TODO: check response body content
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
+        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'email');
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -136,8 +142,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         ]));
 
         // check http response
-        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
-        // TODO: check response body content
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
+        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'email');
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -154,8 +162,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         ]));
 
         // check http response
-        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
-        // TODO: check response body content
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
+        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'password');
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 

@@ -1,3 +1,5 @@
+exception: An error occured.
+
 file:
     exception:
         image_upload: An error occured during image upload.

@@ -3,6 +3,7 @@ exception: An error occured.
 file:
     exception:
         image_upload: An error occured during image upload.
+        image_delete: An error occured during image deletion.
 
 http:
     request_body_param_converter:

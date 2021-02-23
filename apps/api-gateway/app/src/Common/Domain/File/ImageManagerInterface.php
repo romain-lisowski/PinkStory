@@ -12,4 +12,9 @@ interface ImageManagerInterface
      * @throws ImageUploadException
      */
     public function upload(File $image, ImageableInterface $imageable): void;
+
+    /**
+     * @throws ImageDeleteException
+     */
+    public function delete(ImageableInterface $imageable): void;
 }

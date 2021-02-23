@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Common\Infrastructure\File;
 
 use App\Common\Domain\File\ImageableInterface;
+use App\Common\Domain\File\ImageDeleteException;
 use App\Common\Domain\File\ImageManagerInterface;
 use App\Common\Domain\File\ImageUploadException;
 use Imagine\Image\Box;
@@ -47,6 +48,15 @@ final class ImageManager implements ImageManagerInterface
             $this->imageStorage->write($imageable->getImagePath(true), (new File($tmpImagePath))->getContent());
         } catch (Throwable $e) {
             throw new ImageUploadException($e);
+        }
+    }
+
+    public function delete(ImageableInterface $imageable): void
+    {
+        try {
+            $this->imageStorage->delete($imageable->getImagePath(true));
+        } catch (Throwable $e) {
+            throw new ImageDeleteException($e);
         }
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
+use App\User\Domain\Event\UserDeletedImageEvent;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -38,6 +39,10 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         // check image has been deleted
         $this->assertFalse($user->isImageDefined());
         $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+
+        // check event has been dispatched
+        $this->assertCount(1, $this->asyncTransport->get());
+        $this->assertInstanceOf(UserDeletedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
     }
 
     public function testFailedUnauthorized(): void
@@ -54,5 +59,8 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         // check image has not been deleted
         $this->assertTrue($user->isImageDefined());
         $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 }

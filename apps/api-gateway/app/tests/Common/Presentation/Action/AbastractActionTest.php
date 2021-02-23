@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Test\Common\Presentation\Action;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Messenger\Transport\TransportInterface;
 
 /**
  * @internal
@@ -14,14 +15,16 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 abstract class AbastractActionTest extends WebTestCase
 {
-    protected AbstractBrowser $client;
+    protected KernelBrowser $client;
+    protected TransportInterface $asyncTransport;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = static::createClient();
-        $this->client->enableProfiler();
+
+        $this->asyncTransport = self::$container->get('messenger.transport.async');
     }
 
     protected function tearDown(): void

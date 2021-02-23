@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Test\User\Presentation\Action;
 
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
+use App\User\Domain\Event\UserCreatedEvent;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnexpectedResultException;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Mime\Address;
 
 /**
  * @internal
@@ -43,8 +42,9 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
         $this->assertTrue($this->hasDataBeenFullySavedInDatabase(false));
 
-        $this->assertTrue($this->hasMailBeenSent());
-        $this->assertTrue($this->hasMailBeenFullySent());
+        // check event has been dispatched
+        $this->assertCount(1, $this->asyncTransport->get());
+        $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
     }
 
     public function testSuccessWithImage(): void
@@ -68,8 +68,9 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
         $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath()));
 
-        $this->assertTrue($this->hasMailBeenSent());
-        $this->assertTrue($this->hasMailBeenFullySent());
+        // check event has been dispatched
+        $this->assertCount(1, $this->asyncTransport->get());
+        $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
     }
 
     public function testFailedNonExistentGender(): void
@@ -89,7 +90,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
-        $this->assertFalse($this->hasMailBeenSent());
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 
     public function testFailedWrongFormatEmail(): void
@@ -109,7 +111,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
-        $this->assertFalse($this->hasMailBeenSent());
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 
     public function testFailedNonExistentEmail(): void
@@ -129,7 +132,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
-        $this->assertFalse($this->hasMailBeenSent());
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 
     public function testFailedNonUniqueEmail(): void
@@ -149,7 +153,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
-        $this->assertFalse($this->hasMailBeenSent());
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 
     public function testFailedPasswordStrenght(): void
@@ -169,13 +174,14 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
-        $this->assertFalse($this->hasMailBeenSent());
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 
     private function hasDataBeenSavedInDatabase(): bool
     {
         try {
-            $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+            $this->userRepository->findOneByEmail(self::USER_DATA['email']);
 
             return true;
         } catch (NoResultException $e) {
@@ -202,37 +208,5 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         } catch (UnexpectedResultException $e) {
             return false;
         }
-    }
-
-    private function hasMailBeenSent(): bool
-    {
-        $mailerCollector = $this->client->getProfile()->getCollector('mailer');
-
-        if (1 !== count($mailerCollector->getEvents()->getMessages())) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function hasMailBeenFullySent(): bool
-    {
-        $mailerCollector = $this->client->getProfile()->getCollector('mailer');
-
-        if (1 !== count($mailerCollector->getEvents()->getMessages())) {
-            return false;
-        }
-
-        $collectedMessages = $mailerCollector->getEvents()->getMessages();
-        $message = $collectedMessages[0];
-
-        if (
-            !$message instanceof NotificationEmail
-            || false === in_array(self::USER_DATA['email'], array_map(function (Address $address) { return $address->getAddress(); }, $message->getTo()))
-        ) {
-            return false;
-        }
-
-        return true;
     }
 }

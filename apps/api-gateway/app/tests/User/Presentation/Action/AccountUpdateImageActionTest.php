@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Test\User\Presentation\Action;
 
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
+use App\User\Domain\Event\UserUpdatedImageEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -31,6 +32,10 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         // check image has been uploaded
         $this->assertTrue($user->isImageDefined());
         $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+
+        // check event has been dispatched
+        $this->assertCount(1, $this->asyncTransport->get());
+        $this->assertInstanceOf(UserUpdatedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
     }
 
     public function testFailedUnauthorized(): void
@@ -46,8 +51,11 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
 
         $user = $this->userRepository->findOneByEmail(self::PINKSTORY_USER_DATA['email']);
 
-        // check image has been uploaded
+        // check image has not been uploaded
         $this->assertFalse($user->isImageDefined());
         $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
     }
 }

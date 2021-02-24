@@ -6,7 +6,6 @@ namespace App\User\Infrastructure\Mailer;
 
 use App\Common\Domain\Event\EventHandlerInterface;
 use App\User\Domain\Event\UserCreatedEvent;
-use App\User\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
@@ -16,13 +15,11 @@ final class UserCreatedEventHandler implements EventHandlerInterface
 {
     private NotifierInterface $notifier;
     private ParameterBagInterface $params;
-    private UserRepositoryInterface $userRepository;
 
-    public function __construct(NotifierInterface $notifier, ParameterBagInterface $params, UserRepositoryInterface $userRepository)
+    public function __construct(NotifierInterface $notifier, ParameterBagInterface $params)
     {
         $this->notifier = $notifier;
         $this->params = $params;
-        $this->userRepository = $userRepository;
     }
 
     public function __invoke(UserCreatedEvent $event): void

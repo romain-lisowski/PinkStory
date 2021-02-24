@@ -32,7 +32,8 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals([], $responseContent);
 
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
 
@@ -43,6 +44,7 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserDeletedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
+        $this->assertEquals(self::PINKSTORY_USER_DATA['id'], $this->asyncTransport->get()[0]->getMessage()->getId());
     }
 
     public function testFailedUnauthorized(): void
@@ -52,7 +54,7 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'insufficient_authentication_exception');
+        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
 
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
 

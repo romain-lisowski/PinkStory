@@ -25,7 +25,8 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals([], $responseContent);
 
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
 
@@ -36,6 +37,8 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserUpdatedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
+        $this->assertEquals(self::PINKSTORY_USER_DATA['id'], $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals($user->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
     }
 
     public function testFailedUnauthorized(): void
@@ -47,7 +50,7 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'insufficient_authentication_exception');
+        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
 
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
 

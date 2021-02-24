@@ -27,12 +27,10 @@ final class UserCreatedEventHandler implements EventHandlerInterface
 
     public function __invoke(UserCreatedEvent $event): void
     {
-        $user = $this->userRepository->findOne($event->getId());
-
         $notification = (new Notification('Welcome', ['email']))
-            ->content('Welcome on PinkStory: '.$this->params->get('project_front_web_dsn').'. Please validate your email: '.$user->getEmail().' with this code: '.$user->getEmailValidationCode())
+            ->content('Welcome on PinkStory: '.$this->params->get('project_front_web_dsn').'. Please validate your email: '.$event->getEmail().' with this code: '.$event->getEmailValidationCode())
         ;
 
-        $this->notifier->send($notification, new Recipient($user->getEmail()));
+        $this->notifier->send($notification, new Recipient($event->getEmail()));
     }
 }

@@ -196,6 +196,7 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
     {
         $this->setEmailValidated(true);
         $this->setEmailValidationCodeUsed(true);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -217,6 +218,7 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
         $this->setEmailValidationCode(sprintf('%06d', random_int(0, 999999)));
         $this->setEmailValidationCodeUsed(false);
         $this->setEmailValidated(false);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }

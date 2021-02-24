@@ -12,7 +12,6 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Domain\Event\UserUpdatedImageEvent;
 use App\User\Domain\Repository\UserRepositoryInterface;
-use App\User\Domain\Security\UserPasswordEncoderInterface;
 
 final class UserUpdateImageCommandHandler implements CommandHandlerInterface
 {
@@ -22,7 +21,7 @@ final class UserUpdateImageCommandHandler implements CommandHandlerInterface
     private UserRepositoryInterface $userRepository;
     private ValidatorInterface $validator;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, ImageManagerInterface $imageManager, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, ImageManagerInterface $imageManager, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->eventBus = $eventBus;

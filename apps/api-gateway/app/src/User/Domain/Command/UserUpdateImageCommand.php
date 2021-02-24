@@ -15,6 +15,7 @@ final class UserUpdateImageCommand implements CommandInterface
      * @Assert\Uuid
      */
     private string $id;
+
     /**
      * @Assert\File(
      *      mimeTypes = {"image/jpeg", "image/png"},

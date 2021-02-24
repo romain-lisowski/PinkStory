@@ -7,10 +7,13 @@ namespace App\Test\User\Presentation\Action;
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
 use App\User\Domain\Event\UserCreatedEvent;
 use App\User\Domain\Model\UserGender;
+use App\User\Domain\Model\UserRole;
+use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
@@ -36,7 +39,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals([], $responseContent);
 
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
         $this->hasDataBeenFullySavedInDatabase(false);
@@ -44,6 +48,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
+        $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), false);
     }
 
     public function testSuccessWithImage(): void
@@ -58,7 +63,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals([], $responseContent);
 
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
         $this->hasDataBeenFullySavedInDatabase(true);
@@ -70,6 +76,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
+        $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), true);
     }
 
     public function testFailedNonExistentGender(): void
@@ -84,8 +91,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
-        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'gender');
+        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
+        $this->assertEquals('gender', $responseContent['exception']['violations'][0]['property_path']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -105,8 +112,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
-        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'email');
+        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
+        $this->assertEquals('email', $responseContent['exception']['violations'][0]['property_path']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -126,8 +133,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
-        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'email');
+        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
+        $this->assertEquals('email', $responseContent['exception']['violations'][0]['property_path']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -147,8 +154,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
-        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'email');
+        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
+        $this->assertEquals('email', $responseContent['exception']['violations'][0]['property_path']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -168,8 +175,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($responseContent['exception']['type'], 'validation_failed_exception');
-        $this->assertEquals($responseContent['exception']['violations'][0]['property_path'], 'password');
+        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
+        $this->assertEquals('password', $responseContent['exception']['violations'][0]['property_path']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -188,17 +195,39 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         }
     }
 
-    private function hasDataBeenFullySavedInDatabase($shouldHaveImageDefined = false): void
+    private function hasDataBeenFullySavedInDatabase(bool $shouldHaveImageDefined = false): void
     {
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
 
-        $this->assertEquals($user->getGender(), self::USER_DATA['gender']);
-        $this->assertEquals($user->getName(), self::USER_DATA['name']);
-        $this->assertEquals($user->getEmail(), self::USER_DATA['email']);
+        $this->assertTrue(Uuid::isValid($user->getId()));
+        $this->assertEquals(self::USER_DATA['gender'], $user->getGender());
+        $this->assertEquals(self::USER_DATA['name'], $user->getName());
+        $this->assertEquals(self::USER_DATA['email'], $user->getEmail());
         $this->assertFalse($user->isEmailValidated());
         $this->assertRegExp('/([0-9]{6})/', $user->getEmailValidationCode());
         $this->assertFalse($user->isEmailValidationCodeUsed());
         $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::USER_DATA['password']));
-        $this->assertEquals($user->isImageDefined(), $shouldHaveImageDefined);
+        $this->assertEquals($shouldHaveImageDefined, $user->isImageDefined());
+        $this->assertEquals(UserRole::USER, $user->getRole());
+        $this->assertEquals(UserStatus::ACTIVATED, $user->getStatus());
+    }
+
+    private function hasEventBeenFullyDispatched(UserCreatedEvent $event, bool $shouldHaveImageDefined = false): void
+    {
+        $this->assertTrue(Uuid::isValid($event->getId()));
+        $this->assertEquals(self::USER_DATA['gender'], $event->getGender());
+        $this->assertEquals(self::USER_DATA['name'], $event->getName());
+        $this->assertEquals(self::USER_DATA['email'], $event->getEmail());
+        $this->assertRegExp('/([0-9]{6})/', $event->getEmailValidationCode());
+        $this->assertNotNull($event->getPassword());
+
+        if (true === $shouldHaveImageDefined) {
+            $this->assertNotNull($event->getImagePath());
+        } else {
+            $this->assertNull($event->getImagePath());
+        }
+
+        $this->assertEquals(UserRole::USER, $event->getRole());
+        $this->assertEquals(UserStatus::ACTIVATED, $event->getStatus());
     }
 }

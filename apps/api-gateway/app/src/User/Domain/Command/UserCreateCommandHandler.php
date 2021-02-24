@@ -56,6 +56,7 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
             $user->getGender(),
             $user->getName(),
             $user->getEmail(),
+            $user->getEmailValidationCode(),
             $user->getPassword(),
             $user->getImagePath(),
             $user->getRole(),

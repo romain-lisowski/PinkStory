@@ -35,6 +35,11 @@ final class UserCreatedEvent implements EventInterface
     /**
      * @Assert\NotBlank
      */
+    private string $emailValidationCode;
+
+    /**
+     * @Assert\NotBlank
+     */
     private string $password;
 
     private ?string $imagePath;
@@ -51,12 +56,13 @@ final class UserCreatedEvent implements EventInterface
      */
     private string $status;
 
-    public function __construct(string $id, string $gender, string $name, string $email, string $password, ?string $imagePath, string $role, string $status)
+    public function __construct(string $id, string $gender, string $name, string $email, string $emailValidationCode, string $password, ?string $imagePath, string $role, string $status)
     {
         $this->id = $id;
         $this->gender = $gender;
         $this->name = $name;
         $this->email = $email;
+        $this->emailValidationCode = $emailValidationCode;
         $this->password = $password;
         $this->imagePath = $imagePath;
         $this->role = $role;
@@ -81,6 +87,11 @@ final class UserCreatedEvent implements EventInterface
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function getEmailValidationCode(): string
+    {
+        return $this->emailValidationCode;
     }
 
     public function getPassword(): string

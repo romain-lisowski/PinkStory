@@ -27,7 +27,7 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
 
-        $user = $this->userRepository->findOneByEmail(self::PINKSTORY_USER_DATA['email']);
+        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
 
         // check image has been uploaded
         $this->assertTrue($user->isImageDefined());
@@ -49,7 +49,7 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals($responseContent['exception']['type'], 'insufficient_authentication_exception');
 
-        $user = $this->userRepository->findOneByEmail(self::PINKSTORY_USER_DATA['email']);
+        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
 
         // check image has not been uploaded
         $this->assertFalse($user->isImageDefined());

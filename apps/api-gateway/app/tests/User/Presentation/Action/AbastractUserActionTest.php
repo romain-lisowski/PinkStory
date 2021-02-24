@@ -16,6 +16,7 @@ abstract class AbastractUserActionTest extends AbastractActionTest
 {
     protected const PINKSTORY_USER_DATA = [
         'access_token' => 'f478da1e-f5a8-4c28-a5e2-77abeb7f1cdf',
+        'id' => 'dc8d7267-fcb8-4f42-b164-a08e7cb9296b',
         'email' => 'hello@pinkstory.io',
     ];
 

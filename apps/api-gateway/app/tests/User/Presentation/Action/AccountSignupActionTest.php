@@ -9,7 +9,6 @@ use App\User\Domain\Event\UserCreatedEvent;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -40,7 +39,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
 
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
-        $this->assertTrue($this->hasDataBeenFullySavedInDatabase(false));
+        $this->hasDataBeenFullySavedInDatabase(false);
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
@@ -62,7 +61,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->assertEquals(json_decode($this->client->getResponse()->getContent(), true), []);
 
         $this->assertTrue($this->hasDataBeenSavedInDatabase());
-        $this->assertTrue($this->hasDataBeenFullySavedInDatabase(true));
+        $this->hasDataBeenFullySavedInDatabase(true);
 
         // check image has been uploaded
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
@@ -189,24 +188,17 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         }
     }
 
-    private function hasDataBeenFullySavedInDatabase($shouldHaveImageDefined = false): bool
+    private function hasDataBeenFullySavedInDatabase($shouldHaveImageDefined = false): void
     {
-        try {
-            $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+        $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
 
-            if (
-                $user->getGender() !== self::USER_DATA['gender']
-                || $user->getName() !== self::USER_DATA['name']
-                || $user->getEmail() !== self::USER_DATA['email']
-                || false === self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::USER_DATA['password'])
-                || $user->isImageDefined() !== $shouldHaveImageDefined
-            ) {
-                throw new UnexpectedResultException();
-            }
-
-            return true;
-        } catch (UnexpectedResultException $e) {
-            return false;
-        }
+        $this->assertEquals($user->getGender(), self::USER_DATA['gender']);
+        $this->assertEquals($user->getName(), self::USER_DATA['name']);
+        $this->assertEquals($user->getEmail(), self::USER_DATA['email']);
+        $this->assertFalse($user->isEmailValidated());
+        $this->assertRegExp('/([0-9]{6})/', $user->getEmailValidationCode());
+        $this->assertFalse($user->isEmailValidationCodeUsed());
+        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::USER_DATA['password']));
+        $this->assertEquals($user->isImageDefined(), $shouldHaveImageDefined);
     }
 }

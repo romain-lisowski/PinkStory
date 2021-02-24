@@ -18,7 +18,7 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         parent::setUp();
 
         // init user image
-        $user = $this->userRepository->findOneByEmail(self::PINKSTORY_USER_DATA['email']);
+        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $user->setImageDefined(true);
         $this->userRepository->flush();
         (new Filesystem())->copy(__DIR__.'/../../../image/test.jpg', self::$container->getParameter('project_image_storage_path').$user->getImagePath(true));

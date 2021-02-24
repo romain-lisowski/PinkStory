@@ -55,6 +55,24 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
     private string $email;
 
     /**
+     * @ORM\Column(name="email_validated", type="boolean")
+     * @Assert\NotNull
+     */
+    private bool $emailValidated;
+
+    /**
+     * @ORM\Column(name="email_validation_code", type="string", length=255)
+     * @Assert\NotBlank
+     */
+    private string $emailValidationCode;
+
+    /**
+     * @ORM\Column(name="email_validation_code_used", type="boolean")
+     * @Assert\NotNull
+     */
+    private bool $emailValidationCodeUsed;
+
+    /**
      * @ORM\Column(name="password", type="string")
      * @Assert\NotBlank
      */
@@ -90,6 +108,7 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
         parent::__construct();
 
         // init values
+        $this->regenerateEmailValidationCode();
         $this->accessTokens = new ArrayCollection();
     }
 
@@ -157,6 +176,59 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
     {
         $this->setEmail($email);
         $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function isEmailValidated(): bool
+    {
+        return $this->emailValidated;
+    }
+
+    public function setEmailValidated(bool $validated): self
+    {
+        $this->emailValidated = $validated;
+
+        return $this;
+    }
+
+    public function validateEmail(): self
+    {
+        $this->setEmailValidated(true);
+        $this->setEmailValidationCodeUsed(true);
+
+        return $this;
+    }
+
+    public function getEmailValidationCode(): string
+    {
+        return $this->emailValidationCode;
+    }
+
+    public function setEmailValidationCode(string $code): self
+    {
+        $this->emailValidationCode = $code;
+
+        return $this;
+    }
+
+    public function regenerateEmailValidationCode(): self
+    {
+        $this->setEmailValidationCode(sprintf('%06d', random_int(0, 999999)));
+        $this->setEmailValidationCodeUsed(false);
+        $this->setEmailValidated(false);
+
+        return $this;
+    }
+
+    public function isEmailValidationCodeUsed(): bool
+    {
+        return $this->emailValidationCodeUsed;
+    }
+
+    public function setEmailValidationCodeUsed(bool $used): self
+    {
+        $this->emailValidationCodeUsed = $used;
 
         return $this;
     }

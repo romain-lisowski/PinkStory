@@ -6,6 +6,7 @@ namespace App\Test\User\Presentation\Action;
 
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
 use App\User\Domain\Event\UserCreatedEvent;
+use App\User\Domain\Model\User;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserRole;
 use App\User\Domain\Model\UserStatus;
@@ -42,13 +43,14 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
-        $this->assertTrue($this->hasDataBeenSavedInDatabase());
-        $this->hasDataBeenFullySavedInDatabase(false);
+        // check data has been saved in database
+        $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+        $this->hasDataBeenFullySavedInDatabase($user, false);
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), false);
+        $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), $user);
     }
 
     public function testSuccessWithImage(): void
@@ -66,8 +68,9 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
-        $this->assertTrue($this->hasDataBeenSavedInDatabase());
-        $this->hasDataBeenFullySavedInDatabase(true);
+        // check data has been saved in database
+        $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+        $this->hasDataBeenFullySavedInDatabase($user, true);
 
         // check image has been uploaded
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
@@ -76,7 +79,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), true);
+        $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), $user);
     }
 
     public function testFailedNonExistentGender(): void
@@ -195,10 +198,8 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         }
     }
 
-    private function hasDataBeenFullySavedInDatabase(bool $shouldHaveImageDefined = false): void
+    private function hasDataBeenFullySavedInDatabase(User $user, bool $shouldHaveImageDefined): void
     {
-        $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
-
         $this->assertTrue(Uuid::isValid($user->getId()));
         $this->assertEquals(self::USER_DATA['gender'], $user->getGender());
         $this->assertEquals(self::USER_DATA['name'], $user->getName());
@@ -212,22 +213,16 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->assertEquals(UserStatus::ACTIVATED, $user->getStatus());
     }
 
-    private function hasEventBeenFullyDispatched(UserCreatedEvent $event, bool $shouldHaveImageDefined = false): void
+    private function hasEventBeenFullyDispatched(UserCreatedEvent $event, User $user): void
     {
-        $this->assertTrue(Uuid::isValid($event->getId()));
-        $this->assertEquals(self::USER_DATA['gender'], $event->getGender());
-        $this->assertEquals(self::USER_DATA['name'], $event->getName());
-        $this->assertEquals(self::USER_DATA['email'], $event->getEmail());
-        $this->assertRegExp('/([0-9]{6})/', $event->getEmailValidationCode());
-        $this->assertNotNull($event->getPassword());
-
-        if (true === $shouldHaveImageDefined) {
-            $this->assertNotNull($event->getImagePath());
-        } else {
-            $this->assertNull($event->getImagePath());
-        }
-
-        $this->assertEquals(UserRole::USER, $event->getRole());
-        $this->assertEquals(UserStatus::ACTIVATED, $event->getStatus());
+        $this->assertEquals($user->getId(), $event->getId());
+        $this->assertEquals($user->getGender(), $event->getGender());
+        $this->assertEquals($user->getName(), $event->getName());
+        $this->assertEquals($user->getEmail(), $event->getEmail());
+        $this->assertEquals($user->getEmailValidationCode(), $event->getEmailValidationCode());
+        $this->assertEquals($user->getPassword(), $event->getPassword());
+        $this->assertEquals($user->getImagePath(), $event->getImagePath());
+        $this->assertEquals($user->getRole(), $event->getRole());
+        $this->assertEquals($user->getStatus(), $event->getStatus());
     }
 }

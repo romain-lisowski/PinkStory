@@ -23,7 +23,7 @@ final class UserUpdateImageCommand implements CommandInterface
      */
     private File $image;
 
-    public function __construct(string $id, File $image = null)
+    public function __construct(string $id, File $image)
     {
         $this->id = $id;
         $this->image = $image;

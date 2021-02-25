@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\File;
 
-use Exception;
 use Throwable;
 
-final class ImageDeleteException extends Exception
+final class ImageDeleteException extends RuntimeException
 {
     protected $message = 'file.exception.image_delete';
 

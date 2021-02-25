@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Validator;
 
-use Exception;
-
-final class ValidationFailedException extends Exception
+final class ValidationFailedException extends RuntimeException
 {
     protected $message = 'validator.exception.validation_failed';
 

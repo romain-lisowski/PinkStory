@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\File;
 
-use Exception;
 use Throwable;
 
-final class ImageUploadException extends Exception
+final class ImageUploadException extends RuntimeException
 {
     protected $message = 'file.exception.image_upload';
 

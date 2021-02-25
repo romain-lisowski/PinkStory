@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Test\User\Presentation\Action;
 
 use App\User\Domain\Event\UserRegenerateEmailValidationCodeEvent;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -12,27 +13,39 @@ use App\User\Domain\Event\UserRegenerateEmailValidationCodeEvent;
  */
 final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUserActionTest
 {
+    protected const HTTP_METHOD = Request::METHOD_PATCH;
+    protected const HTTP_URI = '/account/regenerate-email-validation-code';
+
+    private string $userEmailValidationCode;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // init user image
+        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->userEmailValidationCode = $user->getEmailValidationCode();
+    }
+
     public function testSuccess(): void
     {
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
-        $userEmailValidationCode = $user->getEmailValidationCode();
+        $this->checkSuccess();
+    }
 
-        $this->client->request('PATCH', '/account/regenerate-email-validation-code', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ]);
+    public function testFailedUnauthorized(): void
+    {
+        $this->checkFailedUnauthorized();
+    }
 
-        // check http response
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals([], $responseContent);
-
+    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    {
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
         // check email has been invalidated
         $this->assertFalse($user->isEmailValidated());
-        $this->assertNotEquals($userEmailValidationCode, $user->getEmailValidationCode());
+        $this->assertNotEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
         $this->assertFalse($user->isEmailValidationCodeUsed());
 
         // check event has been dispatched
@@ -43,15 +56,8 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
         $this->assertEquals($user->getEmailValidationCode(), $this->asyncTransport->get()[0]->getMessage()->getEmailValidationCode());
     }
 
-    public function testFailedUnauthorized(): void
+    protected function checkProcessHasBeenStopped(): void
     {
-        $this->client->request('PATCH', '/account/regenerate-email-validation-code');
-
-        // check http response
-        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
-
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);

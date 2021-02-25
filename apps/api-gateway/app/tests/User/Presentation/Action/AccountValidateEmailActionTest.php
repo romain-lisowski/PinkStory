@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Test\User\Presentation\Action;
 
 use App\User\Domain\Event\UserValidatedEmailEvent;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -12,6 +13,9 @@ use App\User\Domain\Event\UserValidatedEmailEvent;
  */
 final class AccountValidateEmailActionTest extends AbastractUserActionTest
 {
+    protected const HTTP_METHOD = Request::METHOD_PATCH;
+    protected const HTTP_URI = '/account/validate-email';
+
     private string $userEmailValidationCode;
 
     protected function setUp(): void
@@ -27,17 +31,43 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
 
     public function testSuccess(): void
     {
-        $this->client->request('PATCH', '/account/validate-email', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ], json_encode([
+        $this->checkSuccess([
             'code' => $this->userEmailValidationCode,
-        ]));
+        ]);
+    }
 
-        // check http response
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals([], $responseContent);
+    public function testFailedUnauthorized(): void
+    {
+        $this->checkFailedUnauthorized([
+            'code' => $this->userEmailValidationCode,
+        ]);
+    }
 
+    public function testFailedMissingCode(): void
+    {
+        $this->checkFailedMissingMandatory();
+    }
+
+    public function testFailedWrongCodeFormat(): void
+    {
+        $this->checkFailedValidationFailed([
+            'code' => 'code',
+        ], [
+            'code',
+        ]);
+    }
+
+    public function testFailedWrongCode(): void
+    {
+        $this->checkFailedValidationFailed([
+            'code' => '012345',
+        ], [
+            'code',
+        ]);
+    }
+
+    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    {
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
@@ -53,89 +83,8 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $this->assertEquals($user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
     }
 
-    public function testFailedUnauthorized(): void
+    protected function checkProcessHasBeenStopped(): void
     {
-        $this->client->request('PATCH', '/account/validate-email');
-
-        // check http response
-        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
-
-        // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
-        $this->entityManager->refresh($user);
-
-        // check email has not been validated
-        $this->assertFalse($user->isEmailValidated());
-        $this->assertFalse($user->isEmailValidationCodeUsed());
-
-        // check event has not been dispatched
-        $this->assertCount(0, $this->asyncTransport->get());
-    }
-
-    public function testFailedMissingCode(): void
-    {
-        $this->client->request('PATCH', '/account/validate-email', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ]);
-
-        // check http response
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
-
-        // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
-        $this->entityManager->refresh($user);
-
-        // check email has not been validated
-        $this->assertFalse($user->isEmailValidated());
-        $this->assertFalse($user->isEmailValidationCodeUsed());
-
-        // check event has not been dispatched
-        $this->assertCount(0, $this->asyncTransport->get());
-    }
-
-    public function testFailedWrongCodeFormat(): void
-    {
-        $this->client->request('PATCH', '/account/validate-email', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ], json_encode([
-            'code' => 'code',
-        ]));
-
-        // check http response
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
-        $this->assertEquals('code', $responseContent['exception']['violations'][0]['property_path']);
-
-        // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
-        $this->entityManager->refresh($user);
-
-        // check email has not been validated
-        $this->assertFalse($user->isEmailValidated());
-        $this->assertFalse($user->isEmailValidationCodeUsed());
-
-        // check event has not been dispatched
-        $this->assertCount(0, $this->asyncTransport->get());
-    }
-
-    public function testFailedWrongCode(): void
-    {
-        $this->client->request('PATCH', '/account/validate-email', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ], json_encode([
-            'code' => '012345',
-        ]));
-
-        // check http response
-        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('access_denied_exception', $responseContent['exception']['type']);
-
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);

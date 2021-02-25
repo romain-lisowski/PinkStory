@@ -8,6 +8,7 @@ use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
 use App\User\Domain\Event\UserUpdatedImageEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -15,19 +16,30 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 final class AccountUpdateImageActionTest extends AbastractUserActionTest
 {
+    protected const HTTP_METHOD = Request::METHOD_PATCH;
+    protected const HTTP_URI = '/account/update-image';
+
     public function testSuccess(): void
     {
-        $this->client->request('PATCH', '/account/update-image', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ], json_encode([
+        $this->checkSuccess([
             'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
-        ]));
+        ]);
+    }
 
-        // check http response
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals([], $responseContent);
+    public function testFailedUnauthorized(): void
+    {
+        $this->checkFailedUnauthorized([
+            'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
+        ]);
+    }
 
+    public function testFailedMissingImage(): void
+    {
+        $this->checkFailedMissingMandatory();
+    }
+
+    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    {
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
@@ -43,40 +55,8 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         $this->assertEquals($user->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
     }
 
-    public function testFailedUnauthorized(): void
+    protected function checkProcessHasBeenStopped(): void
     {
-        $this->client->request('PATCH', '/account/update-image', [], [], [], json_encode([
-            'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
-        ]));
-
-        // check http response
-        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
-
-        // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
-        $this->entityManager->refresh($user);
-
-        // check image has not been uploaded
-        $this->assertFalse($user->isImageDefined());
-        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
-
-        // check event has not been dispatched
-        $this->assertCount(0, $this->asyncTransport->get());
-    }
-
-    public function testFailedMissingImage(): void
-    {
-        $this->client->request('PATCH', '/account/update-image', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ]);
-
-        // check http response
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
-
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);

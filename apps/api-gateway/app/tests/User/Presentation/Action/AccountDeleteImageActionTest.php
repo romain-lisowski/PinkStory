@@ -6,6 +6,7 @@ namespace App\Test\User\Presentation\Action;
 
 use App\User\Domain\Event\UserDeletedImageEvent;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -13,6 +14,9 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 final class AccountDeleteImageActionTest extends AbastractUserActionTest
 {
+    protected const HTTP_METHOD = Request::METHOD_DELETE;
+    protected const HTTP_URI = '/account/delete-image';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -26,15 +30,16 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
 
     public function testSuccess(): void
     {
-        $this->client->request('DELETE', '/account/delete-image', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
-        ]);
+        $this->checkSuccess();
+    }
 
-        // check http response
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals([], $responseContent);
+    public function testFailedUnauthorized(): void
+    {
+        $this->checkFailedUnauthorized();
+    }
 
+    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    {
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
@@ -49,15 +54,8 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
     }
 
-    public function testFailedUnauthorized(): void
+    protected function checkProcessHasBeenStopped(): void
     {
-        $this->client->request('DELETE', '/account/delete-image');
-
-        // check http response
-        $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
-
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);

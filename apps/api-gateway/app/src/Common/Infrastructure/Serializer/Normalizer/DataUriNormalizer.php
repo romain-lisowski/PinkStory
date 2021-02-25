@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Common\Infrastructure\Serializer\Normalizer;
 
 use InvalidArgumentException;
+use SplFileObject;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Normalizer\DataUriNormalizer as SerializerDataUriNormalizer;
+use Throwable;
 
 final class DataUriNormalizer extends SerializerDataUriNormalizer
 {
@@ -32,12 +34,13 @@ final class DataUriNormalizer extends SerializerDataUriNormalizer
                     }
 
                     return new File($tmp, false);
+
                 case 'SplFileObject':
                 case 'SplFileInfo':
-                    return new \SplFileObject($tmp);
+                    return new SplFileObject($tmp);
             }
-        } catch (\RuntimeException $exception) {
-            throw new NotNormalizableValueException($exception->getMessage(), $exception->getCode(), $exception);
+        } catch (Throwable $e) {
+            throw new NotNormalizableValueException($e->getMessage(), $e->getCode(), $e);
         }
 
         throw new InvalidArgumentException(sprintf('The class parameter "%s" is not supported. It must be one of "SplFileInfo", "SplFileObject" or "Symfony\Component\HttpFoundation\File\File".', $type));

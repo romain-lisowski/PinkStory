@@ -13,6 +13,6 @@ final class RequestBodyParamConversionFailedException extends Exception
 
     public function __construct(Throwable $e)
     {
-        parent::__construct($this->message, 0, $e);
+        parent::__construct($this->message, $e->getCode(), $e);
     }
 }

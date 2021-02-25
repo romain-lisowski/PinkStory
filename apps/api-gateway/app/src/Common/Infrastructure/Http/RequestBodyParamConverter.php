@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Http;
 
-use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Infrastructure\Security\SecurityInterface;
 use ReflectionClass;
@@ -14,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 
 final class RequestBodyParamConverter implements ParamConverterInterface
 {
@@ -65,7 +64,7 @@ final class RequestBodyParamConverter implements ParamConverterInterface
             $this->validator->validate($object);
 
             $request->attributes->set($configuration->getName(), $object);
-        } catch (ExceptionInterface | ValidationFailedException $e) {
+        } catch (Throwable $e) {
             throw new RequestBodyParamConversionFailedException($e);
         }
     }

@@ -88,6 +88,25 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->hasEventBeenFullyDispatched($this->asyncTransport->get()[0]->getMessage(), $user);
     }
 
+    public function testFailedMissingGender(): void
+    {
+        $this->client->request('POST', '/account/signup', [], [], [], json_encode([
+            'name' => self::USER_DATA['name'],
+            'email' => self::USER_DATA['email'],
+            'password' => self::USER_DATA['password'],
+        ]));
+
+        // check http response
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
+
+        $this->assertFalse($this->hasDataBeenSavedInDatabase());
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
+    }
+
     public function testFailedNonExistentGender(): void
     {
         $this->client->request('POST', '/account/signup', [], [], [], json_encode([
@@ -102,6 +121,44 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
         $this->assertEquals('gender', $responseContent['exception']['violations'][0]['property_path']);
+
+        $this->assertFalse($this->hasDataBeenSavedInDatabase());
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
+    }
+
+    public function testFailedMissingName(): void
+    {
+        $this->client->request('POST', '/account/signup', [], [], [], json_encode([
+            'gender' => self::USER_DATA['gender'],
+            'email' => self::USER_DATA['email'],
+            'password' => self::USER_DATA['password'],
+        ]));
+
+        // check http response
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
+
+        $this->assertFalse($this->hasDataBeenSavedInDatabase());
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
+    }
+
+    public function testFailedMissingEmail(): void
+    {
+        $this->client->request('POST', '/account/signup', [], [], [], json_encode([
+            'gender' => self::USER_DATA['gender'],
+            'name' => self::USER_DATA['name'],
+            'password' => self::USER_DATA['password'],
+        ]));
+
+        // check http response
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 
@@ -165,6 +222,25 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
         $this->assertEquals('email', $responseContent['exception']['violations'][0]['property_path']);
+
+        $this->assertFalse($this->hasDataBeenSavedInDatabase());
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
+    }
+
+    public function testFailedMissingPassword(): void
+    {
+        $this->client->request('POST', '/account/signup', [], [], [], json_encode([
+            'gender' => self::USER_DATA['gender'],
+            'name' => self::USER_DATA['name'],
+            'email' => self::USER_DATA['email'],
+        ]));
+
+        // check http response
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
 
         $this->assertFalse($this->hasDataBeenSavedInDatabase());
 

@@ -65,4 +65,27 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());
     }
+
+    public function testFailedMissingImage(): void
+    {
+        $this->client->request('PATCH', '/account/update-image', [], [], [
+            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
+        ]);
+
+        // check http response
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
+
+        // get fresh user from database
+        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
+
+        // check image has not been uploaded
+        $this->assertFalse($user->isImageDefined());
+        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
+    }
 }

@@ -83,6 +83,31 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
         $this->assertCount(0, $this->asyncTransport->get());
     }
 
+    public function testFailedMissingEmail(): void
+    {
+        $this->client->request('PATCH', '/account/update-email', [], [], [
+            'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
+        ]);
+
+        // check http response
+        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
+
+        // get fresh user from database
+        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
+
+        // check email has not been updated
+        $this->assertEquals(self::PINKSTORY_USER_DATA['email'], $user->getEmail());
+        $this->assertTrue($user->isEmailValidated());
+        $this->assertEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
+        $this->assertTrue($user->isEmailValidationCodeUsed());
+
+        // check event has not been dispatched
+        $this->assertCount(0, $this->asyncTransport->get());
+    }
+
     public function testFailedWrongFormatEmail(): void
     {
         $this->client->request('PATCH', '/account/update-email', [], [], [

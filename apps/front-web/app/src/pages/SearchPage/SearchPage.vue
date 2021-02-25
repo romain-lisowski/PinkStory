@@ -14,7 +14,7 @@
       </template>
     </CategoryBlock>
     <div class="mx-8">
-      <StoryList />
+      <StoryList :with-loading-overlay="false" />
     </div>
   </div>
 </template>

@@ -51,6 +51,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    withLoadingOverlay: {
+      type: Boolean,
+      default: true,
+    },
     title: {
       type: String,
       default: null,
@@ -92,12 +96,15 @@ export default {
   },
   methods: {
     async searchStories() {
-      const { response, error } = await useApiStorySearch({
-        order: this.localSearchOrder,
-        sort: this.searchSort,
-        limit: this.searchLimit,
-        categoryIds: this.localSearchCategoryIds,
-      })
+      const { response, error } = await useApiStorySearch(
+        {
+          order: this.localSearchOrder,
+          sort: this.searchSort,
+          limit: this.searchLimit,
+          categoryIds: this.localSearchCategoryIds,
+        },
+        this.withLoadingOverlay
+      )
 
       if (!error.value) {
         this.stories = response.value.stories

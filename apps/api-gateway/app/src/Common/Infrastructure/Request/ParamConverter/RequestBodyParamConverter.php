@@ -29,7 +29,7 @@ final class RequestBodyParamConverter implements ParamConverterInterface
         $this->validator = $validator;
     }
 
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         try {
             $resolver = new OptionsResolver();
@@ -64,6 +64,8 @@ final class RequestBodyParamConverter implements ParamConverterInterface
             $this->validator->validate($object);
 
             $request->attributes->set($configuration->getName(), $object);
+
+            return true;
         } catch (MissingConstructorArgumentsException $e) {
             throw new RequestBodyParamMissingMandatoryException($e);
         } catch (ValidationFailedException $e) {
@@ -71,6 +73,8 @@ final class RequestBodyParamConverter implements ParamConverterInterface
         } catch (\Throwable $e) {
             throw new RequestBodyParamConversionFailedException($e);
         }
+
+        return false;
     }
 
     public function supports(ParamConverter $configuration): bool

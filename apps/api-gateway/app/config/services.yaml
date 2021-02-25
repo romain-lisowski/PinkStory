@@ -51,6 +51,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
-    App\Common\Infrastructure\Serializer\Normalizer\ValidationFailedExceptionNormalizer:
+    App\Common\Infrastructure\Validator\ValidationFailedExceptionNormalizer:
         tags:
             - { name: 'serializer.normalizer', priority: 10 }

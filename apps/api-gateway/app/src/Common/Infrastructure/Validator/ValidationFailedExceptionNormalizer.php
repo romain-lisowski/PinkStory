@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Infrastructure\Serializer\Normalizer;
+namespace App\Common\Infrastructure\Validator;
 
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
+use App\Common\Infrastructure\Serializer\Normalizer\ThrowableNormalizer;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 final class ValidationFailedExceptionNormalizer extends ThrowableNormalizer

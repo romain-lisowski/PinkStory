@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\EventListener;
 
-use App\Common\Infrastructure\Http\RequestBodyParamConversionFailedException;
 use App\Common\Presentation\Http\ResponderInterface;
 use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,10 +28,6 @@ final class ExceptionListener
 
         if ($e instanceof HttpExceptionInterface) {
             $statusCode = $e->getStatusCode();
-            $e = $e->getPrevious();
-        }
-
-        if ($e instanceof RequestBodyParamConversionFailedException) {
             $e = $e->getPrevious();
         }
 

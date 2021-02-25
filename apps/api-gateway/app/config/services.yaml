@@ -43,7 +43,7 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
 
-    App\Common\Infrastructure\Http\RequestBodyParamConverter:
+    App\Common\Infrastructure\Request\ParamConverter\RequestBodyParamConverter:
         tags: 
             - { name: 'request.param_converter', converter: 'request_body' }
 

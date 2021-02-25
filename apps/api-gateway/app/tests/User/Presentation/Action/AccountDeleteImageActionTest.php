@@ -44,7 +44,7 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserDeletedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals(self::PINKSTORY_USER_DATA['id'], $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
     }
 
     public function testFailedUnauthorized(): void

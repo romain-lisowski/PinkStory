@@ -12,7 +12,7 @@ use App\User\Domain\Event\UserValidatedEmailEvent;
  */
 final class AccountValidateEmailActionTest extends AbastractUserActionTest
 {
-    private string $emailValidationCode;
+    private string $userEmailValidationCode;
 
     protected function setUp(): void
     {
@@ -22,7 +22,7 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $user->regenerateEmailValidationCode();
         $this->userRepository->flush();
-        $this->emailValidationCode = $user->getEmailValidationCode();
+        $this->userEmailValidationCode = $user->getEmailValidationCode();
     }
 
     public function testSuccess(): void
@@ -30,7 +30,7 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $this->client->request('PATCH', '/account/validate-email', [], [], [
             'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
         ], json_encode([
-            'email_validation_code' => $this->emailValidationCode,
+            'email_validation_code' => $this->userEmailValidationCode,
         ]));
 
         // check http response

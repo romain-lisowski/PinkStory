@@ -1,5 +1,5 @@
 import { reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
+// import store from './store.js'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
@@ -68,11 +68,11 @@ export default (
   }
 
   const getHeaders = (jwtParam) => {
-    const store = useStore()
-    let jwt = jwtParam
-    if (!jwt) {
-      jwt = store.getters['auth/getJwt']
-    }
+    const jwt = jwtParam
+    // TODO : enable store for jwt
+    // if (!jwt) {
+    //   jwt = store.getters['auth/getJwt']
+    // }
     return { Authorization: jwt ? `Bearer ${jwt}` : null }
   }
 

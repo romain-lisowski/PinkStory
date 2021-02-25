@@ -1,14 +1,14 @@
 import ApiUsers from '@/api/ApiUsers'
 
 export default {
-  async login({ state, commit, dispatch }, { email, password }) {
+  async login({ context, commit, dispatch }, { email, password }) {
     const responseLogin = await ApiUsers.login(email, password)
 
     if (responseLogin.ok) {
       const jwt = responseLogin.token
 
       dispatch('fetchCurrentUser', jwt)
-      if (state.userLoggedIn) {
+      if (context.state.userLoggedIn) {
         localStorage.setItem('jwt', JSON.stringify(jwt))
         commit('SET_JWT', jwt)
       }

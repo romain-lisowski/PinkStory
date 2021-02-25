@@ -14,10 +14,7 @@
       </template>
     </CategoryBlock>
     <div class="mx-8">
-      <StoryList
-        :search-order="searchOrder"
-        :search-category-ids="searchCategoryIds"
-      />
+      <StoryList />
     </div>
   </div>
 </template>
@@ -26,8 +23,6 @@
 import CategoryBlock from '@/components/category/CategoryBlock.vue'
 import StoryList from '@/components/story/StoryList.vue'
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
-import { useStore } from 'vuex'
 
 export default {
   name: 'SearchPage',
@@ -37,10 +32,6 @@ export default {
   },
 
   setup() {
-    const store = useStore()
-    const searchCategoryIds = ref(store.state.site.state.searchCategoryIds)
-    const searchOrder = ref(store.state.site.state.searchOrder)
-
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -50,7 +41,7 @@ export default {
       },
     })
 
-    return { searchCategoryIds, searchOrder, t }
+    return { t }
   },
 }
 </script>

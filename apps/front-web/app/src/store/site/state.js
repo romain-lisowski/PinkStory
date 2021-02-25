@@ -16,6 +16,7 @@ export default {
   state: {
     isAdult,
     theme,
+    refreshSearchCategory: false,
     searchCategoryIds: [],
     searchOrder: '',
     showLoadingOverlay: false,

@@ -43,11 +43,11 @@ export default {
     )
     const activeClasses = ['text-primary', 'bg-accent', 'border-accent']
 
-    const changeOrder = async (searchOrder) => {
+    const changeOrder = (searchOrder) => {
       if (activeOrder.value !== searchOrder) {
         activeOrder.value = searchOrder
       }
-      await store.dispatch('site/updateSearchOrder', { searchOrder })
+      store.dispatch('site/updateSearchOrder', searchOrder)
     }
 
     const orderRate = () => {

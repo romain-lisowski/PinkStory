@@ -7,14 +7,18 @@ export default {
     commit('SET_THEME', theme)
     localStorage.setItem('theme', JSON.stringify(theme))
   },
-  toggleSearchCategory({ state, commit }, { categoryId }) {
+  toggleSearchCategory({ state, dispatch, commit }, categoryId) {
     if (!state.state.searchCategoryIds.includes(categoryId)) {
       commit('ADD_SEARCH_CATEGORY', categoryId)
     } else {
       commit('REMOVE_SEARCH_CATEGORY', categoryId)
     }
+    dispatch('refreshSearchCategory')
   },
-  updateSearchOrder({ commit }, { searchOrder }) {
+  refreshSearchCategory({ commit }) {
+    commit('REFRESH_SEARCH_CATEGORY')
+  },
+  updateSearchOrder({ commit }, searchOrder) {
     commit('SET_SEARCH_ORDER', searchOrder)
   },
   showLoadingOverlay({ commit }) {

@@ -27,6 +27,7 @@
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryListItem from '@/components/story/StoryListItem.vue'
 import useApiStorySearch from '@/composition/api/story/useApiStorySearch'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -63,21 +64,26 @@ export default {
     return {
       stories: [],
       nbResults: 0,
+      localSearchOrder: this.searchOrder,
+      localSearchCategoryIds: this.searchCategoryIds,
     }
   },
   computed: {
-    storeSearchOrder() {
-      return this.$store.state.site.state.searchOrder
-    },
+    ...mapGetters({
+      storeSearchOrder: 'site/getSearchOrder',
+      storeSearchCategoryIds: 'site/getSearchCategoryIds',
+      refreshingSearchCategory: 'site/refreshingSearchCategory',
+    }),
   },
   watch: {
     storeSearchOrder(value) {
       if (value) {
-        // this.searchOrder = value
+        this.localSearchOrder = value
         this.searchStories()
       }
     },
-    searchCategoryIds() {
+    refreshingSearchCategory() {
+      this.localSearchCategoryIds = this.storeSearchCategoryIds
       this.searchStories()
     },
   },
@@ -87,10 +93,10 @@ export default {
   methods: {
     async searchStories() {
       const { response, error } = await useApiStorySearch({
-        order: this.searchOrder,
+        order: this.localSearchOrder,
         sort: this.searchSort,
         limit: this.searchLimit,
-        categoryIds: this.searchCategoryIds,
+        categoryIds: this.localSearchCategoryIds,
       })
 
       if (!error.value) {

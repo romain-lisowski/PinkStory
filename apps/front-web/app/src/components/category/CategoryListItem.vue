@@ -21,16 +21,14 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    const active = ref(
-      store.state.site.state.searchCategoryIds.includes(props.category.id)
-    )
     const activeClasses = ['bg-accent', 'text-primary-inverse']
+    const active = ref(
+      store.getters['site/getSearchCategoryIds'].includes(props.category.id)
+    )
 
     const toggleActive = () => {
       active.value = !active.value
-      store.dispatch('site/toggleSearchCategory', {
-        categoryId: props.category.id,
-      })
+      store.dispatch('site/toggleSearchCategory', props.category.id)
     }
 
     return { active, activeClasses, toggleActive }

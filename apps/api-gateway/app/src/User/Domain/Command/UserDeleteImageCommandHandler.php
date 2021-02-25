@@ -34,7 +34,7 @@ final class UserDeleteImageCommandHandler implements CommandHandlerInterface
     {
         $user = $this->userRepository->findOne($command->getId());
 
-        $this->authorizationChecker->isGranted(EditableInterface::DELETE, $user);
+        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
         $user->updateImageDefined(false);
 

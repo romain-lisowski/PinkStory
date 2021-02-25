@@ -44,7 +44,7 @@ class UserFixture extends Fixture
             ->validateEmail()
             ->setPassword('@Password2!', $this->passwordEncoder)
             ->setImageDefined(false)
-            ->setRole(UserRole::GOD)
+            ->setRole(UserRole::ADMIN)
             ->setStatus(UserStatus::ACTIVATED)
         ;
         $manager->persist($user);
@@ -58,7 +58,7 @@ class UserFixture extends Fixture
             ->validateEmail()
             ->setPassword('@Password2!', $this->passwordEncoder)
             ->setImageDefined(false)
-            ->setRole(UserRole::GOD)
+            ->setRole(UserRole::ADMIN)
             ->setStatus(UserStatus::ACTIVATED)
         ;
         $manager->persist($user);
@@ -72,7 +72,7 @@ class UserFixture extends Fixture
             ->validateEmail()
             ->setPassword('@Password2!', $this->passwordEncoder)
             ->setImageDefined(false)
-            ->setRole(UserRole::GOD)
+            ->setRole(UserRole::USER)
             ->setStatus(UserStatus::ACTIVATED)
         ;
         $manager->persist($user);
@@ -86,7 +86,7 @@ class UserFixture extends Fixture
             ->validateEmail()
             ->setPassword('@Password2!', $this->passwordEncoder)
             ->setImageDefined(false)
-            ->setRole(UserRole::GOD)
+            ->setRole(UserRole::USER)
             ->setStatus(UserStatus::ACTIVATED)
         ;
         $manager->persist($user);

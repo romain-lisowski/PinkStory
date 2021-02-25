@@ -43,8 +43,11 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
-        // check data has been saved in database
+        // get fresh user from database
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+        $this->entityManager->refresh($user);
+
+        // check data has been saved in database
         $this->hasDataBeenFullySavedInDatabase($user, false);
 
         // check event has been dispatched
@@ -68,8 +71,11 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
-        // check data has been saved in database
+        // get fresh user from database
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+        $this->entityManager->refresh($user);
+
+        // check data has been saved in database
         $this->hasDataBeenFullySavedInDatabase($user, true);
 
         // check image has been uploaded
@@ -190,7 +196,9 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     private function hasDataBeenSavedInDatabase(): bool
     {
         try {
-            $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+            // get fresh user from database
+            $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+            $this->entityManager->refresh($user);
 
             return true;
         } catch (NoResultException $e) {

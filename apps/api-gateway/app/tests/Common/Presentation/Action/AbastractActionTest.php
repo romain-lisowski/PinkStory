@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\Common\Presentation\Action;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,6 +17,7 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
 abstract class AbastractActionTest extends WebTestCase
 {
     protected KernelBrowser $client;
+    protected EntityManagerInterface $entityManager;
     protected TransportInterface $asyncTransport;
 
     protected function setUp(): void
@@ -23,6 +25,8 @@ abstract class AbastractActionTest extends WebTestCase
         parent::setUp();
 
         $this->client = static::createClient();
+
+        $this->entityManager = self::$container->get('doctrine.orm.entity_manager');
 
         $this->asyncTransport = self::$container->get('messenger.transport.async');
     }

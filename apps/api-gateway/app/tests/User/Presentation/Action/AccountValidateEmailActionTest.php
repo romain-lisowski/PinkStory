@@ -38,7 +38,9 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check email has been validated
         $this->assertTrue($user->isEmailValidated());
@@ -60,7 +62,9 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check email has not been validated
         $this->assertFalse($user->isEmailValidated());
@@ -84,7 +88,9 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
         $this->assertEquals('email_validation_code', $responseContent['exception']['violations'][0]['property_path']);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check email has not been validated
         $this->assertFalse($user->isEmailValidated());
@@ -107,7 +113,9 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('access_denied_exception', $responseContent['exception']['type']);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check email has not been validated
         $this->assertFalse($user->isEmailValidated());

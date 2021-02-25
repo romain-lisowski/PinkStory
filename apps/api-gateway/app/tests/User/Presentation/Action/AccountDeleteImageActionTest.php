@@ -35,7 +35,9 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check image has been deleted
         $this->assertFalse($user->isImageDefined());
@@ -56,7 +58,9 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check image has not been deleted
         $this->assertTrue($user->isImageDefined());

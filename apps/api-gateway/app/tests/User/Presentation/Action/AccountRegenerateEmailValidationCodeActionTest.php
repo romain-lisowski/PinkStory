@@ -26,7 +26,9 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals([], $responseContent);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check email has been invalidated
         $this->assertFalse($user->isEmailValidated());
@@ -50,7 +52,9 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
 
+        // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $this->entityManager->refresh($user);
 
         // check email has not been invalidated
         $this->assertTrue($user->isEmailValidated());

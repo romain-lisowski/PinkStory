@@ -4,7 +4,7 @@ import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 export default async (store) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'GET',
-    'story-theme/search'
+    'language/search'
   )
 
   useLoadingOverlay(store, isLoading)

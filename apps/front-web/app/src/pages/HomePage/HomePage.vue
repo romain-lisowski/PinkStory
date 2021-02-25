@@ -3,6 +3,7 @@
     <HomeStoryMain />
   </Suspense>
   <StoryList
+    :with-story-list-order="false"
     :search-order="'ORDER_POPULAR'"
     :search-sort="'DESC'"
     :title="t('top-rated-title')"
@@ -11,6 +12,7 @@
     <template #StoryListOrder>&nbsp;</template>
   </StoryList>
   <StoryList
+    :with-story-list-order="false"
     :search-order="'ORDER_CREATED_AT'"
     :search-sort="'DESC'"
     :title="t('latest-stories-title')"

@@ -1,16 +1,9 @@
-import ApiLanguages from '@/api/ApiLanguages'
+// import useApiLanguageSearch from '@/composition/api/language/useApiLanguageSearch'
 import fetchData from '@/composition/api/useFetch'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
-  async login(email, password) {
-    return fetchData('POST', 'account/login', null, {
-      email,
-      password,
-    })
-  },
-
   async signUp(name, gender, email, password, passwordConfirm) {
     return fetchData('POST', 'account/signup', null, {
       name,
@@ -56,7 +49,8 @@ export default {
   },
 
   async updateInformation(jwt, name) {
-    const { languages } = await ApiLanguages.search()
+    // const { languages } = await useApiLanguageSearch()
+    const languages = []
 
     const formData = new FormData()
     formData.append('name', name)

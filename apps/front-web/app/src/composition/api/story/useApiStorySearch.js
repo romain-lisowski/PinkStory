@@ -1,7 +1,7 @@
 import useFetch from '@/composition/api/useFetch'
 import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 
-export default async (params = {}, withLoadingOverlay = true) => {
+export default async (store, params = {}, withLoadingOverlay = true) => {
   const queryParams = params
   if (queryParams.categoryIds) {
     queryParams.story_theme_ids = queryParams.categoryIds
@@ -15,7 +15,7 @@ export default async (params = {}, withLoadingOverlay = true) => {
   )
 
   if (withLoadingOverlay) {
-    useLoadingOverlay(isLoading)
+    useLoadingOverlay(store, isLoading)
   }
 
   await fetchData()

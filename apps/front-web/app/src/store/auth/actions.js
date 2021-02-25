@@ -1,8 +1,9 @@
 import ApiUsers from '@/api/ApiUsers'
+import useApiUserLogin from '@/composition/api/user/useApiUserLogin'
 
 export default {
   async login({ context, commit, dispatch }, { email, password }) {
-    const responseLogin = await ApiUsers.login(email, password)
+    const responseLogin = await useApiUserLogin(this, email, password)
 
     if (responseLogin.ok) {
       const jwt = responseLogin.token

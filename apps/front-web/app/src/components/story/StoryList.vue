@@ -10,9 +10,9 @@
         {{ link }} ></a
       >
     </div>
-    <slot name="StoryListOrder">
+    <div v-if="withStoryListOrder">
       <StoryListOrder :nb-results="nbResults" />
-    </slot>
+    </div>
     <ul class="flex flex-wrap -mx-6 mt-4 sm:mt-6 xl:mt-8 pt-2 pl-2 text-left">
       <StoryListItem
         v-for="(story, index) in stories"
@@ -35,6 +35,10 @@ export default {
     StoryListItem,
   },
   props: {
+    withStoryListOrder: {
+      type: Boolean,
+      default: true,
+    },
     searchOrder: {
       type: String,
       default: 'ORDER_POPULAR',
@@ -97,6 +101,7 @@ export default {
   methods: {
     async searchStories() {
       const { response, error } = await useApiStorySearch(
+        this.$store,
         {
           order: this.localSearchOrder,
           sort: this.searchSort,

@@ -8,7 +8,12 @@
       <div class="flex flex-col items-center">
         <StoryContent v-if="story" :story="story" />
         <StoryInformations v-if="story" :story="story" />
-        <StoryList :search-order="'ORDER_POPULAR'" :search-sort="'DESC'" />
+        <StoryList
+          :with-story-list-order="false"
+          :search-order="'ORDER_POPULAR'"
+          :search-sort="'DESC'"
+          :with-loading-overlay="false"
+        />
       </div>
     </div>
   </div>
@@ -46,7 +51,7 @@ export default {
   },
   methods: {
     async fetchStory(storyId) {
-      const { response, error } = await useApiStoryGet(storyId)
+      const { response, error } = await useApiStoryGet(this.$store, storyId)
       if (!error.value) {
         this.story = response.value.story
       }

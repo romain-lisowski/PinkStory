@@ -55,12 +55,14 @@ import { useI18n } from 'vue-i18n'
 import useApiStorySearch from '@/composition/api/story/useApiStorySearch'
 import { computed } from 'vue'
 import dayJs from 'dayjs'
+import { useStore } from 'vuex'
 
 export default {
   components: {
     UiRatingStars,
   },
   async setup() {
+    const store = useStore()
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -71,7 +73,7 @@ export default {
     })
 
     let story = {}
-    const { response, error } = await useApiStorySearch({
+    const { response, error } = await useApiStorySearch(store, {
       order: 'ORDER_POPULAR',
       sort: 'ASC',
       limit: 1,

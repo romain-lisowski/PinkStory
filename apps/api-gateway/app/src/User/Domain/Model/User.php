@@ -176,6 +176,7 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
     public function updateEmail(string $email): self
     {
         $this->setEmail($email);
+        $this->regenerateEmailValidationCode();
         $this->updateLastUpdatedAt();
 
         return $this;

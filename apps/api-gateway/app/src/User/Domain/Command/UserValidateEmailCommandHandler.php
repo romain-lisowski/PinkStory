@@ -34,7 +34,7 @@ final class UserValidateEmailCommandHandler implements CommandHandlerInterface
 
         $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
-        if ($user->getEmailValidationCode() !== $command->getEmailValidationCode()) {
+        if ($user->getEmailValidationCode() !== $command->getCode()) {
             throw new AccessDeniedException();
         }
 

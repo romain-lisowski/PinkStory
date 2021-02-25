@@ -19,12 +19,12 @@ final class UserValidateEmailCommand implements CommandInterface
      * @Assert\NotBlank
      * @Assert\Regex("/^([0-9]{6})$/")
      */
-    private string $emailValidationCode;
+    private string $code;
 
-    public function __construct(string $id, string $emailValidationCode)
+    public function __construct(string $id, string $code)
     {
         $this->id = $id;
-        $this->emailValidationCode = $emailValidationCode;
+        $this->code = $code;
     }
 
     public function getId(): string
@@ -32,8 +32,8 @@ final class UserValidateEmailCommand implements CommandInterface
         return $this->id;
     }
 
-    public function getEmailValidationCode(): string
+    public function getCode(): string
     {
-        return $this->emailValidationCode;
+        return $this->code;
     }
 }

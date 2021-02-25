@@ -30,7 +30,7 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $this->client->request('PATCH', '/account/validate-email', [], [], [
             'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
         ], json_encode([
-            'email_validation_code' => $this->userEmailValidationCode,
+            'code' => $this->userEmailValidationCode,
         ]));
 
         // check http response
@@ -102,14 +102,14 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $this->client->request('PATCH', '/account/validate-email', [], [], [
             'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
         ], json_encode([
-            'email_validation_code' => 'code',
+            'code' => 'code',
         ]));
 
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
-        $this->assertEquals('email_validation_code', $responseContent['exception']['violations'][0]['property_path']);
+        $this->assertEquals('code', $responseContent['exception']['violations'][0]['property_path']);
 
         // get fresh user from database
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
@@ -128,7 +128,7 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $this->client->request('PATCH', '/account/validate-email', [], [], [
             'HTTP_AUTHORIZATION' => 'Bearer '.self::PINKSTORY_USER_DATA['access_token'],
         ], json_encode([
-            'email_validation_code' => '012345',
+            'code' => '012345',
         ]));
 
         // check http response

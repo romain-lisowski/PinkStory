@@ -60,7 +60,7 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
 
     public function testFailedUnauthorized(): void
     {
-        $this->client->request('PATCH', '/account/update-image', [], [], [], json_encode([
+        $this->client->request('PATCH', '/account/update-email', [], [], [], json_encode([
             'email' => self::USER_DATA['email'],
         ]));
 

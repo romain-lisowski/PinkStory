@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Infrastructure\Http;
+namespace App\Common\Infrastructure\Response;
 
-use App\Common\Presentation\Http\ResponderInterface;
+use App\Common\Presentation\Response\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

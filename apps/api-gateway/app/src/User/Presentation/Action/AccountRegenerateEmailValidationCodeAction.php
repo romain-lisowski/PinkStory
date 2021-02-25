@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Presentation\Action;
 
 use App\Common\Domain\Command\CommandBusInterface;
-use App\Common\Presentation\Http\ResponderInterface;
+use App\Common\Presentation\Response\ResponderInterface;
 use App\User\Domain\Command\UserRegenerateEmailValidationCodeCommand;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;

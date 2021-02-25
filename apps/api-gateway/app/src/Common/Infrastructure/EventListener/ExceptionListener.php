@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\EventListener;
 
-use App\Common\Presentation\Http\ResponderInterface;
+use App\Common\Presentation\Response\ResponderInterface;
 use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;

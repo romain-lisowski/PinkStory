@@ -7,7 +7,6 @@ namespace App\Common\Infrastructure\Security;
 use App\Common\Domain\Model\EditableInterface;
 use App\User\Domain\Model\UserRole;
 use App\User\Infrastructure\Security\User;
-use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -45,6 +44,6 @@ final class EditableVoter extends Voter
 
         return $this->authorizationChecker->isGranted(User::ROLE_PREFIX.UserRole::MODERATOR);
 
-        throw new LogicException('This code should not be reached!');
+        throw new \LogicException('This code should not be reached!');
     }
 }

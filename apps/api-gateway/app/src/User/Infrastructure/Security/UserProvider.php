@@ -6,7 +6,6 @@ namespace App\User\Infrastructure\Security;
 
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\NoResultException;
-use LogicException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -57,7 +56,7 @@ final class UserProvider implements UserProviderInterface
      */
     public function refreshUser(UserInterface $user): UserInterface
     {
-        throw new LogicException('Will not be called, cause firwall is stateless');
+        throw new \LogicException('Will not be called, cause firwall is stateless');
     }
 
     /**

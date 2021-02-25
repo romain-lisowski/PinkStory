@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\File;
 
-use Throwable;
-
 final class ImageDeleteException extends RuntimeException
 {
     protected $message = 'file.exception.image_delete';
 
-    public function __construct(Throwable $e)
+    public function __construct(\Throwable $e)
     {
         parent::__construct($this->message, $e->getCode(), $e);
     }

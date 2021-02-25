@@ -14,7 +14,6 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Throwable;
 
 final class AccessTokenAuthenticator extends AbstractAuthenticator
 {
@@ -47,7 +46,7 @@ final class AccessTokenAuthenticator extends AbstractAuthenticator
             $this->accessTokenRepository->flush();
 
             return new SelfValidatingPassport(new UserBadge($accessToken->getUser()->getId()));
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new AuthenticationException('', 0, new InvalidTokenException());
         }
     }

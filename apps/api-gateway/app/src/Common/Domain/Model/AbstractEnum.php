@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Model;
 
-use ReflectionClass;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractEnum
@@ -34,7 +33,7 @@ abstract class AbstractEnum
 
     protected static function getConstants(): array
     {
-        $enum = new ReflectionClass(static::class);
+        $enum = new \ReflectionClass(static::class);
 
         return $enum->getConstants();
     }

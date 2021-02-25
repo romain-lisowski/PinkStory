@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Model;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Uuid;
@@ -30,19 +29,19 @@ abstract class AbstractEntity implements EditableInterface
      * @ORM\Column(name="created_at", type="datetime")
      * @Assert\NotBlank
      */
-    private DateTime $createdAt;
+    private \DateTime $createdAt;
 
     /**
      * @ORM\Column(name="last_updated_at", type="datetime")
      * @Assert\NotBlank
      */
-    private DateTime $lastUpdatedAt;
+    private \DateTime $lastUpdatedAt;
 
     public function __construct()
     {
         // init values
         $this->generateId()
-            ->setCreatedAt(new DateTime())
+            ->setCreatedAt(new \DateTime())
             ->updateLastUpdatedAt()
         ;
     }
@@ -59,19 +58,19 @@ abstract class AbstractEntity implements EditableInterface
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function getLastUpdatedAt(): DateTime
+    public function getLastUpdatedAt(): \DateTime
     {
         return $this->lastUpdatedAt;
     }
 
     public function updateLastUpdatedAt(): self
     {
-        $this->setLastUpdatedAt(new DateTime());
+        $this->setLastUpdatedAt(new \DateTime());
 
         return $this;
     }
@@ -83,14 +82,14 @@ abstract class AbstractEntity implements EditableInterface
         return $this;
     }
 
-    private function setCreatedAt(DateTime $date): self
+    private function setCreatedAt(\DateTime $date): self
     {
         $this->createdAt = $date;
 
         return $this;
     }
 
-    private function setLastUpdatedAt(DateTime $date): self
+    private function setLastUpdatedAt(\DateTime $date): self
     {
         $this->lastUpdatedAt = $date;
 

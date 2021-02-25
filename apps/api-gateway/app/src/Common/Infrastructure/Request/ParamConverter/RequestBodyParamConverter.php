@@ -7,7 +7,6 @@ namespace App\Common\Infrastructure\Request\ParamConverter;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Infrastructure\Security\SecurityInterface;
-use ReflectionClass;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\SerializerInterface;
-use Throwable;
 
 final class RequestBodyParamConverter implements ParamConverterInterface
 {
@@ -56,7 +54,7 @@ final class RequestBodyParamConverter implements ParamConverterInterface
 
                 $enumMatches = [];
                 if (1 === preg_match('/^enum\.([\\\\\w+]+)::(\w+)$/', $value, $enumMatches)) {
-                    $class = new ReflectionClass($enumMatches[1]);
+                    $class = new \ReflectionClass($enumMatches[1]);
                     $content[$field] = $class->getConstant($enumMatches[2]);
                 }
             }
@@ -70,7 +68,7 @@ final class RequestBodyParamConverter implements ParamConverterInterface
             throw new RequestBodyParamMissingMandatoryException($e);
         } catch (ValidationFailedException $e) {
             throw $e;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new RequestBodyParamConversionFailedException($e);
         }
     }
@@ -98,7 +96,7 @@ final class RequestBodyParamConverter implements ParamConverterInterface
 
                         $enumMatches = [];
                         if (1 === preg_match('/^enum\.([\\\\\w+]+)::(\w+)$/', $value, $enumMatches)) {
-                            $class = new ReflectionClass($enumMatches[1]);
+                            $class = new \ReflectionClass($enumMatches[1]);
 
                             return $class->hasConstant($enumMatches[2]);
                         }

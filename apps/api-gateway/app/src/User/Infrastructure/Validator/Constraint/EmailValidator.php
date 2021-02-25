@@ -8,17 +8,15 @@ use Egulias\EmailValidator\EmailValidator as Validator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use UnexpectedValueException;
 
 final class EmailValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof Email) {
-            throw new UnexpectedTypeException($constraint, Email::class);
+            throw new \UnexpectedTypeException($constraint, Email::class);
         }
 
         // custom constraints should ignore null and empty values to allow
@@ -30,7 +28,7 @@ final class EmailValidator extends ConstraintValidator
         if (false === is_string($value)) {
             // throw this exception if your validator cannot handle
             // the passed type so that it can be marked as invalid
-            throw new UnexpectedValueException($value, 'string');
+            throw new \UnexpectedValueException($value, 'string');
         }
 
         $validator = new Validator();

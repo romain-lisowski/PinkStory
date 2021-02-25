@@ -12,7 +12,6 @@ use Imagine\Image\Box;
 use Imagine\Imagick\Imagine;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\File;
-use Throwable;
 
 final class ImageManager implements ImageManagerInterface
 {
@@ -46,7 +45,7 @@ final class ImageManager implements ImageManagerInterface
 
             // move to final storage
             $this->imageStorage->write($imageable->getImagePath(true), (new File($tmpImagePath))->getContent());
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new ImageUploadException($e);
         }
     }
@@ -55,7 +54,7 @@ final class ImageManager implements ImageManagerInterface
     {
         try {
             $this->imageStorage->delete($imageable->getImagePath(true));
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new ImageDeleteException($e);
         }
     }

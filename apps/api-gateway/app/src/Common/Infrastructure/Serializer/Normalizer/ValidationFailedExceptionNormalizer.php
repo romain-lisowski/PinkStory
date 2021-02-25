@@ -6,6 +6,7 @@ namespace App\Common\Infrastructure\Serializer\Normalizer;
 
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 final class ValidationFailedExceptionNormalizer extends ThrowableNormalizer
 {
@@ -18,7 +19,7 @@ final class ValidationFailedExceptionNormalizer extends ThrowableNormalizer
             parent::normalize($exception, $format, $context),
             ['violations' => array_map(function (ConstraintViolation $violation) {
                 return [
-                    'property_path' => $violation->getPropertyPath(),
+                    'property_path' => (new CamelCaseToSnakeCaseNameConverter())->normalize($violation->getPropertyPath()),
                     'message' => $this->translator->trans($violation->getMessage()),
                 ];
             }, $exception->getViolations())]

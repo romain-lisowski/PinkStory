@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Domain\Event;
 
 use App\Common\Domain\Event\EventInterface;
+use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserRegenerateEmailValidationCodeEvent implements EventInterface
@@ -23,6 +24,7 @@ final class UserRegenerateEmailValidationCodeEvent implements EventInterface
 
     /**
      * @Assert\NotBlank
+     * @Assert\Regex("/^([0-9]{6})$/")
      */
     private string $emailValidationCode;
 

@@ -156,7 +156,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
         $this->entityManager->refresh($user);
 
-        // check data has been saved in database
+        // check user has been created
         $this->assertTrue(Uuid::isValid($user->getId()));
         $this->assertEquals(self::USER_DATA['gender'], $user->getGender());
         $this->assertEquals(self::USER_DATA['name'], $user->getName());

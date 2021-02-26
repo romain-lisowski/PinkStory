@@ -22,7 +22,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
     {
         parent::setUp();
 
-        // init user image
+        // get user email validation code
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->userEmailValidationCode = $user->getEmailValidationCode();
     }
@@ -43,7 +43,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check email has been invalidated
+        // check user has been updated
         $this->assertFalse($user->isEmailValidated());
         $this->assertNotEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
         $this->assertFalse($user->isEmailValidationCodeUsed());
@@ -62,7 +62,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check email has not been invalidated
+        // check user has not been updated
         $this->assertTrue($user->isEmailValidated());
         $this->assertTrue($user->isEmailValidationCodeUsed());
 

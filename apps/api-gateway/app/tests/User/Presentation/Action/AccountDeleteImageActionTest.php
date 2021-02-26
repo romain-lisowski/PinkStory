@@ -44,8 +44,10 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check image has been deleted
+        // check user has been updated
         $this->assertFalse($user->isImageDefined());
+
+        // check image has been deleted
         $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
 
         // check event has been dispatched
@@ -60,8 +62,10 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check image has not been deleted
+        // check user has not been updated
         $this->assertTrue($user->isImageDefined());
+
+        // check image has not been deleted
         $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
 
         // check event has not been dispatched

@@ -44,8 +44,10 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check image has been uploaded
+        // check user has been updated
         $this->assertTrue($user->isImageDefined());
+
+        // check image has been uploaded
         $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
 
         // check event has been dispatched
@@ -61,8 +63,10 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check image has not been uploaded
+        // check user has not been updated
         $this->assertFalse($user->isImageDefined());
+
+        // check image has not been uploaded
         $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
 
         // check event has not been dispatched

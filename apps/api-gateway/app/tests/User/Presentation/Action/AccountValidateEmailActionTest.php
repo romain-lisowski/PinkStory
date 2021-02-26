@@ -72,7 +72,7 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check email has been validated
+        // check user has been updated
         $this->assertTrue($user->isEmailValidated());
         $this->assertTrue($user->isEmailValidationCodeUsed());
 
@@ -89,7 +89,7 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
         $this->entityManager->refresh($user);
 
-        // check email has not been validated
+        // check user has not been updated
         $this->assertFalse($user->isEmailValidated());
         $this->assertFalse($user->isEmailValidationCodeUsed());
 

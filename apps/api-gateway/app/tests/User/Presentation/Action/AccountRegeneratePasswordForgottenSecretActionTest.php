@@ -29,10 +29,9 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
 
         self::$httpAuthorization = null;
 
-        // get user email validation code
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->userPasswordForgottenSecret = $user->getPasswordForgottenSecret();
-        $this->userPasswordForgottenSecretCreatedAt = $user->getPasswordForgottenSecretCreatedAt();
+        // get user data
+        $this->userPasswordForgottenSecret = self::$user->getPasswordForgottenSecret();
+        $this->userPasswordForgottenSecretCreatedAt = self::$user->getPasswordForgottenSecretCreatedAt();
     }
 
     public function testSuccess(): void
@@ -59,32 +58,30 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has been updated
-        $this->assertNotEquals($this->userPasswordForgottenSecret, $user->getPasswordForgottenSecret());
-        $this->assertFalse($user->isPasswordForgottenSecretUsed());
-        $this->assertNotEquals($this->userPasswordForgottenSecretCreatedAt, $user->getPasswordForgottenSecretCreatedAt());
+        $this->assertNotEquals($this->userPasswordForgottenSecret, self::$user->getPasswordForgottenSecret());
+        $this->assertFalse(self::$user->isPasswordForgottenSecretUsed());
+        $this->assertNotEquals($this->userPasswordForgottenSecretCreatedAt, self::$user->getPasswordForgottenSecretCreatedAt());
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserRegeneratePasswordForgottenSecretEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals($user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
-        $this->assertEquals($user->getPasswordForgottenSecret(), $this->asyncTransport->get()[0]->getMessage()->getPasswordForgottenSecret());
+        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
+        $this->assertEquals(self::$user->getPasswordForgottenSecret(), $this->asyncTransport->get()[0]->getMessage()->getPasswordForgottenSecret());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has not been updated
-        $this->assertEquals($this->userPasswordForgottenSecret, $user->getPasswordForgottenSecret());
-        $this->assertTrue($user->isPasswordForgottenSecretUsed());
-        $this->assertEquals($this->userPasswordForgottenSecretCreatedAt, $user->getPasswordForgottenSecretCreatedAt());
+        $this->assertEquals($this->userPasswordForgottenSecret, self::$user->getPasswordForgottenSecret());
+        $this->assertTrue(self::$user->isPasswordForgottenSecretUsed());
+        $this->assertEquals($this->userPasswordForgottenSecretCreatedAt, self::$user->getPasswordForgottenSecretCreatedAt());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

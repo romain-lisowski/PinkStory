@@ -41,33 +41,31 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has been updated
-        $this->assertTrue($user->isImageDefined());
+        $this->assertTrue(self::$user->isImageDefined());
 
         // check image has been uploaded
-        $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+        $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true)));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserUpdatedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals($user->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
+        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$user->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has not been updated
-        $this->assertFalse($user->isImageDefined());
+        $this->assertFalse(self::$user->isImageDefined());
 
         // check image has not been uploaded
-        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true)));
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

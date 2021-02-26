@@ -22,6 +22,18 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         'gender' => UserGender::MALE,
     ];
 
+    private string $userGender;
+    private string $userName;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // get user data
+        $this->userGender = self::$user->getGender();
+        $this->userName = self::$user->getName();
+    }
+
     public function testSuccess(): void
     {
         $this->checkSuccess([
@@ -65,30 +77,28 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has been updated
-        $this->assertEquals(self::$userData['name'], $user->getName());
-        $this->assertEquals(self::$userData['gender'], $user->getGender());
+        $this->assertEquals(self::$userData['gender'], self::$user->getGender());
+        $this->assertEquals(self::$userData['name'], self::$user->getName());
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserUpdatedInformationEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals($user->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());
-        $this->assertEquals($user->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());
+        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$user->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());
+        $this->assertEquals(self::$user->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has not been updated
-        $this->assertEquals(self::$pinkstoryUserData['name'], $user->getName());
-        $this->assertEquals(self::$pinkstoryUserData['gender'], $user->getGender());
+        $this->assertEquals($this->userGender, self::$user->getGender());
+        $this->assertEquals($this->userName, self::$user->getName());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

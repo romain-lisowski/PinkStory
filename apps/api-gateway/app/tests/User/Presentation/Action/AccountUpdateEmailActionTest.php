@@ -20,15 +20,16 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
         'email' => 'test@pinkstory.io',
     ];
 
+    private string $userEmail;
     private string $userEmailValidationCode;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // get user email validation code
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->userEmailValidationCode = $user->getEmailValidationCode();
+        // get user data
+        $this->userEmail = self::$user->getEmail();
+        $this->userEmailValidationCode = self::$user->getEmailValidationCode();
     }
 
     public function testSuccess(): void
@@ -80,34 +81,32 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has been updated
-        $this->assertEquals(self::$userData['email'], $user->getEmail());
-        $this->assertFalse($user->isEmailValidated());
-        $this->assertNotEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
-        $this->assertFalse($user->isEmailValidationCodeUsed());
+        $this->assertEquals(self::$userData['email'], self::$user->getEmail());
+        $this->assertFalse(self::$user->isEmailValidated());
+        $this->assertNotEquals($this->userEmailValidationCode, self::$user->getEmailValidationCode());
+        $this->assertFalse(self::$user->isEmailValidationCodeUsed());
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserUpdatedEmailEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals($user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
-        $this->assertEquals($user->getEmailValidationCode(), $this->asyncTransport->get()[0]->getMessage()->getEmailValidationCode());
+        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
+        $this->assertEquals(self::$user->getEmailValidationCode(), $this->asyncTransport->get()[0]->getMessage()->getEmailValidationCode());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has not been updated
-        $this->assertEquals(self::$pinkstoryUserData['email'], $user->getEmail());
-        $this->assertTrue($user->isEmailValidated());
-        $this->assertEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
-        $this->assertTrue($user->isEmailValidationCodeUsed());
+        $this->assertEquals($this->userEmail, self::$user->getEmail());
+        $this->assertTrue(self::$user->isEmailValidated());
+        $this->assertEquals($this->userEmailValidationCode, self::$user->getEmailValidationCode());
+        $this->assertTrue(self::$user->isEmailValidationCodeUsed());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

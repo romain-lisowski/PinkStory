@@ -22,10 +22,9 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         parent::setUp();
 
         // init user image
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $user->setImageDefined(true);
+        self::$user->setImageDefined(true);
         $this->userRepository->flush();
-        (new Filesystem())->copy(__DIR__.'/../../../image/test.jpg', self::$container->getParameter('project_image_storage_path').$user->getImagePath(true));
+        (new Filesystem())->copy(__DIR__.'/../../../image/test.jpg', self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true));
     }
 
     public function testSuccess(): void
@@ -41,32 +40,30 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has been updated
-        $this->assertFalse($user->isImageDefined());
+        $this->assertFalse(self::$user->isImageDefined());
 
         // check image has been deleted
-        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true)));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserDeletedImageEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has not been updated
-        $this->assertTrue($user->isImageDefined());
+        $this->assertTrue(self::$user->isImageDefined());
 
         // check image has not been deleted
-        $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath(true)));
+        $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true)));
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

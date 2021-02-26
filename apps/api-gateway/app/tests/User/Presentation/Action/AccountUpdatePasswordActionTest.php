@@ -27,9 +27,8 @@ final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
     {
         parent::setUp();
 
-        // get user password
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->userPassword = $user->getPassword();
+        // get user data
+        $this->userPassword = self::$user->getPassword();
     }
 
     public function testSuccess(): void
@@ -63,27 +62,25 @@ final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has been updated
-        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::$userData['password']));
+        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid(self::$user, self::$userData['password']));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertInstanceOf(UserUpdatedPasswordEvent::class, $this->asyncTransport->get()[0]->getMessage());
-        $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals($user->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
+        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$user->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
-        $this->entityManager->refresh($user);
+        $this->entityManager->refresh(self::$user);
 
         // check user has not been updated
-        $this->assertEquals($this->userPassword, $user->getPassword());
+        $this->assertEquals($this->userPassword, self::$user->getPassword());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

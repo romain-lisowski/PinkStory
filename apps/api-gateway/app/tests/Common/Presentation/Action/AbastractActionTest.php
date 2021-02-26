@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Test\Common\Presentation\Action;
 
-use App\User\Domain\Model\UserGender;
-use App\User\Domain\Model\UserRole;
-use App\User\Domain\Model\UserStatus;
+use App\User\Domain\Model\User;
+use App\User\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -20,35 +19,32 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
  */
 abstract class AbastractActionTest extends WebTestCase
 {
-    protected static array $pinkstoryUserData = [
-        'access_token' => 'f478da1e-f5a8-4c28-a5e2-77abeb7f1cdf',
-        'id' => 'dc8d7267-fcb8-4f42-b164-a08e7cb9296b',
-        'gender' => UserGender::UNDEFINED,
-        'name' => 'Pinkstory',
-        'email' => 'hello@pinkstory.io',
-        'role' => UserRole::GOD,
-        'status' => UserStatus::ACTIVATED,
-    ];
+    protected KernelBrowser $client;
+    protected EntityManagerInterface $entityManager;
+    protected TransportInterface $asyncTransport;
+    protected UserRepositoryInterface $userRepository;
+
+    protected static string $userId = 'dc8d7267-fcb8-4f42-b164-a08e7cb9296b';
+    protected static User $user;
 
     protected static string $httpMethod = Request::METHOD_GET;
     protected static string $httpUri = '';
     protected static ?string $httpAuthorization = null;
 
-    protected KernelBrowser $client;
-    protected EntityManagerInterface $entityManager;
-    protected TransportInterface $asyncTransport;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        self::$httpAuthorization = self::$pinkstoryUserData['access_token'];
 
         $this->client = self::createClient();
 
         $this->entityManager = self::$container->get('doctrine.orm.entity_manager');
 
         $this->asyncTransport = self::$container->get('messenger.transport.async');
+
+        $this->userRepository = self::$container->get('doctrine')->getManager()->getRepository(User::class);
+        self::$user = $this->userRepository->findOne(self::$userId);
+
+        self::$httpAuthorization = 'Bearer '.self::$user->getAccessTokens()->first()->getId();
     }
 
     protected function tearDown(): void
@@ -62,7 +58,7 @@ abstract class AbastractActionTest extends WebTestCase
     protected function checkSuccess(?array $requestContent = [], array $expectedResponseData = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? 'Bearer '.static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -100,7 +96,7 @@ abstract class AbastractActionTest extends WebTestCase
     protected function checkFailedMissingMandatory(?array $requestContent = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? 'Bearer '.static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -120,7 +116,7 @@ abstract class AbastractActionTest extends WebTestCase
     protected function checkFailedValidationFailed(?array $requestContent = [], array $invalidFields = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? 'Bearer '.static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
         ], json_encode($requestContent));
 
         // check http response

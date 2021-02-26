@@ -3,7 +3,7 @@ import useApiUserCurrent from '@/composition/api/user/useApiUserCurrent'
 
 export default {
   async login({ state, commit, dispatch }, { email, password }) {
-    const { response, error } = await useApiUserLogin(this, email, password)
+    const { response, error } = await useApiUserLogin(this, { email, password })
 
     if (!error.value) {
       const jwt = response.value.token

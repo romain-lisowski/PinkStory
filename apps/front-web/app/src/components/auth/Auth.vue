@@ -1,6 +1,5 @@
 <template>
   <div
-    ref="auth"
     :class="!openAuthPanel ? '-translate-y-full' : ''"
     class="flex flex-row absolute justify-center items-center inset-0 w-full h-screen p-10 bg-primary bg-opacity-100 transform transition-transform duration-300 ease-in-out z-20"
     tabindex="0"
@@ -36,7 +35,6 @@
 <script>
 import AuthLogin from '@/components/auth/AuthLogin.vue'
 import AuthSignUp from '@/components/auth/AuthSignUp.vue'
-import { ref } from 'vue'
 
 export default {
   components: {
@@ -50,29 +48,16 @@ export default {
     },
   },
   emits: ['close-auth-panel'],
-  setup(props, context) {
-    // const auth = ref(null)
-
-    const displaySignUp = ref(false)
-
-    // TODO: focus on panel open
-    // watch(
-    //   () => props.openAuthPanel,
-    //   (value) => {
-    //     if (value === true) {
-    //       // eslint-disable-next-line vue/no-ref-as-operand
-    //       auth.focus()
-    // this.$refs.auth.focus()
-    //     }
-    //   }
-    // )
-
-    const onClickCloseAuthPanel = () => {
-      displaySignUp.value = false
-      context.emit('close-auth-panel')
+  data() {
+    return {
+      displaySignUp: false,
     }
-
-    return { displaySignUp, onClickCloseAuthPanel }
+  },
+  methods: {
+    onClickCloseAuthPanel() {
+      this.displaySignUp = false
+      this.$emit('close-auth-panel')
+    },
   },
 }
 </script>

@@ -4,16 +4,6 @@ import fetchData from '@/composition/api/useFetch'
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
-  async signUp(name, gender, email, password, passwordConfirm) {
-    return fetchData('POST', 'account/signup', null, {
-      name,
-      gender,
-      email,
-      'password[first]': password,
-      'password[second]': passwordConfirm,
-    })
-  },
-
   async updateEmail(jwt, email) {
     const formData = new FormData()
     formData.append('email[first]', email)

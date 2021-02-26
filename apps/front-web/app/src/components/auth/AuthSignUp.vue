@@ -62,33 +62,32 @@
 </template>
 
 <script>
-import ApiUsers from '@/api/ApiUsers'
-import { ref } from 'vue'
+import useApiUserSignUp from '@/composition/api/user/useApiUserSignUp'
+import { reactive, toRefs } from 'vue'
 import { useI18n } from 'vue-i18n'
 import genderTypes from '@/enums/genderTypes'
+import { useStore } from 'vuex'
 
 export default {
   emits: ['display-login-block'],
   setup(props, context) {
-    const genders = genderTypes
-    const pseudo = ref(null)
-    const gender = ref(genderTypes.UNDEFINED)
-    const email = ref(null)
-    const password = ref(null)
-    const passwordConfirm = ref(null)
+    const store = useStore()
+
+    const data = reactive({
+      genders: genderTypes,
+      pseudo: null,
+      gender: genderTypes.UNDEFINED,
+      email: null,
+      password: null,
+      passwordConfirm: null,
+    })
 
     const onClickDisplayLoginBlock = () => {
       context.emit('display-login-block')
     }
 
     const processForm = () => {
-      ApiUsers.signUp(
-        pseudo.value,
-        gender.value,
-        email.value,
-        password.value,
-        passwordConfirm.value
-      )
+      useApiUserSignUp(store, { ...data })
       onClickDisplayLoginBlock()
     }
 
@@ -113,12 +112,7 @@ export default {
     })
 
     return {
-      pseudo,
-      genders,
-      gender,
-      email,
-      password,
-      passwordConfirm,
+      ...toRefs(data),
       processForm,
       onClickDisplayLoginBlock,
       t,

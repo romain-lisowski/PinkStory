@@ -40,9 +40,6 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
 
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has been updated
         $this->assertTrue(self::$user->isImageDefined());
 
@@ -58,9 +55,6 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
 
     protected function checkProcessHasBeenStopped(): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has not been updated
         $this->assertFalse(self::$user->isImageDefined());
 

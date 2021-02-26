@@ -38,9 +38,6 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
 
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has been updated
         $this->assertFalse(self::$user->isEmailValidated());
         $this->assertNotEquals($this->userEmailValidationCode, self::$user->getEmailValidationCode());
@@ -56,9 +53,6 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
 
     protected function checkProcessHasBeenStopped(): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has not been updated
         $this->assertTrue(self::$user->isEmailValidated());
         $this->assertTrue(self::$user->isEmailValidationCodeUsed());

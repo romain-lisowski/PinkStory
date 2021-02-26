@@ -57,9 +57,6 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
 
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has been updated
         $this->assertNotEquals($this->userPasswordForgottenSecret, self::$user->getPasswordForgottenSecret());
         $this->assertFalse(self::$user->isPasswordForgottenSecretUsed());
@@ -75,9 +72,6 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
 
     protected function checkProcessHasBeenStopped(): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has not been updated
         $this->assertEquals($this->userPasswordForgottenSecret, self::$user->getPasswordForgottenSecret());
         $this->assertTrue(self::$user->isPasswordForgottenSecretUsed());

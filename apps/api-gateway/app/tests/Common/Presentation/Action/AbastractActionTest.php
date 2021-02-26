@@ -62,17 +62,15 @@ abstract class AbastractActionTest extends WebTestCase
         ], json_encode($requestContent));
 
         // check http response
-        $this->checkHttpResponseSuccess($expectedResponseData);
-
-        // check process has been succeeded
-        $this->checkProcessHasBeenSucceeded($processOptions);
-    }
-
-    protected function checkHttpResponseSuccess(array $expectedResponseData = []): void
-    {
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals($expectedResponseData, $responseContent);
+
+        // get fresh user from database
+        $this->entityManager->refresh(self::$user);
+
+        // check process has been succeeded
+        $this->checkProcessHasBeenSucceeded($processOptions);
     }
 
     protected function checkFailedUnauthorized(?array $requestContent = []): void
@@ -80,17 +78,15 @@ abstract class AbastractActionTest extends WebTestCase
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
 
         // check http response
-        $this->checkHttpResponseUnauthorized();
-
-        // check process has been stopped
-        $this->checkProcessHasBeenStopped();
-    }
-
-    protected function checkHttpResponseUnauthorized(): void
-    {
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
+
+        // get fresh user from database
+        $this->entityManager->refresh(self::$user);
+
+        // check process has been stopped
+        $this->checkProcessHasBeenStopped();
     }
 
     protected function checkFailedMissingMandatory(?array $requestContent = []): void
@@ -100,17 +96,15 @@ abstract class AbastractActionTest extends WebTestCase
         ], json_encode($requestContent));
 
         // check http response
-        $this->checkHttpResponseMissingMandatory();
-
-        // check process has been stopped
-        $this->checkProcessHasBeenStopped();
-    }
-
-    protected function checkHttpResponseMissingMandatory(): void
-    {
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
+
+        // get fresh user from database
+        $this->entityManager->refresh(self::$user);
+
+        // check process has been stopped
+        $this->checkProcessHasBeenStopped();
     }
 
     protected function checkFailedValidationFailed(?array $requestContent = [], array $invalidFields = []): void
@@ -120,14 +114,6 @@ abstract class AbastractActionTest extends WebTestCase
         ], json_encode($requestContent));
 
         // check http response
-        $this->checkHttpResponseValidationFailed($invalidFields);
-
-        // check process has been stopped
-        $this->checkProcessHasBeenStopped();
-    }
-
-    protected function checkHttpResponseValidationFailed(array $invalidFields = []): void
-    {
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
@@ -135,6 +121,12 @@ abstract class AbastractActionTest extends WebTestCase
         foreach ($responseContent['exception']['violations'] as $violation) {
             $this->assertTrue(in_array($violation['property_path'], $invalidFields));
         }
+
+        // get fresh user from database
+        $this->entityManager->refresh(self::$user);
+
+        // check process has been stopped
+        $this->checkProcessHasBeenStopped();
     }
 
     abstract protected function checkProcessHasBeenSucceeded(array $options = []): void;

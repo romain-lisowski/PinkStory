@@ -76,9 +76,6 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
 
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has been updated
         $this->assertEquals(self::$userData['gender'], self::$user->getGender());
         $this->assertEquals(self::$userData['name'], self::$user->getName());
@@ -93,9 +90,6 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
 
     protected function checkProcessHasBeenStopped(): void
     {
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
-
         // check user has not been updated
         $this->assertEquals($this->userGender, self::$user->getGender());
         $this->assertEquals($this->userName, self::$user->getName());

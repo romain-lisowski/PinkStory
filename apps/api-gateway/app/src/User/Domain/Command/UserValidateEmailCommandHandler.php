@@ -8,10 +8,11 @@ use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
+use App\Common\Domain\Validator\ConstraintViolation;
+use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Domain\Event\UserValidatedEmailEvent;
 use App\User\Domain\Repository\UserRepositoryInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class UserValidateEmailCommandHandler implements CommandHandlerInterface
 {
@@ -35,7 +36,9 @@ final class UserValidateEmailCommandHandler implements CommandHandlerInterface
         $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
         if ($user->getEmailValidationCode() !== $command->getCode()) {
-            throw new AccessDeniedException();
+            throw new ValidationFailedException([
+                new ConstraintViolation('code', 'user.validator.constraint.invalid_email_validation_code'),
+            ]);
         }
 
         $user->validateEmail();

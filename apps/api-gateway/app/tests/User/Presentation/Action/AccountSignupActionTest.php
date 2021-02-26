@@ -25,6 +25,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
 {
     protected const HTTP_METHOD = Request::METHOD_POST;
     protected const HTTP_URI = '/account/signup';
+    protected const HTTP_AUTHORIZATION = false;
 
     private const USER_DATA = [
         'gender' => UserGender::UNDEFINED,

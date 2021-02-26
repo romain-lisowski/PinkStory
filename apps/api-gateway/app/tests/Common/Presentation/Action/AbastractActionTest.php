@@ -60,7 +60,7 @@ abstract class AbastractActionTest extends WebTestCase
     protected function checkSuccess(?array $requestContent = [], array $expectedResponseData = [], array $processOptions = []): void
     {
         $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.static::HTTP_AUTHORIZATION,
+            'HTTP_AUTHORIZATION' => false !== static::HTTP_AUTHORIZATION ? 'Bearer '.static::HTTP_AUTHORIZATION : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -98,7 +98,7 @@ abstract class AbastractActionTest extends WebTestCase
     protected function checkFailedMissingMandatory(?array $requestContent = []): void
     {
         $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.static::HTTP_AUTHORIZATION,
+            'HTTP_AUTHORIZATION' => false !== static::HTTP_AUTHORIZATION ? 'Bearer '.static::HTTP_AUTHORIZATION : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -118,7 +118,7 @@ abstract class AbastractActionTest extends WebTestCase
     protected function checkFailedValidationFailed(?array $requestContent = [], array $invalidFields = []): void
     {
         $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.static::HTTP_AUTHORIZATION,
+            'HTTP_AUTHORIZATION' => false !== static::HTTP_AUTHORIZATION ? 'Bearer '.static::HTTP_AUTHORIZATION : '',
         ], json_encode($requestContent));
 
         // check http response

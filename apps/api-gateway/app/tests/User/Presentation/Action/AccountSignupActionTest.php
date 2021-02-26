@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
+use App\Common\Domain\Repository\NoResultException;
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
 use App\User\Domain\Event\UserCreatedEvent;
 use App\User\Domain\Model\User;
@@ -11,7 +12,6 @@ use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserRole;
 use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
-use Doctrine\ORM\NoResultException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;

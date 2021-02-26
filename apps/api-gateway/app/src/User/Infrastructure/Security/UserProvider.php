@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Security;
 
+use App\Common\Domain\Repository\NoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
-use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;

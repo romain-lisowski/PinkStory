@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Doctrine\Repository;
 
+use App\Common\Domain\Repository\NoResultException as DomainNoResultException;
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineORMRepository;
 use App\User\Domain\Model\AccessToken;
 use App\User\Domain\Repository\AccessTokenRepositoryInterface;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class AccessTokenDoctrineORMRepository extends AbstractDoctrineORMRepository implements AccessTokenRepositoryInterface
@@ -18,12 +20,16 @@ final class AccessTokenDoctrineORMRepository extends AbstractDoctrineORMReposito
 
     public function findOne(string $id): AccessToken
     {
-        $qb = $this->createQueryBuilder('accessToken');
+        try {
+            $qb = $this->createQueryBuilder('accessToken');
 
-        $qb->where($qb->expr()->eq('accessToken.id', ':accessToken_id'))
-            ->setParameter('accessToken_id', $id)
-        ;
+            $qb->where($qb->expr()->eq('accessToken.id', ':accessToken_id'))
+                ->setParameter('accessToken_id', $id)
+            ;
 
-        return $qb->getQuery()->getSingleResult();
+            return $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {
+            throw new DomainNoResultException($e);
+        }
     }
 }

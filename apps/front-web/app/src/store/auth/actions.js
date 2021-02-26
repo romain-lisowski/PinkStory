@@ -1,15 +1,15 @@
-import ApiUsers from '@/api/ApiUsers'
 import useApiUserLogin from '@/composition/api/user/useApiUserLogin'
+import useApiUserCurrent from '@/composition/api/user/useApiUserCurrent'
 
 export default {
-  async login({ context, commit, dispatch }, { email, password }) {
-    const responseLogin = await useApiUserLogin(this, email, password)
+  async login({ state, commit, dispatch }, { email, password }) {
+    const { response, error } = await useApiUserLogin(this, email, password)
 
-    if (responseLogin.ok) {
-      const jwt = responseLogin.token
+    if (!error.value) {
+      const jwt = response.value.token
 
       dispatch('fetchCurrentUser', jwt)
-      if (context.state.userLoggedIn) {
+      if (state.state.userLoggedIn) {
         localStorage.setItem('jwt', JSON.stringify(jwt))
         commit('SET_JWT', jwt)
       }
@@ -23,10 +23,10 @@ export default {
     commit('LOGOUT')
   },
   async fetchCurrentUser({ commit }, jwt = null) {
-    const responseUserLoggedIn = await ApiUsers.getCurrentUser(jwt)
+    const { response, error } = await useApiUserCurrent(this, jwt)
 
-    if (responseUserLoggedIn.ok) {
-      const userLoggedIn = responseUserLoggedIn.user
+    if (!error.value) {
+      const userLoggedIn = response.value.user
       commit('SET_USER_LOGGED_IN', userLoggedIn)
       localStorage.setItem('userLoggedIn', JSON.stringify(userLoggedIn))
     } else {

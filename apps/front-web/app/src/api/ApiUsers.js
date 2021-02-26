@@ -14,10 +14,6 @@ export default {
     })
   },
 
-  async getCurrentUser(jwt = null) {
-    return fetchData('GET', 'account', null, null, jwt)
-  },
-
   async updateEmail(jwt, email) {
     const formData = new FormData()
     formData.append('email[first]', email)

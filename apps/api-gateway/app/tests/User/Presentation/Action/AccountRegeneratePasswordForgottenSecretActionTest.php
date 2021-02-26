@@ -13,11 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountRegeneratePasswordForgottenSecretActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_PATCH;
-    protected const HTTP_URI = '/account/regenerate-password-forgotten-secret';
-    protected const HTTP_AUTHORIZATION = false;
+    protected static string $httpMethod = Request::METHOD_PATCH;
+    protected static string $httpUri = '/account/regenerate-password-forgotten-secret';
 
-    private const USER_DATA = [
+    private static array $userData = [
         'email' => 'hello@pinkstory.io',
     ];
 
@@ -28,8 +27,10 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
     {
         parent::setUp();
 
+        self::$httpAuthorization = null;
+
         // get user email validation code
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->userPasswordForgottenSecret = $user->getPasswordForgottenSecret();
         $this->userPasswordForgottenSecretCreatedAt = $user->getPasswordForgottenSecretCreatedAt();
     }
@@ -37,7 +38,7 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
     public function testSuccess(): void
     {
         $this->checkSuccess([
-            'email' => self::USER_DATA['email'],
+            'email' => self::$userData['email'],
         ]);
     }
 
@@ -58,7 +59,7 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
@@ -77,7 +78,7 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends Abastract
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated

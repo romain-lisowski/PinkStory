@@ -20,7 +20,7 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
  */
 abstract class AbastractActionTest extends WebTestCase
 {
-    protected const PINKSTORY_USER_DATA = [
+    protected static array $pinkstoryUserData = [
         'access_token' => 'f478da1e-f5a8-4c28-a5e2-77abeb7f1cdf',
         'id' => 'dc8d7267-fcb8-4f42-b164-a08e7cb9296b',
         'gender' => UserGender::UNDEFINED,
@@ -30,9 +30,9 @@ abstract class AbastractActionTest extends WebTestCase
         'status' => UserStatus::ACTIVATED,
     ];
 
-    protected const HTTP_METHOD = Request::METHOD_GET;
-    protected const HTTP_URI = '';
-    protected const HTTP_AUTHORIZATION = self::PINKSTORY_USER_DATA['access_token'];
+    protected static string $httpMethod = Request::METHOD_GET;
+    protected static string $httpUri = '';
+    protected static ?string $httpAuthorization = null;
 
     protected KernelBrowser $client;
     protected EntityManagerInterface $entityManager;
@@ -42,7 +42,9 @@ abstract class AbastractActionTest extends WebTestCase
     {
         parent::setUp();
 
-        $this->client = static::createClient();
+        self::$httpAuthorization = self::$pinkstoryUserData['access_token'];
+
+        $this->client = self::createClient();
 
         $this->entityManager = self::$container->get('doctrine.orm.entity_manager');
 
@@ -59,8 +61,8 @@ abstract class AbastractActionTest extends WebTestCase
 
     protected function checkSuccess(?array $requestContent = [], array $expectedResponseData = [], array $processOptions = []): void
     {
-        $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [
-            'HTTP_AUTHORIZATION' => false !== static::HTTP_AUTHORIZATION ? 'Bearer '.static::HTTP_AUTHORIZATION : '',
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? 'Bearer '.static::$httpAuthorization : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -79,7 +81,7 @@ abstract class AbastractActionTest extends WebTestCase
 
     protected function checkFailedUnauthorized(?array $requestContent = []): void
     {
-        $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [], json_encode($requestContent));
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
 
         // check http response
         $this->checkHttpResponseUnauthorized();
@@ -97,8 +99,8 @@ abstract class AbastractActionTest extends WebTestCase
 
     protected function checkFailedMissingMandatory(?array $requestContent = []): void
     {
-        $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [
-            'HTTP_AUTHORIZATION' => false !== static::HTTP_AUTHORIZATION ? 'Bearer '.static::HTTP_AUTHORIZATION : '',
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? 'Bearer '.static::$httpAuthorization : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -117,8 +119,8 @@ abstract class AbastractActionTest extends WebTestCase
 
     protected function checkFailedValidationFailed(?array $requestContent = [], array $invalidFields = []): void
     {
-        $this->client->request(static::HTTP_METHOD, static::HTTP_URI, [], [], [
-            'HTTP_AUTHORIZATION' => false !== static::HTTP_AUTHORIZATION ? 'Bearer '.static::HTTP_AUTHORIZATION : '',
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? 'Bearer '.static::$httpAuthorization : '',
         ], json_encode($requestContent));
 
         // check http response

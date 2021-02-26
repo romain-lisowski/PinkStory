@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_PATCH;
-    protected const HTTP_URI = '/account/regenerate-email-validation-code';
+    protected static string $httpMethod = Request::METHOD_PATCH;
+    protected static string $httpUri = '/account/regenerate-email-validation-code';
 
     private string $userEmailValidationCode;
 
@@ -23,7 +23,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
         parent::setUp();
 
         // get user email validation code
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->userEmailValidationCode = $user->getEmailValidationCode();
     }
 
@@ -40,7 +40,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
@@ -59,7 +59,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUser
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated

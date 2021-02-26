@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdateEmailActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_PATCH;
-    protected const HTTP_URI = '/account/update-email';
+    protected static string $httpMethod = Request::METHOD_PATCH;
+    protected static string $httpUri = '/account/update-email';
 
-    private const USER_DATA = [
+    private static array $userData = [
         'email' => 'test@pinkstory.io',
     ];
 
@@ -27,21 +27,21 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
         parent::setUp();
 
         // get user email validation code
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->userEmailValidationCode = $user->getEmailValidationCode();
     }
 
     public function testSuccess(): void
     {
         $this->checkSuccess([
-            'email' => self::USER_DATA['email'],
+            'email' => self::$userData['email'],
         ]);
     }
 
     public function testFailedUnauthorized(): void
     {
         $this->checkFailedUnauthorized([
-            'email' => self::USER_DATA['email'],
+            'email' => self::$userData['email'],
         ]);
     }
 
@@ -80,11 +80,11 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
-        $this->assertEquals(self::USER_DATA['email'], $user->getEmail());
+        $this->assertEquals(self::$userData['email'], $user->getEmail());
         $this->assertFalse($user->isEmailValidated());
         $this->assertNotEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
         $this->assertFalse($user->isEmailValidationCodeUsed());
@@ -100,11 +100,11 @@ final class AccountUpdateEmailActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated
-        $this->assertEquals(self::PINKSTORY_USER_DATA['email'], $user->getEmail());
+        $this->assertEquals(self::$pinkstoryUserData['email'], $user->getEmail());
         $this->assertTrue($user->isEmailValidated());
         $this->assertEquals($this->userEmailValidationCode, $user->getEmailValidationCode());
         $this->assertTrue($user->isEmailValidationCodeUsed());

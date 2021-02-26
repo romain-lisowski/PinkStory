@@ -14,15 +14,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountDeleteImageActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_DELETE;
-    protected const HTTP_URI = '/account/delete-image';
+    protected static string $httpMethod = Request::METHOD_DELETE;
+    protected static string $httpUri = '/account/delete-image';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         // init user image
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $user->setImageDefined(true);
         $this->userRepository->flush();
         (new Filesystem())->copy(__DIR__.'/../../../image/test.jpg', self::$container->getParameter('project_image_storage_path').$user->getImagePath(true));
@@ -41,7 +41,7 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
@@ -59,7 +59,7 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated

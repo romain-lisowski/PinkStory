@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdateImageActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_PATCH;
-    protected const HTTP_URI = '/account/update-image';
+    protected static string $httpMethod = Request::METHOD_PATCH;
+    protected static string $httpUri = '/account/update-image';
 
     public function testSuccess(): void
     {
@@ -41,7 +41,7 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
@@ -60,7 +60,7 @@ final class AccountUpdateImageActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated

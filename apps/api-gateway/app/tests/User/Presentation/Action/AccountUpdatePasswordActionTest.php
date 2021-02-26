@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_PATCH;
-    protected const HTTP_URI = '/account/update-password';
+    protected static string $httpMethod = Request::METHOD_PATCH;
+    protected static string $httpUri = '/account/update-password';
 
-    private const USER_DATA = [
+    private static array $userData = [
         'password' => '@Password3!',
     ];
 
@@ -28,21 +28,21 @@ final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
         parent::setUp();
 
         // get user password
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->userPassword = $user->getPassword();
     }
 
     public function testSuccess(): void
     {
         $this->checkSuccess([
-            'password' => self::USER_DATA['password'],
+            'password' => self::$userData['password'],
         ]);
     }
 
     public function testFailedUnauthorized(): void
     {
         $this->checkFailedUnauthorized([
-            'password' => self::USER_DATA['password'],
+            'password' => self::$userData['password'],
         ]);
     }
 
@@ -63,11 +63,11 @@ final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
-        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::USER_DATA['password']));
+        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::$userData['password']));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
@@ -79,7 +79,7 @@ final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated

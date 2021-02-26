@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdateInformationActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_PATCH;
-    protected const HTTP_URI = '/account/update-information';
+    protected static string $httpMethod = Request::METHOD_PATCH;
+    protected static string $httpUri = '/account/update-information';
 
-    private const USER_DATA = [
+    private static array $userData = [
         'name' => 'Test',
         'gender' => UserGender::MALE,
     ];
@@ -25,23 +25,23 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     public function testSuccess(): void
     {
         $this->checkSuccess([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
         ]);
     }
 
     public function testFailedUnauthorized(): void
     {
         $this->checkFailedUnauthorized([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
         ]);
     }
 
     public function testFailedMissingGender(): void
     {
         $this->checkFailedMissingMandatory([
-            'name' => self::USER_DATA['name'],
+            'name' => self::$userData['name'],
         ]);
     }
 
@@ -49,7 +49,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     {
         $this->checkFailedValidationFailed([
             'gender' => 'gender',
-            'name' => self::USER_DATA['name'],
+            'name' => self::$userData['name'],
         ], [
             'gender',
         ]);
@@ -58,19 +58,19 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     public function testFailedMissingName(): void
     {
         $this->checkFailedMissingMandatory([
-            'gender' => self::USER_DATA['gender'],
+            'gender' => self::$userData['gender'],
         ]);
     }
 
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has been updated
-        $this->assertEquals(self::USER_DATA['name'], $user->getName());
-        $this->assertEquals(self::USER_DATA['gender'], $user->getGender());
+        $this->assertEquals(self::$userData['name'], $user->getName());
+        $this->assertEquals(self::$userData['gender'], $user->getGender());
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
@@ -83,12 +83,12 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOne(self::PINKSTORY_USER_DATA['id']);
+        $user = $this->userRepository->findOne(self::$pinkstoryUserData['id']);
         $this->entityManager->refresh($user);
 
         // check user has not been updated
-        $this->assertEquals(self::PINKSTORY_USER_DATA['name'], $user->getName());
-        $this->assertEquals(self::PINKSTORY_USER_DATA['gender'], $user->getGender());
+        $this->assertEquals(self::$pinkstoryUserData['name'], $user->getName());
+        $this->assertEquals(self::$pinkstoryUserData['gender'], $user->getGender());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

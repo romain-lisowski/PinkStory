@@ -23,34 +23,40 @@ use Symfony\Component\Uid\Uuid;
  */
 final class AccountSignupActionTest extends AbastractUserActionTest
 {
-    protected const HTTP_METHOD = Request::METHOD_POST;
-    protected const HTTP_URI = '/account/signup';
-    protected const HTTP_AUTHORIZATION = false;
+    protected static string $httpMethod = Request::METHOD_POST;
+    protected static string $httpUri = '/account/signup';
 
-    private const USER_DATA = [
+    private static array $userData = [
         'gender' => UserGender::UNDEFINED,
         'name' => 'Test',
         'email' => 'test@pinkstory.io',
         'password' => '@Password2!',
     ];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::$httpAuthorization = null;
+    }
+
     public function testSuccessWithoutImage(): void
     {
         $this->checkSuccess([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
-            'email' => self::USER_DATA['email'],
-            'password' => self::USER_DATA['password'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
         ], [], ['should_have_image_defined' => false]);
     }
 
     public function testSuccessWithImage(): void
     {
         $this->checkSuccess([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
-            'email' => self::USER_DATA['email'],
-            'password' => self::USER_DATA['password'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
             'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
         ], [], ['should_have_image_defined' => true]);
     }
@@ -58,9 +64,9 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     public function testFailedMissingGender(): void
     {
         $this->checkFailedMissingMandatory([
-            'name' => self::USER_DATA['name'],
-            'email' => self::USER_DATA['email'],
-            'password' => self::USER_DATA['password'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
         ]);
     }
 
@@ -68,9 +74,9 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     {
         $this->checkFailedValidationFailed([
             'gender' => 'gender',
-            'name' => self::USER_DATA['name'],
-            'email' => self::USER_DATA['email'],
-            'password' => self::USER_DATA['password'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
         ], [
             'gender',
         ]);
@@ -79,28 +85,28 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     public function testFailedMissingName(): void
     {
         $this->checkFailedMissingMandatory([
-            'gender' => self::USER_DATA['gender'],
-            'email' => self::USER_DATA['email'],
-            'password' => self::USER_DATA['password'],
+            'gender' => self::$userData['gender'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
         ]);
     }
 
     public function testFailedMissingEmail(): void
     {
         $this->checkFailedMissingMandatory([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
-            'password' => self::USER_DATA['password'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'password' => self::$userData['password'],
         ]);
     }
 
     public function testFailedWrongFormatEmail(): void
     {
         $this->checkFailedValidationFailed([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
             'email' => 'email',
-            'password' => self::USER_DATA['password'],
+            'password' => self::$userData['password'],
         ], [
             'email',
         ]);
@@ -109,10 +115,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     public function testFailedNonExistentEmail(): void
     {
         $this->checkFailedValidationFailed([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
             'email' => 'email@email.em',
-            'password' => self::USER_DATA['password'],
+            'password' => self::$userData['password'],
         ], [
             'email',
         ]);
@@ -121,10 +127,10 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     public function testFailedNonUniqueEmail(): void
     {
         $this->checkFailedValidationFailed([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
             'email' => 'hello@pinkstory.io',
-            'password' => self::USER_DATA['password'],
+            'password' => self::$userData['password'],
         ], [
             'email',
         ]);
@@ -133,18 +139,18 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     public function testFailedMissingPassword(): void
     {
         $this->checkFailedMissingMandatory([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
-            'email' => self::USER_DATA['email'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
         ]);
     }
 
     public function testFailedPasswordStrenght(): void
     {
         $this->checkFailedValidationFailed([
-            'gender' => self::USER_DATA['gender'],
-            'name' => self::USER_DATA['name'],
-            'email' => self::USER_DATA['email'],
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
             'password' => 'password',
         ], [
             'password',
@@ -154,25 +160,25 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $options = []): void
     {
         // get fresh user from database
-        $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+        $user = $this->userRepository->findOneByEmail(self::$userData['email']);
         $this->entityManager->refresh($user);
 
         // check user has been created
         $this->assertTrue(Uuid::isValid($user->getId()));
-        $this->assertEquals(self::USER_DATA['gender'], $user->getGender());
-        $this->assertEquals(self::USER_DATA['name'], $user->getName());
-        $this->assertEquals(self::USER_DATA['email'], $user->getEmail());
+        $this->assertEquals(self::$userData['gender'], $user->getGender());
+        $this->assertEquals(self::$userData['name'], $user->getName());
+        $this->assertEquals(self::$userData['email'], $user->getEmail());
         $this->assertFalse($user->isEmailValidated());
         $this->assertRegExp('/([0-9]{6})/', $user->getEmailValidationCode());
         $this->assertFalse($user->isEmailValidationCodeUsed());
-        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::USER_DATA['password']));
+        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid($user, self::$userData['password']));
         $this->assertEquals($options['should_have_image_defined'], $user->isImageDefined());
         $this->assertEquals(UserRole::USER, $user->getRole());
         $this->assertEquals(UserStatus::ACTIVATED, $user->getStatus());
 
         // check image has been uploaded
         if (true === $options['should_have_image_defined']) {
-            $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+            $user = $this->userRepository->findOneByEmail(self::$userData['email']);
             $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').$user->getImagePath()));
         }
 
@@ -194,7 +200,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
     {
         try {
             // get fresh user from database
-            $user = $this->userRepository->findOneByEmail(self::USER_DATA['email']);
+            $user = $this->userRepository->findOneByEmail(self::$userData['email']);
             $this->entityManager->refresh($user);
             $this->fail();
         } catch (NoResultException $e) {

@@ -45,6 +45,7 @@ user:
                 invalid_token: Invalid token provided.
     validator:
         constraint:
+            email_not_found: This email doesn't exist.
             invalid_email: The email address is not valid.
             invalid_email_validation_code: The email validation code is not valid.
             password_strenght_min: The password is not complex enough.

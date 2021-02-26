@@ -19,4 +19,9 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @throws NoResultException
      */
     public function findOneByEmail(string $email): User;
+
+    /**
+     * @throws NoResultException
+     */
+    public function findOneByActivePasswordForgottenSecret(string $secret): User;
 }

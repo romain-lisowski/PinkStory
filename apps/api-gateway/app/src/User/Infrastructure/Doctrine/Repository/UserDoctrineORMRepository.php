@@ -56,4 +56,27 @@ final class UserDoctrineORMRepository extends AbstractDoctrineORMRepository impl
             throw new DomainNoResultException($e);
         }
     }
+
+    public function findOneByActivePasswordForgottenSecret(string $secret): User
+    {
+        try {
+            $qb = $this->createQueryBuilder('user');
+
+            $qb->where($qb->expr()->andX(
+                $qb->expr()->eq('user.passwordForgottenSecret', ':user_password_forgotten_secret'),
+                $qb->expr()->eq('user.passwordForgottenSecretUsed', ':user_password_forgotten_secret_used'),
+                $qb->expr()->gt('user.passwordForgottenSecretCreatedAt', ':user_password_forgotten_secret_created_at'),
+                $qb->expr()->eq('user.status', ':user_status')
+            ))
+                ->setParameter('user_password_forgotten_secret', $secret)
+                ->setParameter('user_password_forgotten_secret_used', false)
+                ->setParameter('user_password_forgotten_secret_created_at', (new \DateTime())->modify('-1 hour'))
+                ->setParameter('user_status', UserStatus::ACTIVATED)
+            ;
+
+            return $qb->getQuery()->getSingleResult();
+        } catch (NoResultException $e) {
+            throw new DomainNoResultException($e);
+        }
+    }
 }

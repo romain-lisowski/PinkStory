@@ -49,3 +49,4 @@ user:
             invalid_email: The email address is not valid.
             invalid_email_validation_code: The email validation code is not valid.
             password_strenght_min: The password is not complex enough.
+            secret_not_found: This secret doesn't exist.

@@ -65,7 +65,7 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
     private bool $emailValidated;
 
     /**
-     * @ORM\Column(name="email_validation_code", type="string", length=255)
+     * @ORM\Column(name="email_validation_code", type="string")
      * @Assert\NotBlank
      * @Assert\Regex("/^([0-9]{6})$/")
      */

@@ -21,4 +21,4 @@ doctrine:
                 type: annotation
                 dir: '%kernel.project_dir%/src/User/Domain/Model'
                 prefix: 'App\User\Domain\Model'
-                alias: App
+                alias: AppUser

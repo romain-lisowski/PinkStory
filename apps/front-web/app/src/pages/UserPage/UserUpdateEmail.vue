@@ -30,7 +30,7 @@ import { useStore } from 'vuex'
 export default {
   setup() {
     const store = useStore()
-    const email = ref(store.state.auth.stateuserLoggedIn.email)
+    const email = ref(store.state.auth.state.userLoggedIn.email)
 
     const processForm = async () => {
       await ApiUsers.updateEmail(store.state.auth.state.jwt, email.value)

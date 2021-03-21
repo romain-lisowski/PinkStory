@@ -1,20 +1,7 @@
 // import useApiLanguageSearch from '@/composition/api/language/useApiLanguageSearch'
-import fetchData from '@/composition/api/useFetch'
-
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default {
-  async updateEmail(jwt, email) {
-    const formData = new FormData()
-    formData.append('email[first]', email)
-    formData.append('email[second]', email)
-
-    return fetchData('PATCH', 'account/update-email', null, {
-      "email['first']": email,
-      "email['second']": email,
-    })
-  },
-
   async updatePassword(jwt, passwordOld, passwordNew, passwordNewConfirm) {
     const formData = new FormData()
     formData.append('old_password', passwordOld)

@@ -5,8 +5,8 @@ export default {
   SET_THEME(state, theme) {
     state.theme = theme
   },
-  ADD_SEARCH_CATEGORY(context, categoryId) {
-    context.state.searchCategoryIds.push(categoryId)
+  ADD_SEARCH_CATEGORY({ state }, categoryId) {
+    state.searchCategoryIds.push(categoryId)
   },
   REMOVE_SEARCH_CATEGORY(state, categoryId) {
     const index = state.state.searchCategoryIds.indexOf(categoryId)
@@ -14,9 +14,8 @@ export default {
       state.state.searchCategoryIds.splice(index, 1)
     }
   },
-  REFRESH_SEARCH_CATEGORY(context) {
-    // eslint-disable-next-line no-param-reassign
-    context.state.refreshSearchCategory = !context.state.refreshSearchCategory
+  REFRESH_SEARCH_CATEGORY({ state }) {
+    state.refreshSearchCategory = !state.refreshSearchCategory
   },
   SET_SEARCH_ORDER({ state }, searchOrder) {
     state.searchOrder = searchOrder

@@ -2,13 +2,13 @@ export default {
   showingLoadingOverlay: (state) => {
     return state.showLoadingOverlay
   },
-  getSearchOrder: (context) => {
-    return context.state.searchOrder
+  getSearchOrder: ({ state }) => {
+    return state.searchOrder
   },
-  getSearchCategoryIds: (context) => {
-    return context.state.searchCategoryIds
+  getSearchCategoryIds: ({ state }) => {
+    return state.searchCategoryIds
   },
-  refreshingSearchCategory: (context) => {
-    return context.state.refreshSearchCategory
+  refreshingSearchCategory: ({ state }) => {
+    return state.refreshSearchCategory
   },
 }

@@ -61,6 +61,7 @@ export default (
       formData = new FormData()
       Object.keys(formParams).forEach((formParamKey) => {
         formData.append(formParamKey, formParams[formParamKey])
+        console.log(formParamKey, formParams[formParamKey])
       })
     }
 
@@ -68,12 +69,7 @@ export default (
   }
 
   const getHeaders = (jwtParam) => {
-    const jwt = jwtParam
-    // TODO : enable store for jwt
-    // if (!jwt) {
-    //   jwt = store.getters['auth/getJwt']
-    // }
-    return { Authorization: jwt ? `Bearer ${jwt}` : null }
+    return { Authorization: jwtParam ? `Bearer ${jwtParam}` : null }
   }
 
   const fetchData = async () => {

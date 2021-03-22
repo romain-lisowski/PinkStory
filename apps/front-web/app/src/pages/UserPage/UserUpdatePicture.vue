@@ -59,15 +59,14 @@ export default {
       }
     }
     const deleteProfilePicture = async () => {
-      await ApiUsers.deleteimage(store.state.auth.state.jwt)
-      store.dispatch('auth/fetchCurrentUser')
+      const jwt = store.getters['auth/getJwt']
+      await ApiUsers.deleteimage(jwt)
+      store.dispatch('auth/fetchCurrentUser', jwt)
     }
     const processForm = async () => {
-      await ApiUsers.updateImage(
-        store.state.auth.state.jwt,
-        uploadProfilePicture.value
-      )
-      store.dispatch('auth/fetchCurrentUser')
+      const jwt = store.getters['auth/getJwt']
+      await ApiUsers.updateImage(jwt, uploadProfilePicture.value)
+      store.dispatch('auth/fetchCurrentUser', jwt)
     }
 
     const { t } = useI18n({

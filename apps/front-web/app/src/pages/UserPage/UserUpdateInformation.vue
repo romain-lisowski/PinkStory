@@ -35,11 +35,12 @@ export default {
     const language = ref(store.state.auth.state.userLoggedIn.language)
 
     const processForm = async () => {
-      await ApiUsers.updateInformation(store.state.auth.state.jwt, {
+      const jwt = store.getters['auth/getJwt']
+      await ApiUsers.updateInformation(jwt, {
         name: name.value,
         language: language.value,
       })
-      store.dispatch('auth/fetchCurrentUser')
+      store.dispatch('auth/fetchCurrentUser', jwt)
     }
 
     // TODO: Gender

@@ -1,5 +1,5 @@
 export default {
-  getJwt: (state) => {
+  getJwt: ({ state }) => {
     return state.jwt
   },
 

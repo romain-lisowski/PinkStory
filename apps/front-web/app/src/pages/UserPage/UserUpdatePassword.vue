@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ApiUsers from '@/api/ApiUsers'
+import useApiUserUpdatePassword from '@/composition/api/user/useApiUserUpdatePassword'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
@@ -52,12 +52,12 @@ export default {
     const passwordNewConfirm = ref(null)
 
     const processForm = () => {
-      ApiUsers.updatePassword(
-        store.state.auth.state.jwt,
-        passwordOld.value,
-        passwordNew.value,
-        passwordNewConfirm.value
-      )
+      useApiUserUpdatePassword(store, {
+        jwt: store.state.auth.state.jwt,
+        passwordOld: passwordOld.value,
+        passwordNew: passwordNew.value,
+        passwordNewConfirm: passwordNewConfirm.value,
+      })
     }
 
     const { t } = useI18n({

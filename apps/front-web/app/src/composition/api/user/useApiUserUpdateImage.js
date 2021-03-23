@@ -1,15 +1,12 @@
 import useFetch from '@/composition/api/useFetch'
 import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 
-export default async (store, { jwt, newEmail }) => {
+export default async (store, { jwt, image }) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'PATCH',
-    'account/update-email',
+    'account/update-image',
     null,
-    {
-      'email[first]': newEmail,
-      'email[second]': newEmail,
-    },
+    { image },
     jwt
   )
 

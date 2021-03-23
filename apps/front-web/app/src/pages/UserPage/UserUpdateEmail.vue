@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ApiUsers from '@/api/ApiUsers'
+import useApiUserUpdateEmail from '@/composition/api/user/useApiUserUpdateEmail'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
@@ -33,8 +33,9 @@ export default {
     const email = ref(store.state.auth.state.userLoggedIn.email)
 
     const processForm = async () => {
-      await ApiUsers.updateEmail(store.state.auth.state.jwt, email.value)
-      store.dispatch('auth/fetchCurrentUser')
+      const jwt = store.getters['auth/getJwt']
+      await useApiUserUpdateEmail(store, { jwt, email: email.value })
+      store.dispatch('auth/fetchCurrentUser', jwt)
     }
 
     const { t } = useI18n({

@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import ApiUsers from '@/api/ApiUsers'
+import useApiUserUpdateInformation from '@/composition/api/user/useApiUserUpdateInformation'
 import { useStore } from 'vuex'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -36,7 +36,8 @@ export default {
 
     const processForm = async () => {
       const jwt = store.getters['auth/getJwt']
-      await ApiUsers.updateInformation(jwt, {
+      await useApiUserUpdateInformation(store, {
+        jwt,
         name: name.value,
         language: language.value,
       })

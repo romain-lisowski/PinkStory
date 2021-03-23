@@ -38,8 +38,9 @@
 </template>
 
 <script>
+import useApiUserUpdateImage from '@/composition/api/user/useApiUserUpdateImage'
+import useApiUserDeleteImage from '@/composition/api/user/useApiUserDeleteImage'
 import { useStore } from 'vuex'
-import ApiUsers from '@/api/ApiUsers'
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 
@@ -60,12 +61,15 @@ export default {
     }
     const deleteProfilePicture = async () => {
       const jwt = store.getters['auth/getJwt']
-      await ApiUsers.deleteimage(jwt)
+      await useApiUserDeleteImage(store, { jwt })
       store.dispatch('auth/fetchCurrentUser', jwt)
     }
     const processForm = async () => {
       const jwt = store.getters['auth/getJwt']
-      await ApiUsers.updateImage(jwt, uploadProfilePicture.value)
+      await useApiUserUpdateImage(store, {
+        jwt,
+        image: uploadProfilePicture.value,
+      })
       store.dispatch('auth/fetchCurrentUser', jwt)
     }
 

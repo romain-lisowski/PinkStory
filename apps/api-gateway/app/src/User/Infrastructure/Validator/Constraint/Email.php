@@ -11,5 +11,5 @@ use Symfony\Component\Validator\Constraint;
  */
 final class Email extends Constraint
 {
-    public $message = 'user.validator.constraint.invalid_email';
+    public string $message = 'user.validator.constraint.invalid_email';
 }

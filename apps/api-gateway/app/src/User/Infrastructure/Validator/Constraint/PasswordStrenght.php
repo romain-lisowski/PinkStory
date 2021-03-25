@@ -11,5 +11,5 @@ use Symfony\Component\Validator\Constraint;
  */
 final class PasswordStrenght extends Constraint
 {
-    public $message = 'user.validator.constraint.password_strenght_min';
+    public string $message = 'user.validator.constraint.password_strenght_min';
 }

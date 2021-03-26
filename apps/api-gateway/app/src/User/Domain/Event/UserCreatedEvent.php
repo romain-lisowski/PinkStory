@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Domain\Event;
 
 use App\Common\Domain\Event\EventInterface;
+use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserCreatedEvent implements EventInterface
@@ -56,7 +57,13 @@ final class UserCreatedEvent implements EventInterface
      */
     private string $status;
 
-    public function __construct(string $id, string $gender, string $name, string $email, string $emailValidationCode, string $password, ?string $imagePath, string $role, string $status)
+    /**
+     * @Assert\NotBlank
+     * @Assert\Uuid
+     */
+    private string $languageId;
+
+    public function __construct(string $id, string $gender, string $name, string $email, string $emailValidationCode, string $password, ?string $imagePath, string $role, string $status, string $languageId)
     {
         $this->id = $id;
         $this->gender = $gender;
@@ -67,6 +74,7 @@ final class UserCreatedEvent implements EventInterface
         $this->imagePath = $imagePath;
         $this->role = $role;
         $this->status = $status;
+        $this->languageId = $languageId;
     }
 
     public function getId(): string
@@ -112,5 +120,10 @@ final class UserCreatedEvent implements EventInterface
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function getLanguageId(): string
+    {
+        return $this->languageId;
     }
 }

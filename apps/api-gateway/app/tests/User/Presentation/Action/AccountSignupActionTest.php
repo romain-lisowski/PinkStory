@@ -31,6 +31,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         'name' => 'Test',
         'email' => 'test@pinkstory.io',
         'password' => '@Password2!',
+        'language_id' => '9854df32-4a08-4f10-93ed-ae72ce52748b',
     ];
 
     protected function setUp(): void
@@ -47,6 +48,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ], [], ['should_have_image_defined' => false]);
     }
 
@@ -58,6 +60,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
             'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
+            'language_id' => self::$userData['language_id'],
         ], [], ['should_have_image_defined' => true]);
     }
 
@@ -67,6 +70,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -77,6 +81,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ], [
             'gender',
         ]);
@@ -88,6 +93,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'gender' => self::$userData['gender'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -97,6 +103,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -107,6 +114,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => 'email',
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -119,6 +127,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => 'email@email.em',
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -131,6 +140,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => 'hello@pinkstory.io',
             'password' => self::$userData['password'],
+            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -142,6 +152,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -152,8 +163,45 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => 'password',
+            'language_id' => self::$userData['language_id'],
         ], [
             'password',
+        ]);
+    }
+
+    public function testFailedMissingLanguage(): void
+    {
+        $this->checkFailedMissingMandatory([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
+        ]);
+    }
+
+    public function testFailedWrongFormatLanguage(): void
+    {
+        $this->checkFailedValidationFailed([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
+            'language_id' => 'language_id',
+        ], [
+            'language_id',
+        ]);
+    }
+
+    public function testFailedNonExistentLanguage(): void
+    {
+        $this->checkFailedValidationFailed([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
+            'language_id' => Uuid::v4()->toRfc4122(),
+        ], [
+            'language_id',
         ]);
     }
 
@@ -175,6 +223,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->assertEquals($options['should_have_image_defined'], $user->isImageDefined());
         $this->assertEquals(UserRole::USER, $user->getRole());
         $this->assertEquals(UserStatus::ACTIVATED, $user->getStatus());
+        $this->assertEquals(self::$userData['language_id'], $user->getLanguage()->getId());
 
         // check image has been uploaded
         if (true === $options['should_have_image_defined']) {
@@ -194,6 +243,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         $this->assertEquals($user->getImagePath(), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
         $this->assertEquals($user->getRole(), $this->asyncTransport->get()[0]->getMessage()->getRole());
         $this->assertEquals($user->getStatus(), $this->asyncTransport->get()[0]->getMessage()->getStatus());
+        $this->assertEquals($user->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getLanguageId());
     }
 
     protected function checkProcessHasBeenStopped(): void

@@ -43,14 +43,18 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
 
-    App\Common\Infrastructure\Request\ParamConverter\RequestBodyParamConverter:
-        tags: 
-            - { name: 'request.param_converter', converter: 'request_body' }
-
     App\Common\Infrastructure\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
+    App\Common\Infrastructure\Request\ParamConverter\RequestBodyParamConverter:
+        tags: 
+            - { name: 'request.param_converter', converter: 'request_body' }
+
     App\Common\Infrastructure\Validator\ValidationFailedExceptionNormalizer:
         tags:
             - { name: 'serializer.normalizer', priority: 10 }
+
+    App\Language\Infrastructure\EventListener\RequestLanguageListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

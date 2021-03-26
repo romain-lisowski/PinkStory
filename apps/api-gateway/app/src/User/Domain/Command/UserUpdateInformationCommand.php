@@ -26,11 +26,18 @@ final class UserUpdateInformationCommand implements CommandInterface
      */
     private string $name;
 
-    public function __construct(string $id, string $gender, string $name)
+    /**
+     * @Assert\NotBlank
+     * @Assert\Uuid
+     */
+    private string $languageId;
+
+    public function __construct(string $id, string $gender, string $name, string $languageId)
     {
         $this->id = $id;
         $this->gender = $gender;
         $this->name = $name;
+        $this->languageId = $languageId;
     }
 
     public function getId(): string
@@ -46,5 +53,10 @@ final class UserUpdateInformationCommand implements CommandInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getLanguageId(): string
+    {
+        return $this->languageId;
     }
 }

@@ -2,16 +2,18 @@
 
 namespace App\Fixture\User;
 
+use App\Fixture\Language\LanguageFixture;
 use App\User\Domain\Model\User;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserRole;
 use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
 
-class UserFixture extends Fixture
+class UserFixture extends Fixture implements DependentFixtureInterface
 {
     private UserPasswordEncoderInterface $passwordEncoder;
 
@@ -32,6 +34,7 @@ class UserFixture extends Fixture
             ->setImageDefined(false)
             ->setRole(UserRole::GOD)
             ->setStatus(UserStatus::ACTIVATED)
+            ->setLanguage($this->getReference('language-french'))
         ;
         $manager->persist($user);
         $this->addReference('user-pinkstory', $user);
@@ -46,6 +49,7 @@ class UserFixture extends Fixture
             ->setImageDefined(false)
             ->setRole(UserRole::ADMIN)
             ->setStatus(UserStatus::ACTIVATED)
+            ->setLanguage($this->getReference('language-french'))
         ;
         $manager->persist($user);
         $this->addReference('user-yannis', $user);
@@ -60,6 +64,7 @@ class UserFixture extends Fixture
             ->setImageDefined(false)
             ->setRole(UserRole::ADMIN)
             ->setStatus(UserStatus::ACTIVATED)
+            ->setLanguage($this->getReference('language-french'))
         ;
         $manager->persist($user);
         $this->addReference('user-romain', $user);
@@ -74,6 +79,7 @@ class UserFixture extends Fixture
             ->setImageDefined(false)
             ->setRole(UserRole::USER)
             ->setStatus(UserStatus::ACTIVATED)
+            ->setLanguage($this->getReference('language-french'))
         ;
         $manager->persist($user);
         $this->addReference('user-leslie', $user);
@@ -88,10 +94,18 @@ class UserFixture extends Fixture
             ->setImageDefined(false)
             ->setRole(UserRole::USER)
             ->setStatus(UserStatus::ACTIVATED)
+            ->setLanguage($this->getReference('language-french'))
         ;
         $manager->persist($user);
         $this->addReference('user-juliette', $user);
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            LanguageFixture::class,
+        ];
     }
 }

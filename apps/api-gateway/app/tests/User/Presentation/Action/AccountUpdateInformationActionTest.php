@@ -7,6 +7,7 @@ namespace App\Test\User\Presentation\Action;
 use App\User\Domain\Event\UserUpdatedInformationEvent;
 use App\User\Domain\Model\UserGender;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
@@ -20,10 +21,12 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     private static array $userData = [
         'name' => 'Test',
         'gender' => UserGender::MALE,
+        'language_id' => 'f11a8fd7-2a35-4f8a-a485-ab24acf214c1',
     ];
 
     private string $userGender;
     private string $userName;
+    private string $languageId;
 
     protected function setUp(): void
     {
@@ -32,6 +35,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         // get user data
         $this->userGender = self::$user->getGender();
         $this->userName = self::$user->getName();
+        $this->languageId = self::$user->getLanguage()->getId();
     }
 
     public function testSuccess(): void
@@ -39,6 +43,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         $this->checkSuccess([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -47,6 +52,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         $this->checkFailedUnauthorized([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -54,6 +60,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     {
         $this->checkFailedMissingMandatory([
             'name' => self::$userData['name'],
+            'language_id' => self::$userData['language_id'],
         ]);
     }
 
@@ -62,6 +69,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         $this->checkFailedValidationFailed([
             'gender' => 'gender',
             'name' => self::$userData['name'],
+            'language_id' => self::$userData['language_id'],
         ], [
             'gender',
         ]);
@@ -71,6 +79,37 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
     {
         $this->checkFailedMissingMandatory([
             'gender' => self::$userData['gender'],
+            'language_id' => self::$userData['language_id'],
+        ]);
+    }
+
+    public function testFailedMissingLanguage(): void
+    {
+        $this->checkFailedMissingMandatory([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+        ]);
+    }
+
+    public function testFailedWrongFormatLanguage(): void
+    {
+        $this->checkFailedValidationFailed([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'language_id' => 'language_id',
+        ], [
+            'language_id',
+        ]);
+    }
+
+    public function testFailedNonExistentLanguage(): void
+    {
+        $this->checkFailedValidationFailed([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'language_id' => Uuid::v4()->toRfc4122(),
+        ], [
+            'language_id',
         ]);
     }
 
@@ -79,6 +118,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         // check user has been updated
         $this->assertEquals(self::$userData['gender'], self::$user->getGender());
         $this->assertEquals(self::$userData['name'], self::$user->getName());
+        $this->assertEquals(self::$userData['language_id'], self::$user->getLanguage()->getId());
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
@@ -86,6 +126,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
         $this->assertEquals(self::$user->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());
         $this->assertEquals(self::$user->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());
+        $this->assertEquals(self::$user->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getLanguageId());
     }
 
     protected function checkProcessHasBeenStopped(): void
@@ -93,6 +134,7 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         // check user has not been updated
         $this->assertEquals($this->userGender, self::$user->getGender());
         $this->assertEquals($this->userName, self::$user->getName());
+        $this->assertEquals($this->languageId, self::$user->getLanguage()->getId());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

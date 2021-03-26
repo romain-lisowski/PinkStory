@@ -8,7 +8,11 @@ use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
+use App\Common\Domain\Validator\ConstraintViolation;
+use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
+use App\Language\Domain\Repository\LanguageNoResultException;
+use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\User\Domain\Event\UserUpdatedInformationEvent;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
@@ -16,34 +20,48 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private EventBusInterface $eventBus;
+    private LanguageRepositoryInterface $languageRepository;
     private UserRepositoryInterface $userRepository;
     private ValidatorInterface $validator;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, LanguageRepositoryInterface $languageRepository, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->eventBus = $eventBus;
+        $this->languageRepository = $languageRepository;
         $this->userRepository = $userRepository;
         $this->validator = $validator;
     }
 
     public function __invoke(UserUpdateInformationCommand $command): void
     {
-        $user = $this->userRepository->findOne($command->getId());
+        try {
+            $this->validator->validate($command);
 
-        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
+            $user = $this->userRepository->findOne($command->getId());
 
-        $user->updateGender($command->getGender());
-        $user->updateName($command->getName());
+            $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
-        $this->validator->validate($user);
+            $language = $this->languageRepository->findOne($command->getLanguageId());
 
-        $this->userRepository->flush();
+            $user->updateGender($command->getGender());
+            $user->updateName($command->getName());
+            $user->updateLanguage($language);
 
-        $this->eventBus->dispatch(new UserUpdatedInformationEvent(
-            $user->getId(),
-            $user->getGender(),
-            $user->getName()
-        ));
+            $this->validator->validate($user);
+
+            $this->userRepository->flush();
+
+            $this->eventBus->dispatch(new UserUpdatedInformationEvent(
+                $user->getId(),
+                $user->getGender(),
+                $user->getName(),
+                $user->getLanguage()->getId()
+            ));
+        } catch (LanguageNoResultException $e) {
+            throw new ValidationFailedException([
+                new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),
+            ]);
+        }
     }
 }

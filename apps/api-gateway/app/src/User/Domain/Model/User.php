@@ -7,6 +7,7 @@ namespace App\User\Domain\Model;
 use App\Common\Domain\File\ImageableInterface;
 use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
+use App\Language\Domain\Model\Language;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -121,6 +122,12 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
      * @Assert\Choice(callback={"App\User\Domain\Model\UserStatus", "getChoices"})
      */
     private string $status;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Language\Domain\Model\Language", inversedBy="users")
+     * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
+     */
+    private Language $language;
 
     /**
      * @ORM\OneToMany(targetEntity="App\User\Domain\Model\AccessToken", mappedBy="user", cascade={"remove"})
@@ -383,6 +390,28 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
     public function updateStatus(string $status): self
     {
         $this->setStatus($status);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getLanguage(): Language
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(Language $language): self
+    {
+        $this->language = $language;
+        $language->addUser($this);
+
+        return $this;
+    }
+
+    public function updateLanguage(Language $language): self
+    {
+        $this->language->removeUser($this);
+        $this->setLanguage($language);
         $this->updateLastUpdatedAt();
 
         return $this;

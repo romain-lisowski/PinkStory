@@ -53,7 +53,13 @@ final class UserCreateCommand implements CommandInterface
      */
     private string $status;
 
-    public function __construct(string $gender, string $name, string $email, string $password, ?File $image = null, string $role, string $status)
+    /**
+     * @Assert\NotBlank
+     * @Assert\Uuid
+     */
+    private string $languageId;
+
+    public function __construct(string $gender, string $name, string $email, string $password, ?File $image = null, string $role, string $status, string $languageId)
     {
         $this->gender = $gender;
         $this->name = $name;
@@ -62,6 +68,7 @@ final class UserCreateCommand implements CommandInterface
         $this->image = $image;
         $this->role = $role;
         $this->status = $status;
+        $this->languageId = $languageId;
     }
 
     public function getGender(): string
@@ -97,5 +104,10 @@ final class UserCreateCommand implements CommandInterface
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function getLanguageId(): string
+    {
+        return $this->languageId;
     }
 }

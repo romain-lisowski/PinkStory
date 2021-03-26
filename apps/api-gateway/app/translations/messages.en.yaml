@@ -20,6 +20,14 @@ validator:
     exception:
         validation_failed: Some errors occured during validation process.
 
+language:
+    repository:
+        exception:
+            no_result_exception: No language was found for query although at least one was expected.
+    validator:
+        constraint:
+            language_not_found: This language doesn't exist.
+
 user:
     field:
         user_gender:

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Language\Infrastructure\EventListener;
 
-use App\Common\Domain\Repository\NoResultException;
+use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -26,7 +26,7 @@ final class RequestLanguageListener
 
         try {
             $currentLanguage = $this->languageRepository->findOneByLocale($request->query->get('_locale', 'en'));
-        } catch (NoResultException $e) {
+        } catch (LanguageNoResultException $e) {
             $currentLanguage = $this->languageRepository->findOneByLocale('en');
         }
 

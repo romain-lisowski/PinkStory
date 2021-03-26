@@ -20,6 +20,11 @@ validator:
     exception:
         validation_failed: Some errors occured during validation process.
 
+access_token:
+    repository:
+        exception:
+            no_result_exception: No access token was found for query although at least one was expected.
+
 language:
     repository:
         exception:
@@ -47,6 +52,9 @@ user:
             value:
                 activated: Activated
                 blocked: Blocked
+    repository:
+        exception:
+            no_result_exception: No user was found for query although at least one was expected.
     security:
         token_authenticator:
             exception:

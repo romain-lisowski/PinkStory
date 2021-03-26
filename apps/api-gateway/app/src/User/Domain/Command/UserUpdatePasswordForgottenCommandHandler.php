@@ -6,11 +6,11 @@ namespace App\User\Domain\Command;
 
 use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
-use App\Common\Domain\Repository\NoResultException;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Domain\Event\UserUpdatedPasswordForgottenEvent;
+use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 
@@ -50,7 +50,7 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
-        } catch (NoResultException $e) {
+        } catch (UserNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('secret', 'user.validator.constraint.secret_not_found'),
             ]);

@@ -6,11 +6,11 @@ namespace App\User\Domain\Command;
 
 use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
-use App\Common\Domain\Repository\NoResultException;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Domain\Event\UserRegeneratePasswordForgottenSecretEvent;
+use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
 final class UserRegeneratePasswordForgottenSecretCommandHandler implements CommandHandlerInterface
@@ -48,7 +48,7 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler implements Comma
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
-        } catch (NoResultException $e) {
+        } catch (UserNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('email', 'user.validator.constraint.email_not_found'),
             ]);

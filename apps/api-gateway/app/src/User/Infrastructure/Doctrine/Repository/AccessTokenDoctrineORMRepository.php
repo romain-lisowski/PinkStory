@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Doctrine\Repository;
 
-use App\Common\Domain\Repository\NoResultException as DomainNoResultException;
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineORMRepository;
 use App\User\Domain\Model\AccessToken;
+use App\User\Domain\Repository\AccessTokenNoResultException;
 use App\User\Domain\Repository\AccessTokenRepositoryInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,7 +29,7 @@ final class AccessTokenDoctrineORMRepository extends AbstractDoctrineORMReposito
 
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            throw new DomainNoResultException($e);
+            throw new AccessTokenNoResultException($e);
         }
     }
 }

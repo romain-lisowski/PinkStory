@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Doctrine\Repository;
 
-use App\Common\Domain\Repository\NoResultException as DomainNoResultException;
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineORMRepository;
 use App\User\Domain\Model\User;
 use App\User\Domain\Model\UserStatus;
+use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,7 +34,7 @@ final class UserDoctrineORMRepository extends AbstractDoctrineORMRepository impl
 
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            throw new DomainNoResultException($e);
+            throw new UserNoResultException($e);
         }
     }
 
@@ -53,7 +53,7 @@ final class UserDoctrineORMRepository extends AbstractDoctrineORMRepository impl
 
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            throw new DomainNoResultException($e);
+            throw new UserNoResultException($e);
         }
     }
 
@@ -76,7 +76,7 @@ final class UserDoctrineORMRepository extends AbstractDoctrineORMRepository impl
 
             return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            throw new DomainNoResultException($e);
+            throw new UserNoResultException($e);
         }
     }
 }

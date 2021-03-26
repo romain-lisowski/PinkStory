@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Security;
 
-use App\Common\Domain\Repository\NoResultException;
+use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,7 +38,7 @@ final class UserProvider implements UserProviderInterface
             $user = $this->userRepository->findOne($id);
 
             return new User($user->getId(), User::ROLE_PREFIX.$user->getRole());
-        } catch (NoResultException $e) {
+        } catch (UserNoResultException $e) {
             throw new UsernameNotFoundException();
         }
     }

@@ -41,10 +41,14 @@ final class UserRegenerateEmailValidationCodeCommandHandler implements CommandHa
 
         $this->userRepository->flush();
 
-        $this->eventBus->dispatch(new UserRegenerateEmailValidationCodeEvent(
+        $event = new UserRegenerateEmailValidationCodeEvent(
             $user->getId(),
             $user->getEmail(),
             $user->getEmailValidationCode()
-        ));
+        );
+
+        $this->validator->validate($event);
+
+        $this->eventBus->dispatch($event);
     }
 }

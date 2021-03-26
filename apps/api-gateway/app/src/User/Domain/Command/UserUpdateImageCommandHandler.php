@@ -46,9 +46,13 @@ final class UserUpdateImageCommandHandler implements CommandHandlerInterface
 
         $this->userRepository->flush();
 
-        $this->eventBus->dispatch(new UserUpdatedImageEvent(
+        $event = new UserUpdatedImageEvent(
             $user->getId(),
             $user->getImagePath()
-        ));
+        );
+
+        $this->validator->validate($event);
+
+        $this->eventBus->dispatch($event);
     }
 }

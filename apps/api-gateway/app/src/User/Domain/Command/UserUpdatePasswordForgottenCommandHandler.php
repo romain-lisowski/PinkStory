@@ -42,10 +42,14 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
 
             $this->userRepository->flush();
 
-            $this->eventBus->dispatch(new UserUpdatedPasswordForgottenEvent(
+            $event = new UserUpdatedPasswordForgottenEvent(
                 $user->getId(),
                 $user->getPassword()
-            ));
+            );
+
+            $this->validator->validate($event);
+
+            $this->eventBus->dispatch($event);
         } catch (NoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('secret', 'user.validator.constraint.secret_not_found'),

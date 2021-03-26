@@ -52,12 +52,16 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
 
             $this->userRepository->flush();
 
-            $this->eventBus->dispatch(new UserUpdatedInformationEvent(
+            $event = new UserUpdatedInformationEvent(
                 $user->getId(),
                 $user->getGender(),
                 $user->getName(),
                 $user->getLanguage()->getId()
-            ));
+            );
+
+            $this->validator->validate($event);
+
+            $this->eventBus->dispatch($event);
         } catch (LanguageNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),

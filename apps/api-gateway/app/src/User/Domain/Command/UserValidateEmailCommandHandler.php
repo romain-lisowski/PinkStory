@@ -49,9 +49,13 @@ final class UserValidateEmailCommandHandler implements CommandHandlerInterface
 
         $this->userRepository->flush();
 
-        $this->eventBus->dispatch(new UserValidatedEmailEvent(
+        $event = new UserValidatedEmailEvent(
             $user->getId(),
             $user->getEmail()
-        ));
+        );
+
+        $this->validator->validate($event);
+
+        $this->eventBus->dispatch($event);
     }
 }

@@ -39,11 +39,15 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler implements Comma
 
             $this->userRepository->flush();
 
-            $this->eventBus->dispatch(new UserRegeneratePasswordForgottenSecretEvent(
+            $event = new UserRegeneratePasswordForgottenSecretEvent(
                 $user->getId(),
                 $user->getEmail(),
                 $user->getPasswordForgottenSecret()
-            ));
+            );
+
+            $this->validator->validate($event);
+
+            $this->eventBus->dispatch($event);
         } catch (NoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('email', 'user.validator.constraint.email_not_found'),

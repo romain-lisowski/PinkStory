@@ -63,7 +63,7 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
             $this->userRepository->persist($user);
             $this->userRepository->flush();
 
-            $this->eventBus->dispatch(new UserCreatedEvent(
+            $event = new UserCreatedEvent(
                 $user->getId(),
                 $user->getGender(),
                 $user->getName(),
@@ -74,7 +74,11 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
                 $user->getRole(),
                 $user->getStatus(),
                 $user->getLanguage()->getId()
-            ));
+            );
+
+            $this->validator->validate($event);
+
+            $this->eventBus->dispatch($event);
         } catch (LanguageNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),

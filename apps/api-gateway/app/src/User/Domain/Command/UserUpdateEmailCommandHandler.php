@@ -41,10 +41,14 @@ final class UserUpdateEmailCommandHandler implements CommandHandlerInterface
 
         $this->userRepository->flush();
 
-        $this->eventBus->dispatch(new UserUpdatedEmailEvent(
+        $event = new UserUpdatedEmailEvent(
             $user->getId(),
             $user->getEmail(),
             $user->getEmailValidationCode()
-        ));
+        );
+
+        $this->validator->validate($event);
+
+        $this->eventBus->dispatch($event);
     }
 }

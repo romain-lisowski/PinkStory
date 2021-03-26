@@ -46,9 +46,13 @@ final class UserDeleteImageCommandHandler implements CommandHandlerInterface
 
         $this->userRepository->flush();
 
-        $this->eventBus->dispatch(new UserDeletedImageEvent(
+        $event = new UserDeletedImageEvent(
             $user->getId(),
             $user->getImagePath()
-        ));
+        );
+
+        $this->validator->validate($event);
+
+        $this->eventBus->dispatch($event);
     }
 }

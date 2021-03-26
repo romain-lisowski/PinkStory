@@ -47,15 +47,4 @@ final class LanguageDoctrineORMRepository extends AbstractDoctrineORMRepository 
             throw new LanguageNoResultException($e);
         }
     }
-
-    public function exists(string $id): bool
-    {
-        try {
-            $this->findOne($id);
-
-            return true;
-        } catch (LanguageNoResultException $e) {
-            return false;
-        }
-    }
 }

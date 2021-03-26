@@ -32,6 +32,8 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
     public function __invoke(UserUpdatePasswordForgottenCommand $command): void
     {
         try {
+            $this->validator->validate($command);
+
             $user = $this->userRepository->findOneByActivePasswordForgottenSecret($command->getSecret());
 
             $user->updatePassword($command->getPassword(), $this->passwordEncoder);

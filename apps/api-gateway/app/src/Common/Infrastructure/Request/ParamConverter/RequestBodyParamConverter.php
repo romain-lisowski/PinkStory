@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Request\ParamConverter;
 
-use App\Common\Domain\Validator\ValidationFailedException;
-use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Infrastructure\Security\SecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -20,13 +18,11 @@ final class RequestBodyParamConverter implements ParamConverterInterface
 {
     private SerializerInterface $serializer;
     private SecurityInterface $security;
-    private ValidatorInterface $validator;
 
-    public function __construct(SerializerInterface $serializer, SecurityInterface $security, ValidatorInterface $validator)
+    public function __construct(SerializerInterface $serializer, SecurityInterface $security)
     {
         $this->serializer = $serializer;
         $this->security = $security;
-        $this->validator = $validator;
     }
 
     public function apply(Request $request, ParamConverter $configuration): bool
@@ -61,15 +57,11 @@ final class RequestBodyParamConverter implements ParamConverterInterface
 
             $object = $this->serializer->deserialize(json_encode($content), $configuration->getClass(), JsonEncoder::FORMAT);
 
-            $this->validator->validate($object);
-
             $request->attributes->set($configuration->getName(), $object);
 
             return true;
         } catch (MissingConstructorArgumentsException $e) {
             throw new RequestBodyParamMissingMandatoryException($e);
-        } catch (ValidationFailedException $e) {
-            throw $e;
         } catch (\Throwable $e) {
             throw new RequestBodyParamConversionFailedException($e);
         }

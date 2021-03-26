@@ -29,6 +29,8 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler implements Comma
     public function __invoke(UserRegeneratePasswordForgottenSecretCommand $command): void
     {
         try {
+            $this->validator->validate($command);
+
             $user = $this->userRepository->findOneByEmail($command->getEmail());
 
             $user->regeneratePasswordForgottenSecret();

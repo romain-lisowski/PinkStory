@@ -29,6 +29,8 @@ final class UserRegenerateEmailValidationCodeCommandHandler implements CommandHa
 
     public function __invoke(UserRegenerateEmailValidationCodeCommand $command): void
     {
+        $this->validator->validate($command);
+
         $user = $this->userRepository->findOne($command->getId());
 
         $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);

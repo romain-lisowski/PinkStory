@@ -32,6 +32,8 @@ final class UserDeleteImageCommandHandler implements CommandHandlerInterface
 
     public function __invoke(UserDeleteImageCommand $command): void
     {
+        $this->validator->validate($command);
+
         $user = $this->userRepository->findOne($command->getId());
 
         $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);

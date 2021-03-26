@@ -29,6 +29,8 @@ final class UserUpdateEmailCommandHandler implements CommandHandlerInterface
 
     public function __invoke(UserUpdateEmailCommand $command): void
     {
+        $this->validator->validate($command);
+
         $user = $this->userRepository->findOne($command->getId());
 
         $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);

@@ -6,6 +6,7 @@ framework:
             command.bus: ~
             event.bus:
                 default_middleware: allow_no_handlers
+            query.bus: ~
             
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         failure_transport: failed
@@ -28,3 +29,4 @@ framework:
             # Route your messages to the transports
             'App\Common\Domain\Command\CommandInterface': sync
             'App\Common\Domain\Event\EventInterface': async
+            'App\Common\Query\Query\QueryInterface': sync

@@ -25,6 +25,8 @@ services:
             - '../src/*/Domain/Command/*Command.php'
             - '../src/*/Domain/Event/*Event.php'
             - '../src/*/Domain/Model'
+            - '../src/*/Query/Query/*Query.php'
+            - '../src/*/Query/Model'
             - '../src/User/Infrastructure/Security/User.php'
 
     # controllers are imported separately to make sure services can be injected
@@ -42,6 +44,9 @@ services:
         App\Common\Domain\Event\EventHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
+        App\Common\Query\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
 
     App\Common\Infrastructure\EventListener\ExceptionListener:
         tags:

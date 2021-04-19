@@ -2,6 +2,10 @@ kernel:
     resource: ../../src/Kernel.php
     type: annotation
 
+language:
+    resource: ../../src/Language/Presentation/Action/
+    type: annotation
+
 user:
     resource: ../../src/User/Presentation/Action/
     type: annotation

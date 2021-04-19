@@ -113,8 +113,11 @@ final class AccountUpdateInformationActionTest extends AbastractUserActionTest
         ]);
     }
 
-    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
+        // check http response
+        $this->assertEquals([], $responseData);
+
         // check user has been updated
         $this->assertEquals(self::$userData['gender'], self::$user->getGender());
         $this->assertEquals(self::$userData['name'], self::$user->getName());

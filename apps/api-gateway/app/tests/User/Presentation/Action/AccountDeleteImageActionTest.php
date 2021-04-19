@@ -37,8 +37,11 @@ final class AccountDeleteImageActionTest extends AbastractUserActionTest
         $this->checkFailedUnauthorized();
     }
 
-    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
+        // check http response
+        $this->assertEquals([], $responseData);
+
         // check user has been updated
         $this->assertFalse(self::$user->isImageDefined());
 

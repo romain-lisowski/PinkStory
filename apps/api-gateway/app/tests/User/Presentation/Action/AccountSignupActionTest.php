@@ -49,7 +49,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
             'language_id' => self::$userData['language_id'],
-        ], [], ['should_have_image_defined' => false]);
+        ], ['should_have_image_defined' => false]);
     }
 
     public function testSuccessWithImage(): void
@@ -61,7 +61,7 @@ final class AccountSignupActionTest extends AbastractUserActionTest
             'password' => self::$userData['password'],
             'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
             'language_id' => self::$userData['language_id'],
-        ], [], ['should_have_image_defined' => true]);
+        ], ['should_have_image_defined' => true]);
     }
 
     public function testFailedMissingGender(): void
@@ -205,8 +205,11 @@ final class AccountSignupActionTest extends AbastractUserActionTest
         ]);
     }
 
-    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
+        // check http response
+        $this->assertEquals([], $responseData);
+
         // get fresh user from database
         $user = $this->userRepository->findOneByEmail(self::$userData['email']);
         $this->entityManager->refresh($user);

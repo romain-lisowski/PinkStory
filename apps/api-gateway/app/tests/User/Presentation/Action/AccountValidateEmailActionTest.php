@@ -65,8 +65,11 @@ final class AccountValidateEmailActionTest extends AbastractUserActionTest
         ]);
     }
 
-    protected function checkProcessHasBeenSucceeded(array $options = []): void
+    protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
+        // check http response
+        $this->assertEquals([], $responseData);
+
         // check user has been updated
         $this->assertTrue(self::$user->isEmailValidated());
         $this->assertTrue(self::$user->isEmailValidationCodeUsed());

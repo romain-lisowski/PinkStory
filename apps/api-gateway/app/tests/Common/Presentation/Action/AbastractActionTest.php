@@ -55,7 +55,7 @@ abstract class AbastractActionTest extends WebTestCase
         parent::tearDown();
     }
 
-    protected function checkSuccess(?array $requestContent = [], array $expectedResponseData = [], array $processOptions = []): void
+    protected function checkSuccess(?array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
@@ -63,14 +63,13 @@ abstract class AbastractActionTest extends WebTestCase
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($expectedResponseData, $responseContent);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
 
         // get fresh user from database
         $this->entityManager->refresh(self::$user);
 
         // check process has been succeeded
-        $this->checkProcessHasBeenSucceeded($processOptions);
+        $this->checkProcessHasBeenSucceeded($responseData, $processOptions);
     }
 
     protected function checkFailedUnauthorized(?array $requestContent = []): void
@@ -129,7 +128,7 @@ abstract class AbastractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped();
     }
 
-    abstract protected function checkProcessHasBeenSucceeded(array $options = []): void;
+    abstract protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void;
 
     abstract protected function checkProcessHasBeenStopped(): void;
 }

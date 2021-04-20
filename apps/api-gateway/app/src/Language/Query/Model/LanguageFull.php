@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Language\Query\Model;
 
-use App\Language\Domain\Model\Language;
-
 final class LanguageFull extends Language
 {
     private string $title;

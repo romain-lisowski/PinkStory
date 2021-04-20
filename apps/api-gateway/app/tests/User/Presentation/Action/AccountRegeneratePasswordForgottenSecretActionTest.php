@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  * @coversNothing
  */
-final class AccountRegeneratePasswordForgottenSecretActionTest extends AbastractUserActionTest
+final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/regenerate-password-forgotten-secret';

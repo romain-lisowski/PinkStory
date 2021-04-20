@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  * @coversNothing
  */
-final class AccountUpdatePasswordActionTest extends AbastractUserActionTest
+final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/update-password';

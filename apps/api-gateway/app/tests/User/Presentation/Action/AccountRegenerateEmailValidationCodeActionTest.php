@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  * @coversNothing
  */
-final class AccountRegenerateEmailValidationCodeActionTest extends AbastractUserActionTest
+final class AccountRegenerateEmailValidationCodeActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/regenerate-email-validation-code';

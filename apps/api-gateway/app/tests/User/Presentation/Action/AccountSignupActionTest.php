@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  * @coversNothing
  */
-final class AccountSignupActionTest extends AbastractUserActionTest
+final class AccountSignupActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_POST;
     protected static string $httpUri = '/account/signup';

@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  * @coversNothing
  */
-final class AccountUpdatePasswordForgottenActionTest extends AbastractUserActionTest
+final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/update-password-forgotten';

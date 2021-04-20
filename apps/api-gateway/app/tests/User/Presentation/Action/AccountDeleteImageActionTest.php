@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  * @coversNothing
  */
-final class AccountDeleteImageActionTest extends AbastractUserActionTest
+final class AccountDeleteImageActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_DELETE;
     protected static string $httpUri = '/account/delete-image';

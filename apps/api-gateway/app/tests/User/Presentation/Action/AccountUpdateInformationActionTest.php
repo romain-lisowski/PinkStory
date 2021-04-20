@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  * @coversNothing
  */
-final class AccountUpdateInformationActionTest extends AbastractUserActionTest
+final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/update-information';

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  * @coversNothing
  */
-final class AccountUpdateImageActionTest extends AbastractUserActionTest
+final class AccountUpdateImageActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/update-image';

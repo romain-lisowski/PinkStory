@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  * @coversNothing
  */
-final class AccountUpdateEmailActionTest extends AbastractUserActionTest
+final class AccountUpdateEmailActionTest extends AbstractUserActionTest
 {
     protected static string $httpMethod = Request::METHOD_PATCH;
     protected static string $httpUri = '/account/update-email';

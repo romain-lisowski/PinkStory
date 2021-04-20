@@ -15,8 +15,9 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
 {
     public function search(LanguageSearchQuery $query): \Traversable
     {
-        $qb = $this->createQueryBuilder()
-            ->select('id', 'title', 'locale')
+        $qb = $this->createQueryBuilder();
+
+        $qb->select('id', 'title', 'locale')
             ->from('lng_language')
         ;
 

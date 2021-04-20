@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\Common\Presentation\Action;
 
+use App\Fixture\User\UserFixture;
 use App\User\Domain\Model\User;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,14 +18,14 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
  * @internal
  * @coversNothing
  */
-abstract class AbastractActionTest extends WebTestCase
+abstract class AbstractActionTest extends WebTestCase
 {
     protected KernelBrowser $client;
     protected EntityManagerInterface $entityManager;
     protected TransportInterface $asyncTransport;
     protected UserRepositoryInterface $userRepository;
 
-    protected static string $userId = 'dc8d7267-fcb8-4f42-b164-a08e7cb9296b';
+    protected static string $userId = UserFixture::DATA['user-pinkstory']['id'];
     protected static User $user;
 
     protected static string $httpMethod = Request::METHOD_GET;

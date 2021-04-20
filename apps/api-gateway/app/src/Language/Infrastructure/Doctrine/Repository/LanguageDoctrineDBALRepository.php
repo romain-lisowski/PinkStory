@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Language\Infrastructure\Doctrine\Repository;
 
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository;
-use App\Language\Query\Model\Language;
+use App\Language\Query\Model\LanguageFull;
 use App\Language\Query\Query\LanguageSearchQuery;
 use App\Language\Query\Repository\LanguageRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,12 +22,12 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
 
         $qb->orderBy('locale', Criteria::ASC);
 
-        $languageDatas = $qb->execute()->fetchAllAssociative();
+        $datas = $qb->execute()->fetchAllAssociative();
 
         $languages = new ArrayCollection();
 
-        foreach ($languageDatas as $languageData) {
-            $language = new Language(strval($languageData['id']), strval($languageData['title']), strval($languageData['locale']));
+        foreach ($datas as $data) {
+            $language = new LanguageFull(strval($data['id']), strval($data['title']), strval($data['locale']));
             $languages->add($language);
         }
 

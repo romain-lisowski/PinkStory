@@ -32,10 +32,12 @@ final class LanguageSearchActionTest extends AbastractLanguageActionTest
     {
         $this->assertCount(4, $responseData['languages']);
 
+        $languageFixtures = array_values(LanguageFixture::DATA);
+
         foreach ($responseData['languages'] as $i => $data) {
-            $this->assertEquals(LanguageFixture::DATA[$i]['id'], $data['id']);
-            $this->assertEquals(LanguageFixture::DATA[$i]['title'], $data['title']);
-            $this->assertEquals(LanguageFixture::DATA[$i]['locale'], $data['locale']);
+            $this->assertEquals($languageFixtures[$i]['id'], $data['id']);
+            $this->assertEquals($languageFixtures[$i]['title'], $data['title']);
+            $this->assertEquals($languageFixtures[$i]['locale'], $data['locale']);
         }
     }
 

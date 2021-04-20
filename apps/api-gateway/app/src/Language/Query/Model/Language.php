@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Language\Query\Model;
 
-class Language
+use App\Common\Query\Model\AbstractModel;
+
+class Language extends AbstractModel
 {
     private string $id;
 

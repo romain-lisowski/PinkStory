@@ -19,7 +19,7 @@ class AccessToken extends AbstractEntity implements UserableInterface
      */
     private User $user;
 
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }

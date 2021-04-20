@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"passwordForgottenSecret"}
  * )
  */
-class User extends AbstractEntity implements UserableInterface, ImageableInterface
+class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface
 {
     use ImageableTrait;
 
@@ -436,7 +436,7 @@ class User extends AbstractEntity implements UserableInterface, ImageableInterfa
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this;
     }

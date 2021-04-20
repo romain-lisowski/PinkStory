@@ -6,5 +6,5 @@ namespace App\User\Domain\Model;
 
 interface UserableInterface
 {
-    public function getUser(): User;
+    public function getUser(): UserInterface;
 }

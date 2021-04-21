@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\User\Query\Model;
+
+use App\Common\Query\Model\AbstractModel;
+use App\User\Domain\Model\UserableInterface;
+use App\User\Domain\Model\UserInterface;
+use Symfony\Component\Serializer\Annotation as Serializer;
+
+class User extends AbstractModel implements UserInterface, UserableInterface
+{
+    private string $id;
+
+    public function __construct(string $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @Serializer\Ignore()
+     */
+    public function getUser(): UserInterface
+    {
+        return $this;
+    }
+}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Model;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Common\Domain\Translation\TranslatorInterface;
 
 abstract class AbstractEnum
 {

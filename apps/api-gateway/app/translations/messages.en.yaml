@@ -16,6 +16,10 @@ request:
                 request_body_param_conversion_failed: Some errors occured during request body conversion process.
                 request_body_param_missing_mandatory: Some mandatory params are missing.
 
+security:
+    exception:
+        access_denied: Access denied.
+
 validator:
     exception:
         validation_failed: Some errors occured during validation process.

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Security;
 
+use App\Common\Domain\Security\AccessDeniedException;
 use App\Common\Domain\Security\AuthorizationCheckerInterface as DomainAuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class AuthorizationChecker implements DomainAuthorizationCheckerInterface
 {

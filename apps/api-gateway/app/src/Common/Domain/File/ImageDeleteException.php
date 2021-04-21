@@ -7,9 +7,4 @@ namespace App\Common\Domain\File;
 final class ImageDeleteException extends RuntimeException
 {
     protected $message = 'file.exception.image_delete';
-
-    public function __construct(\Throwable $e)
-    {
-        parent::__construct($this->message, $e->getCode(), $e);
-    }
 }

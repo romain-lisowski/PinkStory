@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\Common\Presentation\Action;
 
+use App\Fixture\User\AccessTokenFixture;
 use App\Fixture\User\UserFixture;
 use App\User\Domain\Model\User;
 use App\User\Domain\Repository\UserRepositoryInterface;
@@ -30,7 +31,7 @@ abstract class AbstractActionTest extends WebTestCase
 
     protected static string $httpMethod = Request::METHOD_GET;
     protected static string $httpUri = '';
-    protected static ?string $httpAuthorization = null;
+    protected static ?string $httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
     protected function setUp(): void
     {
@@ -44,8 +45,6 @@ abstract class AbstractActionTest extends WebTestCase
 
         $this->userRepository = self::$container->get('doctrine')->getManager()->getRepository(User::class);
         self::$user = $this->userRepository->findOne(self::$userId);
-
-        self::$httpAuthorization = 'Bearer '.self::$user->getAccessTokens()->first()->getId();
     }
 
     protected function tearDown(): void
@@ -56,7 +55,7 @@ abstract class AbstractActionTest extends WebTestCase
         parent::tearDown();
     }
 
-    protected function checkSuccess(?array $requestContent = [], array $processOptions = []): void
+    protected function checkSuccess(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
@@ -73,7 +72,7 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenSucceeded($responseData, $processOptions);
     }
 
-    protected function checkFailedUnauthorized(?array $requestContent = []): void
+    protected function checkFailedUnauthorized(array $requestContent = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
 
@@ -89,7 +88,7 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped();
     }
 
-    protected function checkFailedMissingMandatory(?array $requestContent = []): void
+    protected function checkFailedMissingMandatory(array $requestContent = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
@@ -107,7 +106,7 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped();
     }
 
-    protected function checkFailedValidationFailed(?array $requestContent = [], array $invalidFields = []): void
+    protected function checkFailedValidationFailed(array $requestContent = [], array $invalidFields = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',

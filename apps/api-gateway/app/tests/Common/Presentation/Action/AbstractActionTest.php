@@ -128,6 +128,21 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped();
     }
 
+    protected function checkFailedNotFound(array $requestContent = []): void
+    {
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
+
+        // check http response
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+
+        // get fresh user from database
+        $this->entityManager->refresh(self::$user);
+
+        // check process has been stopped
+        $this->checkProcessHasBeenStopped();
+    }
+
     abstract protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void;
 
     abstract protected function checkProcessHasBeenStopped(): void;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\EventListener;
 
+use App\Common\Domain\Repository\NoResultException;
 use App\Common\Presentation\Response\ResponderInterface;
-use Doctrine\ORM\UnexpectedResultException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -35,7 +35,7 @@ final class ExceptionListener
             $e = $e->getPrevious();
         }
 
-        if ($e instanceof UnexpectedResultException) {
+        if ($e instanceof NoResultException) {
             $statusCode = Response::HTTP_NOT_FOUND;
         }
 

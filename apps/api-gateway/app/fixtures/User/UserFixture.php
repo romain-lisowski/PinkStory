@@ -49,7 +49,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'name' => 'Leslie',
             'email' => 'leslie.akindou@gmail.com',
             'password' => '@Password2!',
-            'role' => UserRole::ADMIN,
+            'role' => UserRole::MODERATOR,
             'language_reference' => 'language-french',
         ],
         'user-juliette' => [
@@ -58,7 +58,16 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'name' => 'Juliette',
             'email' => 'contact@julietteverdurand.com',
             'password' => '@Password2!',
-            'role' => UserRole::ADMIN,
+            'role' => UserRole::USER,
+            'language_reference' => 'language-french',
+        ],
+        'user-john' => [
+            'id' => '1bd26cfe-7e85-401c-b379-65158bfca161',
+            'gender' => UserGender::MALE,
+            'name' => 'John',
+            'email' => 'john@pinkstory.io',
+            'password' => '@Password2!',
+            'role' => UserRole::USER,
             'language_reference' => 'language-french',
         ],
     ];

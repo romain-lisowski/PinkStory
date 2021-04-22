@@ -31,6 +31,10 @@ class AccessTokenFixture extends Fixture implements DependentFixtureInterface
             'id' => '8b134166-af5c-41b6-8193-a6d901e3544a',
             'user_reference' => 'user-juliette',
         ],
+        'access-token-john' => [
+            'id' => '94fb2131-0f75-4df6-a208-379e102389e0',
+            'user_reference' => 'user-john',
+        ],
     ];
 
     public function load(ObjectManager $manager)

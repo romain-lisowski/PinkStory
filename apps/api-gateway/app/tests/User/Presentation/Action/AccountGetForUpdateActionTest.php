@@ -33,6 +33,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->assertEquals(UserFixture::DATA['user-pinkstory']['gender'], $responseData['user']['gender']);
         $this->assertEquals(UserFixture::DATA['user-pinkstory']['name'], $responseData['user']['name']);
         $this->assertEquals(UserFixture::DATA['user-pinkstory']['email'], $responseData['user']['email']);
+        $this->assertFalse($responseData['user']['image_defined']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['language_reference']]['id'], $responseData['user']['language']['id']);
     }
 

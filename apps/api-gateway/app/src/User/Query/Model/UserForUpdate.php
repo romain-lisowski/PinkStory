@@ -11,15 +11,17 @@ final class UserForUpdate extends User
     private string $gender;
     private string $name;
     private string $email;
+    private bool $imageDefined;
     private Language $language;
 
-    public function __construct(string $id, string $gender, string $name, string $email, Language $language)
+    public function __construct(string $id, string $gender, string $name, string $email, bool $imageDefined, Language $language)
     {
         parent::__construct($id);
 
         $this->gender = $gender;
         $this->name = $name;
         $this->email = $email;
+        $this->imageDefined = $imageDefined;
         $this->language = $language;
     }
 
@@ -36,6 +38,11 @@ final class UserForUpdate extends User
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function getImageDefined(): bool
+    {
+        return $this->imageDefined;
     }
 
     public function getLanguage(): Language

@@ -57,7 +57,7 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
     {
         $qb = $this->createQueryBuilder();
 
-        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.email as user_email')
+        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.email as user_email', 'u.image_defined as user_image_defined')
             ->from('usr_user', 'u')
             ->addSelect('language.id as language_id')
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
@@ -75,6 +75,6 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
         $language = new Language(strval($data['language_id']));
 
-        return new UserForUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), $language);
+        return new UserForUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), boolval($data['user_image_defined']), $language);
     }
 }

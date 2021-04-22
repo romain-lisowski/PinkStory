@@ -30,7 +30,7 @@ final class ValidationFailedExceptionNormalizer extends ThrowableNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization($data, string $format = null): bool
     {
         return $data instanceof ValidationFailedException;
     }

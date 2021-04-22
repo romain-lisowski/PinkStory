@@ -52,6 +52,9 @@ abstract class AbstractActionTest extends WebTestCase
         // remove test images
         (new Filesystem())->remove(self::$container->getParameter('project_image_storage_path'));
 
+        // reset access token
+        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
+
         parent::tearDown();
     }
 

@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class AbstractEntity implements EditableInterface
 {
+    use EditableTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="uuid", unique=true)

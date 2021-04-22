@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Serializer\Normalizer;
 
-use App\Common\Query\Model\EditableInterface;
+use App\Common\Domain\Model\EditableInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 
-final class QueryEditableNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
+final class EditableNormalizer implements ContextAwareNormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 

@@ -26,8 +26,10 @@ validator:
 
 access_token:
     repository:
-        exception:
             no_result_exception: No access token was found for query although at least one was expected.
+    validator:
+        constraint:
+            bad_credentials: Bad credentials.
 
 language:
     repository:

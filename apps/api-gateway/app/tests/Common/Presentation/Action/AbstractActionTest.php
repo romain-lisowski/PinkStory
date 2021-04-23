@@ -91,6 +91,24 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped();
     }
 
+    protected function checkFailedAccessDenied(array $requestContent = []): void
+    {
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
+        ], json_encode($requestContent));
+
+        // check http response
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('access_denied_exception', $responseContent['exception']['type']);
+
+        // get fresh user from database
+        $this->entityManager->refresh(self::$user);
+
+        // check process has been stopped
+        $this->checkProcessHasBeenStopped();
+    }
+
     protected function checkFailedMissingMandatory(array $requestContent = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [

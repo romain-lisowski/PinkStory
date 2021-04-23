@@ -255,9 +255,9 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             $this->fail();
         } catch (NoResultException $e) {
             $this->assertTrue(true);
-        }
 
-        // check event has not been dispatched
-        $this->assertCount(0, $this->asyncTransport->get());
+            // check event has not been dispatched
+            $this->assertCount(0, $this->asyncTransport->get());
+        }
     }
 }

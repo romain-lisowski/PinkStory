@@ -10,5 +10,7 @@ interface RepositoryInterface
 {
     public function persist(AbstractEntity $entity): void;
 
+    public function remove(AbstractEntity $entity): void;
+
     public function flush(): void;
 }

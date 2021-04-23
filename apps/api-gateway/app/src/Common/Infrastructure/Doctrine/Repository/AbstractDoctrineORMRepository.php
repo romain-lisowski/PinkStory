@@ -15,6 +15,11 @@ abstract class AbstractDoctrineORMRepository extends ServiceEntityRepository imp
         $this->getEntityManager()->persist($entity);
     }
 
+    public function remove(AbstractEntity $entity): void
+    {
+        $this->getEntityManager()->remove($entity);
+    }
+
     public function flush(): void
     {
         $this->getEntityManager()->flush();

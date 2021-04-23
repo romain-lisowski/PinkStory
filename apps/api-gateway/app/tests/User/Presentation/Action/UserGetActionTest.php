@@ -20,9 +20,14 @@ use Symfony\Component\Uid\Uuid;
  */
 final class UserGetActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_GET;
-    protected static string $httpUri = '/user/'.UserFixture::DATA['user-john']['id'];
-    protected static ?string $httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::$httpMethod = Request::METHOD_GET;
+        self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'];
+        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+    }
 
     public function testSuccessSameUserLoggedIn(): void
     {

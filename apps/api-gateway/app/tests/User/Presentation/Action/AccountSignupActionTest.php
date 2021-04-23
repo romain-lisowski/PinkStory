@@ -22,9 +22,6 @@ use Symfony\Component\Uid\Uuid;
  */
 final class AccountSignupActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_POST;
-    protected static string $httpUri = '/account/signup';
-
     private static array $userData = [
         'gender' => UserGender::UNDEFINED,
         'name' => 'Test',
@@ -37,6 +34,8 @@ final class AccountSignupActionTest extends AbstractUserActionTest
     {
         parent::setUp();
 
+        self::$httpMethod = Request::METHOD_POST;
+        self::$httpUri = '/account/signup';
         self::$httpAuthorization = null;
     }
 

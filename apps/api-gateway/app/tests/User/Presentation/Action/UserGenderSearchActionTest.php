@@ -14,13 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class UserGenderSearchActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_GET;
-    protected static string $httpUri = '/user-gender/search';
-
     protected function setUp(): void
     {
         parent::setUp();
 
+        self::$httpMethod = Request::METHOD_GET;
+        self::$httpUri = '/user-gender/search';
         self::$httpAuthorization = null;
     }
 

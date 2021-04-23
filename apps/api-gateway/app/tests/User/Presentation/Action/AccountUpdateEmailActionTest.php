@@ -12,9 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdateEmailActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/update-email';
-
     private static array $userData = [
         'email' => 'test@pinkstory.io',
     ];
@@ -25,6 +22,9 @@ final class AccountUpdateEmailActionTest extends AbstractUserActionTest
     protected function setUp(): void
     {
         parent::setUp();
+
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/update-email';
 
         // get user data
         $this->userEmail = self::$user->getEmail();

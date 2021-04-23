@@ -17,9 +17,6 @@ use Symfony\Component\Uid\Uuid;
  */
 final class AccessTokenCreateActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_POST;
-    protected static string $httpUri = '/access-token';
-    protected static ?string $httpAuthorization = null;
     private AccessTokenRepositoryInterface $accessTokenRepository;
 
     private array $accessTokens;
@@ -27,6 +24,10 @@ final class AccessTokenCreateActionTest extends AbstractUserActionTest
     protected function setUp(): void
     {
         parent::setUp();
+
+        self::$httpMethod = Request::METHOD_POST;
+        self::$httpUri = '/access-token';
+        self::$httpAuthorization = null;
 
         $this->accessTokenRepository = self::$container->get('doctrine')->getManager()->getRepository(AccessToken::class);
 

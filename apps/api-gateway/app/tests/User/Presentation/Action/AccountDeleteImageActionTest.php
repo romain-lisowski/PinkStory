@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountDeleteImageActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_DELETE;
-    protected static string $httpUri = '/account/delete-image';
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        self::$httpMethod = Request::METHOD_DELETE;
+        self::$httpUri = '/account/delete-image';
 
         // init user image
         self::$user->setImageDefined(true);

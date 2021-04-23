@@ -12,14 +12,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountRegenerateEmailValidationCodeActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/regenerate-email-validation-code';
-
     private string $userEmailValidationCode;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/regenerate-email-validation-code';
 
         // get user data
         $this->userEmailValidationCode = self::$user->getEmailValidationCode();

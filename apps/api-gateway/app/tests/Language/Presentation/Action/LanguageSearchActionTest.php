@@ -13,13 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class LanguageSearchActionTest extends AbstractLanguageActionTest
 {
-    protected static string $httpMethod = Request::METHOD_GET;
-    protected static string $httpUri = '/language/search';
-
     protected function setUp(): void
     {
         parent::setUp();
 
+        self::$httpMethod = Request::METHOD_GET;
+        self::$httpUri = '/language/search';
         self::$httpAuthorization = null;
     }
 

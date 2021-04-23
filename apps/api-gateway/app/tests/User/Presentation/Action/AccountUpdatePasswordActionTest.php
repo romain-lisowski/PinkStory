@@ -13,9 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/update-password';
-
     private static array $userData = [
         'password' => '@Password3!',
     ];
@@ -25,6 +22,9 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
     protected function setUp(): void
     {
         parent::setUp();
+
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/update-password';
 
         // get user data
         $this->userPassword = self::$user->getPassword();

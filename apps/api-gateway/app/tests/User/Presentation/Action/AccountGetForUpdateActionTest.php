@@ -14,8 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountGetForUpdateActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_GET;
-    protected static string $httpUri = '/account/update';
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::$httpMethod = Request::METHOD_GET;
+        self::$httpUri = '/account/update';
+    }
 
     public function testSuccess(): void
     {

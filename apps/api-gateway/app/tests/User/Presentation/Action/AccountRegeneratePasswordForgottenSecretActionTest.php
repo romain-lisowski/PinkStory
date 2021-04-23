@@ -12,9 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/regenerate-password-forgotten-secret';
-
     private static array $userData = [
         'email' => 'hello@pinkstory.io',
     ];
@@ -26,6 +23,8 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractU
     {
         parent::setUp();
 
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/regenerate-password-forgotten-secret';
         self::$httpAuthorization = null;
 
         // get user data

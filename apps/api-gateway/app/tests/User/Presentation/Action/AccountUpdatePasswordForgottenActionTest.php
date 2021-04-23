@@ -14,9 +14,6 @@ use Symfony\Component\Uid\Uuid;
  */
 final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/update-password-forgotten';
-
     private static array $userData = [
         'password' => '@Password3!',
     ];
@@ -27,6 +24,8 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
     {
         parent::setUp();
 
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/update-password-forgotten';
         self::$httpAuthorization = null;
 
         // get user data

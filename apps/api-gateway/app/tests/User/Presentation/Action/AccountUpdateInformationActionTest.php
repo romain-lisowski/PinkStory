@@ -14,9 +14,6 @@ use Symfony\Component\Uid\Uuid;
  */
 final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/update-information';
-
     private static array $userData = [
         'name' => 'Test',
         'gender' => UserGender::MALE,
@@ -30,6 +27,9 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
     protected function setUp(): void
     {
         parent::setUp();
+
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/update-information';
 
         // get user data
         $this->userGender = self::$user->getGender();

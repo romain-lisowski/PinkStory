@@ -15,8 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class AccountUpdateImageActionTest extends AbstractUserActionTest
 {
-    protected static string $httpMethod = Request::METHOD_PATCH;
-    protected static string $httpUri = '/account/update-image';
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::$httpMethod = Request::METHOD_PATCH;
+        self::$httpUri = '/account/update-image';
+    }
 
     public function testSuccess(): void
     {

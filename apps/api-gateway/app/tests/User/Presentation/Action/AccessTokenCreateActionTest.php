@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Test\User\Presentation\Action;
 
 use App\Fixture\User\UserFixture;
-use App\User\Domain\Model\AccessToken;
 use App\User\Domain\Repository\AccessTokenNoResultException;
-use App\User\Domain\Repository\AccessTokenRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
@@ -15,10 +13,8 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  * @coversNothing
  */
-final class AccessTokenCreateActionTest extends AbstractUserActionTest
+final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
 {
-    private AccessTokenRepositoryInterface $accessTokenRepository;
-
     private array $accessTokens;
 
     protected function setUp(): void
@@ -28,8 +24,6 @@ final class AccessTokenCreateActionTest extends AbstractUserActionTest
         self::$httpMethod = Request::METHOD_POST;
         self::$httpUri = '/access-token';
         self::$httpAuthorization = null;
-
-        $this->accessTokenRepository = self::$container->get('doctrine')->getManager()->getRepository(AccessToken::class);
 
         // get user data
         $this->accessTokens = self::$user->getAccessTokens()->toArray();

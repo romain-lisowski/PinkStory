@@ -7,6 +7,7 @@ namespace App\Common\Infrastructure\Command;
 use App\Common\Domain\Command\CommandBusInterface;
 use App\Common\Domain\Command\CommandInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 final class CommandBus implements CommandBusInterface
 {
@@ -17,8 +18,13 @@ final class CommandBus implements CommandBusInterface
         $this->bus = $commandBus;
     }
 
-    public function dispatch(CommandInterface $command): void
+    public function dispatch(CommandInterface $command)
     {
-        $this->bus->dispatch($command);
+        $envelope = $this->bus->dispatch($command);
+
+        // get the value that was returned by the last message handler
+        $handledStamp = $envelope->last(HandledStamp::class);
+
+        return $handledStamp->getResult();
     }
 }

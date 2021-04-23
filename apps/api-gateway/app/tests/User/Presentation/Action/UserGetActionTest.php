@@ -9,6 +9,7 @@ use App\Fixture\Language\LanguageFixture;
 use App\Fixture\User\AccessTokenFixture;
 use App\Fixture\User\UserFixture;
 use App\User\Domain\Model\UserGender;
+use App\User\Domain\Model\UserStatus;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -88,6 +89,18 @@ final class UserGetActionTest extends AbstractUserActionTest
     {
         // non existent id
         self::$httpUri = '/user/'.Uuid::v4()->toRfc4122();
+
+        $this->checkFailedNotFound();
+    }
+
+    public function testFailedNotFoundUserBlocked(): void
+    {
+        self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'];
+
+        // block user
+        $user = $this->userRepository->findOne(UserFixture::DATA['user-john']['id']);
+        $user->setStatus(UserStatus::BLOCKED);
+        $this->userRepository->flush();
 
         $this->checkFailedNotFound();
     }

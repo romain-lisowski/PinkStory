@@ -9,6 +9,7 @@ use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository
 use App\Language\Query\Model\Language;
 use App\Language\Query\Model\LanguageFull;
 use App\User\Domain\Model\UserGender;
+use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Repository\UserNoResultException;
 use App\User\Query\Model\UserForUpdate;
 use App\User\Query\Model\UserFull;
@@ -38,9 +39,13 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
         ;
 
-        $qb->where($qb->expr()->eq('u.id', ':user_id'))
-            ->setParameter('user_id', $query->getId())
-        ;
+        $qb->where($qb->expr()->and(
+            $qb->expr()->eq('u.id', ':user_id'),
+            $qb->expr()->eq('u.status', ':user_status')
+        ))->setParameters([
+            'user_id' => $query->getId(),
+            'user_status' => UserStatus::ACTIVATED,
+        ]);
 
         $data = $qb->execute()->fetchAssociative();
 
@@ -63,9 +68,13 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
         ;
 
-        $qb->where($qb->expr()->eq('u.id', ':user_id'))
-            ->setParameter('user_id', $query->getId())
-        ;
+        $qb->where($qb->expr()->and(
+            $qb->expr()->eq('u.id', ':user_id'),
+            $qb->expr()->eq('u.status', ':user_status')
+        ))->setParameters([
+            'user_id' => $query->getId(),
+            'user_status' => UserStatus::ACTIVATED,
+        ]);
 
         $data = $qb->execute()->fetchAssociative();
 

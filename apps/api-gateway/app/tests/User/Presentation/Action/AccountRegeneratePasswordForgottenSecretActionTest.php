@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
-use App\User\Domain\Event\UserRegeneratePasswordForgottenSecretEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -67,7 +66,6 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractU
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertInstanceOf(UserRegeneratePasswordForgottenSecretEvent::class, $this->asyncTransport->get()[0]->getMessage());
         $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
         $this->assertEquals(self::$user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
         $this->assertEquals(self::$user->getPasswordForgottenSecret(), $this->asyncTransport->get()[0]->getMessage()->getPasswordForgottenSecret());

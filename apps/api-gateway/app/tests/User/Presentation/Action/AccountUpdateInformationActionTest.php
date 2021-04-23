@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
-use App\User\Domain\Event\UserUpdatedInformationEvent;
 use App\User\Domain\Model\UserGender;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
@@ -125,7 +124,6 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertInstanceOf(UserUpdatedInformationEvent::class, $this->asyncTransport->get()[0]->getMessage());
         $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
         $this->assertEquals(self::$user->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());
         $this->assertEquals(self::$user->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());

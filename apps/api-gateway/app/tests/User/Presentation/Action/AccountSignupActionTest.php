@@ -6,7 +6,6 @@ namespace App\Test\User\Presentation\Action;
 
 use App\Common\Domain\Repository\NoResultException;
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
-use App\User\Domain\Event\UserCreatedEvent;
 use App\User\Domain\Model\User;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserRole;
@@ -236,7 +235,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertInstanceOf(UserCreatedEvent::class, $this->asyncTransport->get()[0]->getMessage());
         $this->assertEquals($user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
         $this->assertEquals($user->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());
         $this->assertEquals($user->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());

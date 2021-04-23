@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
-use App\User\Domain\Event\UserUpdatedPasswordEvent;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -69,7 +68,6 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertInstanceOf(UserUpdatedPasswordEvent::class, $this->asyncTransport->get()[0]->getMessage());
         $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
         $this->assertEquals(self::$user->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
     }

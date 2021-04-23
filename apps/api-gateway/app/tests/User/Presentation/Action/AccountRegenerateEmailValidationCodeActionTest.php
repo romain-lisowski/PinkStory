@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
-use App\User\Domain\Event\UserRegenerateEmailValidationCodeEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -48,7 +47,6 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbstractUserA
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertInstanceOf(UserRegenerateEmailValidationCodeEvent::class, $this->asyncTransport->get()[0]->getMessage());
         $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
         $this->assertEquals(self::$user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
         $this->assertEquals(self::$user->getEmailValidationCode(), $this->asyncTransport->get()[0]->getMessage()->getEmailValidationCode());

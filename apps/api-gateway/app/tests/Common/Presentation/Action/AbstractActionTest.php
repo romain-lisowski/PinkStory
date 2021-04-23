@@ -58,7 +58,7 @@ abstract class AbstractActionTest extends WebTestCase
         parent::tearDown();
     }
 
-    protected function checkSuccess(array $requestContent = [], array $processOptions = []): void
+    protected function checkSucceeded(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',

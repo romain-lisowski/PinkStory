@@ -30,9 +30,9 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
         $this->userPassword = self::$user->getPassword();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'password' => self::$userData['password'],
         ]);
     }

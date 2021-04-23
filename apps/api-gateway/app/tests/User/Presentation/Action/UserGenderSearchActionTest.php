@@ -23,9 +23,9 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         self::$httpAuthorization = null;
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void

@@ -37,9 +37,9 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
         $this->languageId = self::$user->getLanguage()->getId();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'language_id' => self::$userData['language_id'],

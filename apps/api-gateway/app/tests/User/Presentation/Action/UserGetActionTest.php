@@ -30,49 +30,49 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
     }
 
-    public function testSuccessSameUserLoggedIn(): void
+    public function testSucceededSameUserLoggedIn(): void
     {
-        $this->checkSuccess([], [
+        $this->checkSucceeded([], [
             'editable' => true,
         ]);
     }
 
-    public function testSuccessDifferentUserLoggedInButAdmin(): void
+    public function testSucceededDifferentUserLoggedInButAdmin(): void
     {
         // change user logged in
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSuccess([], [
+        $this->checkSucceeded([], [
             'editable' => true,
         ]);
     }
 
-    public function testSuccessDifferentUserLoggedInButModerator(): void
+    public function testSucceededDifferentUserLoggedInButModerator(): void
     {
         // change user logged in
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-leslie']['id'];
 
-        $this->checkSuccess([], [
+        $this->checkSucceeded([], [
             'editable' => true,
         ]);
     }
 
-    public function testSuccessDifferentUserLoggedIn(): void
+    public function testSucceededDifferentUserLoggedIn(): void
     {
         // change user logged in
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-juliette']['id'];
 
-        $this->checkSuccess([], [
+        $this->checkSucceeded([], [
             'editable' => false,
         ]);
     }
 
-    public function testSuccessNoUserLoggedIn(): void
+    public function testSucceededNoUserLoggedIn(): void
     {
         // no user logged in
         self::$httpAuthorization = null;
 
-        $this->checkSuccess([], [
+        $this->checkSucceeded([], [
             'editable' => false,
         ]);
     }

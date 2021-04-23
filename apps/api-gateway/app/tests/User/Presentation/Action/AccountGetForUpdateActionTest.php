@@ -22,9 +22,9 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         self::$httpUri = '/account/update';
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
     public function testFailedUnauthorized(): void

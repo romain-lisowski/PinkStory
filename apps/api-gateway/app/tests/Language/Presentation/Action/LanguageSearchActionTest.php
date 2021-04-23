@@ -22,9 +22,9 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
         self::$httpAuthorization = null;
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void

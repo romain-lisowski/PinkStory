@@ -31,9 +31,9 @@ final class AccountUpdateEmailActionTest extends AbstractUserActionTest
         $this->userEmailValidationCode = self::$user->getEmailValidationCode();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'email' => self::$userData['email'],
         ]);
     }

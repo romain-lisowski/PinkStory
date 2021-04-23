@@ -25,9 +25,9 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbstractUserA
         $this->userEmailValidationCode = self::$user->getEmailValidationCode();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
     public function testFailedUnauthorized(): void

@@ -27,25 +27,25 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
         $this->accessTokens = self::$user->getAccessTokens()->toArray();
     }
 
-    public function testSuccessSameUserLoggedIn(): void
+    public function testSucceededSameUserLoggedIn(): void
     {
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
-    public function testSuccessDifferentUserLoggedInButAdmin(): void
+    public function testSucceededDifferentUserLoggedInButAdmin(): void
     {
         // change user logged in
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
-    public function testSuccessDifferentUserLoggedInButModerator(): void
+    public function testSucceededDifferentUserLoggedInButModerator(): void
     {
         // change user logged in
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-leslie']['id'];
 
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
     public function testFailedUnauthorized(): void
@@ -53,7 +53,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
         $this->checkFailedUnauthorized();
     }
 
-    public function testFailDifferentUserLoggedIn(): void
+    public function testFailedDifferentUserLoggedIn(): void
     {
         // change user logged in
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-juliette']['id'];

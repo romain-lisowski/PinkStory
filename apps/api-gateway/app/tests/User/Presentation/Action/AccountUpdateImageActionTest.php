@@ -23,9 +23,9 @@ final class AccountUpdateImageActionTest extends AbstractUserActionTest
         self::$httpUri = '/account/update-image';
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
         ]);
     }

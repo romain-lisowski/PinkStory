@@ -32,9 +32,9 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractU
         $this->userPasswordForgottenSecretCreatedAt = self::$user->getPasswordForgottenSecretCreatedAt();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'email' => self::$userData['email'],
         ]);
     }

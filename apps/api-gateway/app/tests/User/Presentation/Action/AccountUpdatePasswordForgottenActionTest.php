@@ -34,9 +34,9 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
         $this->userPassword = self::$user->getPassword();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'password' => self::$userData['password'],
             'secret' => self::$user->getPasswordForgottenSecret(),
         ]);

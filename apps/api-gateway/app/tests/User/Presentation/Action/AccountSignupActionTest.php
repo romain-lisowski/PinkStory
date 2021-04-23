@@ -39,9 +39,9 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         self::$httpAuthorization = null;
     }
 
-    public function testSuccessWithoutImage(): void
+    public function testSucceededWithoutImage(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
@@ -50,9 +50,9 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         ], ['should_have_image_defined' => false]);
     }
 
-    public function testSuccessWithImage(): void
+    public function testSucceededWithImage(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],

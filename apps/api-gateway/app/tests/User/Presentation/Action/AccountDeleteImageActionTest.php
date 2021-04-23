@@ -26,9 +26,9 @@ final class AccountDeleteImageActionTest extends AbstractUserActionTest
         (new Filesystem())->copy(__DIR__.'/../../../image/test.jpg', self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true));
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess();
+        $this->checkSucceeded();
     }
 
     public function testFailedUnauthorized(): void

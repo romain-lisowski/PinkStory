@@ -29,9 +29,9 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
         $this->accessTokens = self::$user->getAccessTokens()->toArray();
     }
 
-    public function testSuccess(): void
+    public function testSucceeded(): void
     {
-        $this->checkSuccess([
+        $this->checkSucceeded([
             'email' => self::$user->getEmail(),
             'password' => UserFixture::DATA['user-pinkstory']['password'],
         ]);

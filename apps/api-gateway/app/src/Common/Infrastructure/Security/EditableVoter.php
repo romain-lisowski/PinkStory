@@ -23,7 +23,7 @@ final class EditableVoter extends Voter
     protected function supports(string $attribute, $subject): bool
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [EditableInterface::UPDATE, EditableInterface::DELETE])) {
+        if (!in_array($attribute, [EditableInterface::CREATE, EditableInterface::READ, EditableInterface::UPDATE, EditableInterface::DELETE])) {
             return false;
         }
 

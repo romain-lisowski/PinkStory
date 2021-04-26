@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Security;
 
+use App\User\Query\Model\UserCurrent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class Security implements SecurityInterface
@@ -15,7 +16,7 @@ final class Security implements SecurityInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?UserCurrent
     {
         $token = $this->tokenStorage->getToken();
 

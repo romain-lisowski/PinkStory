@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\User\Infrastructure\Security;
 
 use App\User\Domain\Repository\UserNoResultException;
-use App\User\Domain\Repository\UserRepositoryInterface;
+use App\User\Query\Model\UserCurrent;
+use App\User\Query\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -35,9 +36,7 @@ final class UserProvider implements UserProviderInterface
         // it is whatever value is being returned by the getUsername()
         // method in your User class.
         try {
-            $user = $this->userRepository->findOne($id);
-
-            return new User($user->getId(), User::ROLE_PREFIX.$user->getRole());
+            return $this->userRepository->findOneForCurrent($id);
         } catch (UserNoResultException $e) {
             throw new UsernameNotFoundException();
         }
@@ -64,6 +63,6 @@ final class UserProvider implements UserProviderInterface
      */
     public function supportsClass(string $class): bool
     {
-        return User::class === $class || is_subclass_of($class, User::class);
+        return UserCurrent::class === $class || is_subclass_of($class, UserCurrent::class);
     }
 }

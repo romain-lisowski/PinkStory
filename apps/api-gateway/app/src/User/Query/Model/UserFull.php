@@ -6,7 +6,7 @@ namespace App\User\Query\Model;
 
 use App\Language\Query\Model\LanguageMedium;
 
-final class UserFull extends UserMedium
+class UserFull extends UserMedium
 {
     private string $genderReading;
     private string $nameSlug;

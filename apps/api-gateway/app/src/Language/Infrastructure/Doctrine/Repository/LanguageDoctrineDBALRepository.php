@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Language\Infrastructure\Doctrine\Repository;
 
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository;
+use App\Language\Query\Model\LanguageCurrent;
 use App\Language\Query\Model\LanguageFull;
 use App\Language\Query\Query\LanguageSearchQuery;
 use App\Language\Query\Repository\LanguageRepositoryInterface;
@@ -33,5 +34,26 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
         }
 
         return $languages;
+    }
+
+    public function findOneByLocaleForCurrent(string $locale): ?LanguageCurrent
+    {
+        $qb = $this->createQueryBuilder();
+
+        $qb->select('id', 'title', 'locale')
+            ->from('lng_language')
+        ;
+
+        $qb->where($qb->expr()->eq('locale', ':locale'))
+            ->setParameter('locale', $locale)
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            return null;
+        }
+
+        return new LanguageCurrent(strval($data['id']), strval($data['title']), strval($data['locale']));
     }
 }

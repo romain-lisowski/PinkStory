@@ -32,19 +32,4 @@ final class LanguageDoctrineORMRepository extends AbstractDoctrineORMRepository 
             throw new LanguageNoResultException($e);
         }
     }
-
-    public function findOneByLocale(string $locale): Language
-    {
-        try {
-            $qb = $this->createQueryBuilder('language');
-
-            $qb->where($qb->expr()->eq('language.locale', ':language_locale'))
-                ->setParameter('language_locale', $locale)
-            ;
-
-            return $qb->getQuery()->getSingleResult();
-        } catch (NoResultException $e) {
-            throw new LanguageNoResultException($e);
-        }
-    }
 }

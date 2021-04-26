@@ -13,9 +13,4 @@ interface LanguageRepositoryInterface extends RepositoryInterface
      * @throws LanguageNoResultException
      */
     public function findOne(string $id): Language;
-
-    /**
-     * @throws LanguageNoResultException
-     */
-    public function findOneByLocale(string $locale): Language;
 }

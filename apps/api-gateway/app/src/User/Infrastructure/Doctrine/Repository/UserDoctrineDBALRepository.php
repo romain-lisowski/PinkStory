@@ -7,6 +7,7 @@ namespace App\User\Infrastructure\Doctrine\Repository;
 use App\Common\Domain\Translation\TranslatorInterface;
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository;
 use App\Language\Query\Model\Language;
+use App\Language\Query\Model\LanguageCurrent;
 use App\Language\Query\Model\LanguageMedium;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserStatus;
@@ -112,7 +113,7 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
             throw new UserNoResultException();
         }
 
-        $language = new LanguageMedium(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+        $language = new LanguageCurrent(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
 
         return new UserCurrent(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), UserCurrent::ROLE_PREFIX.strval($data['user_role']), $language, new \DateTime(strval($data['user_created_at'])));
     }

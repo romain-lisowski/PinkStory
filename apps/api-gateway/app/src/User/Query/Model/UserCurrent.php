@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Query\Model;
 
-use App\Language\Query\Model\LanguageMedium;
+use App\Language\Query\Model\LanguageCurrent;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserCurrent extends UserFull implements UserInterface
@@ -13,7 +13,7 @@ final class UserCurrent extends UserFull implements UserInterface
 
     private string $role;
 
-    public function __construct(string $id, string $gender, string $genderReading, string $name, string $nameSlug, bool $imageDefined, string $role, LanguageMedium $language, \DateTime $createdAt)
+    public function __construct(string $id, string $gender, string $genderReading, string $name, string $nameSlug, bool $imageDefined, string $role, LanguageCurrent $language, \DateTime $createdAt)
     {
         parent::__construct($id, $gender, $genderReading, $name, $nameSlug, $imageDefined, $language, $createdAt);
 

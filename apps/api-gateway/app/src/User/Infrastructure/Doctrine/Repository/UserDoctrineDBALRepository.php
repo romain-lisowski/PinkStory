@@ -13,7 +13,7 @@ use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Repository\UserNoResultException;
 use App\User\Query\Model\UserCurrent;
-use App\User\Query\Model\UserForUpdate;
+use App\User\Query\Model\UserUpdate;
 use App\User\Query\Model\UserFull;
 use App\User\Query\Query\UserGetForUpdateQuery;
 use App\User\Query\Query\UserGetQuery;
@@ -60,7 +60,7 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
         return new UserFull(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), $language, new \DateTime(strval($data['user_created_at'])));
     }
 
-    public function findOneForUpdate(UserGetForUpdateQuery $query): UserForUpdate
+    public function findOneForUpdate(UserGetForUpdateQuery $query): UserUpdate
     {
         $qb = $this->createQueryBuilder();
 
@@ -86,7 +86,7 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
         $language = new Language(strval($data['language_id']));
 
-        return new UserForUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), boolval($data['user_image_defined']), $language);
+        return new UserUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), boolval($data['user_image_defined']), $language);
     }
 
     public function findOneForCurrent(string $id): UserCurrent

@@ -6,7 +6,7 @@ namespace App\User\Query\Model;
 
 use App\Language\Query\Model\Language;
 
-final class UserForUpdate extends UserMedium
+final class UserUpdate extends UserMedium
 {
     private string $email;
 

@@ -8,7 +8,7 @@ use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
-use App\User\Query\Model\UserForUpdate;
+use App\User\Query\Model\UserUpdate;
 use App\User\Query\Repository\UserRepositoryInterface;
 
 final class UserGetForUpdateQueryHandler implements QueryHandlerInterface
@@ -24,7 +24,7 @@ final class UserGetForUpdateQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserGetForUpdateQuery $query): UserForUpdate
+    public function __invoke(UserGetForUpdateQuery $query): UserUpdate
     {
         $this->validator->validate($query);
 

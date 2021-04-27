@@ -9,12 +9,13 @@ use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository
 use App\Language\Query\Model\Language;
 use App\Language\Query\Model\LanguageCurrent;
 use App\Language\Query\Model\LanguageMedium;
+use App\Language\Query\Repository\LanguageRepositoryInterface;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Repository\UserNoResultException;
 use App\User\Query\Model\UserCurrent;
-use App\User\Query\Model\UserUpdate;
 use App\User\Query\Model\UserFull;
+use App\User\Query\Model\UserUpdate;
 use App\User\Query\Query\UserGetForUpdateQuery;
 use App\User\Query\Query\UserGetQuery;
 use App\User\Query\Repository\UserRepositoryInterface;
@@ -22,12 +23,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements UserRepositoryInterface
 {
+    private LanguageRepositoryInterface $languageRepository;
     private TranslatorInterface $translator;
 
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $entityManager, LanguageRepositoryInterface $languageRepository, TranslatorInterface $translator)
     {
         parent::__construct($entityManager);
 
+        $this->languageRepository = $languageRepository;
         $this->translator = $translator;
     }
 
@@ -57,7 +60,11 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
         $language = new LanguageMedium(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
 
-        return new UserFull(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), $language, new \DateTime(strval($data['user_created_at'])));
+        $user = new UserFull(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), $language, new \DateTime(strval($data['user_created_at'])));
+
+        $this->languageRepository->populateUserReadingLanguages($user, LanguageMedium::class);
+
+        return $user;
     }
 
     public function findOneForUpdate(UserGetForUpdateQuery $query): UserUpdate
@@ -86,7 +93,11 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
         $language = new Language(strval($data['language_id']));
 
-        return new UserUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), boolval($data['user_image_defined']), $language);
+        $user = new UserUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), boolval($data['user_image_defined']), $language);
+
+        $this->languageRepository->populateUserReadingLanguages($user, Language::class);
+
+        return $user;
     }
 
     public function findOneForCurrent(string $id): UserCurrent
@@ -115,6 +126,10 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
         $language = new LanguageCurrent(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
 
-        return new UserCurrent(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), UserCurrent::ROLE_PREFIX.strval($data['user_role']), $language, new \DateTime(strval($data['user_created_at'])));
+        $user = new UserCurrent(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), UserCurrent::ROLE_PREFIX.strval($data['user_role']), $language, new \DateTime(strval($data['user_created_at'])));
+
+        $this->languageRepository->populateUserReadingLanguages($user, LanguageCurrent::class);
+
+        return $user;
     }
 }

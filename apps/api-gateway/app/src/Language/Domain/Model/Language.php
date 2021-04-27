@@ -8,6 +8,7 @@ use App\Common\Domain\File\ImageableInterface;
 use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
 use App\User\Domain\Model\User;
+use App\User\Domain\Model\UserHasReadingLanguage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,12 +43,18 @@ class Language extends AbstractEntity implements ImageableInterface
      */
     private Collection $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\User\Domain\Model\UserHasReadingLanguage", mappedBy="language")
+     */
+    private Collection $userHasReadingLanguages;
+
     public function __construct()
     {
         parent::__construct();
 
         // init values
         $this->users = new ArrayCollection();
+        $this->userHasReadingLanguages = new ArrayCollection();
     }
 
     public function getTitle(): string
@@ -105,6 +112,25 @@ class Language extends AbstractEntity implements ImageableInterface
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getUserHasReadingLanguages(): Collection
+    {
+        return $this->userHasReadingLanguages;
+    }
+
+    public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+
+        return $this;
+    }
+
+    public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
 
         return $this;
     }

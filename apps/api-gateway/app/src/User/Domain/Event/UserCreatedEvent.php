@@ -63,7 +63,12 @@ final class UserCreatedEvent implements EventInterface
      */
     private string $languageId;
 
-    public function __construct(string $id, string $gender, string $name, string $email, string $emailValidationCode, string $password, ?string $imagePath, string $role, string $status, string $languageId)
+    /**
+     * @Assert\NotBlank
+     */
+    private array $readingLanguageIds;
+
+    public function __construct(string $id, string $gender, string $name, string $email, string $emailValidationCode, string $password, ?string $imagePath, string $role, string $status, string $languageId, array $readingLanguageIds)
     {
         $this->id = $id;
         $this->gender = $gender;
@@ -75,6 +80,7 @@ final class UserCreatedEvent implements EventInterface
         $this->role = $role;
         $this->status = $status;
         $this->languageId = $languageId;
+        $this->readingLanguageIds = $readingLanguageIds;
     }
 
     public function getId(): string
@@ -125,5 +131,10 @@ final class UserCreatedEvent implements EventInterface
     public function getLanguageId(): string
     {
         return $this->languageId;
+    }
+
+    public function getReadingLanguageIds(): array
+    {
+        return $this->readingLanguageIds;
     }
 }

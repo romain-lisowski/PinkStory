@@ -118,6 +118,10 @@ final class UserGetActionTest extends AbstractUserActionTest
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['locale'], $responseData['user']['language']['locale']);
         $this->assertTrue(new DateTime() > new DateTime($responseData['user']['created_at']));
         $this->assertEquals($options['editable'], $responseData['user']['editable']);
+        $this->assertCount(1, $responseData['user']['reading_languages']);
+        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['reading_language_references'][0]]['id'], $responseData['user']['reading_languages'][0]['id']);
+        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['reading_language_references'][0]]['title'], $responseData['user']['reading_languages'][0]['title']);
+        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['reading_language_references'][0]]['locale'], $responseData['user']['reading_languages'][0]['locale']);
     }
 
     protected function checkProcessHasBeenStopped(): void

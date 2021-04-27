@@ -11,8 +11,10 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
+use App\Language\Domain\Model\Language;
 use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
+use App\Language\Domain\Repository\ReadingLanguageNoResultException;
 use App\User\Domain\Event\UserUpdatedInformationEvent;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
@@ -47,6 +49,7 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
             $user->updateGender($command->getGender());
             $user->updateName($command->getName());
             $user->updateLanguage($language);
+            $user->updateReadingLanguages($command->getReadingLanguageIds(), $this->languageRepository);
 
             $this->validator->validate($user);
 
@@ -56,12 +59,17 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
                 $user->getId(),
                 $user->getGender(),
                 $user->getName(),
-                $user->getLanguage()->getId()
+                $user->getLanguage()->getId(),
+                Language::extractIds($user->getReadingLanguages()->toArray())
             );
 
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
+        } catch (ReadingLanguageNoResultException $e) {
+            throw new ValidationFailedException([
+                new ConstraintViolation('reading_language_ids', 'language.validator.constraint.language_not_found'),
+            ]);
         } catch (LanguageNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),

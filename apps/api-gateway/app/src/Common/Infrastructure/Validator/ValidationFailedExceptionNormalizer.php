@@ -18,12 +18,12 @@ final class ValidationFailedExceptionNormalizer extends ThrowableNormalizer
     {
         return array_merge(
             parent::normalize($exception, $format, $context),
-            ['violations' => array_map(function (ConstraintViolation $violation) {
+            ['violations' => array_values(array_map(function (ConstraintViolation $violation) {
                 return [
                     'property_path' => (new CamelCaseToSnakeCaseNameConverter())->normalize($violation->getPropertyPath()),
                     'message' => $this->translator->trans($violation->getMessage()),
                 ];
-            }, $exception->getViolations())]
+            }, $exception->getViolations()))]
         );
     }
 

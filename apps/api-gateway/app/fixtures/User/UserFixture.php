@@ -24,6 +24,10 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'password' => '@Password2!',
             'role' => UserRole::GOD,
             'language_reference' => 'language-french',
+            'reading_language_references' => [
+                'language-english',
+                'language-french',
+            ],
         ],
         'user-yannis' => [
             'id' => '1152313b-9b15-4f76-9618-1c6f56c07d1b',
@@ -33,6 +37,10 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'password' => '@Password2!',
             'role' => UserRole::ADMIN,
             'language_reference' => 'language-french',
+            'reading_language_references' => [
+                'language-english',
+                'language-french',
+            ],
         ],
         'user-romain' => [
             'id' => '0a5352ed-6989-4fec-9f9a-b96829850e6d',
@@ -42,6 +50,10 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'password' => '@Password2!',
             'role' => UserRole::ADMIN,
             'language_reference' => 'language-french',
+            'reading_language_references' => [
+                'language-english',
+                'language-french',
+            ],
         ],
         'user-leslie' => [
             'id' => 'd50be9fc-0b87-4faa-afea-24fa2491e236',
@@ -51,6 +63,9 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'password' => '@Password2!',
             'role' => UserRole::MODERATOR,
             'language_reference' => 'language-french',
+            'reading_language_references' => [
+                'language-french',
+            ],
         ],
         'user-juliette' => [
             'id' => '162481c3-4b9e-4f8d-9451-768205f6c7a6',
@@ -60,6 +75,10 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'password' => '@Password2!',
             'role' => UserRole::USER,
             'language_reference' => 'language-french',
+            'reading_language_references' => [
+                'language-english',
+                'language-french',
+            ],
         ],
         'user-john' => [
             'id' => '1bd26cfe-7e85-401c-b379-65158bfca161',
@@ -69,6 +88,9 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'password' => '@Password2!',
             'role' => UserRole::USER,
             'language_reference' => 'language-french',
+            'reading_language_references' => [
+                'language-english',
+            ],
         ],
     ];
 
@@ -94,6 +116,11 @@ class UserFixture extends Fixture implements DependentFixtureInterface
                 ->setStatus(UserStatus::ACTIVATED)
                 ->setLanguage($this->getReference($data['language_reference']))
             ;
+
+            foreach ($data['reading_language_references'] as $readingLanguageReference) {
+                $user->addReadingLanguage($this->getReference($readingLanguageReference));
+            }
+
             $manager->persist($user);
             $this->addReference($reference, $user);
         }

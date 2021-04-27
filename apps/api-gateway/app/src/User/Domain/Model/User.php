@@ -8,6 +8,9 @@ use App\Common\Domain\File\ImageableInterface;
 use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
 use App\Language\Domain\Model\Language;
+use App\Language\Domain\Repository\LanguageNoResultException;
+use App\Language\Domain\Repository\LanguageRepositoryInterface;
+use App\Language\Domain\Repository\ReadingLanguageNoResultException;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -130,6 +133,11 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     private Language $language;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\User\Domain\Model\UserHasReadingLanguage", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $userHasReadingLanguages;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\User\Domain\Model\AccessToken", mappedBy="user", cascade={"remove"})
      */
     private Collection $accessTokens;
@@ -141,6 +149,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         // init values
         $this->regenerateEmailValidationCode();
         $this->regeneratePasswordForgottenSecret(true); // not claimed by user at account creation, so block it by forcing true  until new claim
+        $this->userHasReadingLanguages = new ArrayCollection();
         $this->accessTokens = new ArrayCollection();
     }
 
@@ -412,6 +421,91 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     {
         $this->language->removeUser($this);
         $this->setLanguage($language);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getUserHasReadingLanguages(): Collection
+    {
+        return $this->userHasReadingLanguages;
+    }
+
+    public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+
+        return $this;
+    }
+
+    public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
+    {
+        $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+
+        return $this;
+    }
+
+    public function getReadingLanguages(): Collection
+    {
+        $userHasReadingLanguages = array_values(array_map(function (UserHasReadingLanguage $userHasReadingLanguage) {
+            return $userHasReadingLanguage->getLanguage();
+        }, $this->userHasReadingLanguages->toArray()));
+
+        return new ArrayCollection($userHasReadingLanguages);
+    }
+
+    public function addReadingLanguage(Language $language): self
+    {
+        $exists = false;
+
+        foreach ($this->getUserHasReadingLanguages() as $userHasReadingLanguage) {
+            if ($userHasReadingLanguage->getLanguage()->getId() === $language->getId()) {
+                $exists = true;
+
+                break;
+            }
+        }
+
+        if (false === $exists) {
+            new UserHasReadingLanguage($this, $language);
+        }
+
+        return $this;
+    }
+
+    public function addReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
+    {
+        try {
+            foreach ($readingLanguageIds as $readingLanguageId) {
+                if (false === Uuid::isValid($readingLanguageId)) {
+                    throw new ReadingLanguageNoResultException();
+                }
+
+                $readingLanguage = $languageRepository->findOne($readingLanguageId);
+                $this->addReadingLanguage($readingLanguage);
+            }
+
+            return $this;
+        } catch (LanguageNoResultException $e) {
+            throw new ReadingLanguageNoResultException($e);
+        }
+    }
+
+    public function cleanReadingLanguages(array $readingLanguageIds): self
+    {
+        foreach ($this->userHasReadingLanguages as $userHasReadingLanguage) {
+            if (false === in_array($userHasReadingLanguage->getLanguage()->getId(), $readingLanguageIds)) {
+                $this->removeUserHasReadingLanguage($userHasReadingLanguage);
+            }
+        }
+
+        return $this;
+    }
+
+    public function updateReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
+    {
+        $this->addReadingLanguages($readingLanguageIds, $languageRepository);
+        $this->cleanReadingLanguages($readingLanguageIds);
         $this->updateLastUpdatedAt();
 
         return $this;

@@ -32,12 +32,18 @@ final class UserUpdatedInformationEvent implements EventInterface
      */
     private string $languageId;
 
-    public function __construct(string $id, string $gender, string $name, string $languageId)
+    /**
+     * @Assert\NotBlank
+     */
+    private array $readingLanguageIds;
+
+    public function __construct(string $id, string $gender, string $name, string $languageId, array $readingLanguageIds)
     {
         $this->id = $id;
         $this->gender = $gender;
         $this->name = $name;
         $this->languageId = $languageId;
+        $this->readingLanguageIds = $readingLanguageIds;
     }
 
     public function getId(): string
@@ -58,5 +64,10 @@ final class UserUpdatedInformationEvent implements EventInterface
     public function getLanguageId(): string
     {
         return $this->languageId;
+    }
+
+    public function getReadingLanguageIds(): array
+    {
+        return $this->readingLanguageIds;
     }
 }

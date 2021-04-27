@@ -225,6 +225,8 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         $this->assertEquals(UserRole::USER, $user->getRole());
         $this->assertEquals(UserStatus::ACTIVATED, $user->getStatus());
         $this->assertEquals(self::$userData['language_id'], $user->getLanguage()->getId());
+        $this->assertCount(1, $user->getUserHasReadingLanguages());
+        $this->assertEquals(self::$userData['language_id'], $user->getUserHasReadingLanguages()->first()->getLanguage()->getId());
 
         // check image has been uploaded
         if (true === $options['should_have_image_defined']) {
@@ -244,6 +246,8 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         $this->assertEquals($user->getRole(), $this->asyncTransport->get()[0]->getMessage()->getRole());
         $this->assertEquals($user->getStatus(), $this->asyncTransport->get()[0]->getMessage()->getStatus());
         $this->assertEquals($user->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getLanguageId());
+        $this->assertCount(1, $this->asyncTransport->get()[0]->getMessage()->getReadingLanguageIds());
+        $this->assertEquals($user->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getReadingLanguageIds()[0]);
     }
 
     protected function checkProcessHasBeenStopped(): void

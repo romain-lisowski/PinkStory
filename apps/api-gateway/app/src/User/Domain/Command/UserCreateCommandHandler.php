@@ -10,6 +10,7 @@ use App\Common\Domain\File\ImageManagerInterface;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
+use App\Language\Domain\Model\Language;
 use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\User\Domain\Event\UserCreatedEvent;
@@ -52,6 +53,7 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
                 ->setRole($command->getRole())
                 ->setStatus($command->getStatus())
                 ->setLanguage($language)
+                ->addReadingLanguage($language)
             ;
 
             $this->validator->validate($user);
@@ -73,7 +75,8 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
                 $user->getImagePath(),
                 $user->getRole(),
                 $user->getStatus(),
-                $user->getLanguage()->getId()
+                $user->getLanguage()->getId(),
+                Language::extractIds($user->getReadingLanguages()->toArray())
             );
 
             $this->validator->validate($event);

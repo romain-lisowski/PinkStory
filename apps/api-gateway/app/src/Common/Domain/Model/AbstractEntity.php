@@ -77,6 +77,13 @@ abstract class AbstractEntity implements EditableInterface
         return $this;
     }
 
+    public static function extractIds(array $entities): array
+    {
+        return array_values(array_map(function (AbstractEntity $entity) {
+            return $entity->getId();
+        }, $entities));
+    }
+
     private function generateId(): self
     {
         $this->setId(Uuid::v4()->toRfc4122());

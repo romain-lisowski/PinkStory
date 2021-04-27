@@ -29,6 +29,7 @@ final class RequestLanguageListener
         // get current language from user
         if (null !== $this->security->getUser()) {
             $currentLanguage = $this->security->getUser()->getLanguage();
+            $currentReadingLanguages = $this->security->getUser()->getReadingLanguages();
         }
 
         // get current language from locale param in uri

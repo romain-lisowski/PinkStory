@@ -40,6 +40,9 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->assertEquals(UserFixture::DATA['user-pinkstory']['email'], $responseData['user']['email']);
         $this->assertFalse($responseData['user']['image_defined']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['language_reference']]['id'], $responseData['user']['language']['id']);
+        $this->assertCount(2, $responseData['user']['reading_languages']);
+        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['reading_language_references'][0]]['id'], $responseData['user']['reading_languages'][0]['id']);
+        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['reading_language_references'][1]]['id'], $responseData['user']['reading_languages'][1]['id']);
     }
 
     protected function checkProcessHasBeenStopped(): void

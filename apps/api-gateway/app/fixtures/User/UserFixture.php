@@ -87,7 +87,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             'email' => 'john@pinkstory.io',
             'password' => '@Password2!',
             'role' => UserRole::USER,
-            'language_reference' => 'language-french',
+            'language_reference' => 'language-english',
             'reading_language_references' => [
                 'language-english',
             ],

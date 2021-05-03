@@ -10,6 +10,11 @@ abstract class AbstractEnum
 {
     protected static string $translationPrefix = 'value.';
 
+    public static function getTranslationPrefix(): string
+    {
+        return static::$translationPrefix;
+    }
+
     public static function getChoices(): array
     {
         return array_values(static::getConstants());

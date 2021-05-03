@@ -29,9 +29,9 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
-        $this->assertCount(4, $responseData['languages']);
-
         $languageFixtures = array_values(LanguageFixture::DATA);
+
+        $this->assertCount(count($languageFixtures), $responseData['languages']);
 
         foreach ($responseData['languages'] as $i => $data) {
             $this->assertEquals($languageFixtures[$i]['id'], $data['id']);

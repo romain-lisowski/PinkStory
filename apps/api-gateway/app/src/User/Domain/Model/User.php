@@ -8,6 +8,7 @@ use App\Common\Domain\File\ImageableInterface;
 use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
 use App\Language\Domain\Model\Language;
+use App\Language\Domain\Model\LanguageableInterface;
 use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Language\Domain\Repository\ReadingLanguageNoResultException;
@@ -32,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"passwordForgottenSecret"}
  * )
  */
-class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface
+class User extends AbstractEntity implements UserInterface, UserableInterface, ImageableInterface, LanguageableInterface
 {
     use ImageableTrait;
 

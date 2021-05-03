@@ -22,6 +22,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Language/Domain/Model'
                 prefix: 'App\Language\Domain\Model'
                 alias: AppLanguage
+            App\Story:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Story/Domain/Model'
+                prefix: 'App\Story\Domain\Model'
+                alias: AppStory
             App\User:
                 is_bundle: false
                 type: annotation

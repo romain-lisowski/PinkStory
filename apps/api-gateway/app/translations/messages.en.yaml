@@ -5,6 +5,11 @@ file:
         image_upload: An error occured during image upload.
         image_delete: An error occured during image deletion.
 
+model:
+    exception:
+        child_depth: Item with parent referenced can't be linked.
+        position_update: An error occured during position update.
+
 repository:
     exception:
         no_result_exception: No result was found for query although at least one row was expected.
@@ -38,6 +43,11 @@ language:
     validator:
         constraint:
             language_not_found: This language doesn't exist.
+
+story_theme:
+    repository:
+        exception:
+            no_result_exception: No story theme was found for query although at least one was expected.
 
 user:
     field:

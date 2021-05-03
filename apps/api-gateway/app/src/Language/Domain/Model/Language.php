@@ -7,6 +7,7 @@ namespace App\Language\Domain\Model;
 use App\Common\Domain\File\ImageableInterface;
 use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
+use App\Story\Domain\Model\StoryThemeTranslation;
 use App\User\Domain\Model\User;
 use App\User\Domain\Model\UserHasReadingLanguage;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -48,6 +49,11 @@ class Language extends AbstractEntity implements ImageableInterface
      */
     private Collection $userHasReadingLanguages;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryThemeTranslation", mappedBy="language")
+     */
+    private Collection $storyThemeTranslations;
+
     public function __construct()
     {
         parent::__construct();
@@ -55,6 +61,7 @@ class Language extends AbstractEntity implements ImageableInterface
         // init values
         $this->users = new ArrayCollection();
         $this->userHasReadingLanguages = new ArrayCollection();
+        $this->storyThemeTranslations = new ArrayCollection();
     }
 
     public function getTitle(): string
@@ -131,6 +138,25 @@ class Language extends AbstractEntity implements ImageableInterface
     public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
     {
         $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+
+        return $this;
+    }
+
+    public function getStoryThemeTranslations(): Collection
+    {
+        return $this->storyThemeTranslations;
+    }
+
+    public function addStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
+    {
+        $this->storyThemeTranslations[] = $storyThemeTranslation;
+
+        return $this;
+    }
+
+    public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
+    {
+        $this->storyThemeTranslations->removeElement($storyThemeTranslation);
 
         return $this;
     }

@@ -34,6 +34,10 @@ services:
     App\Language\Presentation\Action\:
         resource: '../src/Language/Presentation/Action'
         tags: ['controller.service_arguments']
+    
+    App\Story\Presentation\Action\:
+        resource: '../src/Story/Presentation/Action'
+        tags: ['controller.service_arguments']
 
     App\User\Presentation\Action\:
         resource: '../src/User/Presentation/Action'

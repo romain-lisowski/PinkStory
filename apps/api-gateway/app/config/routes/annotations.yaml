@@ -6,6 +6,10 @@ language:
     resource: ../../src/Language/Presentation/Action/
     type: annotation
 
+story:
+    resource: ../../src/Story/Presentation/Action/
+    type: annotation
+
 user:
     resource: ../../src/User/Presentation/Action/
     type: annotation

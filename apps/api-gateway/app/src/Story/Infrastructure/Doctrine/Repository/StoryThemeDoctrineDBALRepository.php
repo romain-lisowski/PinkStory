@@ -10,11 +10,12 @@ use App\Story\Query\Model\StoryThemeFullParent;
 use App\Story\Query\Query\StoryThemeSearchQuery;
 use App\Story\Query\Repository\StoryThemeRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
 final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements StoryThemeRepositoryInterface
 {
-    public function search(StoryThemeSearchQuery $query): \Traversable
+    public function search(StoryThemeSearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 

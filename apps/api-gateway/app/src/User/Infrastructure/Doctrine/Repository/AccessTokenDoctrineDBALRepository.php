@@ -10,11 +10,12 @@ use App\User\Query\Model\User;
 use App\User\Query\Query\AccessTokenSearchQuery;
 use App\User\Query\Repository\AccessTokenRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
 final class AccessTokenDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements AccessTokenRepositoryInterface
 {
-    public function search(AccessTokenSearchQuery $query): \Traversable
+    public function search(AccessTokenSearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 

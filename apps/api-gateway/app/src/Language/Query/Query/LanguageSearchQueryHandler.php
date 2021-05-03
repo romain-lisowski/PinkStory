@@ -7,6 +7,7 @@ namespace App\Language\Query\Query;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
 use App\Language\Query\Repository\LanguageRepositoryInterface;
+use Doctrine\Common\Collections\Collection;
 
 final class LanguageSearchQueryHandler implements QueryHandlerInterface
 {
@@ -19,7 +20,7 @@ final class LanguageSearchQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(LanguageSearchQuery $query): \Traversable
+    public function __invoke(LanguageSearchQuery $query): Collection
     {
         $this->validator->validate($query);
 

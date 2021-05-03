@@ -6,8 +6,9 @@ namespace App\Story\Query\Repository;
 
 use App\Common\Query\Repository\RepositoryInterface;
 use App\Story\Query\Query\StoryThemeSearchQuery;
+use Doctrine\Common\Collections\Collection;
 
 interface StoryThemeRepositoryInterface extends RepositoryInterface
 {
-    public function search(StoryThemeSearchQuery $query): \Traversable;
+    public function search(StoryThemeSearchQuery $query): Collection;
 }

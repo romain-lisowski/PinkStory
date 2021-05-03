@@ -6,8 +6,9 @@ namespace App\User\Query\Repository;
 
 use App\Common\Query\Repository\RepositoryInterface;
 use App\User\Query\Query\AccessTokenSearchQuery;
+use Doctrine\Common\Collections\Collection;
 
 interface AccessTokenRepositoryInterface extends RepositoryInterface
 {
-    public function search(AccessTokenSearchQuery $query): \Traversable;
+    public function search(AccessTokenSearchQuery $query): Collection;
 }

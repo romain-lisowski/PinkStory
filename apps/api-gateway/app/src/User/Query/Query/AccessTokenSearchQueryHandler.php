@@ -9,6 +9,7 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
 use App\User\Query\Repository\AccessTokenRepositoryInterface;
+use Doctrine\Common\Collections\Collection;
 
 final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
 {
@@ -23,7 +24,7 @@ final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(AccessTokenSearchQuery $query): \Traversable
+    public function __invoke(AccessTokenSearchQuery $query): Collection
     {
         $this->validator->validate($query);
 

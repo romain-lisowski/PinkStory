@@ -13,11 +13,12 @@ use App\Language\Query\Query\LanguageSearchQuery;
 use App\Language\Query\Repository\LanguageRepositoryInterface;
 use App\User\Query\Model\UserMedium;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
 final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements LanguageRepositoryInterface
 {
-    public function search(LanguageSearchQuery $query): \Traversable
+    public function search(LanguageSearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 

@@ -7,6 +7,7 @@ namespace App\Story\Query\Query;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
 use App\Story\Query\Repository\StoryThemeRepositoryInterface;
+use Doctrine\Common\Collections\Collection;
 
 final class StoryThemeSearchQueryHandler implements QueryHandlerInterface
 {
@@ -19,7 +20,7 @@ final class StoryThemeSearchQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(StoryThemeSearchQuery $query): \Traversable
+    public function __invoke(StoryThemeSearchQuery $query): Collection
     {
         $this->validator->validate($query);
 

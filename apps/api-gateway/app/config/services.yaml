@@ -68,6 +68,10 @@ services:
         tags:
             - { name: 'serializer.normalizer', priority: 10 }
 
+    App\Language\Infrastructure\EventListener\RequestLocaleListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 20 }
+
     App\Language\Infrastructure\EventListener\RequestLanguageListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }

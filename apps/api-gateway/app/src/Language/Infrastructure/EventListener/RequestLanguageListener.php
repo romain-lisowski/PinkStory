@@ -46,7 +46,6 @@ final class RequestLanguageListener
             $currentReadingLanguages = [$currentLanguage];
         }
 
-        $request->setLocale($currentLanguage->getLocale());
         $request->attributes->set('current-language', $currentLanguage);
         $request->attributes->set('current-reading-languages', $currentReadingLanguages);
     }

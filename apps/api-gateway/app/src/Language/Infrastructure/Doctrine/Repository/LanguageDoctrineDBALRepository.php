@@ -61,6 +61,29 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
         return new LanguageCurrent(strval($data['id']), strval($data['title']), strval($data['locale']));
     }
 
+    public function findOneByAccessTokenForCurrent(string $accessTokenId): ?LanguageCurrent
+    {
+        $qb = $this->createQueryBuilder();
+
+        $qb->select('language.id as language_id', 'language.title as language_title', 'language.locale as language_locale')
+            ->from('lng_language', 'language')
+            ->join('language', 'usr_user', 'u', $qb->expr()->eq('u.language_id', 'language.id'))
+            ->join('u', 'usr_access_token', 'accessToken', $qb->expr()->eq('accessToken.user_id', 'u.id'))
+        ;
+
+        $qb->where($qb->expr()->eq('accessToken.id', ':access_token_id'))
+            ->setParameter('access_token_id', $accessTokenId)
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            return null;
+        }
+
+        return new LanguageCurrent(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+    }
+
     public function populateUserReadingLanguages(UserMedium $user, string $languageClass = Language::class): void
     {
         $qb = $this->createQueryBuilder();

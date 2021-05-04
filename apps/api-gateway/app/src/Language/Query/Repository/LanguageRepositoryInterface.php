@@ -16,5 +16,7 @@ interface LanguageRepositoryInterface extends RepositoryInterface
 
     public function findOneByLocaleForCurrent(string $locale): ?LanguageCurrent;
 
+    public function findOneByAccessTokenForCurrent(string $accessTokenId): ?LanguageCurrent;
+
     public function populateUserReadingLanguages(UserMedium $user, string $languageClass = Language::class): void;
 }

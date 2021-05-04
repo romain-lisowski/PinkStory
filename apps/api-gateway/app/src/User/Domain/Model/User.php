@@ -435,6 +435,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
     {
         $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -442,6 +443,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
     {
         $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -507,7 +509,6 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     {
         $this->addReadingLanguages($readingLanguageIds, $languageRepository);
         $this->cleanReadingLanguages($readingLanguageIds);
-        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -520,6 +521,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function addAccessToken(AccessToken $accessToken): self
     {
         $this->accessTokens[] = $accessToken;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -527,6 +529,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function removeAccessToken(AccessToken $accessToken): self
     {
         $this->accessTokens->removeElement($accessToken);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }

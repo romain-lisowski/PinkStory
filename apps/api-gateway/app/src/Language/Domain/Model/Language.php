@@ -112,6 +112,7 @@ class Language extends AbstractEntity implements ImageableInterface
     public function addUser(User $user): self
     {
         $this->users[] = $user;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -119,6 +120,7 @@ class Language extends AbstractEntity implements ImageableInterface
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -131,6 +133,7 @@ class Language extends AbstractEntity implements ImageableInterface
     public function addUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
     {
         $this->userHasReadingLanguages[] = $userHasReadingLanguage;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -138,6 +141,7 @@ class Language extends AbstractEntity implements ImageableInterface
     public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
     {
         $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -150,6 +154,7 @@ class Language extends AbstractEntity implements ImageableInterface
     public function addStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
     {
         $this->storyThemeTranslations[] = $storyThemeTranslation;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -157,6 +162,7 @@ class Language extends AbstractEntity implements ImageableInterface
     public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
     {
         $this->storyThemeTranslations->removeElement($storyThemeTranslation);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }

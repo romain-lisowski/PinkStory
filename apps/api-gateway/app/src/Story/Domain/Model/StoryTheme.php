@@ -122,6 +122,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     public function addChild(StoryTheme $child): self
     {
         $this->children[] = $child;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -129,8 +130,8 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     public function removeChild(StoryTheme $child): self
     {
         $this->children->removeElement($child);
-
         static::resetPositions($this->children);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -163,6 +164,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     public function addStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
     {
         $this->storyThemeTranslations[] = $storyThemeTranslation;
+        $this->updateLastUpdatedAt();
 
         return $this;
     }
@@ -170,6 +172,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     public function removeStoryThemeTranslation(StoryThemeTranslation $storyThemeTranslation): self
     {
         $this->storyThemeTranslations->removeElement($storyThemeTranslation);
+        $this->updateLastUpdatedAt();
 
         return $this;
     }

@@ -7,6 +7,7 @@ namespace App\Test\User\Presentation\Action;
 use App\Common\Domain\Translation\TranslatorInterface;
 use App\Fixture\Language\LanguageFixture;
 use App\Fixture\User\AccessTokenFixture;
+use App\Fixture\User\UserFixture;
 use App\User\Domain\Model\UserGender;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -51,7 +52,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
-            'language_reference' => 'language-english',
+            'language_reference' => UserFixture::DATA['user-john']['language_reference'],
         ]);
     }
 
@@ -61,7 +62,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         $this->checkSucceeded([], [
-            'language_reference' => 'language-french',
+            'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
         ]);
     }
 

@@ -34,6 +34,7 @@ final class UserGetActionTest extends AbstractUserActionTest
     {
         $this->checkSucceeded([], [
             'editable' => true,
+            'language_reference' => UserFixture::DATA['user-john']['language_reference'],
         ]);
     }
 
@@ -44,6 +45,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'editable' => true,
+            'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
         ]);
     }
 
@@ -54,6 +56,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'editable' => true,
+            'language_reference' => UserFixture::DATA['user-leslie']['language_reference'],
         ]);
     }
 
@@ -64,16 +67,32 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'editable' => false,
+            'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
         ]);
     }
 
-    public function testSucceededNoUserLoggedIn(): void
+    public function testSucceededNoUserLoggedInButEnglish(): void
     {
         // no user logged in
         self::$httpAuthorization = null;
 
         $this->checkSucceeded([], [
             'editable' => false,
+            'language_reference' => 'language-english',
+        ]);
+    }
+
+    public function testSucceededNoUserLoggedInButFrench(): void
+    {
+        // change locale
+        self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'].'?_locale=fr';
+
+        // no user logged in
+        self::$httpAuthorization = null;
+
+        $this->checkSucceeded([], [
+            'editable' => false,
+            'language_reference' => 'language-french',
         ]);
     }
 
@@ -109,7 +128,7 @@ final class UserGetActionTest extends AbstractUserActionTest
     {
         $this->assertEquals(UserFixture::DATA['user-john']['id'], $responseData['user']['id']);
         $this->assertEquals(UserFixture::DATA['user-john']['gender'], $responseData['user']['gender']);
-        $this->assertEquals(UserGender::getReadingChoice(UserFixture::DATA['user-john']['gender'], self::$container->get(TranslatorInterface::class)), $responseData['user']['gender_reading']);
+        $this->assertEquals(self::$container->get(TranslatorInterface::class)->trans(strtolower(UserGender::getTranslationPrefix().UserFixture::DATA['user-john']['gender']), [], null, LanguageFixture::DATA[$options['language_reference']]['locale']), $responseData['user']['gender_reading']);
         $this->assertEquals(UserFixture::DATA['user-john']['name'], $responseData['user']['name']);
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA['user-john']['name'])->lower()->toString(), $responseData['user']['name_slug']);
         $this->assertFalse($responseData['user']['image_defined']);

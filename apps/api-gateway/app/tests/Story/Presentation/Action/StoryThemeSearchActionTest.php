@@ -6,6 +6,7 @@ namespace App\Test\Story\Presentation\Action;
 
 use App\Fixture\Story\StoryThemeFixture;
 use App\Fixture\User\AccessTokenFixture;
+use App\Fixture\User\UserFixture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -50,7 +51,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
-            'language_reference' => 'language-english',
+            'language_reference' => UserFixture::DATA['user-john']['language_reference'],
         ]);
     }
 
@@ -60,7 +61,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         $this->checkSucceeded([], [
-            'language_reference' => 'language-french',
+            'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
         ]);
     }
 

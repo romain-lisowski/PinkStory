@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace App\Language\Infrastructure\EventListener;
 
 use App\Language\Query\Repository\LanguageRepositoryInterface;
-use App\User\Infrastructure\Security\SecurityInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class RequestLanguageListener
 {
     private LanguageRepositoryInterface $languageRepository;
-    private SecurityInterface $security;
 
-    public function __construct(LanguageRepositoryInterface $languageRepository, SecurityInterface $security)
+    public function __construct(LanguageRepositoryInterface $languageRepository)
     {
         $this->languageRepository = $languageRepository;
-        $this->security = $security;
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -26,23 +23,17 @@ final class RequestLanguageListener
         $currentLanguage = null;
         $currentReadingLanguages = [];
 
-        // get current language from user
-        if (null !== $this->security->getUser()) {
-            $currentLanguage = $this->security->getUser()->getLanguage();
-            $currentReadingLanguages = $this->security->getUser()->getReadingLanguages();
+        if (null !== $request->headers->get('Authorization') && false !== substr($request->headers->get('Authorization'), 7)) {
+            // we have to use trick cause logged in user is not loaded yet
+            $currentLanguage = $this->languageRepository->findOneByAccessTokenForCurrent(substr($request->headers->get('Authorization'), 7));
         }
 
-        // get current language from locale param in uri
         if (null === $currentLanguage) {
             $currentLanguage = $this->languageRepository->findOneByLocaleForCurrent($request->query->get('_locale', 'en'), 'en');
         }
 
-        // get current language from fallback
-        if (null === $currentLanguage) {
-            $currentLanguage = $this->languageRepository->findOneByLocaleForCurrent('en');
-        }
-
-        if (true === empty($currentReadingLanguages) && null !== $currentLanguage) {
+        if (null !== $currentLanguage) {
+            $request->setLocale($currentLanguage->getLocale());
             $currentReadingLanguages = [$currentLanguage];
         }
 

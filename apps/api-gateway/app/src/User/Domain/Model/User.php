@@ -470,7 +470,10 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         }
 
         if (false === $exists) {
-            new UserHasReadingLanguage($this, $language);
+            (new UserHasReadingLanguage())
+                ->setUser($this)
+                ->setLanguage($language)
+            ;
         }
 
         return $this;

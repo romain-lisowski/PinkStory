@@ -30,16 +30,6 @@ class UserHasReadingLanguage extends AbstractEntity implements UserableInterface
      */
     private Language $language;
 
-    public function __construct(User $user, Language $language)
-    {
-        parent::__construct();
-
-        // init values
-        $this->setUser($user)
-            ->setLanguage($language)
-        ;
-    }
-
     public function getUser(): User
     {
         return $this->user;

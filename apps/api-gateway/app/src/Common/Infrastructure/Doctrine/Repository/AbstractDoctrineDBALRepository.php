@@ -17,7 +17,7 @@ abstract class AbstractDoctrineDBALRepository implements RepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    public function createQueryBuilder(): QueryBuilder
+    protected function createQueryBuilder(): QueryBuilder
     {
         return $this->entityManager->getConnection()->createQueryBuilder();
     }

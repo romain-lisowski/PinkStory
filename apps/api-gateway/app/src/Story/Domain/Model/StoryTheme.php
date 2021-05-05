@@ -50,6 +50,11 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
      */
     private Collection $storyThemeTranslations;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryImageHasStoryTheme", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $storyImageHasStoryThemes;
+
     public function __construct()
     {
         parent::__construct();
@@ -57,6 +62,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
         // init values
         $this->children = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
+        $this->storyImageHasStoryThemes = new ArrayCollection();
     }
 
     public function getReference(): string
@@ -180,5 +186,26 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     public function getTranslations(): Collection
     {
         return $this->getStoryThemeTranslations();
+    }
+
+    public function getStoryImageHasStoryThemes(): Collection
+    {
+        return $this->storyImageHasStoryThemes;
+    }
+
+    public function addStoryImageHasStoryTheme(StoryImageHasStoryTheme $storyImageHasStoryTheme): self
+    {
+        $this->storyImageHasStoryThemes[] = $storyImageHasStoryTheme;
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function removeStoryImageHasStoryTheme(StoryImageHasStoryTheme $storyImageHasStoryTheme): self
+    {
+        $this->storyImageHasStoryThemes->removeElement($storyImageHasStoryTheme);
+        $this->updateLastUpdatedAt();
+
+        return $this;
     }
 }

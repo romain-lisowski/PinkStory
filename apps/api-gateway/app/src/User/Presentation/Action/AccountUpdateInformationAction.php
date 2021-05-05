@@ -30,8 +30,8 @@ final class AccountUpdateInformationAction
 
     public function __invoke(UserUpdateInformationCommand $command): Response
     {
-        $this->commandBus->dispatch($command);
+        $result = $this->commandBus->dispatch($command);
 
-        return $this->responder->render();
+        return $this->responder->render($result);
     }
 }

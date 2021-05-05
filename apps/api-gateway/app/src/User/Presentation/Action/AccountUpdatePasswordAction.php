@@ -30,8 +30,8 @@ final class AccountUpdatePasswordAction
 
     public function __invoke(UserUpdatePasswordCommand $command): Response
     {
-        $this->commandBus->dispatch($command);
+        $result = $this->commandBus->dispatch($command);
 
-        return $this->responder->render();
+        return $this->responder->render($result);
     }
 }

@@ -29,7 +29,7 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
         $this->validator = $validator;
     }
 
-    public function __invoke(UserUpdatePasswordForgottenCommand $command): void
+    public function __invoke(UserUpdatePasswordForgottenCommand $command): array
     {
         try {
             $this->validator->validate($command);
@@ -50,6 +50,8 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
+
+            return [];
         } catch (UserNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('secret', 'user.validator.constraint.secret_not_found'),

@@ -30,7 +30,7 @@ final class UserDeleteImageCommandHandler implements CommandHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserDeleteImageCommand $command): void
+    public function __invoke(UserDeleteImageCommand $command): array
     {
         $this->validator->validate($command);
 
@@ -54,5 +54,7 @@ final class UserDeleteImageCommandHandler implements CommandHandlerInterface
         $this->validator->validate($event);
 
         $this->eventBus->dispatch($event);
+
+        return [];
     }
 }

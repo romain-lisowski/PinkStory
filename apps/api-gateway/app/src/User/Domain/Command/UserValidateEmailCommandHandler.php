@@ -29,7 +29,7 @@ final class UserValidateEmailCommandHandler implements CommandHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserValidateEmailCommand $command): void
+    public function __invoke(UserValidateEmailCommand $command): array
     {
         $this->validator->validate($command);
 
@@ -57,5 +57,7 @@ final class UserValidateEmailCommandHandler implements CommandHandlerInterface
         $this->validator->validate($event);
 
         $this->eventBus->dispatch($event);
+
+        return [];
     }
 }

@@ -27,7 +27,7 @@ final class AccessTokenDeleteCommandHandler implements CommandHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(AccessTokenDeleteCommand $command): void
+    public function __invoke(AccessTokenDeleteCommand $command): array
     {
         $this->validator->validate($command);
 
@@ -45,5 +45,7 @@ final class AccessTokenDeleteCommandHandler implements CommandHandlerInterface
         $this->validator->validate($event);
 
         $this->eventBus->dispatch($event);
+
+        return [];
     }
 }

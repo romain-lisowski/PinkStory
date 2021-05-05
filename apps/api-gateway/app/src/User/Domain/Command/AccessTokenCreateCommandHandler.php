@@ -35,7 +35,7 @@ final class AccessTokenCreateCommandHandler implements CommandHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(AccessTokenCreateCommand $command): QueryAccessToken
+    public function __invoke(AccessTokenCreateCommand $command): array
     {
         try {
             $this->validator->validate($command);
@@ -65,7 +65,9 @@ final class AccessTokenCreateCommandHandler implements CommandHandlerInterface
 
             $this->eventBus->dispatch($event);
 
-            return new QueryAccessToken($accessToken->getId(), new User($accessToken->getUser()->getId()));
+            return [
+                'access-token' => new QueryAccessToken($accessToken->getId(), new User($accessToken->getUser()->getId())),
+            ];
         } catch (UserNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('email', 'access_token.validator.constraint.bad_credentials'),

@@ -27,7 +27,7 @@ final class UserRegenerateEmailValidationCodeCommandHandler implements CommandHa
         $this->validator = $validator;
     }
 
-    public function __invoke(UserRegenerateEmailValidationCodeCommand $command): void
+    public function __invoke(UserRegenerateEmailValidationCodeCommand $command): array
     {
         $this->validator->validate($command);
 
@@ -50,5 +50,7 @@ final class UserRegenerateEmailValidationCodeCommandHandler implements CommandHa
         $this->validator->validate($event);
 
         $this->eventBus->dispatch($event);
+
+        return [];
     }
 }

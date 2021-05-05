@@ -6,5 +6,5 @@ namespace App\Common\Domain\Command;
 
 interface CommandBusInterface
 {
-    public function dispatch(CommandInterface $command);
+    public function dispatch(CommandInterface $command): array;
 }

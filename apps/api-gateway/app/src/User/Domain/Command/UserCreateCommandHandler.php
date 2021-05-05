@@ -37,7 +37,7 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserCreateCommand $command): void
+    public function __invoke(UserCreateCommand $command): array
     {
         try {
             $this->validator->validate($command);
@@ -82,6 +82,8 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
+
+            return [];
         } catch (LanguageNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),

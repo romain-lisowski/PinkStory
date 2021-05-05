@@ -30,7 +30,7 @@ final class UserUpdatePasswordCommandHandler implements CommandHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserUpdatePasswordCommand $command): void
+    public function __invoke(UserUpdatePasswordCommand $command): array
     {
         $this->validator->validate($command);
 
@@ -52,5 +52,7 @@ final class UserUpdatePasswordCommandHandler implements CommandHandlerInterface
         $this->validator->validate($event);
 
         $this->eventBus->dispatch($event);
+
+        return [];
     }
 }

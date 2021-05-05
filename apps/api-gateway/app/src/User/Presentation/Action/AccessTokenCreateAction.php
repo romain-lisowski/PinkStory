@@ -30,8 +30,6 @@ final class AccessTokenCreateAction
     {
         $result = $this->commandBus->dispatch($command);
 
-        return $this->responder->render([
-            'access-token' => $result,
-        ]);
+        return $this->responder->render($result);
     }
 }

@@ -30,8 +30,8 @@ final class AccountUpdateEmailAction
 
     public function __invoke(UserUpdateEmailCommand $command): Response
     {
-        $this->commandBus->dispatch($command);
+        $result = $this->commandBus->dispatch($command);
 
-        return $this->responder->render();
+        return $this->responder->render($result);
     }
 }

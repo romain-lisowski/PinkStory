@@ -18,7 +18,7 @@ final class CommandBus implements CommandBusInterface
         $this->bus = $commandBus;
     }
 
-    public function dispatch(CommandInterface $command)
+    public function dispatch(CommandInterface $command): array
     {
         $envelope = $this->bus->dispatch($command);
 

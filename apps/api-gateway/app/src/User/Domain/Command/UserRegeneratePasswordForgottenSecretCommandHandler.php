@@ -26,7 +26,7 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler implements Comma
         $this->validator = $validator;
     }
 
-    public function __invoke(UserRegeneratePasswordForgottenSecretCommand $command): void
+    public function __invoke(UserRegeneratePasswordForgottenSecretCommand $command): array
     {
         try {
             $this->validator->validate($command);
@@ -48,6 +48,8 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler implements Comma
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
+
+            return [];
         } catch (UserNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('email', 'user.validator.constraint.email_not_found'),

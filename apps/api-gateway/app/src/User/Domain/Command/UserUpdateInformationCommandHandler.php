@@ -35,7 +35,7 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
         $this->validator = $validator;
     }
 
-    public function __invoke(UserUpdateInformationCommand $command): void
+    public function __invoke(UserUpdateInformationCommand $command): array
     {
         try {
             $this->validator->validate($command);
@@ -66,6 +66,8 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
             $this->validator->validate($event);
 
             $this->eventBus->dispatch($event);
+
+            return [];
         } catch (ReadingLanguageNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('reading_language_ids', 'language.validator.constraint.language_not_found'),

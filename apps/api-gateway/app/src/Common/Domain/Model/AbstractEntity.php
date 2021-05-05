@@ -15,8 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      fields = {"id"}
  * )
  */
-abstract class AbstractEntity implements EditableInterface
+abstract class AbstractEntity implements IdentifiableInterface, EditableInterface
 {
+    use IdentifiableTrait;
     use EditableTrait;
 
     /**
@@ -75,13 +76,6 @@ abstract class AbstractEntity implements EditableInterface
         $this->setLastUpdatedAt(new \DateTime());
 
         return $this;
-    }
-
-    public static function extractIds(array $entities): array
-    {
-        return array_values(array_map(function (AbstractEntity $entity) {
-            return $entity->getId();
-        }, $entities));
     }
 
     private function generateId(): self

@@ -32,8 +32,6 @@ final class AccountGetForUpdateAction
     {
         $result = $this->queryBus->dispatch($query);
 
-        return $this->responder->render([
-            'user' => $result,
-        ]);
+        return $this->responder->render($result);
     }
 }

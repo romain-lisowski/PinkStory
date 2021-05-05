@@ -9,7 +9,6 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
 use App\User\Query\Repository\AccessTokenRepositoryInterface;
-use Doctrine\Common\Collections\Collection;
 
 final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
 {
@@ -24,7 +23,7 @@ final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(AccessTokenSearchQuery $query): Collection
+    public function __invoke(AccessTokenSearchQuery $query): array
     {
         $this->validator->validate($query);
 
@@ -34,6 +33,8 @@ final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
             $this->authorizationChecker->isGranted(EditableInterface::READ, $accessToken);
         }
 
-        return $accessTokens;
+        return [
+            'access-tokens' => $accessTokens,
+        ];
     }
 }

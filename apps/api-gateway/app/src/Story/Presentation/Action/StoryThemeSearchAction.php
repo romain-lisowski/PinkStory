@@ -30,8 +30,6 @@ final class StoryThemeSearchAction
     {
         $result = $this->queryBus->dispatch($query);
 
-        return $this->responder->render([
-            'story-themes' => $result,
-        ]);
+        return $this->responder->render($result);
     }
 }

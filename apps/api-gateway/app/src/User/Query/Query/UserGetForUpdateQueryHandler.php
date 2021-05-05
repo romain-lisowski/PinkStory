@@ -8,7 +8,6 @@ use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
-use App\User\Query\Model\UserUpdate;
 use App\User\Query\Repository\UserRepositoryInterface;
 
 final class UserGetForUpdateQueryHandler implements QueryHandlerInterface
@@ -24,7 +23,7 @@ final class UserGetForUpdateQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserGetForUpdateQuery $query): UserUpdate
+    public function __invoke(UserGetForUpdateQuery $query): array
     {
         $this->validator->validate($query);
 
@@ -32,6 +31,8 @@ final class UserGetForUpdateQueryHandler implements QueryHandlerInterface
 
         $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
-        return $user;
+        return [
+            'user' => $user,
+        ];
     }
 }

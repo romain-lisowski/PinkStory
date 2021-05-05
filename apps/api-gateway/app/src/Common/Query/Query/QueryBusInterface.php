@@ -6,8 +6,5 @@ namespace App\Common\Query\Query;
 
 interface QueryBusInterface
 {
-    /**
-     * @return mixed
-     */
-    public function dispatch(QueryInterface $query);
+    public function dispatch(QueryInterface $query): array;
 }

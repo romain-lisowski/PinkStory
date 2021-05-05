@@ -7,7 +7,6 @@ namespace App\Language\Query\Query;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
 use App\Language\Query\Repository\LanguageRepositoryInterface;
-use Doctrine\Common\Collections\Collection;
 
 final class LanguageSearchQueryHandler implements QueryHandlerInterface
 {
@@ -20,10 +19,12 @@ final class LanguageSearchQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(LanguageSearchQuery $query): Collection
+    public function __invoke(LanguageSearchQuery $query): array
     {
         $this->validator->validate($query);
 
-        return $this->languageRepository->search($query);
+        return [
+            'languages' => $this->languageRepository->search($query),
+        ];
     }
 }

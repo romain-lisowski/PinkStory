@@ -18,7 +18,7 @@ final class QueryBus implements QueryBusInterface
         $this->bus = $queryBus;
     }
 
-    public function dispatch(QueryInterface $query)
+    public function dispatch(QueryInterface $query): array
     {
         $envelope = $this->bus->dispatch($query);
 

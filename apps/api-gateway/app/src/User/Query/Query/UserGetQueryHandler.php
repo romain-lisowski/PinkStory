@@ -6,7 +6,6 @@ namespace App\User\Query\Query;
 
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Common\Query\Query\QueryHandlerInterface;
-use App\User\Query\Model\UserFull;
 use App\User\Query\Repository\UserRepositoryInterface;
 
 final class UserGetQueryHandler implements QueryHandlerInterface
@@ -20,10 +19,12 @@ final class UserGetQueryHandler implements QueryHandlerInterface
         $this->validator = $validator;
     }
 
-    public function __invoke(UserGetQuery $query): UserFull
+    public function __invoke(UserGetQuery $query): array
     {
         $this->validator->validate($query);
 
-        return $this->userRepository->findOne($query);
+        return [
+            'user' => $this->userRepository->findOne($query),
+        ];
     }
 }

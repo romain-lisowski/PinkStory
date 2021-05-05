@@ -30,8 +30,6 @@ final class AccountAccessTokenSearchAction
     {
         $result = $this->queryBus->dispatch($query);
 
-        return $this->responder->render([
-            'access-tokens' => $result,
-        ]);
+        return $this->responder->render($result);
     }
 }

@@ -30,8 +30,6 @@ final class LanguageSearchAction
     {
         $result = $this->queryBus->dispatch($query);
 
-        return $this->responder->render([
-            'languages' => $result,
-        ]);
+        return $this->responder->render($result);
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface StoryThemeRepositoryInterface extends RepositoryInterface
 {
-    public function search(StoryThemeSearchQuery $query): Collection;
+    public function findBySearch(StoryThemeSearchQuery $query): Collection;
 
     public function populateStoryImages(Collection $storyImages, string $languageId): void;
 }

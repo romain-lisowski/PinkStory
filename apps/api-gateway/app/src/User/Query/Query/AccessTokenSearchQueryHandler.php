@@ -27,7 +27,7 @@ final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
     {
         $this->validator->validate($query);
 
-        $accessTokens = $this->accessTokenRepository->search($query);
+        $accessTokens = $this->accessTokenRepository->findBySearch($query);
 
         foreach ($accessTokens as $accessToken) {
             $this->authorizationChecker->isGranted(EditableInterface::READ, $accessToken);

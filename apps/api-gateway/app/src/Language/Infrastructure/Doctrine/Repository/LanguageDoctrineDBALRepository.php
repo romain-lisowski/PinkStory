@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\Criteria;
 
 final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements LanguageRepositoryInterface
 {
-    public function search(LanguageSearchQuery $query): Collection
+    public function findBySearch(LanguageSearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 

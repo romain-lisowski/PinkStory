@@ -24,7 +24,7 @@ final class StoryThemeSearchQueryHandler implements QueryHandlerInterface
         $this->validator->validate($query);
 
         return [
-            'story-themes' => $this->storyThemeRepository->search($query),
+            'story-themes' => $this->storyThemeRepository->findBySearch($query),
         ];
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface StoryImageRepositoryInterface extends RepositoryInterface
 {
-    public function search(StoryImageSearchQuery $query): Collection;
+    public function findBySearch(StoryImageSearchQuery $query): Collection;
 
     public function countForSearch(StoryImageSearchQuery $query): int;
 }

@@ -24,7 +24,7 @@ final class LanguageSearchQueryHandler implements QueryHandlerInterface
         $this->validator->validate($query);
 
         return [
-            'languages' => $this->languageRepository->search($query),
+            'languages' => $this->languageRepository->findBySearch($query),
         ];
     }
 }

@@ -10,5 +10,5 @@ use Doctrine\Common\Collections\Collection;
 
 interface AccessTokenRepositoryInterface extends RepositoryInterface
 {
-    public function search(AccessTokenSearchQuery $query): Collection;
+    public function findBySearch(AccessTokenSearchQuery $query): Collection;
 }

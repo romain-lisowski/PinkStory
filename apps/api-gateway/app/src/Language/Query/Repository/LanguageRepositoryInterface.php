@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface LanguageRepositoryInterface extends RepositoryInterface
 {
-    public function search(LanguageSearchQuery $query): Collection;
+    public function findBySearch(LanguageSearchQuery $query): Collection;
 
     public function findOneByLocaleForCurrent(string $locale): ?LanguageCurrent;
 

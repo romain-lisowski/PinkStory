@@ -26,7 +26,7 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         $this->storyThemeRepository = $storyThemeRepository;
     }
 
-    public function search(StoryImageSearchQuery $query): Collection
+    public function findBySearch(StoryImageSearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 

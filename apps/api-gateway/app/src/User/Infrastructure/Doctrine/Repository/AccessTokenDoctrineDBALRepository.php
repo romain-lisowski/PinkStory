@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Criteria;
 
 final class AccessTokenDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements AccessTokenRepositoryInterface
 {
-    public function search(AccessTokenSearchQuery $query): Collection
+    public function findBySearch(AccessTokenSearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 

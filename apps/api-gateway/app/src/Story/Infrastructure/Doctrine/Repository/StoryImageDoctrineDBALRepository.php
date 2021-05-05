@@ -53,7 +53,7 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         return $storyImages;
     }
 
-    public function countForSearch(StoryImageSearchQuery $query): int
+    public function countBySearch(StoryImageSearchQuery $query): int
     {
         $qb = $this->createQueryBuilder();
 

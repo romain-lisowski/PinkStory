@@ -24,7 +24,7 @@ final class StoryImageSearchQueryHandler implements QueryHandlerInterface
         $this->validator->validate($query);
 
         return [
-            'story-images-total' => $this->storyImageRepository->countForSearch($query),
+            'story-images-total' => $this->storyImageRepository->countBySearch($query),
             'story-images' => $this->storyImageRepository->findBySearch($query),
         ];
     }

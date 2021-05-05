@@ -12,5 +12,5 @@ interface StoryImageRepositoryInterface extends RepositoryInterface
 {
     public function findBySearch(StoryImageSearchQuery $query): Collection;
 
-    public function countForSearch(StoryImageSearchQuery $query): int;
+    public function countBySearch(StoryImageSearchQuery $query): int;
 }

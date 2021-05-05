@@ -19,6 +19,7 @@ use App\User\Query\Model\UserUpdate;
 use App\User\Query\Query\UserGetForUpdateQuery;
 use App\User\Query\Query\UserGetQuery;
 use App\User\Query\Repository\UserRepositoryInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository implements UserRepositoryInterface
@@ -38,19 +39,13 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
     {
         $qb = $this->createQueryBuilder();
 
-        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.created_at as user_created_at')
-            ->from('usr_user', 'u')
-            ->addSelect('language.id as language_id', 'language.title as language_title', 'language.locale as language_locale')
-            ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
-        ;
+        $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->and(
-            $qb->expr()->eq('u.id', ':user_id'),
-            $qb->expr()->eq('u.status', ':user_status')
-        ))->setParameters([
-            'user_id' => $query->getId(),
-            'user_status' => UserStatus::ACTIVATED,
-        ]);
+        $qb->addSelect('u.created_at as user_created_at')
+            ->addSelect('language.title as language_title', 'language.locale as language_locale')
+            ->andWhere($qb->expr()->eq('u.id', ':user_id'))
+            ->setParameter('user_id', $query->getId())
+        ;
 
         $data = $qb->execute()->fetchAssociative();
 
@@ -71,19 +66,12 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
     {
         $qb = $this->createQueryBuilder();
 
-        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.email as user_email', 'u.image_defined as user_image_defined')
-            ->from('usr_user', 'u')
-            ->addSelect('language.id as language_id')
-            ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
-        ;
+        $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->and(
-            $qb->expr()->eq('u.id', ':user_id'),
-            $qb->expr()->eq('u.status', ':user_status')
-        ))->setParameters([
-            'user_id' => $query->getId(),
-            'user_status' => UserStatus::ACTIVATED,
-        ]);
+        $qb->addSelect('u.email as user_email')
+            ->andWhere($qb->expr()->eq('u.id', ':user_id'))
+            ->setParameter('user_id', $query->getId())
+        ;
 
         $data = $qb->execute()->fetchAssociative();
 
@@ -104,19 +92,13 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
     {
         $qb = $this->createQueryBuilder();
 
-        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.role as user_role', 'u.created_at as user_created_at')
-            ->from('usr_user', 'u')
-            ->addSelect('language.id as language_id', 'language.title as language_title', 'language.locale as language_locale')
-            ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
-        ;
+        $this->createBaseQueryBuilder($qb);
 
-        $qb->where($qb->expr()->and(
-            $qb->expr()->eq('u.id', ':user_id'),
-            $qb->expr()->eq('u.status', ':user_status')
-        ))->setParameters([
-            'user_id' => $id,
-            'user_status' => UserStatus::ACTIVATED,
-        ]);
+        $qb->addSelect('u.role as user_role', 'u.created_at as user_created_at')
+            ->addSelect('language.title as language_title', 'language.locale as language_locale')
+            ->andWhere($qb->expr()->eq('u.id', ':user_id'))
+            ->setParameter('user_id', $id)
+        ;
 
         $data = $qb->execute()->fetchAssociative();
 
@@ -131,5 +113,16 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
         $this->languageRepository->populateUserReadingLanguages($user, LanguageCurrent::class);
 
         return $user;
+    }
+
+    private function createBaseQueryBuilder(QueryBuilder $qb): void
+    {
+        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined')
+            ->from('usr_user', 'u')
+            ->addSelect('language.id as language_id')
+            ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))
+            ->where($qb->expr()->eq('u.status', ':user_status'))
+            ->setParameter('user_status', UserStatus::ACTIVATED)
+        ;
     }
 }

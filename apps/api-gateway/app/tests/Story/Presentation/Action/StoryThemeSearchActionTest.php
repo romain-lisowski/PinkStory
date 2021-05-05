@@ -69,7 +69,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     {
         $storyThemeFixtures = array_values(StoryThemeFixture::DATA);
 
-        $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyThemeFixtures, $responseData['story-themes']);
+        $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyThemeFixtures, $responseData['story_themes']);
     }
 
     protected function checkProcessHasBeenStopped(): void

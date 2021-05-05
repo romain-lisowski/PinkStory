@@ -164,10 +164,10 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
     {
         $storyImageFixtures = array_values(StoryImageFixture::DATA);
 
-        $this->assertEquals($options['total_count'], $responseData['story-images-total']);
-        $this->assertCount($options['count'], $responseData['story-images']);
+        $this->assertEquals($options['total_count'], $responseData['story_images_total']);
+        $this->assertCount($options['count'], $responseData['story_images']);
 
-        foreach ($responseData['story-images'] as $storyImageData) {
+        foreach ($responseData['story_images'] as $storyImageData) {
             $storyImageExists = false;
 
             foreach ($storyImageFixtures as $storyImageFixture) {

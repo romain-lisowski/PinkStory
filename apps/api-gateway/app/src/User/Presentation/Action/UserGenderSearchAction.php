@@ -27,7 +27,7 @@ final class UserGenderSearchAction
     public function __invoke(): Response
     {
         return $this->responder->render([
-            'user-genders' => UserGender::getReadingChoices($this->translator),
+            'user_genders' => UserGender::getReadingChoices($this->translator),
         ]);
     }
 }

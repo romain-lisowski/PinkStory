@@ -34,7 +34,7 @@ final class AccessTokenSearchQueryHandler implements QueryHandlerInterface
         }
 
         return [
-            'access-tokens' => $accessTokens,
+            'access_tokens' => $accessTokens,
         ];
     }
 }

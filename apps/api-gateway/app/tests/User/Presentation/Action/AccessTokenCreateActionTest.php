@@ -84,11 +84,11 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
         // check http response
-        $this->assertInstanceOf(Uuid::class, Uuid::fromString($responseData['access-token']['id']));
+        $this->assertInstanceOf(Uuid::class, Uuid::fromString($responseData['access_token']['id']));
 
         try {
             // check access token has been created
-            $accessToken = $this->accessTokenRepository->findOne(Uuid::fromString($responseData['access-token']['id'])->toRfc4122());
+            $accessToken = $this->accessTokenRepository->findOne(Uuid::fromString($responseData['access_token']['id'])->toRfc4122());
 
             // check event has been dispatched
             $this->assertCount(1, $this->asyncTransport->get());

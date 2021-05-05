@@ -68,9 +68,9 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
-        $this->assertCount(count(UserGender::getChoices()), $responseData['user-genders']);
+        $this->assertCount(count(UserGender::getChoices()), $responseData['user_genders']);
 
-        foreach ($responseData['user-genders'] as $key => $value) {
+        foreach ($responseData['user_genders'] as $key => $value) {
             $this->assertEquals(self::$container->get(TranslatorInterface::class)->trans(strtolower(UserGender::getTranslationPrefix().$key), [], null, LanguageFixture::DATA[$options['language_reference']]['locale']), $value);
         }
     }

@@ -33,9 +33,9 @@ final class AccountAccessTokenSearchActionTest extends AbstractAccessTokenAction
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
-        $this->assertCount(1, $responseData['access-tokens']);
+        $this->assertCount(1, $responseData['access_tokens']);
 
-        $this->assertEquals(AccessTokenFixture::DATA['access-token-pinkstory']['id'], $responseData['access-tokens'][0]['id']);
+        $this->assertEquals(AccessTokenFixture::DATA['access-token-pinkstory']['id'], $responseData['access_tokens'][0]['id']);
     }
 
     protected function checkProcessHasBeenStopped(): void

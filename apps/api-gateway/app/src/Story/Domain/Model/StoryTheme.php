@@ -36,7 +36,6 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryTheme", mappedBy="parent", cascade={"remove"})
-     * @ORM\OrderBy({"position" = "ASC"})
      */
     private Collection $children;
 
@@ -113,7 +112,10 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
 
     public function updateParent(?StoryTheme $parent): self
     {
-        $this->parent->removeChild($this);
+        if (null !== $this->parent) {
+            $this->parent->removeChild($this);
+        }
+
         $this->setParent($parent);
         $this->updateLastUpdatedAt();
 

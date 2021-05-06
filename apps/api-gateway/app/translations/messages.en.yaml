@@ -44,10 +44,29 @@ language:
         constraint:
             language_not_found: This language doesn't exist.
 
+story:
+    repository:
+        exception:
+            no_result_exception: No story was found for query although at least one was expected.
+    validator:
+        constraint:
+            story_not_found: This story doesn't exist.
+
+story_image:
+    repository:
+        exception:
+            no_result_exception: No story image was found for query although at least one was expected.
+    validator:
+        constraint:
+            story_image_not_found: This story image doesn't exist.
+
 story_theme:
     repository:
         exception:
             no_result_exception: No story theme was found for query although at least one was expected.
+    validator:
+        constraint:
+            story_theme_not_found: This story theme doesn't exist.
 
 user:
     field:

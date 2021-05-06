@@ -50,6 +50,11 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     private Collection $storyThemeTranslations;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryHasStoryTheme", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private Collection $storyHasStoryThemes;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryImageHasStoryTheme", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private Collection $storyImageHasStoryThemes;
@@ -61,6 +66,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
         // init values
         $this->children = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
+        $this->storyHasStoryThemes = new ArrayCollection();
         $this->storyImageHasStoryThemes = new ArrayCollection();
     }
 
@@ -188,6 +194,27 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     public function getTranslations(): Collection
     {
         return $this->getStoryThemeTranslations();
+    }
+
+    public function getStoryHasStoryThemes(): Collection
+    {
+        return $this->storyHasStoryThemes;
+    }
+
+    public function addStoryHasStoryTheme(StoryHasStoryTheme $storyHasStoryTheme): self
+    {
+        $this->storyHasStoryThemes[] = $storyHasStoryTheme;
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function removeStoryHasStoryTheme(StoryHasStoryTheme $storyHasStoryTheme): self
+    {
+        $this->storyHasStoryThemes->removeElement($storyHasStoryTheme);
+        $this->updateLastUpdatedAt();
+
+        return $this;
     }
 
     public function getStoryImageHasStoryThemes(): Collection

@@ -12,6 +12,7 @@ use App\Language\Domain\Model\LanguageableInterface;
 use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Language\Domain\Repository\ReadingLanguageNoResultException;
+use App\Story\Domain\Model\Story;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -143,6 +144,11 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
      */
     private Collection $accessTokens;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\Story", mappedBy="user", cascade={"remove"})
+     */
+    private Collection $stories;
+
     public function __construct()
     {
         parent::__construct();
@@ -152,6 +158,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         $this->regeneratePasswordForgottenSecret(true); // not claimed by user at account creation, so block it by forcing true  until new claim
         $this->userHasReadingLanguages = new ArrayCollection();
         $this->accessTokens = new ArrayCollection();
+        $this->stories = new ArrayCollection();
     }
 
     public function getGender(): string
@@ -532,6 +539,27 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function removeAccessToken(AccessToken $accessToken): self
     {
         $this->accessTokens->removeElement($accessToken);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getStories(): Collection
+    {
+        return $this->stories;
+    }
+
+    public function addStory(Story $story): self
+    {
+        $this->stories[] = $story;
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function removeStory(Story $story): self
+    {
+        $this->stories->removeElement($story);
         $this->updateLastUpdatedAt();
 
         return $this;

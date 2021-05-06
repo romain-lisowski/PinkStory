@@ -7,6 +7,7 @@ namespace App\Language\Domain\Model;
 use App\Common\Domain\File\ImageableInterface;
 use App\Common\Domain\File\ImageableTrait;
 use App\Common\Domain\Model\AbstractEntity;
+use App\Story\Domain\Model\Story;
 use App\Story\Domain\Model\StoryImageTranslation;
 use App\Story\Domain\Model\StoryThemeTranslation;
 use App\User\Domain\Model\User;
@@ -51,6 +52,11 @@ class Language extends AbstractEntity implements ImageableInterface
     private Collection $userHasReadingLanguages;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\Story", mappedBy="language")
+     */
+    private Collection $stories;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryThemeTranslation", mappedBy="language")
      */
     private Collection $storyThemeTranslations;
@@ -67,6 +73,7 @@ class Language extends AbstractEntity implements ImageableInterface
         // init values
         $this->users = new ArrayCollection();
         $this->userHasReadingLanguages = new ArrayCollection();
+        $this->stories = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
         $this->storyImageTranslations = new ArrayCollection();
     }
@@ -148,6 +155,27 @@ class Language extends AbstractEntity implements ImageableInterface
     public function removeUserHasReadingLanguage(UserHasReadingLanguage $userHasReadingLanguage): self
     {
         $this->userHasReadingLanguages->removeElement($userHasReadingLanguage);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getStories(): Collection
+    {
+        return $this->stories;
+    }
+
+    public function addStory(Story $story): self
+    {
+        $this->stories[] = $story;
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function removeStory(Story $story): self
+    {
+        $this->stories->removeElement($story);
         $this->updateLastUpdatedAt();
 
         return $this;

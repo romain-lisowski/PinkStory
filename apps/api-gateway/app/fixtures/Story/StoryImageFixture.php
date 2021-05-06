@@ -25,7 +25,7 @@ class StoryImageFixture extends Fixture implements DependentFixtureInterface
                     'title' => 'Première image',
                 ],
             ],
-            'story-themes' => [
+            'story_themes' => [
                 'story-theme-heterosexual',
                 'story-theme-bdsm-domination',
                 'story-theme-extreme',
@@ -42,7 +42,7 @@ class StoryImageFixture extends Fixture implements DependentFixtureInterface
                     'title' => 'Deuxième image',
                 ],
             ],
-            'story-themes' => [
+            'story_themes' => [
                 'story-theme-heterosexual',
                 'story-theme-oral-sex',
                 'story-theme-soft',
@@ -59,7 +59,7 @@ class StoryImageFixture extends Fixture implements DependentFixtureInterface
                     'title' => 'Troisième image',
                 ],
             ],
-            'story-themes' => [
+            'story_themes' => [
                 'story-theme-heterosexual',
                 'story-theme-sodomy',
                 'story-theme-extreme',
@@ -83,7 +83,7 @@ class StoryImageFixture extends Fixture implements DependentFixtureInterface
                 ;
             }
 
-            foreach ($data['story-themes'] as $storyThemesReference) {
+            foreach ($data['story_themes'] as $storyThemesReference) {
                 (new StoryImageHasStoryTheme())
                     ->setStoryImage($storyImage)
                     ->setStoryTheme($this->getReference($storyThemesReference))

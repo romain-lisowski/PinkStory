@@ -7,7 +7,7 @@ file:
 
 model:
     exception:
-        child_depth: Item with parent referenced can't be linked.
+        child_depth: Depth limit reached.
         position_update: An error occured during position update.
 
 repository:
@@ -61,6 +61,9 @@ story_image:
             story_image_not_found: This story image doesn't exist.
 
 story_theme:
+    model:
+        exception:
+            child_depth: Only second level story theme can be linked.
     repository:
         exception:
             no_result_exception: No story theme was found for query although at least one was expected.

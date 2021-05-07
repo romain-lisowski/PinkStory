@@ -104,13 +104,34 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
         $this->position = null;
 
         if (null !== $parent) {
+            // block self referencing
+            if ($this->getId() === $parent->getId()) {
+                throw new ChildDepthException();
+            }
+
+            // only two levels
             if (null !== $parent->getParent()) {
+                throw new ChildDepthException();
+            }
+
+            // only two levels
+            if ($this->children->count() > 0) {
                 throw new ChildDepthException();
             }
 
             static::initPosition($this, $this->parent->getChildren());
 
             $parent->addChild($this);
+        } else {
+            // only second level can have stories
+            if ($this->storyHasStoryThemes->count() > 0) {
+                throw new ChildDepthException();
+            }
+
+            // only second level can have story images
+            if ($this->storyImageHasStoryThemes->count() > 0) {
+                throw new ChildDepthException();
+            }
         }
 
         return $this;

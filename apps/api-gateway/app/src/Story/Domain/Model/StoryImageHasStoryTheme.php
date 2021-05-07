@@ -49,6 +49,11 @@ class StoryImageHasStoryTheme extends AbstractEntity
 
     public function setStoryTheme(StoryTheme $storyTheme): self
     {
+        // only second level can have story images
+        if (null === $storyTheme->getParent()) {
+            throw new StoryThemeDepthException();
+        }
+
         $this->storyTheme = $storyTheme;
         $storyTheme->addStoryImageHasStoryTheme($this);
 

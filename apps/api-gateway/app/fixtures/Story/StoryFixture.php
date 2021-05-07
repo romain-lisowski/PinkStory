@@ -19,7 +19,7 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
             'title' => 'Première histoire',
             'content' => 'Contenu de la première histoire',
             'extract' => 'Extrait de la première histoire',
-            'user_reference' => 'user-romain',
+            'user_reference' => 'user-john',
             'language_reference' => 'language-french',
             'story_image_reference' => 'story-image-first',
             'story_themes' => [

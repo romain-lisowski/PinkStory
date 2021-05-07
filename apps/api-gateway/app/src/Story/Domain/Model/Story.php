@@ -233,7 +233,18 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
         $this->position = null;
 
         if (null !== $parent) {
+            // block self referencing
+            if ($this->getId() === $parent->getId()) {
+                throw new ChildDepthException();
+            }
+
+            // only two levels
             if (null !== $parent->getParent()) {
+                throw new ChildDepthException();
+            }
+
+            // only two levels
+            if ($this->children->count() > 0) {
                 throw new ChildDepthException();
             }
 

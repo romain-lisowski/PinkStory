@@ -17,6 +17,7 @@ use App\User\Domain\Event\UserCreatedEvent;
 use App\User\Domain\Model\User;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
+use App\User\Query\Model\User as QueryUser;
 
 final class UserCreateCommandHandler implements CommandHandlerInterface
 {
@@ -83,7 +84,9 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
 
             $this->eventBus->dispatch($event);
 
-            return [];
+            return [
+                'user' => new QueryUser($user->getId()),
+            ];
         } catch (LanguageNoResultException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),

@@ -206,10 +206,10 @@ final class AccountSignupActionTest extends AbstractUserActionTest
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
         // check http response
-        $this->assertEquals([], $responseData);
+        $this->assertTrue(Uuid::isValid($responseData['user']['id']));
 
         // get fresh user from database
-        $user = $this->userRepository->findOneByEmail(self::$userData['email']);
+        $user = $this->userRepository->findOne(Uuid::fromString($responseData['user']['id'])->toRfc4122());
         $this->entityManager->refresh($user);
 
         // check user has been created

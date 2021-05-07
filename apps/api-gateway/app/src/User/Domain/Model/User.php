@@ -457,11 +457,11 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
 
     public function getReadingLanguages(): Collection
     {
-        $userHasReadingLanguages = array_values(array_map(function (UserHasReadingLanguage $userHasReadingLanguage) {
+        $readingLanguages = array_values(array_map(function (UserHasReadingLanguage $userHasReadingLanguage) {
             return $userHasReadingLanguage->getLanguage();
         }, $this->userHasReadingLanguages->toArray()));
 
-        return new ArrayCollection($userHasReadingLanguages);
+        return new ArrayCollection($readingLanguages);
     }
 
     public function addReadingLanguage(Language $language): self
@@ -486,6 +486,9 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         return $this;
     }
 
+    /**
+     * @throws ReadingLanguageNoResultException
+     */
     public function addReadingLanguages(array $readingLanguageIds, LanguageRepositoryInterface $languageRepository): self
     {
         try {

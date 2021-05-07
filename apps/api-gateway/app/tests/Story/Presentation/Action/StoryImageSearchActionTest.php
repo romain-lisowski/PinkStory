@@ -176,7 +176,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
                     $this->assertEquals($storyImageFixture['translations'][$options['language_reference']]['title'], $storyImageData['title']);
                     $this->assertEquals((new AsciiSlugger())->slug($storyImageFixture['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyImageData['title_slug']);
 
-                    $this->assertCount(count($storyImageFixture['story-themes']), $storyImageData['story_themes']);
+                    $this->assertCount(count($storyImageFixture['story_themes']), $storyImageData['story_themes']);
 
                     foreach ($storyImageData['story_themes'] as $storyThemeData) {
                         $storyThemeExists = false;

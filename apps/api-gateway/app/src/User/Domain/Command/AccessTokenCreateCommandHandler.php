@@ -16,7 +16,7 @@ use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Query\Model\AccessToken as QueryAccessToken;
-use App\User\Query\Model\User;
+use App\User\Query\Model\User as QueryUser;
 
 final class AccessTokenCreateCommandHandler implements CommandHandlerInterface
 {
@@ -66,7 +66,7 @@ final class AccessTokenCreateCommandHandler implements CommandHandlerInterface
             $this->eventBus->dispatch($event);
 
             return [
-                'access_token' => new QueryAccessToken($accessToken->getId(), new User($accessToken->getUser()->getId())),
+                'access_token' => new QueryAccessToken($accessToken->getId(), new QueryUser($accessToken->getUser()->getId())),
             ];
         } catch (UserNoResultException $e) {
             throw new ValidationFailedException([

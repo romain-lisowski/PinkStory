@@ -6,6 +6,7 @@ namespace App\Test\User\Presentation\Action;
 
 use App\Common\Domain\Repository\NoResultException;
 use App\Common\Infrastructure\Serializer\Normalizer\DataUriNormalizer;
+use App\Fixture\Language\LanguageFixture;
 use App\User\Domain\Model\User;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserRole;
@@ -27,7 +28,7 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         'name' => 'Test',
         'email' => 'test@pinkstory.io',
         'password' => '@Password2!',
-        'language_id' => '9854df32-4a08-4f10-93ed-ae72ce52748b',
+        'language_id' => LanguageFixture::DATA['language-french']['id'],
     ];
 
     protected function setUp(): void

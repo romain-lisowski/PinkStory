@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
+use App\Fixture\Language\LanguageFixture;
 use App\Language\Domain\Model\Language;
 use App\User\Domain\Model\UserGender;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,11 +19,11 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
     private static array $userData = [
         'name' => 'Test',
         'gender' => UserGender::MALE,
-        'language_id' => 'f11a8fd7-2a35-4f8a-a485-ab24acf214c1',
+        'language_id' => LanguageFixture::DATA['language-french']['id'],
         'reading_language_ids' => [
-            '99e8cc58-db0d-4ffd-9186-5a3f8c9e94e1',
-            '9854df32-4a08-4f10-93ed-ae72ce52748b',
-            '47afc681-9a6d-4fef-812e-f9df9a869945',
+            LanguageFixture::DATA['language-spanish']['id'],
+            LanguageFixture::DATA['language-french']['id'],
+            LanguageFixture::DATA['language-italian']['id'],
         ],
     ];
 

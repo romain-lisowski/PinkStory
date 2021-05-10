@@ -329,22 +329,9 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
             $this->assertEquals($options['should_have_image_defined'], false);
         }
 
-        $this->assertCount(count(self::$storyData['story_theme_ids']), $story->getStoryHasStoryThemes());
-
-        foreach (self::$storyData['story_theme_ids'] as $storyThemeId) {
-            $exists = false;
-
-            foreach ($story->getStoryHasStoryThemes() as $storyHasStoryTheme) {
-                if ($storyThemeId === $storyHasStoryTheme->getStoryTheme()->getId()) {
-                    $exists = true;
-
-                    break;
-                }
-            }
-
-            if (false === $exists) {
-                $this->fail('Story theme does not exist.');
-            }
+        $this->assertCount(count(self::$storyData['story_theme_ids']), $story->getStoryThemes());
+        foreach ($story->getStoryThemes() as $storyTheme) {
+            $this->assertTrue(in_array($storyTheme->getId(), self::$storyData['story_theme_ids']));
         }
 
         // check event has been dispatched
@@ -370,7 +357,6 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
         }
 
         $this->assertCount(count(self::$storyData['story_theme_ids']), $this->asyncTransport->get()[0]->getMessage()->getStoryThemeIds());
-
         foreach ($this->asyncTransport->get()[0]->getMessage()->getStoryThemeIds() as $storyThemeId) {
             $this->assertTrue(in_array($storyThemeId, self::$storyData['story_theme_ids']));
         }

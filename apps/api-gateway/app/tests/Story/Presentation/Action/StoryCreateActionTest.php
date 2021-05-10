@@ -94,7 +94,13 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
 
     public function testFailedUnauthorized(): void
     {
-        $this->checkFailedUnauthorized();
+        $this->checkFailedUnauthorized([
+            'title' => self::$storyData['title'],
+            'content' => self::$storyData['content'],
+            'extract' => self::$storyData['extract'],
+            'language_id' => self::$storyData['language_id'],
+            'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ]);
     }
 
     public function testFailedMissingTitle(): void

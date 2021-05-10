@@ -192,7 +192,7 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
         }
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertEquals($this->userGender, self::$currentUser->getGender());

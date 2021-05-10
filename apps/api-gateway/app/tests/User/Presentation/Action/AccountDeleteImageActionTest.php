@@ -52,7 +52,7 @@ final class AccountDeleteImageActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$currentUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertTrue(self::$currentUser->isImageDefined());

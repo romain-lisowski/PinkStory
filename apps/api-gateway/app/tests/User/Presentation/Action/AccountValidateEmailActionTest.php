@@ -79,7 +79,7 @@ final class AccountValidateEmailActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$currentUser->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertFalse(self::$currentUser->isEmailValidated());

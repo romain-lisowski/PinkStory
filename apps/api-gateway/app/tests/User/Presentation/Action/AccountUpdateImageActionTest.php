@@ -59,7 +59,7 @@ final class AccountUpdateImageActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$currentUser->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertFalse(self::$currentUser->isImageDefined());

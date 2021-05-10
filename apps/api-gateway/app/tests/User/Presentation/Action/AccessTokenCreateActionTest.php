@@ -99,7 +99,7 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
         }
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check no access token has been created
         $this->assertCount(count($this->accessTokens), self::$defaultUser->getAccessTokens());

@@ -100,7 +100,7 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
         $this->assertEquals(self::$defaultUser->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertEquals($this->userPassword, self::$defaultUser->getPassword());

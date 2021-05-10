@@ -52,7 +52,7 @@ final class AccountRegenerateEmailValidationCodeActionTest extends AbstractUserA
         $this->assertEquals(self::$currentUser->getEmailValidationCode(), $this->asyncTransport->get()[0]->getMessage()->getEmailValidationCode());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertTrue(self::$currentUser->isEmailValidated());

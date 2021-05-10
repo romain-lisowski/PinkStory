@@ -72,7 +72,7 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$currentUser->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertEquals($this->userPassword, self::$currentUser->getPassword());

@@ -84,24 +84,24 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenSucceeded($responseData, $processOptions);
     }
 
-    protected function checkFailedUnauthorized(array $requestContent = []): void
+    protected function checkFailedUnauthorized(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
 
         // check http response
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('insufficient_authentication_exception', $responseData['exception']['type']);
 
         // get fresh users
         $this->entityManager->refresh(self::$defaultUser);
         $this->refreshCurrentUser();
 
         // check process has been stopped
-        $this->checkProcessHasBeenStopped();
+        $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedAccessDenied(array $requestContent = []): void
+    protected function checkFailedAccessDenied(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
@@ -109,18 +109,18 @@ abstract class AbstractActionTest extends WebTestCase
 
         // check http response
         $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('access_denied_exception', $responseContent['exception']['type']);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('access_denied_exception', $responseData['exception']['type']);
 
         // get fresh users
         $this->entityManager->refresh(self::$defaultUser);
         $this->refreshCurrentUser();
 
         // check process has been stopped
-        $this->checkProcessHasBeenStopped();
+        $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedMissingMandatory(array $requestContent = []): void
+    protected function checkFailedMissingMandatory(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
@@ -128,18 +128,18 @@ abstract class AbstractActionTest extends WebTestCase
 
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseData['exception']['type']);
 
         // get fresh users
         $this->entityManager->refresh(self::$defaultUser);
         $this->refreshCurrentUser();
 
         // check process has been stopped
-        $this->checkProcessHasBeenStopped();
+        $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedValidationFailed(array $requestContent = [], array $invalidFields = []): void
+    protected function checkFailedValidationFailed(array $requestContent = [], array $invalidFields = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
@@ -147,10 +147,10 @@ abstract class AbstractActionTest extends WebTestCase
 
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('validation_failed_exception', $responseContent['exception']['type']);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('validation_failed_exception', $responseData['exception']['type']);
 
-        foreach ($responseContent['exception']['violations'] as $violation) {
+        foreach ($responseData['exception']['violations'] as $violation) {
             $this->assertTrue(in_array($violation['property_path'], $invalidFields));
         }
 
@@ -159,28 +159,28 @@ abstract class AbstractActionTest extends WebTestCase
         $this->refreshCurrentUser();
 
         // check process has been stopped
-        $this->checkProcessHasBeenStopped();
+        $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedNotFound(array $requestContent = []): void
+    protected function checkFailedNotFound(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
 
         // check http response
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
-        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
 
         // get fresh users
         $this->entityManager->refresh(self::$defaultUser);
         $this->refreshCurrentUser();
 
         // check process has been stopped
-        $this->checkProcessHasBeenStopped();
+        $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
     abstract protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void;
 
-    abstract protected function checkProcessHasBeenStopped(): void;
+    abstract protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void;
 
     private function refreshCurrentUser()
     {

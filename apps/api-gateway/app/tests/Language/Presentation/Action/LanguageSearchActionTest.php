@@ -40,7 +40,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
         }
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // nothing to check
     }

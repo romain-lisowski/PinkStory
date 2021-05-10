@@ -250,7 +250,7 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         $this->assertEquals($user->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getReadingLanguageIds()[0]);
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         try {
             // get fresh user from database

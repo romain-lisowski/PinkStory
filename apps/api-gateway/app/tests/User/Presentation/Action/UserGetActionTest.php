@@ -159,7 +159,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         }
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // nothing to check
     }

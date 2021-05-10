@@ -80,7 +80,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
         }
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         try {
             // check access token has not been deleted

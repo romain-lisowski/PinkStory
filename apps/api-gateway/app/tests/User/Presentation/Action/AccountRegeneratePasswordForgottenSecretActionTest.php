@@ -70,7 +70,7 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractU
         $this->assertEquals(self::$defaultUser->getPasswordForgottenSecret(), $this->asyncTransport->get()[0]->getMessage()->getPasswordForgottenSecret());
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // check user has not been updated
         $this->assertEquals($this->userPasswordForgottenSecret, self::$defaultUser->getPasswordForgottenSecret());

@@ -378,7 +378,7 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
         }
     }
 
-    protected function checkProcessHasBeenStopped(): void
+    protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
     {
         // get story total
         $storyTotal = $this->storyRepository->count([]);

@@ -19,20 +19,20 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_POST;
         self::$httpUri = '/access-token';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
 
         // get user data
-        $this->accessTokens = self::$user->getAccessTokens()->toArray();
+        $this->accessTokens = self::$defaultUser->getAccessTokens()->toArray();
     }
 
     public function testSucceeded(): void
     {
         $this->checkSucceeded([
-            'email' => self::$user->getEmail(),
+            'email' => self::$defaultUser->getEmail(),
             'password' => UserFixture::DATA['user-pinkstory']['password'],
         ]);
     }
@@ -67,14 +67,14 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
     public function testFailedMissingPassword(): void
     {
         $this->checkFailedMissingMandatory([
-            'email' => self::$user->getEmail(),
+            'email' => self::$defaultUser->getEmail(),
         ]);
     }
 
     public function testFailedWrongPassword(): void
     {
         $this->checkFailedValidationFailed([
-            'email' => self::$user->getEmail(),
+            'email' => self::$defaultUser->getEmail(),
             'password' => 'password',
         ], [
             'email', // no password error, don't specify too much : only "bad credentials" error
@@ -93,7 +93,7 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
             // check event has been dispatched
             $this->assertCount(1, $this->asyncTransport->get());
             $this->assertEquals($accessToken->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-            $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getUserId());
+            $this->assertEquals(self::$defaultUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getUserId());
         } catch (AccessTokenNoResultException $e) {
             $this->fail();
         }
@@ -102,8 +102,7 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // check no access token has been created
-        $this->entityManager->refresh(self::$user);
-        $this->assertCount(count($this->accessTokens), self::$user->getAccessTokens());
+        $this->assertCount(count($this->accessTokens), self::$defaultUser->getAccessTokens());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

@@ -33,11 +33,11 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_POST;
         self::$httpUri = '/account/signup';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
     }
 
     public function testSucceededWithoutImage(): void
@@ -211,7 +211,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
         // get fresh user from database
         $user = $this->userRepository->findOne(Uuid::fromString($responseData['user']['id'])->toRfc4122());
-        $this->entityManager->refresh($user);
 
         // check user has been created
         $this->assertTrue(Uuid::isValid($user->getId()));
@@ -256,7 +255,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         try {
             // get fresh user from database
             $user = $this->userRepository->findOneByEmail(self::$userData['email']);
-            $this->entityManager->refresh($user);
             $this->fail();
         } catch (NoResultException $e) {
             $this->assertTrue(true);

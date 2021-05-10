@@ -19,11 +19,11 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/story-image/search';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
     }
 
     public function testSucceededNoSearchNoLogginButEnglish(): void
@@ -53,7 +53,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         self::$httpUri = '/story-image/search?_locale=fr';
 
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
@@ -65,7 +65,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
     public function testSucceededNoSearchLogginFrench(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],

@@ -9,7 +9,6 @@ use App\Fixture\Story\StoryFixture;
 use App\Fixture\Story\StoryImageFixture;
 use App\Fixture\Story\StoryThemeFixture;
 use App\Fixture\User\AccessTokenFixture;
-use App\Fixture\User\UserFixture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Uid\Uuid;
@@ -38,11 +37,11 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_POST;
         self::$httpUri = '/story';
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
+        parent::setUp();
 
         // get story total
         $this->storyTotal = $this->storyRepository->count([]);
@@ -216,7 +215,7 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
     public function testFailedNonParentlessStoryParent(): void
     {
         // change user logged in (for authorization on parent story)
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-leslie']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
         $this->checkFailedValidationFailed([
             'title' => self::$storyData['title'],
@@ -308,7 +307,6 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
 
         // get fresh story from database
         $story = $this->storyRepository->findOne(Uuid::fromString($responseData['story']['id'])->toRfc4122());
-        $this->entityManager->refresh($story);
 
         // check user has been created
         $this->assertTrue(Uuid::isValid($story->getId()));
@@ -316,7 +314,7 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(self::$storyData['title'])->lower()->toString(), $story->getTitleSlug());
         $this->assertEquals(self::$storyData['content'], $story->getContent());
         $this->assertEquals(self::$storyData['extract'], $story->getExtract());
-        $this->assertEquals(UserFixture::DATA['user-john']['id'], $story->getUser()->getId());
+        $this->assertEquals(self::$currentUser->getId(), $story->getUser()->getId());
         $this->assertEquals(self::$storyData['language_id'], $story->getLanguage()->getId());
 
         if (null !== $story->getParent()) {

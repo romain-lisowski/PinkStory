@@ -17,14 +17,14 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
 {
     protected function setUp(): void
     {
+        self::$httpMethod = Request::METHOD_DELETE;
+        self::$httpUri = '/access-token/'.AccessTokenFixture::DATA['access-token-john-bis']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
         parent::setUp();
 
-        self::$httpMethod = Request::METHOD_DELETE;
-        self::$httpUri = '/access-token/'.AccessTokenFixture::DATA['access-token-john']['id'];
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
-
         // get user data
-        $this->accessTokens = self::$user->getAccessTokens()->toArray();
+        $this->accessTokens = self::$currentUser->getAccessTokens()->toArray();
     }
 
     public function testSucceededSameUserLoggedIn(): void
@@ -35,7 +35,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
     public function testSucceededDifferentUserLoggedInButAdmin(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-yannis']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
         $this->checkSucceeded();
     }
@@ -43,7 +43,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
     public function testSucceededDifferentUserLoggedInButModerator(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-leslie']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
         $this->checkSucceeded();
     }
@@ -56,7 +56,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
     public function testFailedDifferentUserLoggedIn(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-juliette']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-juliette']['id'];
 
         $this->checkFailedAccessDenied();
     }
@@ -68,7 +68,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
 
         try {
             // check access token has been deleted
-            $accessToken = $this->accessTokenRepository->findOne(Uuid::fromString(AccessTokenFixture::DATA['access-token-john']['id'])->toRfc4122());
+            $accessToken = $this->accessTokenRepository->findOne(Uuid::fromString(AccessTokenFixture::DATA['access-token-john-bis']['id'])->toRfc4122());
 
             $this->fail();
         } catch (AccessTokenNoResultException $e) {
@@ -76,7 +76,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
 
             // check event has been dispatched
             $this->assertCount(1, $this->asyncTransport->get());
-            $this->assertEquals(AccessTokenFixture::DATA['access-token-john']['id'], $this->asyncTransport->get()[0]->getMessage()->getId());
+            $this->assertEquals(AccessTokenFixture::DATA['access-token-john-bis']['id'], $this->asyncTransport->get()[0]->getMessage()->getId());
         }
     }
 
@@ -84,7 +84,7 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
     {
         try {
             // check access token has not been deleted
-            $accessToken = $this->accessTokenRepository->findOne(Uuid::fromString(AccessTokenFixture::DATA['access-token-john']['id'])->toRfc4122());
+            $accessToken = $this->accessTokenRepository->findOne(Uuid::fromString(AccessTokenFixture::DATA['access-token-john-bis']['id'])->toRfc4122());
 
             $this->assertTrue(true);
 

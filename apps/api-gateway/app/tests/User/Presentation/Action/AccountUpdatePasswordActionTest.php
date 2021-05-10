@@ -21,13 +21,13 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_PATCH;
         self::$httpUri = '/account/update-password';
 
+        parent::setUp();
+
         // get user data
-        $this->userPassword = self::$user->getPassword();
+        $this->userPassword = self::$currentUser->getPassword();
     }
 
     public function testSucceeded(): void
@@ -64,18 +64,18 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
         $this->assertEquals([], $responseData);
 
         // check user has been updated
-        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid(self::$user, self::$userData['password']));
+        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid(self::$currentUser, self::$userData['password']));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals(self::$user->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
+        $this->assertEquals(self::$currentUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$currentUser->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // check user has not been updated
-        $this->assertEquals($this->userPassword, self::$user->getPassword());
+        $this->assertEquals($this->userPassword, self::$currentUser->getPassword());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

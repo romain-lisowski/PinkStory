@@ -15,11 +15,11 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/language/search';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
     }
 
     public function testSucceeded(): void

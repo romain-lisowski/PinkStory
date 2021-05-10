@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
-use App\Fixture\User\AccessTokenFixture;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,10 +14,10 @@ final class AccountAccessTokenSearchActionTest extends AbstractAccessTokenAction
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/account/access-token/search';
+
+        parent::setUp();
     }
 
     public function testSucceeded(): void
@@ -33,9 +32,11 @@ final class AccountAccessTokenSearchActionTest extends AbstractAccessTokenAction
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
-        $this->assertCount(1, $responseData['access_tokens']);
+        $this->assertCount(self::$currentUser->getAccessTokens()->count(), $responseData['access_tokens']);
 
-        $this->assertEquals(AccessTokenFixture::DATA['access-token-pinkstory']['id'], $responseData['access_tokens'][0]['id']);
+        foreach (self::$currentUser->getAccessTokens() as $accessToken) {
+            $this->assertEquals($accessToken->getId(), $responseData['access_tokens'][0]['id']);
+        }
     }
 
     protected function checkProcessHasBeenStopped(): void

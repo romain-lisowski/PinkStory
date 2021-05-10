@@ -17,10 +17,10 @@ final class AccountUpdateImageActionTest extends AbstractUserActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_PATCH;
         self::$httpUri = '/account/update-image';
+
+        parent::setUp();
     }
 
     public function testSucceeded(): void
@@ -48,24 +48,24 @@ final class AccountUpdateImageActionTest extends AbstractUserActionTest
         $this->assertEquals([], $responseData);
 
         // check user has been updated
-        $this->assertTrue(self::$user->isImageDefined());
+        $this->assertTrue(self::$currentUser->isImageDefined());
 
         // check image has been uploaded
-        $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true)));
+        $this->assertTrue((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$currentUser->getImagePath(true)));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals(self::$user->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
+        $this->assertEquals(self::$currentUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$currentUser->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // check user has not been updated
-        $this->assertFalse(self::$user->isImageDefined());
+        $this->assertFalse(self::$currentUser->isImageDefined());
 
         // check image has not been uploaded
-        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$user->getImagePath(true)));
+        $this->assertFalse((new Filesystem())->exists(self::$container->getParameter('project_image_storage_path').self::$currentUser->getImagePath(true)));
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

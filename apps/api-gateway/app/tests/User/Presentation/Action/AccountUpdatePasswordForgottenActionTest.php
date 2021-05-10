@@ -22,30 +22,30 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_PATCH;
         self::$httpUri = '/account/update-password-forgotten';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
 
         // get user data
-        self::$user->regeneratePasswordForgottenSecret();
+        self::$defaultUser->regeneratePasswordForgottenSecret();
         $this->userRepository->flush();
-        $this->userPassword = self::$user->getPassword();
+        $this->userPassword = self::$defaultUser->getPassword();
     }
 
     public function testSucceeded(): void
     {
         $this->checkSucceeded([
             'password' => self::$userData['password'],
-            'secret' => self::$user->getPasswordForgottenSecret(),
+            'secret' => self::$defaultUser->getPasswordForgottenSecret(),
         ]);
     }
 
     public function testFailedMissingPassword(): void
     {
         $this->checkFailedMissingMandatory([
-            'secret' => self::$user->getPasswordForgottenSecret(),
+            'secret' => self::$defaultUser->getPasswordForgottenSecret(),
         ]);
     }
 
@@ -53,7 +53,7 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
     {
         $this->checkFailedValidationFailed([
             'password' => 'password',
-            'secret' => self::$user->getPasswordForgottenSecret(),
+            'secret' => self::$defaultUser->getPasswordForgottenSecret(),
         ], [
             'password',
         ]);
@@ -92,18 +92,18 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
         $this->assertEquals([], $responseData);
 
         // check user has been updated
-        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid(self::$user, self::$userData['password']));
+        $this->assertTrue(self::$container->get(UserPasswordEncoderInterface::class)->isPasswordValid(self::$defaultUser, self::$userData['password']));
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals(self::$user->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
+        $this->assertEquals(self::$defaultUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$defaultUser->getPassword(), $this->asyncTransport->get()[0]->getMessage()->getPassword());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // check user has not been updated
-        $this->assertEquals($this->userPassword, self::$user->getPassword());
+        $this->assertEquals($this->userPassword, self::$defaultUser->getPassword());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

@@ -19,11 +19,11 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/user-gender/search';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
     }
 
     public function testSucceededNoLogginButEnglish(): void
@@ -49,7 +49,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         self::$httpUri = '/user-gender/search?_locale=fr';
 
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
@@ -59,7 +59,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
     public function testSucceededLogginFrench(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],

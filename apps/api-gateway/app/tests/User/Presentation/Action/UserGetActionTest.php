@@ -23,11 +23,11 @@ final class UserGetActionTest extends AbstractUserActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'];
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
+        parent::setUp();
     }
 
     public function testSucceededSameUserLoggedIn(): void
@@ -41,7 +41,7 @@ final class UserGetActionTest extends AbstractUserActionTest
     public function testSucceededDifferentUserLoggedInButAdmin(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-yannis']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
         $this->checkSucceeded([], [
             'editable' => true,
@@ -52,7 +52,7 @@ final class UserGetActionTest extends AbstractUserActionTest
     public function testSucceededDifferentUserLoggedInButModerator(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-leslie']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
         $this->checkSucceeded([], [
             'editable' => true,
@@ -63,7 +63,7 @@ final class UserGetActionTest extends AbstractUserActionTest
     public function testSucceededDifferentUserLoggedIn(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-juliette']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-juliette']['id'];
 
         $this->checkSucceeded([], [
             'editable' => false,
@@ -74,7 +74,7 @@ final class UserGetActionTest extends AbstractUserActionTest
     public function testSucceededNoUserLoggedInButEnglish(): void
     {
         // no user logged in
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
 
         $this->checkSucceeded([], [
             'editable' => false,
@@ -88,7 +88,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'].'?_locale=fr';
 
         // no user logged in
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
 
         $this->checkSucceeded([], [
             'editable' => false,
@@ -137,10 +137,26 @@ final class UserGetActionTest extends AbstractUserActionTest
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['locale'], $responseData['user']['language']['locale']);
         $this->assertTrue(new DateTime() > new DateTime($responseData['user']['created_at']));
         $this->assertEquals($options['editable'], $responseData['user']['editable']);
-        $this->assertCount(1, $responseData['user']['reading_languages']);
-        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['reading_language_references'][0]]['id'], $responseData['user']['reading_languages'][0]['id']);
-        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['reading_language_references'][0]]['title'], $responseData['user']['reading_languages'][0]['title']);
-        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['reading_language_references'][0]]['locale'], $responseData['user']['reading_languages'][0]['locale']);
+        $this->assertCount(count(UserFixture::DATA['user-john']['reading_language_references']), $responseData['user']['reading_languages']);
+
+        foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
+            $exists = false;
+
+            foreach (UserFixture::DATA['user-john']['reading_language_references'] as $readingLanguageReference) {
+                if (LanguageFixture::DATA[$readingLanguageReference]['id'] === $readingLanguage['id']) {
+                    $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['title'], $responseData['user']['language']['title']);
+                    $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['locale'], $responseData['user']['language']['locale']);
+
+                    $exists = true;
+
+                    break;
+                }
+            }
+
+            if (false === $exists) {
+                $this->fail('Reading language does not exist.');
+            }
+        }
     }
 
     protected function checkProcessHasBeenStopped(): void

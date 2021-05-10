@@ -16,15 +16,15 @@ final class AccountValidateEmailActionTest extends AbstractUserActionTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_PATCH;
         self::$httpUri = '/account/validate-email';
 
+        parent::setUp();
+
         // invalidate user email
-        self::$user->regenerateEmailValidationCode();
+        self::$currentUser->regenerateEmailValidationCode();
         $this->userRepository->flush();
-        $this->userEmailValidationCode = self::$user->getEmailValidationCode();
+        $this->userEmailValidationCode = self::$currentUser->getEmailValidationCode();
     }
 
     public function testSucceeded(): void
@@ -70,20 +70,20 @@ final class AccountValidateEmailActionTest extends AbstractUserActionTest
         $this->assertEquals([], $responseData);
 
         // check user has been updated
-        $this->assertTrue(self::$user->isEmailValidated());
-        $this->assertTrue(self::$user->isEmailValidationCodeUsed());
+        $this->assertTrue(self::$currentUser->isEmailValidated());
+        $this->assertTrue(self::$currentUser->isEmailValidationCodeUsed());
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals(self::$user->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
+        $this->assertEquals(self::$currentUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$currentUser->getEmail(), $this->asyncTransport->get()[0]->getMessage()->getEmail());
     }
 
     protected function checkProcessHasBeenStopped(): void
     {
         // check user has not been updated
-        $this->assertFalse(self::$user->isEmailValidated());
-        $this->assertFalse(self::$user->isEmailValidationCodeUsed());
+        $this->assertFalse(self::$currentUser->isEmailValidated());
+        $this->assertFalse(self::$currentUser->isEmailValidationCodeUsed());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

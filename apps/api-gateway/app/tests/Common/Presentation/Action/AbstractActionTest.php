@@ -6,7 +6,9 @@ namespace App\Test\Common\Presentation\Action;
 
 use App\Fixture\User\AccessTokenFixture;
 use App\Fixture\User\UserFixture;
+use App\User\Domain\Model\AccessToken;
 use App\User\Domain\Model\User;
+use App\User\Domain\Repository\AccessTokenRepositoryInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -24,14 +26,15 @@ abstract class AbstractActionTest extends WebTestCase
     protected KernelBrowser $client;
     protected EntityManagerInterface $entityManager;
     protected TransportInterface $asyncTransport;
+    protected AccessTokenRepositoryInterface $accessTokenRepository;
     protected UserRepositoryInterface $userRepository;
 
-    protected static string $userId = UserFixture::DATA['user-pinkstory']['id'];
-    protected static User $user;
+    protected static User $defaultUser;
+    protected static ?User $currentUser = null;
 
     protected static string $httpMethod = Request::METHOD_GET;
     protected static string $httpUri = '';
-    protected static ?string $httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
+    protected static ?string $httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
     protected function setUp(): void
     {
@@ -43,8 +46,13 @@ abstract class AbstractActionTest extends WebTestCase
 
         $this->asyncTransport = self::$container->get('messenger.transport.async');
 
+        $this->accessTokenRepository = self::$container->get('doctrine')->getManager()->getRepository(AccessToken::class);
+
         $this->userRepository = self::$container->get('doctrine')->getManager()->getRepository(User::class);
-        self::$user = $this->userRepository->findOne(self::$userId);
+        self::$defaultUser = $this->userRepository->findOne(UserFixture::DATA['user-pinkstory']['id']);
+
+        // get fresh current user
+        $this->refreshCurrentUser();
     }
 
     protected function tearDown(): void
@@ -53,7 +61,7 @@ abstract class AbstractActionTest extends WebTestCase
         (new Filesystem())->remove(self::$container->getParameter('project_image_storage_path'));
 
         // reset access token
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         parent::tearDown();
     }
@@ -61,15 +69,16 @@ abstract class AbstractActionTest extends WebTestCase
     protected function checkSucceeded(array $requestContent = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
         ], json_encode($requestContent));
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
 
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
+        // get fresh users
+        $this->entityManager->refresh(self::$defaultUser);
+        $this->refreshCurrentUser();
 
         // check process has been succeeded
         $this->checkProcessHasBeenSucceeded($responseData, $processOptions);
@@ -84,8 +93,9 @@ abstract class AbstractActionTest extends WebTestCase
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('insufficient_authentication_exception', $responseContent['exception']['type']);
 
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
+        // get fresh users
+        $this->entityManager->refresh(self::$defaultUser);
+        $this->refreshCurrentUser();
 
         // check process has been stopped
         $this->checkProcessHasBeenStopped();
@@ -94,7 +104,7 @@ abstract class AbstractActionTest extends WebTestCase
     protected function checkFailedAccessDenied(array $requestContent = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -102,8 +112,9 @@ abstract class AbstractActionTest extends WebTestCase
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('access_denied_exception', $responseContent['exception']['type']);
 
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
+        // get fresh users
+        $this->entityManager->refresh(self::$defaultUser);
+        $this->refreshCurrentUser();
 
         // check process has been stopped
         $this->checkProcessHasBeenStopped();
@@ -112,7 +123,7 @@ abstract class AbstractActionTest extends WebTestCase
     protected function checkFailedMissingMandatory(array $requestContent = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -120,8 +131,9 @@ abstract class AbstractActionTest extends WebTestCase
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals('request_body_param_missing_mandatory_exception', $responseContent['exception']['type']);
 
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
+        // get fresh users
+        $this->entityManager->refresh(self::$defaultUser);
+        $this->refreshCurrentUser();
 
         // check process has been stopped
         $this->checkProcessHasBeenStopped();
@@ -130,7 +142,7 @@ abstract class AbstractActionTest extends WebTestCase
     protected function checkFailedValidationFailed(array $requestContent = [], array $invalidFields = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorization ? static::$httpAuthorization : '',
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
         ], json_encode($requestContent));
 
         // check http response
@@ -142,8 +154,9 @@ abstract class AbstractActionTest extends WebTestCase
             $this->assertTrue(in_array($violation['property_path'], $invalidFields));
         }
 
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
+        // get fresh users
+        $this->entityManager->refresh(self::$defaultUser);
+        $this->refreshCurrentUser();
 
         // check process has been stopped
         $this->checkProcessHasBeenStopped();
@@ -157,8 +170,9 @@ abstract class AbstractActionTest extends WebTestCase
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
 
-        // get fresh user from database
-        $this->entityManager->refresh(self::$user);
+        // get fresh users
+        $this->entityManager->refresh(self::$defaultUser);
+        $this->refreshCurrentUser();
 
         // check process has been stopped
         $this->checkProcessHasBeenStopped();
@@ -167,4 +181,13 @@ abstract class AbstractActionTest extends WebTestCase
     abstract protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void;
 
     abstract protected function checkProcessHasBeenStopped(): void;
+
+    private function refreshCurrentUser()
+    {
+        if (null !== self::$httpAuthorizationToken) {
+            $accessToken = $this->accessTokenRepository->findOne(self::$httpAuthorizationToken);
+            self::$currentUser = $accessToken->getUser();
+            $this->entityManager->refresh(self::$currentUser);
+        }
+    }
 }

@@ -18,11 +18,11 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/story-theme/search';
-        self::$httpAuthorization = null;
+        self::$httpAuthorizationToken = null;
+
+        parent::setUp();
     }
 
     public function testSucceededNoLogginButEnglish(): void
@@ -48,7 +48,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         self::$httpUri = '/story-theme/search?_locale=fr';
 
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-john']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
@@ -58,7 +58,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     public function testSucceededLogginFrench(): void
     {
         // change user logged in
-        self::$httpAuthorization = 'Bearer '.AccessTokenFixture::DATA['access-token-pinkstory']['id'];
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],

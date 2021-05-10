@@ -33,15 +33,15 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_PATCH;
         self::$httpUri = '/account/update-information';
 
+        parent::setUp();
+
         // get user data
-        $this->userGender = self::$user->getGender();
-        $this->userName = self::$user->getName();
-        $this->languageId = self::$user->getLanguage()->getId();
+        $this->userGender = self::$currentUser->getGender();
+        $this->userName = self::$currentUser->getName();
+        $this->languageId = self::$currentUser->getLanguage()->getId();
     }
 
     public function testSucceeded(): void
@@ -171,22 +171,23 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
         $this->assertEquals([], $responseData);
 
         // check user has been updated
-        $this->assertEquals(self::$userData['gender'], self::$user->getGender());
-        $this->assertEquals(self::$userData['name'], self::$user->getName());
-        $this->assertEquals(self::$userData['language_id'], self::$user->getLanguage()->getId());
-        $this->assertCount(count(self::$userData['reading_language_ids']), self::$user->getUserHasReadingLanguages());
+        $this->assertEquals(self::$userData['gender'], self::$currentUser->getGender());
+        $this->assertEquals(self::$userData['name'], self::$currentUser->getName());
+        $this->assertEquals(self::$userData['language_id'], self::$currentUser->getLanguage()->getId());
+        $this->assertCount(count(self::$userData['reading_language_ids']), self::$currentUser->getUserHasReadingLanguages());
+
         foreach (self::$userData['reading_language_ids'] as $readingLanguageId) {
-            $this->assertTrue(in_array($readingLanguageId, Language::extractIds(self::$user->getReadingLanguages()->toArray())));
+            $this->assertTrue(in_array($readingLanguageId, Language::extractIds(self::$currentUser->getReadingLanguages()->toArray())));
         }
 
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
-        $this->assertEquals(self::$user->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
-        $this->assertEquals(self::$user->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());
-        $this->assertEquals(self::$user->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());
-        $this->assertEquals(self::$user->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getLanguageId());
-        $this->assertCount(self::$user->getReadingLanguages()->count(), $this->asyncTransport->get()[0]->getMessage()->getReadingLanguageIds());
-        foreach (Language::extractIds(self::$user->getReadingLanguages()->toArray()) as $readingLanguageId) {
+        $this->assertEquals(self::$currentUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$currentUser->getName(), $this->asyncTransport->get()[0]->getMessage()->getName());
+        $this->assertEquals(self::$currentUser->getGender(), $this->asyncTransport->get()[0]->getMessage()->getGender());
+        $this->assertEquals(self::$currentUser->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getLanguageId());
+        $this->assertCount(self::$currentUser->getReadingLanguages()->count(), $this->asyncTransport->get()[0]->getMessage()->getReadingLanguageIds());
+        foreach (Language::extractIds(self::$currentUser->getReadingLanguages()->toArray()) as $readingLanguageId) {
             $this->assertTrue(in_array($readingLanguageId, $this->asyncTransport->get()[0]->getMessage()->getReadingLanguageIds()));
         }
     }
@@ -194,9 +195,9 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
     protected function checkProcessHasBeenStopped(): void
     {
         // check user has not been updated
-        $this->assertEquals($this->userGender, self::$user->getGender());
-        $this->assertEquals($this->userName, self::$user->getName());
-        $this->assertEquals($this->languageId, self::$user->getLanguage()->getId());
+        $this->assertEquals($this->userGender, self::$currentUser->getGender());
+        $this->assertEquals($this->userName, self::$currentUser->getName());
+        $this->assertEquals($this->languageId, self::$currentUser->getLanguage()->getId());
 
         // check event has not been dispatched
         $this->assertCount(0, $this->asyncTransport->get());

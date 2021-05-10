@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
-use App\Fixture\Language\LanguageFixture;
-use App\Fixture\User\UserFixture;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,10 +14,10 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/account/update';
+
+        parent::setUp();
     }
 
     public function testSucceeded(): void
@@ -34,15 +32,29 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
-        $this->assertEquals(UserFixture::DATA['user-pinkstory']['id'], $responseData['user']['id']);
-        $this->assertEquals(UserFixture::DATA['user-pinkstory']['gender'], $responseData['user']['gender']);
-        $this->assertEquals(UserFixture::DATA['user-pinkstory']['name'], $responseData['user']['name']);
-        $this->assertEquals(UserFixture::DATA['user-pinkstory']['email'], $responseData['user']['email']);
+        $this->assertEquals(self::$currentUser->getId(), $responseData['user']['id']);
+        $this->assertEquals(self::$currentUser->getGender(), $responseData['user']['gender']);
+        $this->assertEquals(self::$currentUser->getName(), $responseData['user']['name']);
+        $this->assertEquals(self::$currentUser->getEmail(), $responseData['user']['email']);
         $this->assertFalse($responseData['user']['image_defined']);
-        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['language_reference']]['id'], $responseData['user']['language']['id']);
-        $this->assertCount(2, $responseData['user']['reading_languages']);
-        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['reading_language_references'][0]]['id'], $responseData['user']['reading_languages'][0]['id']);
-        $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-pinkstory']['reading_language_references'][1]]['id'], $responseData['user']['reading_languages'][1]['id']);
+        $this->assertEquals(self::$currentUser->getLanguage()->getId(), $responseData['user']['language']['id']);
+        $this->assertCount(self::$currentUser->getReadingLanguages()->count(), $responseData['user']['reading_languages']);
+
+        foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
+            $exists = false;
+
+            foreach (self::$currentUser->getReadingLanguages() as $userReadingLanguage) {
+                if ($userReadingLanguage->getId() === $readingLanguage['id']) {
+                    $exists = true;
+
+                    break;
+                }
+            }
+
+            if (false === $exists) {
+                $this->fail('Reading language does not exist.');
+            }
+        }
     }
 
     protected function checkProcessHasBeenStopped(): void

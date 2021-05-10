@@ -25,7 +25,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
         'content' => 'Contenu de l\'histoire modifiée',
         'extract' => 'Extrait de l\'histoire modifiée',
         'language_id' => LanguageFixture::DATA['language-english']['id'],
-        'parent_id' => StoryFixture::DATA['story-second']['id'],
         'story_image_id' => StoryImageFixture::DATA['story-image-second']['id'],
         'story_theme_ids' => [
             StoryThemeFixture::DATA['story-theme-orientation']['children']['story-theme-heterosexual']['id'],
@@ -65,7 +64,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
             'language_id' => self::$storyData['language_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
         ], [
-            'should_have_parent_defined' => false,
             'should_have_image_defined' => false,
         ]);
     }
@@ -82,7 +80,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
             'language_id' => self::$storyData['language_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
         ], [
-            'should_have_parent_defined' => false,
             'should_have_image_defined' => false,
         ]);
     }
@@ -99,7 +96,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
             'language_id' => self::$storyData['language_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
         ], [
-            'should_have_parent_defined' => false,
             'should_have_image_defined' => false,
         ]);
     }
@@ -114,23 +110,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
         ], [
-            'should_have_parent_defined' => false,
-            'should_have_image_defined' => true,
-        ]);
-    }
-
-    public function testSucceededWithParent(): void
-    {
-        $this->checkSucceeded([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => self::$storyData['parent_id'],
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ], [
-            'should_have_parent_defined' => true,
             'should_have_image_defined' => true,
         ]);
     }
@@ -232,102 +211,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
         ]);
     }
 
-    public function testFailedWrongFormatStoryParent(): void
-    {
-        $this->checkFailedValidationFailed([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => 'parent_id',
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ], [
-            'parent_id',
-        ]);
-    }
-
-    public function testFailedNonExistentStoryParent(): void
-    {
-        $this->checkFailedValidationFailed([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => Uuid::v4()->toRfc4122(),
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ], [
-            'parent_id',
-        ]);
-    }
-
-    public function testFailedWithNoAuthorizationStoryParent(): void
-    {
-        $this->checkFailedAccessDenied([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => StoryFixture::DATA['story-third']['id'],
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ]);
-    }
-
-    public function testFailedNonParentlessStoryParent(): void
-    {
-        $this->checkFailedValidationFailed([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ], [
-            'parent_id',
-        ]);
-    }
-
-    public function testFailedNonChildlessStoryParentStory(): void
-    {
-        // change url
-        self::$httpUri = '/story/'.StoryFixture::DATA['story-second']['id'];
-
-        // get story data
-        $this->populateStoryInformation(Uuid::fromString(StoryFixture::DATA['story-second']['id'])->toRfc4122());
-
-        $this->checkFailedValidationFailed([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => StoryFixture::DATA['story-first']['id'],
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ], [
-            'parent_id',
-        ], [
-            'story_id' => StoryFixture::DATA['story-second']['id'],
-        ]);
-    }
-
-    public function testFailedSelfReferencingStoryParent(): void
-    {
-        $this->checkFailedValidationFailed([
-            'title' => self::$storyData['title'],
-            'content' => self::$storyData['content'],
-            'extract' => self::$storyData['extract'],
-            'language_id' => self::$storyData['language_id'],
-            'parent_id' => StoryFixture::DATA['story-first']['id'],
-            'story_image_id' => self::$storyData['story_image_id'],
-            'story_theme_ids' => self::$storyData['story_theme_ids'],
-        ], [
-            'parent_id',
-        ]);
-    }
-
     public function testFailedWrongFormatStoryImage(): void
     {
         $this->checkFailedValidationFailed([
@@ -412,14 +295,13 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(self::$storyData['title'])->lower()->toString(), $story->getTitleSlug());
         $this->assertEquals(self::$storyData['content'], $story->getContent());
         $this->assertEquals(self::$storyData['extract'], $story->getExtract());
-        $this->assertEquals($this->storyUserId, $story->getUser()->getId());
+        $this->assertEquals($this->storyUserId, $story->getUser()->getId()); // can't be updated
         $this->assertEquals(self::$storyData['language_id'], $story->getLanguage()->getId());
 
         if (null !== $story->getParent()) {
-            $this->assertEquals($options['should_have_parent_defined'], true);
-            $this->assertEquals(self::$storyData['parent_id'], $story->getParent()->getId());
+            $this->assertEquals($this->storyParentId, $story->getParent()->getId()); // can't be updated
         } else {
-            $this->assertEquals($options['should_have_parent_defined'], false);
+            $this->assertNull($this->storyParentId);
         }
 
         if (null !== $story->getStoryImage()) {
@@ -442,12 +324,6 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
         $this->assertEquals($story->getContent(), $this->asyncTransport->get()[0]->getMessage()->getContent());
         $this->assertEquals($story->getExtract(), $this->asyncTransport->get()[0]->getMessage()->getExtract());
         $this->assertEquals($story->getLanguage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getLanguageId());
-
-        if (null !== $story->getParent()) {
-            $this->assertEquals($story->getParent()->getId(), $this->asyncTransport->get()[0]->getMessage()->getParentId());
-        } else {
-            $this->assertNull($this->asyncTransport->get()[0]->getMessage()->getParentId());
-        }
 
         if (null !== $story->getStoryImage()) {
             $this->assertEquals($story->getStoryImage()->getId(), $this->asyncTransport->get()[0]->getMessage()->getStoryImageId());

@@ -44,11 +44,6 @@ final class StoryUpdatedEvent implements EventInterface
     /**
      * @Assert\Uuid
      */
-    private ?string $parentId;
-
-    /**
-     * @Assert\Uuid
-     */
     private ?string $storyImageId;
 
     /**
@@ -56,7 +51,7 @@ final class StoryUpdatedEvent implements EventInterface
      */
     private array $storyThemeIds;
 
-    public function __construct(string $id, string $title, string $titleSlug, string $content, string $extract, string $languageId, ?string $parentId = null, ?string $storyImageId = null, array $storyThemeIds = [])
+    public function __construct(string $id, string $title, string $titleSlug, string $content, string $extract, string $languageId, ?string $storyImageId = null, array $storyThemeIds = [])
     {
         $this->id = $id;
         $this->title = $title;
@@ -64,7 +59,6 @@ final class StoryUpdatedEvent implements EventInterface
         $this->content = $content;
         $this->extract = $extract;
         $this->languageId = $languageId;
-        $this->parentId = $parentId;
         $this->storyImageId = $storyImageId;
         $this->storyThemeIds = $storyThemeIds;
     }
@@ -97,11 +91,6 @@ final class StoryUpdatedEvent implements EventInterface
     public function getLanguageId(): string
     {
         return $this->languageId;
-    }
-
-    public function getParentId(): ?string
-    {
-        return $this->parentId;
     }
 
     public function getStoryImageId(): ?string

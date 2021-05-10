@@ -39,11 +39,6 @@ final class StoryUpdateCommand implements CommandInterface
     /**
      * @Assert\Uuid
      */
-    private ?string $parentId;
-
-    /**
-     * @Assert\Uuid
-     */
     private ?string $storyImageId;
 
     /**
@@ -51,14 +46,13 @@ final class StoryUpdateCommand implements CommandInterface
      */
     private array $storyThemeIds;
 
-    public function __construct(string $id, string $title, string $content, string $extract, string $languageId, ?string $parentId = null, ?string $storyImageId = null, array $storyThemeIds = [])
+    public function __construct(string $id, string $title, string $content, string $extract, string $languageId, ?string $storyImageId = null, array $storyThemeIds = [])
     {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
         $this->extract = $extract;
         $this->languageId = $languageId;
-        $this->parentId = $parentId;
         $this->storyImageId = $storyImageId;
         $this->storyThemeIds = $storyThemeIds;
     }
@@ -86,11 +80,6 @@ final class StoryUpdateCommand implements CommandInterface
     public function getLanguageId(): string
     {
         return $this->languageId;
-    }
-
-    public function getParentId(): ?string
-    {
-        return $this->parentId;
     }
 
     public function getStoryImageId(): ?string

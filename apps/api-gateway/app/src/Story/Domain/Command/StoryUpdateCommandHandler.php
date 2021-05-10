@@ -6,7 +6,6 @@ namespace App\Story\Domain\Command;
 
 use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
-use App\Common\Domain\Model\ChildDepthException;
 use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ConstraintViolation;
@@ -19,7 +18,6 @@ use App\Story\Domain\Model\StoryHasStoryTheme;
 use App\Story\Domain\Model\StoryThemeDepthException;
 use App\Story\Domain\Repository\StoryImageNoResultException;
 use App\Story\Domain\Repository\StoryImageRepositoryInterface;
-use App\Story\Domain\Repository\StoryNoResultException;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
 use App\Story\Domain\Repository\StoryThemeNoResultException;
 use App\Story\Domain\Repository\StoryThemeRepositoryInterface;
@@ -65,16 +63,6 @@ final class StoryUpdateCommandHandler implements CommandHandlerInterface
                 ->updateLanguage($language)
             ;
 
-            if (null !== $command->getParentId()) {
-                $storyParent = $this->storyRepository->findOne($command->getParentId());
-
-                $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $storyParent);
-
-                $story->updateParent($storyParent);
-            } else {
-                $story->updateParent(null);
-            }
-
             if (null !== $command->getStoryImageId()) {
                 $storyImage = $this->storyImageRepository->findOne($command->getStoryImageId());
                 $story->updateStoryImage($storyImage);
@@ -95,7 +83,6 @@ final class StoryUpdateCommandHandler implements CommandHandlerInterface
                 $story->getContent(),
                 $story->getExtract(),
                 $story->getLanguage()->getId(),
-                (null !== $story->getParent() ? $story->getParent()->getId() : null),
                 (null !== $story->getStoryImage() ? $story->getStoryImage()->getId() : null),
                 array_map(function (StoryHasStoryTheme $storyHasStoryTheme) {
                     return $storyHasStoryTheme->getStoryTheme()->getId();
@@ -111,17 +98,9 @@ final class StoryUpdateCommandHandler implements CommandHandlerInterface
             throw new ValidationFailedException([
                 new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),
             ]);
-        } catch (StoryNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('parent_id', 'story.validator.constraint.story_not_found'),
-            ]);
         } catch (StoryThemeDepthException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('story_theme_ids', $e->getMessage()),
-            ]);
-        } catch (ChildDepthException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('parent_id', $e->getMessage()),
             ]);
         } catch (StoryImageNoResultException $e) {
             throw new ValidationFailedException([

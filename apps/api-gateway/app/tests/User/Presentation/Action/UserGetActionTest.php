@@ -25,13 +25,16 @@ final class UserGetActionTest extends AbstractUserActionTest
     {
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'];
-        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+        self::$httpAuthorizationToken = null;
 
         parent::setUp();
     }
 
     public function testSucceededSameUserLoggedIn(): void
     {
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
         $this->checkSucceeded([], [
             'editable' => true,
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
@@ -73,9 +76,6 @@ final class UserGetActionTest extends AbstractUserActionTest
 
     public function testSucceededNoUserLoggedInButEnglish(): void
     {
-        // no user logged in
-        self::$httpAuthorizationToken = null;
-
         $this->checkSucceeded([], [
             'editable' => false,
             'language_reference' => 'language-english',
@@ -86,9 +86,6 @@ final class UserGetActionTest extends AbstractUserActionTest
     {
         // change locale
         self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'].'?_locale=fr';
-
-        // no user logged in
-        self::$httpAuthorizationToken = null;
 
         $this->checkSucceeded([], [
             'editable' => false,
@@ -144,8 +141,8 @@ final class UserGetActionTest extends AbstractUserActionTest
 
             foreach (UserFixture::DATA['user-john']['reading_language_references'] as $readingLanguageReference) {
                 if (LanguageFixture::DATA[$readingLanguageReference]['id'] === $readingLanguage['id']) {
-                    $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['title'], $responseData['user']['language']['title']);
-                    $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['locale'], $responseData['user']['language']['locale']);
+                    $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['title'], $readingLanguage['title']);
+                    $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['locale'], $readingLanguage['locale']);
 
                     $exists = true;
 

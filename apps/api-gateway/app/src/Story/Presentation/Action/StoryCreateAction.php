@@ -7,6 +7,7 @@ namespace App\Story\Presentation\Action;
 use App\Common\Domain\Command\CommandBusInterface;
 use App\Common\Presentation\Response\ResponderInterface;
 use App\Story\Domain\Command\StoryCreateCommand;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/story", name="story_create", methods={"POST"})
  * @ParamConverter("command", converter="request_body", options={"mapping": {"user_id" = "security.user.id"}})
+ * @IsGranted("ROLE_USER")
  */
 final class StoryCreateAction
 {

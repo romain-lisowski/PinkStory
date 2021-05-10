@@ -22,9 +22,6 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         parent::setUp();
-
-        // get user data
-        $this->accessTokens = self::$currentUser->getAccessTokens()->toArray();
     }
 
     public function testSucceededSameUserLoggedIn(): void

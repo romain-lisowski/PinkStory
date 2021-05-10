@@ -206,7 +206,7 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
             'content' => self::$storyData['content'],
             'extract' => self::$storyData['extract'],
             'language_id' => self::$storyData['language_id'],
-            'parent_id' => StoryFixture::DATA['story-second']['id'],
+            'parent_id' => StoryFixture::DATA['story-third']['id'],
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
         ]);
@@ -214,9 +214,6 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
 
     public function testFailedNonParentlessStoryParent(): void
     {
-        // change user logged in (for authorization on parent story)
-        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
-
         $this->checkFailedValidationFailed([
             'title' => self::$storyData['title'],
             'content' => self::$storyData['content'],
@@ -307,8 +304,9 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
 
         // get fresh story from database
         $story = $this->storyRepository->findOne(Uuid::fromString($responseData['story']['id'])->toRfc4122());
+        $this->entityManager->refresh($story);
 
-        // check user has been created
+        // check story has been created
         $this->assertTrue(Uuid::isValid($story->getId()));
         $this->assertEquals(self::$storyData['title'], $story->getTitle());
         $this->assertEquals((new AsciiSlugger())->slug(self::$storyData['title'])->lower()->toString(), $story->getTitleSlug());

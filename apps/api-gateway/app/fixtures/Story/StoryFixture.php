@@ -16,11 +16,11 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
     public const DATA = [
         'story-first' => [
             'id' => '067d92b2-fd2a-4815-9d75-bf7dee31aec8',
-            'title' => 'Première histoire',
-            'content' => 'Contenu de la première histoire',
-            'extract' => 'Extrait de la première histoire',
+            'title' => 'First story',
+            'content' => 'Content of the first story',
+            'extract' => 'Extract of the first story',
             'user_reference' => 'user-john',
-            'language_reference' => 'language-french',
+            'language_reference' => 'language-english',
             'story_image_reference' => 'story-image-first',
             'story_themes' => [
                 'story-theme-heterosexual',
@@ -32,11 +32,11 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
         ],
         'story-second' => [
             'id' => '5f2a7bdb-f9aa-4bb0-9b02-0f1b751d4d6d',
-            'title' => 'Deuxième histoire',
-            'content' => 'Contenu de la deuxième histoire',
-            'extract' => 'Extrait de la deuxième histoire',
-            'user_reference' => 'user-leslie',
-            'language_reference' => 'language-french',
+            'title' => 'Second story',
+            'content' => 'Content of the second story',
+            'extract' => 'Extract of the second story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
             'story_image_reference' => 'story-image-second',
             'story_themes' => [
                 'story-theme-heterosexual',
@@ -45,11 +45,11 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
             'children' => [
                 'story-second-first' => [
                     'id' => '55476103-f142-4f38-bd33-4b5348ea9d2d',
-                    'title' => 'Premier chapitre de la deuxième histoire',
-                    'content' => 'Contenu du premier chapitre de la deuxième histoire',
-                    'extract' => 'Extrait du premier chapitre de la deuxième histoire',
-                    'user_reference' => 'user-leslie',
-                    'language_reference' => 'language-french',
+                    'title' => 'First chapter of the second story',
+                    'content' => 'Content of the first chapter of the second story',
+                    'extract' => 'Extract of the first chapter of the second story',
+                    'user_reference' => 'user-john',
+                    'language_reference' => 'language-english',
                     'story_image_reference' => 'story-image-second',
                     'story_themes' => [
                         'story-theme-heterosexual',
@@ -60,11 +60,11 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
                 ],
                 'story-second-second' => [
                     'id' => 'c889cb01-0992-45cf-857e-ffeabb318b20',
-                    'title' => 'Deuxième chapitre de la deuxième histoire',
-                    'content' => 'Contenu du deuxième chapitre de la deuxième histoire',
-                    'extract' => 'Extrait du deuxième chapitre de la deuxième histoire',
-                    'user_reference' => 'user-leslie',
-                    'language_reference' => 'language-french',
+                    'title' => 'Second chapter of the second story',
+                    'content' => 'Content of the second chapter of the second story',
+                    'extract' => 'Extract of the second chapter of the second story',
+                    'user_reference' => 'user-john',
+                    'language_reference' => 'language-english',
                     'story_image_reference' => 'story-image-third',
                     'story_themes' => [
                         'story-theme-heterosexual',
@@ -73,6 +73,22 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
                         'story-theme-hard',
                     ],
                 ],
+            ],
+        ],
+        'story-third' => [
+            'id' => 'a89d68e2-e0a4-4b31-b04c-d2b2ccb6857e',
+            'title' => 'Troisième histoire',
+            'content' => 'Contenu de la troisième histoire',
+            'extract' => 'Extrait de la troisième histoire',
+            'user_reference' => 'user-leslie',
+            'language_reference' => 'language-french',
+            'story_image_reference' => 'story-image-first',
+            'story_themes' => [
+                'story-theme-heterosexual',
+                'story-theme-office',
+                'story-theme-threesome',
+                'story-theme-bdsm-domination',
+                'story-theme-extreme',
             ],
         ],
     ];

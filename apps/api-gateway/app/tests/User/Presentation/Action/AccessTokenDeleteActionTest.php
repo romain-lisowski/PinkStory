@@ -50,6 +50,22 @@ final class AccessTokenDeleteActionTest extends AbstractAccessTokenActionTest
         $this->checkFailedUnauthorized();
     }
 
+    public function testFailedNotFoundWrongFormatId(): void
+    {
+        // wrong uri format
+        self::$httpUri = '/access-token/id';
+
+        $this->checkFailedNotFound();
+    }
+
+    public function testFailedNotFoundNonExistentId(): void
+    {
+        // non existent id
+        self::$httpUri = '/access-token/'.Uuid::v4()->toRfc4122();
+
+        $this->checkFailedNotFound();
+    }
+
     public function testFailedDifferentUserLoggedIn(): void
     {
         // change user logged in

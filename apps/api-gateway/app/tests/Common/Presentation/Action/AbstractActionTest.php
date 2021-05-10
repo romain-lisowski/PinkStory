@@ -164,7 +164,9 @@ abstract class AbstractActionTest extends WebTestCase
 
     protected function checkFailedNotFound(array $requestContent = [], array $processOptions = []): void
     {
-        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
+            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
+        ], json_encode($requestContent));
 
         // check http response
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());

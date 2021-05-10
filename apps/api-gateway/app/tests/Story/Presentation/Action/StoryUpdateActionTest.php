@@ -125,6 +125,34 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
         ]);
     }
 
+    public function testFailedNotFoundWrongFormatId(): void
+    {
+        // wrong uri format
+        self::$httpUri = '/story/id';
+
+        $this->checkFailedNotFound([
+            'title' => self::$storyData['title'],
+            'content' => self::$storyData['content'],
+            'extract' => self::$storyData['extract'],
+            'language_id' => self::$storyData['language_id'],
+            'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ]);
+    }
+
+    public function testFailedNotFoundNonExistentId(): void
+    {
+        // non existent id
+        self::$httpUri = '/story/'.Uuid::v4()->toRfc4122();
+
+        $this->checkFailedNotFound([
+            'title' => self::$storyData['title'],
+            'content' => self::$storyData['content'],
+            'extract' => self::$storyData['extract'],
+            'language_id' => self::$storyData['language_id'],
+            'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ]);
+    }
+
     public function testFailedDifferentUserLoggedIn(): void
     {
         // change user logged in

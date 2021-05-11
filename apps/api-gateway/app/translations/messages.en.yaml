@@ -51,6 +51,7 @@ story:
     validator:
         constraint:
             story_not_found: This story doesn't exist.
+            children_position_not_found: New position for each child needs to be specify.
 
 story_image:
     repository:

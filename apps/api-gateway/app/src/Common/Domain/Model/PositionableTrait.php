@@ -38,6 +38,9 @@ trait PositionableTrait
         }, $positionedItems);
     }
 
+    /**
+     * @throws PositionUpdateException
+     */
     public static function updatePositions(Collection $positionedItems, array $newPositionedItemIds): void
     {
         foreach ($positionedItems as $positionedItem) {

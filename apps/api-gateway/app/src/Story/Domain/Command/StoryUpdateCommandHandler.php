@@ -21,7 +21,6 @@ use App\Story\Domain\Repository\StoryImageRepositoryInterface;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
 use App\Story\Domain\Repository\StoryThemeNoResultException;
 use App\Story\Domain\Repository\StoryThemeRepositoryInterface;
-use App\User\Domain\Repository\UserRepositoryInterface;
 
 final class StoryUpdateCommandHandler implements CommandHandlerInterface
 {
@@ -31,10 +30,9 @@ final class StoryUpdateCommandHandler implements CommandHandlerInterface
     private StoryRepositoryInterface $storyRepository;
     private StoryImageRepositoryInterface $storyImageRepository;
     private StoryThemeRepositoryInterface $storyThemeRepository;
-    private UserRepositoryInterface $userRepository;
     private ValidatorInterface $validator;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, LanguageRepositoryInterface $languageRepository, StoryRepositoryInterface $storyRepository, StoryImageRepositoryInterface $storyImageRepository, StoryThemeRepositoryInterface $storyThemeRepository, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, LanguageRepositoryInterface $languageRepository, StoryRepositoryInterface $storyRepository, StoryImageRepositoryInterface $storyImageRepository, StoryThemeRepositoryInterface $storyThemeRepository, ValidatorInterface $validator)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->eventBus = $eventBus;

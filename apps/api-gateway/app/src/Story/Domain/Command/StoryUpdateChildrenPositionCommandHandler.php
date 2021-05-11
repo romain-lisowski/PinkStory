@@ -12,32 +12,21 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
-use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Story\Domain\Event\StoryUpdatedChildrenPositionEvent;
-use App\Story\Domain\Repository\StoryImageRepositoryInterface;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
-use App\Story\Domain\Repository\StoryThemeRepositoryInterface;
-use App\User\Domain\Repository\UserRepositoryInterface;
 
 final class StoryUpdateChildrenPositionCommandHandler implements CommandHandlerInterface
 {
     private AuthorizationCheckerInterface $authorizationChecker;
     private EventBusInterface $eventBus;
-    private LanguageRepositoryInterface $languageRepository;
     private StoryRepositoryInterface $storyRepository;
-    private StoryImageRepositoryInterface $storyImageRepository;
-    private StoryThemeRepositoryInterface $storyThemeRepository;
-    private UserRepositoryInterface $userRepository;
     private ValidatorInterface $validator;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, LanguageRepositoryInterface $languageRepository, StoryRepositoryInterface $storyRepository, StoryImageRepositoryInterface $storyImageRepository, StoryThemeRepositoryInterface $storyThemeRepository, UserRepositoryInterface $userRepository, ValidatorInterface $validator)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EventBusInterface $eventBus, StoryRepositoryInterface $storyRepository, ValidatorInterface $validator)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->eventBus = $eventBus;
-        $this->languageRepository = $languageRepository;
         $this->storyRepository = $storyRepository;
-        $this->storyImageRepository = $storyImageRepository;
-        $this->storyThemeRepository = $storyThemeRepository;
         $this->validator = $validator;
     }
 

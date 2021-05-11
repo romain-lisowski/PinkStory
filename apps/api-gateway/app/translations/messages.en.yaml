@@ -61,6 +61,11 @@ story_image:
         constraint:
             story_image_not_found: This story image doesn't exist.
 
+story_rating:
+    repository:
+        exception:
+            no_result_exception: No story rating was found for query although at least one was expected.
+
 story_theme:
     model:
         exception:

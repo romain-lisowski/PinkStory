@@ -13,6 +13,7 @@ use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Language\Domain\Repository\ReadingLanguageNoResultException;
 use App\Story\Domain\Model\Story;
+use App\Story\Domain\Model\StoryRating;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -149,6 +150,11 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
      */
     private Collection $stories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryRating", mappedBy="user", cascade={"remove"})
+     */
+    private Collection $storyRatings;
+
     public function __construct()
     {
         parent::__construct();
@@ -159,6 +165,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         $this->userHasReadingLanguages = new ArrayCollection();
         $this->accessTokens = new ArrayCollection();
         $this->stories = new ArrayCollection();
+        $this->storyRatings = new ArrayCollection();
     }
 
     public function getGender(): string
@@ -563,6 +570,27 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
     public function removeStory(Story $story): self
     {
         $this->stories->removeElement($story);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function getStoryRatings(): Collection
+    {
+        return $this->storyRatings;
+    }
+
+    public function addStoryRating(StoryRating $storyRating): self
+    {
+        $this->storyRatings[] = $storyRating;
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function removeStoryRating(StoryRating $storyRating): self
+    {
+        $this->storyRatings->removeElement($storyRating);
         $this->updateLastUpdatedAt();
 
         return $this;

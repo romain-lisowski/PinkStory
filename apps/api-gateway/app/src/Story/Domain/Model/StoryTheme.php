@@ -171,6 +171,27 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
         return $this;
     }
 
+    public function updateChildrenPositions(array $newPositionedItemIds): self
+    {
+        static::updatePositions($this->children, $newPositionedItemIds);
+        $this->updateLastUpdatedAt();
+
+        return $this;
+    }
+
+    public function extractChildrenPositionedIds(): array
+    {
+        $ids = [];
+
+        foreach ($this->children as $child) {
+            $ids[$child->getPosition()] = $child->getId();
+        }
+
+        ksort($ids);
+
+        return array_values($ids);
+    }
+
     public function getPosition(): ?int
     {
         return $this->position;

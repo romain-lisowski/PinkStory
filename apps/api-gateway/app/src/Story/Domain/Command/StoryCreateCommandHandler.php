@@ -16,7 +16,7 @@ use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Story\Domain\Event\StoryCreatedEvent;
 use App\Story\Domain\Model\Story;
-use App\Story\Domain\Model\StoryHasStoryTheme;
+use App\Story\Domain\Model\StoryTheme;
 use App\Story\Domain\Model\StoryThemeDepthException;
 use App\Story\Domain\Repository\StoryImageNoResultException;
 use App\Story\Domain\Repository\StoryImageRepositoryInterface;
@@ -100,9 +100,7 @@ final class StoryCreateCommandHandler implements CommandHandlerInterface
                 $story->getLanguage()->getId(),
                 (null !== $story->getParent() ? $story->getParent()->getId() : null),
                 (null !== $story->getStoryImage() ? $story->getStoryImage()->getId() : null),
-                array_map(function (StoryHasStoryTheme $storyHasStoryTheme) {
-                    return $storyHasStoryTheme->getStoryTheme()->getId();
-                }, $story->getStoryHasStoryThemes()->toArray())
+                StoryTheme::extractIds($story->getStoryThemes()->toArray())
             );
 
             $this->validator->validate($event);

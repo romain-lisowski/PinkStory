@@ -5,31 +5,25 @@ declare(strict_types=1);
 namespace App\User\Query\Model;
 
 use App\Language\Query\Model\Language;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 class UserMedium extends User
 {
     private string $gender;
     private string $name;
     private bool $imageDefined;
+    private \DateTime $createdAt;
     private Language $language;
-    private Collection $readingLanguages;
-
-    public function __construct(string $id, string $gender, string $name, bool $imageDefined, Language $language)
-    {
-        parent::__construct($id);
-
-        $this->gender = $gender;
-        $this->name = $name;
-        $this->imageDefined = $imageDefined;
-        $this->language = $language;
-        $this->readingLanguages = new ArrayCollection();
-    }
 
     public function getGender(): string
     {
         return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
     }
 
     public function getName(): string
@@ -37,9 +31,35 @@ class UserMedium extends User
         return $this->name;
     }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function getImageDefined(): bool
     {
         return $this->imageDefined;
+    }
+
+    public function setImageDefined(bool $imageDefined): self
+    {
+        $this->imageDefined = $imageDefined;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getLanguage(): Language
@@ -47,14 +67,9 @@ class UserMedium extends User
         return $this->language;
     }
 
-    public function getReadingLanguages(): Collection
+    public function setLanguage(Language $language): self
     {
-        return $this->readingLanguages;
-    }
-
-    public function addReadingLanguage(Language $readingLanguage): self
-    {
-        $this->readingLanguages[] = $readingLanguage;
+        $this->language = $language;
 
         return $this;
     }

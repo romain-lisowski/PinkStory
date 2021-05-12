@@ -41,8 +41,7 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
         $this->createBaseQueryBuilder($qb);
 
-        $qb->addSelect('u.created_at as user_created_at')
-            ->addSelect('language.title as language_title', 'language.locale as language_locale')
+        $qb->addSelect('language.title as language_title', 'language.locale as language_locale')
             ->andWhere($qb->expr()->eq('u.id', ':user_id'))
             ->setParameter('user_id', $query->getId())
         ;
@@ -53,9 +52,22 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
             throw new UserNoResultException();
         }
 
-        $language = new LanguageMedium(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+        $language = (new LanguageMedium())
+            ->setId(strval($data['language_id']))
+            ->setTitle(strval($data['language_title']))
+            ->setLocale(strval($data['language_locale']))
+        ;
 
-        $user = new UserFull(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), $language, new \DateTime(strval($data['user_created_at'])));
+        $user = (new UserFull())
+            ->setId(strval($data['user_id']))
+            ->setGender(strval($data['user_gender']))
+            ->setGenderReading(UserGender::getReadingChoice(strval($data['user_gender']), $this->translator))
+            ->setName(strval($data['user_name']))
+            ->setNameSlug(strval($data['user_name_slug']))
+            ->setImageDefined(boolval($data['user_image_defined']))
+            ->setCreatedAt(new \DateTime(strval($data['user_created_at'])))
+            ->setLanguage($language)
+        ;
 
         $this->languageRepository->populateUserReadingLanguages($user, LanguageMedium::class);
 
@@ -79,9 +91,19 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
             throw new UserNoResultException();
         }
 
-        $language = new Language(strval($data['language_id']));
+        $language = (new Language())
+            ->setId(strval($data['language_id']))
+        ;
 
-        $user = new UserUpdate(strval($data['user_id']), strval($data['user_gender']), strval($data['user_name']), strval($data['user_email']), boolval($data['user_image_defined']), $language);
+        $user = (new UserUpdate())
+            ->setId(strval($data['user_id']))
+            ->setGender(strval($data['user_gender']))
+            ->setName(strval($data['user_name']))
+            ->setEmail(strval($data['user_email']))
+            ->setImageDefined(boolval($data['user_image_defined']))
+            ->setCreatedAt(new \DateTime(strval($data['user_created_at'])))
+            ->setLanguage($language)
+        ;
 
         $this->languageRepository->populateUserReadingLanguages($user, Language::class);
 
@@ -106,9 +128,23 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
             throw new UserNoResultException();
         }
 
-        $language = new LanguageCurrent(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+        $language = (new LanguageCurrent())
+            ->setId(strval($data['language_id']))
+            ->setTitle(strval($data['language_title']))
+            ->setLocale(strval($data['language_locale']))
+        ;
 
-        $user = new UserCurrent(strval($data['user_id']), strval($data['user_gender']), UserGender::getReadingChoice(strval($data['user_gender']), $this->translator), strval($data['user_name']), strval($data['user_name_slug']), boolval($data['user_image_defined']), UserCurrent::ROLE_PREFIX.strval($data['user_role']), $language, new \DateTime(strval($data['user_created_at'])));
+        $user = (new UserCurrent())
+            ->setId(strval($data['user_id']))
+            ->setGender(strval($data['user_gender']))
+            ->setGenderReading(UserGender::getReadingChoice(strval($data['user_gender']), $this->translator))
+            ->setName(strval($data['user_name']))
+            ->setNameSlug(strval($data['user_name_slug']))
+            ->setImageDefined(boolval($data['user_image_defined']))
+            ->setRole(UserCurrent::ROLE_PREFIX.strval($data['user_role']))
+            ->setCreatedAt(new \DateTime(strval($data['user_created_at'])))
+            ->setLanguage($language)
+        ;
 
         $this->languageRepository->populateUserReadingLanguages($user, LanguageCurrent::class);
 
@@ -117,7 +153,7 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
 
     private function createBaseQueryBuilder(QueryBuilder $qb): void
     {
-        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined')
+        $qb->select('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.created_at as user_created_at')
             ->from('usr_user', 'u')
             ->addSelect('language.id as language_id')
             ->join('u', 'lng_language', 'language', $qb->expr()->eq('language.id', 'u.language_id'))

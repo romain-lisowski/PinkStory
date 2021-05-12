@@ -11,7 +11,7 @@ use App\Language\Query\Model\LanguageFull;
 use App\Language\Query\Model\LanguageMedium;
 use App\Language\Query\Query\LanguageSearchQuery;
 use App\Language\Query\Repository\LanguageRepositoryInterface;
-use App\User\Query\Model\UserMedium;
+use App\User\Query\Model\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -32,7 +32,12 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
         $languages = new ArrayCollection();
 
         foreach ($datas as $data) {
-            $language = new LanguageFull(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+            $language = (new LanguageFull())
+                ->setId(strval($data['language_id']))
+                ->setTitle(strval($data['language_title']))
+                ->setLocale(strval($data['language_locale']))
+            ;
+
             $languages->add($language);
         }
 
@@ -55,7 +60,11 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
             return null;
         }
 
-        return new LanguageCurrent(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+        return (new LanguageCurrent())
+            ->setId(strval($data['language_id']))
+            ->setTitle(strval($data['language_title']))
+            ->setLocale(strval($data['language_locale']))
+        ;
     }
 
     public function findOneByAccessTokenForCurrent(string $accessTokenId): ?LanguageCurrent
@@ -78,10 +87,14 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
             return null;
         }
 
-        return new LanguageCurrent(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale']));
+        return (new LanguageCurrent())
+            ->setId(strval($data['language_id']))
+            ->setTitle(strval($data['language_title']))
+            ->setLocale(strval($data['language_locale']))
+        ;
     }
 
-    public function populateUserReadingLanguages(UserMedium $user, string $languageClass = Language::class): void
+    public function populateUserReadingLanguages(User $user, string $languageClass = Language::class): void
     {
         $qb = $this->createQueryBuilder();
 
@@ -100,9 +113,19 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
 
         foreach ($datas as $data) {
             if (true === in_array($languageClass, [LanguageMedium::class, LanguageFull::class, LanguageCurrent::class])) {
-                $user->addReadingLanguage(new $languageClass(strval($data['language_id']), strval($data['language_title']), strval($data['language_locale'])));
+                $language = (new $languageClass())
+                    ->setId(strval($data['language_id']))
+                    ->setTitle(strval($data['language_title']))
+                    ->setLocale(strval($data['language_locale']))
+                ;
+
+                $user->addReadingLanguage($language);
             } else {
-                $user->addReadingLanguage(new $languageClass(strval($data['language_id'])));
+                $language = (new $languageClass())
+                    ->setId(strval($data['language_id']))
+                ;
+
+                $user->addReadingLanguage($language);
             }
         }
     }

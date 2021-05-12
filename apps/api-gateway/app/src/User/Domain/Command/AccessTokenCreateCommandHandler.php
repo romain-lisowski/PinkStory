@@ -66,7 +66,7 @@ final class AccessTokenCreateCommandHandler implements CommandHandlerInterface
             $this->eventBus->dispatch($event);
 
             return [
-                'access_token' => new QueryAccessToken($accessToken->getId(), new QueryUser($accessToken->getUser()->getId())),
+                'access_token' => (new QueryAccessToken())->setId($accessToken->getId())->setUser((new QueryUser())->setId($accessToken->getUser()->getId())),
             ];
         } catch (UserNoResultException $e) {
             throw new ValidationFailedException([

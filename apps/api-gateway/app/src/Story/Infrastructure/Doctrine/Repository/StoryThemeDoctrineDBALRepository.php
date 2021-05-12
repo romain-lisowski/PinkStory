@@ -34,11 +34,23 @@ final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALReposit
 
         foreach ($datas as $data) {
             if (null === $data['parent_id']) {
-                $storyThemes->add(new StoryThemeFullParent(strval($data['id']), strval($data['title']), strval($data['title_slug'])));
+                $storyTheme = (new StoryThemeFullParent())
+                    ->setId(strval($data['id']))
+                    ->setTitle(strval($data['title']))
+                    ->setTitleSlug(strval($data['title_slug']))
+                ;
+
+                $storyThemes->add($storyTheme);
             } else {
+                $storyTheme = (new StoryThemeFull())
+                    ->setId(strval($data['id']))
+                    ->setTitle(strval($data['title']))
+                    ->setTitleSlug(strval($data['title_slug']))
+                ;
+
                 $storyThemeChildrenTmp[] = [
                     'parent_id' => strval($data['parent_id']),
-                    'story_theme' => new StoryThemeFull(strval($data['id']), strval($data['title']), strval($data['title_slug'])),
+                    'story_theme' => $storyTheme,
                 ];
             }
         }
@@ -82,7 +94,12 @@ final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         foreach ($datas as $data) {
             foreach ($storyImages as $storyImage) {
                 if ($storyImage->getId() === strval($data['story_image_id'])) {
-                    $storyTheme = new StoryThemeMedium(strval($data['id']), strval($data['title']), strval($data['title_slug']));
+                    $storyTheme = (new StoryThemeMedium())
+                        ->setId(strval($data['id']))
+                        ->setTitle(strval($data['title']))
+                        ->setTitleSlug(strval($data['title_slug']))
+                    ;
+
                     $storyImage->addStoryTheme($storyTheme);
 
                     break;

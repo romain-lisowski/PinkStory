@@ -7,14 +7,12 @@ namespace App\Story\Query\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class StoryImageFull extends StoryImageMedium
+final class StoryImageFull extends StoryImageMedium
 {
     private Collection $storyThemes;
 
-    public function __construct(string $id, string $title, string $titleSlug)
+    public function __construct()
     {
-        parent::__construct($id, $title, $titleSlug);
-
         $this->storyThemes = new ArrayCollection();
     }
 

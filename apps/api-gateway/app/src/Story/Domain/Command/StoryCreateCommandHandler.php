@@ -108,7 +108,7 @@ final class StoryCreateCommandHandler implements CommandHandlerInterface
             $this->eventBus->dispatch($event);
 
             return [
-                'story' => new QueryStory($story->getId()),
+                'story' => (new QueryStory())->setId($story->getId()),
             ];
         } catch (UserNoResultException $e) {
             throw new ValidationFailedException([

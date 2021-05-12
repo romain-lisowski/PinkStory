@@ -34,7 +34,15 @@ final class AccessTokenDoctrineDBALRepository extends AbstractDoctrineDBALReposi
         $accessTokens = new ArrayCollection();
 
         foreach ($datas as $data) {
-            $accessToken = new AccessToken(strval($data['id']), new User(strval($data['user_id'])));
+            $user = (new User())
+                ->setId(strval($data['user_id']))
+            ;
+
+            $accessToken = (new AccessToken())
+                ->setId(strval($data['id']))
+                ->setUser($user)
+            ;
+
             $accessTokens->add($accessToken);
         }
 

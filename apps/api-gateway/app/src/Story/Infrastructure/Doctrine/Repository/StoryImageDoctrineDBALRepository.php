@@ -44,7 +44,12 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         $storyImages = new ArrayCollection();
 
         foreach ($datas as $data) {
-            $storyImage = new StoryImageFull(strval($data['id']), strval($data['title']), strval($data['title_slug']));
+            $storyImage = (new StoryImageFull())
+                ->setId(strval($data['id']))
+                ->setTitle(strval($data['title']))
+                ->setTitleSlug(strval($data['title_slug']))
+            ;
+
             $storyImages->add($storyImage);
         }
 

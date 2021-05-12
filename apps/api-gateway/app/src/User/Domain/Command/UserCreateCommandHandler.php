@@ -85,7 +85,7 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
             $this->eventBus->dispatch($event);
 
             return [
-                'user' => new QueryUser($user->getId()),
+                'user' => (new QueryUser())->setId($user->getId()),
             ];
         } catch (LanguageNoResultException $e) {
             throw new ValidationFailedException([

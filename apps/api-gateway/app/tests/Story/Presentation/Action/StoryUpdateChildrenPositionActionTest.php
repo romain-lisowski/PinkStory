@@ -29,8 +29,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
     {
         $this->checkSucceeded([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -42,8 +42,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
 
         $this->checkSucceeded([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -55,8 +55,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
 
         $this->checkSucceeded([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -65,8 +65,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
     {
         $this->checkFailedUnauthorized([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -78,8 +78,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
 
         $this->checkFailedNotFound([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -91,8 +91,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
 
         $this->checkFailedNotFound([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -104,8 +104,8 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
 
         $this->checkFailedAccessDenied([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
-                StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
+                StoryFixture::DATA['story-second-first']['id'],
             ],
         ]);
     }
@@ -119,7 +119,7 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
     {
         $this->checkFailedValidationFailed([
             'children_ids' => [
-                StoryFixture::DATA['story-second']['children']['story-second-second']['id'],
+                StoryFixture::DATA['story-second-second']['id'],
             ],
         ], [
             'children_ids',
@@ -140,11 +140,11 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
             // get fresh child from database
             $this->entityManager->refresh($child);
 
-            if ($child->getId() === StoryFixture::DATA['story-second']['children']['story-second-first']['id']) {
+            if ($child->getId() === StoryFixture::DATA['story-second-first']['id']) {
                 $this->assertEquals($child->getPosition(), 2);
             }
 
-            if ($child->getId() === StoryFixture::DATA['story-second']['children']['story-second-second']['id']) {
+            if ($child->getId() === StoryFixture::DATA['story-second-second']['id']) {
                 $this->assertEquals($child->getPosition(), 1);
             }
         }
@@ -166,11 +166,11 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
             // get fresh child from database
             $this->entityManager->refresh($child);
 
-            if ($child->getId() === StoryFixture::DATA['story-second']['children']['story-second-first']['id']) {
+            if ($child->getId() === StoryFixture::DATA['story-second-first']['id']) {
                 $this->assertEquals($child->getPosition(), 1);
             }
 
-            if ($child->getId() === StoryFixture::DATA['story-second']['children']['story-second-second']['id']) {
+            if ($child->getId() === StoryFixture::DATA['story-second-second']['id']) {
                 $this->assertEquals($child->getPosition(), 2);
             }
         }

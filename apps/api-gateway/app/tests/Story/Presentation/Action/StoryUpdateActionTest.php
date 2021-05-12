@@ -27,9 +27,9 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
         'language_id' => LanguageFixture::DATA['language-english']['id'],
         'story_image_id' => StoryImageFixture::DATA['story-image-second']['id'],
         'story_theme_ids' => [
-            StoryThemeFixture::DATA['story-theme-orientation']['children']['story-theme-heterosexual']['id'],
-            StoryThemeFixture::DATA['story-theme-place']['children']['story-theme-home']['id'],
-            StoryThemeFixture::DATA['story-theme-number']['children']['story-theme-couple']['id'],
+            StoryThemeFixture::DATA['story-theme-heterosexual']['id'],
+            StoryThemeFixture::DATA['story-theme-home']['id'],
+            StoryThemeFixture::DATA['story-theme-couple']['id'],
         ],
     ];
 

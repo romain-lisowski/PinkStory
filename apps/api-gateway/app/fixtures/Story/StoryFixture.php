@@ -22,7 +22,7 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
             'user_reference' => 'user-john',
             'language_reference' => 'language-english',
             'story_image_reference' => 'story-image-first',
-            'story_themes' => [
+            'story_themes_reference' => [
                 'story-theme-heterosexual',
                 'story-theme-office',
                 'story-theme-threesome',
@@ -38,42 +38,46 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
             'user_reference' => 'user-john',
             'language_reference' => 'language-english',
             'story_image_reference' => 'story-image-second',
-            'story_themes' => [
+            'story_themes_reference' => [
                 'story-theme-heterosexual',
                 'story-theme-office',
             ],
-            'children' => [
-                'story-second-first' => [
-                    'id' => '55476103-f142-4f38-bd33-4b5348ea9d2d',
-                    'title' => 'First chapter of the second story',
-                    'content' => 'Content of the first chapter of the second story',
-                    'extract' => 'Extract of the first chapter of the second story',
-                    'user_reference' => 'user-john',
-                    'language_reference' => 'language-english',
-                    'story_image_reference' => 'story-image-second',
-                    'story_themes' => [
-                        'story-theme-heterosexual',
-                        'story-theme-office',
-                        'story-theme-oral-sex',
-                        'story-theme-soft',
-                    ],
-                ],
-                'story-second-second' => [
-                    'id' => 'c889cb01-0992-45cf-857e-ffeabb318b20',
-                    'title' => 'Second chapter of the second story',
-                    'content' => 'Content of the second chapter of the second story',
-                    'extract' => 'Extract of the second chapter of the second story',
-                    'user_reference' => 'user-john',
-                    'language_reference' => 'language-english',
-                    'story_image_reference' => 'story-image-third',
-                    'story_themes' => [
-                        'story-theme-heterosexual',
-                        'story-theme-home',
-                        'story-theme-sodomy',
-                        'story-theme-hard',
-                    ],
-                ],
+            'children_reference' => [
+                'story-second-first',
+                'story-second-second',
             ],
+        ],
+        'story-second-first' => [
+            'id' => '55476103-f142-4f38-bd33-4b5348ea9d2d',
+            'title' => 'First chapter of the second story',
+            'content' => 'Content of the first chapter of the second story',
+            'extract' => 'Extract of the first chapter of the second story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
+            'story_image_reference' => 'story-image-second',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-office',
+                'story-theme-oral-sex',
+                'story-theme-soft',
+            ],
+            'parent_reference' => 'story-second',
+        ],
+        'story-second-second' => [
+            'id' => 'c889cb01-0992-45cf-857e-ffeabb318b20',
+            'title' => 'Second chapter of the second story',
+            'content' => 'Content of the second chapter of the second story',
+            'extract' => 'Extract of the second chapter of the second story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
+            'story_image_reference' => 'story-image-third',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-home',
+                'story-theme-sodomy',
+                'story-theme-hard',
+            ],
+            'parent_reference' => 'story-second',
         ],
         'story-third' => [
             'id' => 'a89d68e2-e0a4-4b31-b04c-d2b2ccb6857e',
@@ -83,7 +87,7 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
             'user_reference' => 'user-leslie',
             'language_reference' => 'language-french',
             'story_image_reference' => 'story-image-first',
-            'story_themes' => [
+            'story_themes_reference' => [
                 'story-theme-heterosexual',
                 'story-theme-office',
                 'story-theme-threesome',
@@ -95,7 +99,33 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $this->save($manager, self::DATA);
+        foreach (self::DATA as $storyReference => $data) {
+            $story = (new Story())
+                ->setId(Uuid::fromString($data['id'])->toRfc4122())
+                ->setTitle($data['title'])
+                ->setContent($data['content'])
+                ->setExtract($data['extract'])
+                ->setUser($this->getReference($data['user_reference']))
+                ->setLanguage($this->getReference($data['language_reference']))
+                ->setStoryImage($this->getReference($data['story_image_reference']))
+            ;
+
+            if (false === empty($data['parent_reference'])) {
+                $story->setParent($this->getReference($data['parent_reference']));
+            }
+
+            foreach ($data['story_themes_reference'] as $storyThemeReference) {
+                (new StoryHasStoryTheme())
+                    ->setStory($story)
+                    ->setStoryTheme($this->getReference($storyThemeReference))
+                ;
+            }
+
+            $manager->persist($story);
+            $this->addReference($storyReference, $story);
+
+            sleep(1); // to force different created at (use for testing)
+        }
 
         $manager->flush();
     }
@@ -108,38 +138,5 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
             StoryImageFixture::class,
             UserFixture::class,
         ];
-    }
-
-    private function save(ObjectManager $manager, array $storyData, ?Story $parent = null): void
-    {
-        foreach ($storyData as $storyReference => $data) {
-            $story = (new Story())
-                ->setId(Uuid::fromString($data['id'])->toRfc4122())
-                ->setTitle($data['title'])
-                ->setContent($data['content'])
-                ->setExtract($data['extract'])
-                ->setUser($this->getReference($data['user_reference']))
-                ->setLanguage($this->getReference($data['language_reference']))
-                ->setStoryImage($this->getReference($data['story_image_reference']))
-            ;
-
-            if (null !== $parent) {
-                $story->setParent($parent);
-            }
-
-            foreach ($data['story_themes'] as $storyThemesReference) {
-                (new StoryHasStoryTheme())
-                    ->setStory($story)
-                    ->setStoryTheme($this->getReference($storyThemesReference))
-                ;
-            }
-
-            $manager->persist($story);
-            $this->addReference($storyReference, $story);
-
-            if (true === isset($data['children'])) {
-                $this->save($manager, $data['children'], $story);
-            }
-        }
     }
 }

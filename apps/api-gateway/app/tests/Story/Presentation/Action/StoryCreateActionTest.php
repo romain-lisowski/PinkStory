@@ -27,9 +27,9 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
         'parent_id' => StoryFixture::DATA['story-first']['id'],
         'story_image_id' => StoryImageFixture::DATA['story-image-second']['id'],
         'story_theme_ids' => [
-            StoryThemeFixture::DATA['story-theme-orientation']['children']['story-theme-heterosexual']['id'],
-            StoryThemeFixture::DATA['story-theme-place']['children']['story-theme-home']['id'],
-            StoryThemeFixture::DATA['story-theme-number']['children']['story-theme-couple']['id'],
+            StoryThemeFixture::DATA['story-theme-heterosexual']['id'],
+            StoryThemeFixture::DATA['story-theme-home']['id'],
+            StoryThemeFixture::DATA['story-theme-couple']['id'],
         ],
     ];
 
@@ -225,7 +225,7 @@ final class StoryCreateActionTest extends AbstractStoryActionTest
             'content' => self::$storyData['content'],
             'extract' => self::$storyData['extract'],
             'language_id' => self::$storyData['language_id'],
-            'parent_id' => StoryFixture::DATA['story-second']['children']['story-second-first']['id'],
+            'parent_id' => StoryFixture::DATA['story-second-first']['id'],
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
         ], [

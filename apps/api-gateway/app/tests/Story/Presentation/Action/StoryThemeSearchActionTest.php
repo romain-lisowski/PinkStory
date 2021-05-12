@@ -35,7 +35,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     public function testSucceededNoLogginButFrench(): void
     {
         // change locale
-        self::$httpUri = '/story-theme/search?_locale=fr';
+        self::$httpUri = self::$httpUri.'?_locale=fr';
 
         $this->checkSucceeded([], [
             'language_reference' => 'language-french',
@@ -45,7 +45,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     public function testSucceededLogginEnglish(): void
     {
         // change locale (force to test user setting override)
-        self::$httpUri = '/story-theme/search?_locale=fr';
+        self::$httpUri = self::$httpUri.'?_locale=fr';
 
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
@@ -67,9 +67,15 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
-        $storyThemeFixtures = array_values(StoryThemeFixture::DATA);
+        $storyThemeParentFixturesReferences = [];
 
-        $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyThemeFixtures, $responseData['story_themes']);
+        foreach (StoryThemeFixture::DATA as $storyThemeFixtureReference => $storyThemeFixture) {
+            if (true === empty($storyThemeFixture['parent_reference'])) {
+                $storyThemeParentFixturesReferences[] = $storyThemeFixtureReference;
+            }
+        }
+
+        $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyThemeParentFixturesReferences, $responseData['story_themes']);
     }
 
     protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void
@@ -77,17 +83,17 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         // nothing to check
     }
 
-    private function checkProcessHasBeenSucceededTreatment(array $responseData = [], array $options = [], array $storyThemeFixtures, array $storyThemesData)
+    private function checkProcessHasBeenSucceededTreatment(array $responseData = [], array $options = [], array $storyThemeFixtureReferences, array $storyThemesData)
     {
-        $this->assertCount(count($storyThemeFixtures), $storyThemesData);
+        $this->assertCount(count($storyThemeFixtureReferences), $storyThemesData);
 
-        foreach ($storyThemesData as $i => $data) {
-            $this->assertEquals($storyThemeFixtures[$i]['id'], $data['id']);
-            $this->assertEquals($storyThemeFixtures[$i]['translations'][$options['language_reference']]['title'], $data['title']);
-            $this->assertEquals((new AsciiSlugger())->slug($storyThemeFixtures[$i]['translations'][$options['language_reference']]['title'])->lower()->toString(), $data['title_slug']);
+        foreach ($storyThemesData as $i => $storyThemeData) {
+            $this->assertEquals(StoryThemeFixture::DATA[$storyThemeFixtureReferences[$i]]['id'], $storyThemeData['id']);
+            $this->assertEquals(StoryThemeFixture::DATA[$storyThemeFixtureReferences[$i]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
+            $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[$storyThemeFixtureReferences[$i]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
 
-            if (true === isset($data['children'])) {
-                $this->checkProcessHasBeenSucceededTreatment($responseData, $options, array_values($storyThemeFixtures[$i]['children']), $data['children']);
+            if (false === empty($data['children_reference'])) {
+                $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyThemeData['children_reference'], $storyThemeData['children']);
             }
         }
     }

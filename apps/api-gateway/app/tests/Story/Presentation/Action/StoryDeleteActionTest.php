@@ -95,7 +95,7 @@ final class StoryDeleteActionTest extends AbstractStoryActionTest
 
         try {
             // check story has been deleted - cascade
-            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second']['children']['story-second-first']['id'])->toRfc4122());
+            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second-first']['id'])->toRfc4122());
 
             $this->fail();
         } catch (StoryNoResultException $e) {
@@ -104,7 +104,7 @@ final class StoryDeleteActionTest extends AbstractStoryActionTest
 
         try {
             // check story has been deleted - cascade
-            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second']['children']['story-second-second']['id'])->toRfc4122());
+            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second-second']['id'])->toRfc4122());
 
             $this->fail();
         } catch (StoryNoResultException $e) {
@@ -119,10 +119,10 @@ final class StoryDeleteActionTest extends AbstractStoryActionTest
             $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second']['id'])->toRfc4122());
 
             // check story has not been deleted
-            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second']['children']['story-second-first']['id'])->toRfc4122());
+            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second-first']['id'])->toRfc4122());
 
             // check story has not been deleted
-            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second']['children']['story-second-second']['id'])->toRfc4122());
+            $story = $this->storyRepository->findOne(Uuid::fromString(StoryFixture::DATA['story-second-second']['id'])->toRfc4122());
 
             $this->assertTrue(true);
 

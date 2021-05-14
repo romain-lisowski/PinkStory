@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Language\Infrastructure\EventListener;
 
 use App\Language\Query\Repository\LanguageRepositoryInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class RequestLanguageListener
@@ -38,6 +39,6 @@ final class RequestLanguageListener
         }
 
         $request->attributes->set('current-language', $currentLanguage);
-        $request->attributes->set('current-reading-languages', $currentReadingLanguages);
+        $request->attributes->set('current-reading-languages', new ArrayCollection($currentReadingLanguages));
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Infrastructure\Doctrine\Repository;
 
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository;
+use App\Story\Query\Model\Story;
 use App\Story\Query\Model\StoryImage;
 use App\Story\Query\Model\StoryThemeFull;
 use App\Story\Query\Model\StoryThemeFullParent;
@@ -66,6 +67,46 @@ final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         }
 
         return $storyThemes;
+    }
+
+    public function populateStories(Collection $stories, string $languageId): void
+    {
+        $storyIds = Story::extractIds($stories->toArray());
+
+        $qb = $this->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, $languageId);
+
+        $qb->addSelect('storyHasStoryTheme.story_id as story_id')
+            ->join('storyTheme', 'sty_story_has_story_theme', 'storyHasStoryTheme', $qb->expr()->and(
+                $qb->expr()->eq('storyHasStoryTheme.story_theme_id', 'storyTheme.id'),
+                $qb->expr()->in('storyHasStoryTheme.story_id', ':story_ids')
+            ))
+            ->setParameter('story_ids', $storyIds, Connection::PARAM_STR_ARRAY)
+            ->join('storyTheme', 'sty_story_theme', 'storyThemeParent', $qb->expr()->and(
+                $qb->expr()->eq('storyThemeParent.id', 'storyTheme.parent_id'),
+            ))
+            ->orderBy('storyThemeParent.position', Criteria::ASC)
+            ->addOrderBy('storyTheme.position', Criteria::ASC)
+        ;
+
+        $datas = $qb->execute()->fetchAllAssociative();
+
+        foreach ($datas as $data) {
+            foreach ($stories as $story) {
+                if ($story->getId() === strval($data['story_id'])) {
+                    $storyTheme = (new StoryThemeMedium())
+                        ->setId(strval($data['id']))
+                        ->setTitle(strval($data['title']))
+                        ->setTitleSlug(strval($data['title_slug']))
+                    ;
+
+                    $story->addStoryTheme($storyTheme);
+
+                    break;
+                }
+            }
+        }
     }
 
     public function populateStoryImages(Collection $storyImages, string $languageId): void

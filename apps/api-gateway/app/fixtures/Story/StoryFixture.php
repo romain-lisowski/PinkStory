@@ -95,6 +95,21 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
                 'story-theme-extreme',
             ],
         ],
+        'story-fourth' => [
+            'id' => 'df3f4fdd-fe3c-40f0-8d5a-f98f00179a76',
+            'title' => 'Quatrième histoire',
+            'content' => 'Contenu de la quatrième histoire',
+            'extract' => 'Extrait de la quatrième histoire',
+            'user_reference' => 'user-leslie',
+            'language_reference' => 'language-french',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-home',
+                'story-theme-threesome',
+                'story-theme-bdsm-domination',
+                'story-theme-extreme',
+            ],
+        ],
     ];
 
     public function load(ObjectManager $manager)
@@ -107,8 +122,11 @@ class StoryFixture extends Fixture implements DependentFixtureInterface
                 ->setExtract($data['extract'])
                 ->setUser($this->getReference($data['user_reference']))
                 ->setLanguage($this->getReference($data['language_reference']))
-                ->setStoryImage($this->getReference($data['story_image_reference']))
             ;
+
+            if (false === empty($data['story_image_reference'])) {
+                $story->setStoryImage($this->getReference($data['story_image_reference']));
+            }
 
             if (false === empty($data['parent_reference'])) {
                 $story->setParent($this->getReference($data['parent_reference']));

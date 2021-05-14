@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\Request\ParamConverter;
 
+use App\Language\Query\Model\Language;
 use App\User\Infrastructure\Security\SecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
@@ -52,6 +53,10 @@ final class RequestBodyParamConverter implements ParamConverterInterface
                     $content[$field] = $request->attributes->get('current-language')->getId();
                 }
 
+                if ('request.current_reading_languages.ids' === $value) {
+                    $content[$field] = Language::extractIds($request->attributes->get('current-reading-languages')->toArray());
+                }
+
                 $enumMatches = [];
                 if (1 === preg_match('/^enum\.([\\\\\w+]+)::(\w+)$/', $value, $enumMatches)) {
                     $class = new \ReflectionClass($enumMatches[1]);
@@ -95,6 +100,10 @@ final class RequestBodyParamConverter implements ParamConverterInterface
                         }
 
                         if ('request.current_language.id' === $value) {
+                            return true;
+                        }
+
+                        if ('request.current_reading_languages.ids' === $value) {
                             return true;
                         }
 

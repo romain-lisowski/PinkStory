@@ -12,5 +12,7 @@ interface StoryThemeRepositoryInterface extends RepositoryInterface
 {
     public function findBySearch(StoryThemeSearchQuery $query): Collection;
 
+    public function populateStories(Collection $stories, string $languageId): void;
+
     public function populateStoryImages(Collection $storyImages, string $languageId): void;
 }

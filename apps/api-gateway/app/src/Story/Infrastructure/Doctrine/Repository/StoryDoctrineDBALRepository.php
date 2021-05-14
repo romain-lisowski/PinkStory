@@ -68,8 +68,6 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
             throw new StoryNoResultException();
         }
 
-        $stories = new ArrayCollection();
-
         $user = (new User())
             ->setId(strval($data['user_id']))
         ;
@@ -87,7 +85,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
             ->setLanguage($language)
         ;
 
-        $stories->add($story);
+        $stories = new ArrayCollection([$story]);
 
         $this->storyImageRepository->populateStories($stories, StoryImage::class);
 

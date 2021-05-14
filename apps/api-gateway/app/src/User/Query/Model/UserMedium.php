@@ -9,7 +9,9 @@ use App\Language\Query\Model\Language;
 class UserMedium extends User
 {
     private string $gender;
+    private string $genderReading;
     private string $name;
+    private string $nameSlug;
     private bool $imageDefined;
     private \DateTime $createdAt;
     private Language $language;
@@ -26,6 +28,18 @@ class UserMedium extends User
         return $this;
     }
 
+    public function getGenderReading(): string
+    {
+        return $this->genderReading;
+    }
+
+    public function setGenderReading(string $genderReading): self
+    {
+        $this->genderReading = $genderReading;
+
+        return $this;
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -34,6 +48,18 @@ class UserMedium extends User
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getNameSlug(): string
+    {
+        return $this->nameSlug;
+    }
+
+    public function setNameSlug(string $nameSlug): self
+    {
+        $this->nameSlug = $nameSlug;
 
         return $this;
     }

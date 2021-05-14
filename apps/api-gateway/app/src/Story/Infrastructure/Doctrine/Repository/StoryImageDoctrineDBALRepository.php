@@ -6,8 +6,10 @@ namespace App\Story\Infrastructure\Doctrine\Repository;
 
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository;
 use App\Story\Query\Model\Story;
+use App\Story\Query\Model\StoryImage;
 use App\Story\Query\Model\StoryImageFull;
 use App\Story\Query\Model\StoryImageMedium;
+use App\Story\Query\Model\StoryThemeMedium;
 use App\Story\Query\Query\StoryImageSearchQuery;
 use App\Story\Query\Repository\StoryImageRepositoryInterface;
 use App\Story\Query\Repository\StoryThemeRepositoryInterface;
@@ -33,7 +35,7 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
     {
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb, $query->getLanguageId());
+        $this->createBaseQueryBuilder($qb, StoryImageFull::class, $query->getLanguageId());
 
         $this->filterSearchQueryBuilderByStoryThemes($qb, $query->getStoryThemeIds());
 
@@ -56,7 +58,7 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
             $storyImages->add($storyImage);
         }
 
-        $this->storyThemeRepository->populateStoryImages($storyImages, $query->getLanguageId());
+        $this->storyThemeRepository->populateStoryImages($storyImages, StoryThemeMedium::class, $query->getLanguageId());
 
         return $storyImages;
     }
@@ -76,13 +78,13 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         return intval($data['total']);
     }
 
-    public function populateStories(Collection $stories, string $languageId): void
+    public function populateStories(Collection $stories, string $storyImageClass = StoryImage::class, ?string $languageId = null): void
     {
         $storyIds = Story::extractIds($stories->toArray());
 
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb, $languageId);
+        $this->createBaseQueryBuilder($qb, $storyImageClass, $languageId);
 
         $qb->addSelect('story.id as story_id')
             ->join('storyImage', 'sty_story', 'story', $qb->expr()->and(
@@ -97,11 +99,15 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         foreach ($datas as $data) {
             foreach ($stories as $story) {
                 if ($story->getId() === strval($data['story_id'])) {
-                    $storyImage = (new StoryImageMedium())
+                    $storyImage = (new $storyImageClass())
                         ->setId(strval($data['id']))
-                        ->setTitle(strval($data['title']))
-                        ->setTitleSlug(strval($data['title_slug']))
                     ;
+
+                    if (true === in_array($storyImageClass, [StoryImageMedium::class])) {
+                        $storyImage->setTitle(strval($data['title']))
+                            ->setTitleSlug(strval($data['title_slug']))
+                        ;
+                    }
 
                     $story->setStoryImage($storyImage);
 
@@ -111,17 +117,21 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
         }
     }
 
-    private function createBaseQueryBuilder(QueryBuilder $qb, string $languageId): void
+    private function createBaseQueryBuilder(QueryBuilder $qb, string $storyImageClass = StoryImage::class, ?string $languageId = null): void
     {
         $qb->select('storyImage.id as id')
             ->from('sty_story_image', 'storyImage')
-            ->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
-            ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->and(
-                $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
-                $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
-            ))
-            ->setParameter('language_id', $languageId)
         ;
+
+        if (true === in_array($storyImageClass, [StoryImageMedium::class, StoryImageFull::class])) {
+            $qb->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
+                ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->and(
+                    $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),
+                    $qb->expr()->eq('storyImageTranslation.language_id', ':language_id')
+                ))
+                ->setParameter('language_id', $languageId)
+            ;
+        }
     }
 
     private function filterSearchQueryBuilderByStoryThemes(QueryBuilder $qb, array $storyThemeIds = [])

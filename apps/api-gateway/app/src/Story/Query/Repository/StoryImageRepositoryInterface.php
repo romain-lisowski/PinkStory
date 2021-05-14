@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Query\Repository;
 
 use App\Common\Query\Repository\RepositoryInterface;
+use App\Story\Query\Model\StoryImage;
 use App\Story\Query\Query\StoryImageSearchQuery;
 use Doctrine\Common\Collections\Collection;
 
@@ -14,5 +15,5 @@ interface StoryImageRepositoryInterface extends RepositoryInterface
 
     public function countBySearch(StoryImageSearchQuery $query): int;
 
-    public function populateStories(Collection $stories, string $languageId): void;
+    public function populateStories(Collection $stories, string $storyImageClass = StoryImage::class, ?string $languageId = null): void;
 }

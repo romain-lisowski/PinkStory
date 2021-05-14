@@ -23,7 +23,7 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
     {
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb);
+        $this->createBaseQueryBuilder($qb, LanguageFull::class);
 
         $qb->orderBy('language.locale', Criteria::ASC);
 
@@ -48,7 +48,7 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
     {
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb);
+        $this->createBaseQueryBuilder($qb, LanguageCurrent::class);
 
         $qb->where($qb->expr()->eq('language.locale', ':locale'))
             ->setParameter('locale', $locale)
@@ -71,7 +71,7 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
     {
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb);
+        $this->createBaseQueryBuilder($qb, LanguageCurrent::class);
 
         $qb->join('language', 'usr_user', 'u', $qb->expr()->eq('u.language_id', 'language.id'))
             ->join('u', 'usr_access_token', 'accessToken', $qb->expr()->eq('accessToken.user_id', 'u.id'))
@@ -98,7 +98,7 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
     {
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb);
+        $this->createBaseQueryBuilder($qb, $languageClass);
 
         $qb->join('language', 'usr_user_has_reading_language', 'userHasReadingLanguage', $qb->expr()->and(
             $qb->expr()->eq('userHasReadingLanguage.language_id', 'language.id'),
@@ -112,28 +112,28 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
         $datas = $qb->execute()->fetchAllAssociative();
 
         foreach ($datas as $data) {
+            $language = (new $languageClass())
+                ->setId(strval($data['language_id']))
+            ;
+
             if (true === in_array($languageClass, [LanguageMedium::class, LanguageFull::class, LanguageCurrent::class])) {
-                $language = (new $languageClass())
-                    ->setId(strval($data['language_id']))
-                    ->setTitle(strval($data['language_title']))
+                $language->setTitle(strval($data['language_title']))
                     ->setLocale(strval($data['language_locale']))
                 ;
-
-                $user->addReadingLanguage($language);
-            } else {
-                $language = (new $languageClass())
-                    ->setId(strval($data['language_id']))
-                ;
-
-                $user->addReadingLanguage($language);
             }
+
+            $user->addReadingLanguage($language);
         }
     }
 
-    private function createBaseQueryBuilder(QueryBuilder $qb): void
+    private function createBaseQueryBuilder(QueryBuilder $qb, string $languageClass = Language::class): void
     {
-        $qb->select('language.id as language_id', 'language.title as language_title', 'language.locale as language_locale')
+        $qb->select('language.id as language_id')
             ->from('lng_language', 'language')
         ;
+
+        if (true === in_array($languageClass, [LanguageMedium::class, LanguageFull::class, LanguageCurrent::class])) {
+            $qb->addSelect('language.title as language_title', 'language.locale as language_locale');
+        }
     }
 }

@@ -97,9 +97,9 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
 
         $this->storyRatingRepository->populateStories($stories);
 
-        $this->storyImageRepository->populateStories($stories, $query->getLanguageId());
+        $this->storyImageRepository->populateStories($stories, StoryImageMedium::class, $query->getLanguageId());
 
-        $this->storyThemeRepository->populateStories($stories, $query->getLanguageId());
+        $this->storyThemeRepository->populateStories($stories, StoryThemeMedium::class, $query->getLanguageId());
 
         $this->populateStoryMediumParents($stories);
 

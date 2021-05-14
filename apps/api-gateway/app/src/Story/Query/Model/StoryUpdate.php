@@ -10,31 +10,19 @@ use App\User\Domain\Model\UserInterface;
 use App\User\Query\Model\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Annotation as Serializer;
 
-class StoryMedium extends Story implements UserableInterface
+class StoryUpdate extends Story implements UserableInterface
 {
     private string $title;
-    private string $titleSlug;
     private string $extract;
-    private int $storyRatingsTotal;
-    private ?float $rate;
-    private \DateTime $createdAt;
+    private string $content;
     private User $user;
     private Language $language;
     private ?StoryImage $storyImage;
     private Collection $storyThemes;
 
-    /**
-     * @Serializer\Ignore()
-     */
-    private array $rates;
-
     public function __construct()
     {
-        $this->rates = [];
-        $this->storyRatingsTotal = 0;
-        $this->rate = null;
         $this->storyImage = null;
         $this->storyThemes = new ArrayCollection();
     }
@@ -51,18 +39,6 @@ class StoryMedium extends Story implements UserableInterface
         return $this;
     }
 
-    public function getTitleSlug(): string
-    {
-        return $this->titleSlug;
-    }
-
-    public function setTitleSlug(string $titleSlug): self
-    {
-        $this->titleSlug = $titleSlug;
-
-        return $this;
-    }
-
     public function getExtract(): string
     {
         return $this->extract;
@@ -75,33 +51,14 @@ class StoryMedium extends Story implements UserableInterface
         return $this;
     }
 
-    public function getStoryRatingsTotal(): int
+    public function getContent(): string
     {
-        return $this->storyRatingsTotal;
+        return $this->content;
     }
 
-    public function getRate(): ?float
+    public function setContent(string $content): self
     {
-        return $this->rate;
-    }
-
-    public function addRate(int $rate): self
-    {
-        $this->rates[] = $rate;
-        $this->storyRatingsTotal = count($this->rates);
-        $this->rate = round(array_sum($this->rates) / $this->storyRatingsTotal, 1);
-
-        return $this;
-    }
-
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
+        $this->content = $content;
 
         return $this;
     }

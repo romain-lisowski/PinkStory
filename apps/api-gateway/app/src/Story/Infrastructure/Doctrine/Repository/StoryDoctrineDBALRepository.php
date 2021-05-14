@@ -6,17 +6,26 @@ namespace App\Story\Infrastructure\Doctrine\Repository;
 
 use App\Common\Domain\Translation\TranslatorInterface;
 use App\Common\Infrastructure\Doctrine\Repository\AbstractDoctrineDBALRepository;
+use App\Language\Query\Model\Language;
 use App\Language\Query\Model\LanguageMedium;
+use App\Story\Domain\Repository\StoryNoResultException;
 use App\Story\Query\Model\Story;
+use App\Story\Query\Model\StoryImage;
+use App\Story\Query\Model\StoryImageMedium;
 use App\Story\Query\Model\StoryMedium;
 use App\Story\Query\Model\StoryMediumChild;
 use App\Story\Query\Model\StoryMediumParent;
+use App\Story\Query\Model\StoryTheme;
+use App\Story\Query\Model\StoryThemeMedium;
+use App\Story\Query\Model\StoryUpdate;
+use App\Story\Query\Query\StoryGetForUpdateQuery;
 use App\Story\Query\Query\StorySearchQuery;
 use App\Story\Query\Repository\StoryImageRepositoryInterface;
 use App\Story\Query\Repository\StoryRatingRepositoryInterface;
 use App\Story\Query\Repository\StoryRepositoryInterface;
 use App\Story\Query\Repository\StoryThemeRepositoryInterface;
 use App\User\Domain\Model\UserGender;
+use App\User\Query\Model\User;
 use App\User\Query\Model\UserMedium;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -42,11 +51,56 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
         $this->translator = $translator;
     }
 
+    public function findOneForUpdate(StoryGetForUpdateQuery $query): StoryUpdate
+    {
+        $qb = $this->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, StoryUpdate::class);
+
+        $qb->addSelect('story.content as story_content')
+            ->andWhere($qb->expr()->eq('story.id', ':story_id'))
+            ->setParameter('story_id', $query->getId())
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            throw new StoryNoResultException();
+        }
+
+        $stories = new ArrayCollection();
+
+        $user = (new User())
+            ->setId(strval($data['user_id']))
+        ;
+
+        $language = (new Language())
+            ->setId(strval($data['story_language_id']))
+        ;
+
+        $story = (new StoryUpdate())
+            ->setId(strval($data['story_id']))
+            ->setTitle(strval($data['story_title']))
+            ->setExtract(strval($data['story_extract']))
+            ->setContent(strval($data['story_content']))
+            ->setUser($user)
+            ->setLanguage($language)
+        ;
+
+        $stories->add($story);
+
+        $this->storyImageRepository->populateStories($stories, StoryImage::class);
+
+        $this->storyThemeRepository->populateStories($stories, StoryTheme::class);
+
+        return $story;
+    }
+
     public function findBySearch(StorySearchQuery $query): Collection
     {
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb, $query->getLanguageId());
+        $this->createBaseQueryBuilder($qb, StoryMedium::class);
 
         $qb->andWhere($qb->expr()->in('story.language_id', ':story_language_id'))
             ->setParameter('story_language_id', $query->getReadingLanguageIds(), Connection::PARAM_STR_ARRAY)
@@ -139,17 +193,29 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
         return intval($data['total']);
     }
 
-    private function createBaseQueryBuilder(QueryBuilder $qb): void
+    private function createBaseQueryBuilder(QueryBuilder $qb, string $storyClass = Story::class): void
     {
-        $qb->select('story.id as story_id', 'story.title as story_title', 'story.title_slug as story_title_slug', 'story.extract as story_extract', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
+        $qb->select('story.id as story_id')
             ->from('sty_story', 'story')
-            ->addSelect('story_language.id as story_language_id', 'story_language.title as story_language_title', 'story_language.locale as story_language_locale')
-            ->join('story', 'lng_language', 'story_language', $qb->expr()->eq('story_language.id', 'story.language_id'))
-            ->addSelect('u.id as user_id', 'u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.created_at as user_created_at')
-            ->join('story', 'usr_user', 'u', $qb->expr()->eq('u.id', 'story.user_id'))
-            ->addSelect('u_language.id as user_language_id', 'u_language.title as user_language_title', 'u_language.locale as user_language_locale')
-            ->join('u', 'lng_language', 'u_language', $qb->expr()->eq('u_language.id', 'u.language_id'))
         ;
+
+        if (true === in_array($storyClass, [StoryMedium::class, StoryUpdate::class])) {
+            $qb->addSelect('story.title as story_title', 'story.extract as story_extract')
+                ->addSelect('story_language.id as story_language_id')
+                ->join('story', 'lng_language', 'story_language', $qb->expr()->eq('story_language.id', 'story.language_id'))
+                ->addSelect('u.id as user_id')
+                ->join('story', 'usr_user', 'u', $qb->expr()->eq('u.id', 'story.user_id'))
+            ;
+        }
+
+        if (true === in_array($storyClass, [StoryMedium::class])) {
+            $qb->addSelect('story.title_slug as story_title_slug', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
+                ->addSelect('story_language.title as story_language_title', 'story_language.locale as story_language_locale')
+                ->addSelect('u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.created_at as user_created_at')
+                ->addSelect('u_language.id as user_language_id', 'u_language.title as user_language_title', 'u_language.locale as user_language_locale')
+                ->join('u', 'lng_language', 'u_language', $qb->expr()->eq('u_language.id', 'u.language_id'))
+            ;
+        }
     }
 
     private function filterSearchQueryBuilderByStoryThemes(QueryBuilder $qb, array $storyThemeIds = [])
@@ -258,7 +324,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
 
         $qb = $this->createQueryBuilder();
 
-        $this->createBaseQueryBuilder($qb);
+        $this->createBaseQueryBuilder($qb, StoryMedium::class);
 
         $qb->addSelect('child_story.id as child_story_id')
             ->join('story', 'sty_story', 'child_story', $qb->expr()->and(

@@ -17,7 +17,7 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  * @coversNothing
  */
-final class StoryGetForUpdateActionTest extends AbstractStoryThemeActionTest
+final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
 {
     protected function setUp(): void
     {

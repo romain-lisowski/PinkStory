@@ -155,7 +155,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
 
         $this->populateStoryMediumParents($stories);
 
-        $this->populateStoryMediumChildren($stories);
+        $this->populateStoryMediumChildren($stories, $query->getLanguageId());
 
         return $stories;
     }
@@ -313,7 +313,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
         }
     }
 
-    private function populateStoryMediumChildren(Collection $stories): void
+    private function populateStoryMediumChildren(Collection $stories, string $languageId): void
     {
         $storyMediumChildren = $stories->filter(function ($story) {
             return $story instanceof StoryMediumChild;
@@ -334,19 +334,31 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
 
         $datas = $qb->execute()->fetchAllAssociative();
 
-        $storyParents = new ArrayCollection();
+        $storyParents = [];
 
         foreach ($datas as $data) {
             foreach ($storyMediumChildren as $storyMediumChild) {
                 if ($storyMediumChild->getId() === strval($data['child_story_id'])) {
-                    $storyParent = $this->populateMedium($data);
-                    $storyMediumChild->setParent($storyParent);
-                    $storyParents->add($storyParent);
+                    // avoid duplication by checking story parent was already populate
+                    if (true === empty($storyParents[strval($data['story_id'])])) {
+                        $storyParent = $this->populateMedium($data);
+                        $storyParents[strval($data['story_id'])] = $storyParent;
+                    }
+
+                    $storyMediumChild->setParent($storyParents[strval($data['story_id'])]);
 
                     break;
                 }
             }
         }
+
+        $storyParents = new ArrayCollection(array_values($storyParents));
+
+        $this->storyRatingRepository->populateStories($storyParents);
+
+        $this->storyImageRepository->populateStories($storyParents, StoryImageMedium::class, $languageId);
+
+        $this->storyThemeRepository->populateStories($storyParents, StoryThemeMedium::class, $languageId);
 
         $this->populateStoryMediumParents($storyParents);
     }

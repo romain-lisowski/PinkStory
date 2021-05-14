@@ -22,4 +22,17 @@ abstract class AbstractStoryActionTest extends AbstractActionTest
 
         $this->storyRepository = self::$container->get('doctrine')->getManager()->getRepository(Story::class);
     }
+
+    protected function calculRate($storyRatingFixtures): ?float
+    {
+        $rates = array_map(function (array $storyRatingFixture) {
+            return $storyRatingFixture['rate'];
+        }, $storyRatingFixtures);
+
+        if (0 === count($rates)) {
+            return null;
+        }
+
+        return round(array_sum($rates) / count($rates), 1);
+    }
 }

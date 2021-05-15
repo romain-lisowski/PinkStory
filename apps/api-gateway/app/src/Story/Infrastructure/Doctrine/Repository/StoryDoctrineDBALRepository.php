@@ -10,6 +10,9 @@ use App\Language\Query\Model\Language;
 use App\Language\Query\Model\LanguageMedium;
 use App\Story\Domain\Repository\StoryNoResultException;
 use App\Story\Query\Model\Story;
+use App\Story\Query\Model\StoryFull;
+use App\Story\Query\Model\StoryFullChild;
+use App\Story\Query\Model\StoryFullParent;
 use App\Story\Query\Model\StoryImage;
 use App\Story\Query\Model\StoryImageMedium;
 use App\Story\Query\Model\StoryMedium;
@@ -19,6 +22,7 @@ use App\Story\Query\Model\StoryTheme;
 use App\Story\Query\Model\StoryThemeMedium;
 use App\Story\Query\Model\StoryUpdate;
 use App\Story\Query\Query\StoryGetForUpdateQuery;
+use App\Story\Query\Query\StoryGetQuery;
 use App\Story\Query\Query\StorySearchQuery;
 use App\Story\Query\Repository\StoryImageRepositoryInterface;
 use App\Story\Query\Repository\StoryRatingRepositoryInterface;
@@ -49,6 +53,99 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
         $this->storyRatingRepository = $storyRatingRepository;
         $this->storyThemeRepository = $storyThemeRepository;
         $this->translator = $translator;
+    }
+
+    public function findOne(StoryGetQuery $query): StoryFull
+    {
+        $qb = $this->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, StoryFull::class);
+
+        $qb->addSelect('story.content as story_content')
+            ->andWhere($qb->expr()->eq('story.id', ':story_id'))
+            ->setParameter('story_id', $query->getId())
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            throw new StoryNoResultException();
+        }
+
+        $userLanguage = (new LanguageMedium())
+            ->setId(strval($data['user_language_id']))
+            ->setTitle(strval($data['user_language_title']))
+            ->setLocale(strval($data['user_language_locale']))
+        ;
+
+        $user = (new UserMedium())
+            ->setId(strval($data['user_id']))
+            ->setGender(strval($data['user_gender']))
+            ->setGenderReading(UserGender::getReadingChoice(strval($data['user_gender']), $this->translator))
+            ->setName(strval($data['user_name']))
+            ->setNameSlug(strval($data['user_name_slug']))
+            ->setImageDefined(boolval($data['user_image_defined']))
+            ->setCreatedAt(new \DateTime(strval($data['user_created_at'])))
+            ->setLanguage($userLanguage)
+        ;
+
+        $language = (new LanguageMedium())
+            ->setId(strval($data['story_language_id']))
+            ->setTitle(strval($data['story_language_title']))
+            ->setLocale(strval($data['story_language_locale']))
+        ;
+
+        $stories = new ArrayCollection();
+        $storyClass = (null !== $data['story_parent_id']) ? StoryFullChild::class : StoryFullParent::class;
+
+        $story = (new $storyClass())
+            ->setId(strval($data['story_id']))
+            ->setTitle(strval($data['story_title']))
+            ->setTitleSlug(strval($data['story_title_slug']))
+            ->setExtract(strval($data['story_extract']))
+            ->setContent(strval($data['story_content']))
+            ->setCreatedAt(new \DateTime(strval($data['story_created_at'])))
+            ->setUser($user)
+            ->setLanguage($language)
+        ;
+
+        $stories->add($story);
+
+        if (null === $data['story_parent_id']) {
+            $storyChildren = $this->findChildren($story->getId());
+            $story->setChildren($storyChildren);
+            $stories = new ArrayCollection(array_merge($stories->toArray(), $storyChildren->toArray()));
+        } else {
+            $storyParent = $this->findParent(strval($data['story_parent_id']));
+            $story->setParent($storyParent);
+            $stories->add($storyParent);
+
+            $storyPrevious = $this->findPrevious(strval($data['story_parent_id']), intval($data['story_position']));
+
+            if (null !== $storyPrevious) {
+                $story->setPrevious($storyPrevious);
+                $stories->add($storyPrevious);
+            }
+
+            $storyNext = $this->findNext(strval($data['story_parent_id']), intval($data['story_position']));
+
+            if (null !== $storyNext) {
+                $story->setNext($storyNext);
+                $stories->add($storyNext);
+            }
+        }
+
+        $this->storyRatingRepository->populateStories($stories);
+
+        $this->storyImageRepository->populateStories($stories, StoryImageMedium::class, $query->getLanguageId());
+
+        $this->storyThemeRepository->populateStories($stories, StoryThemeMedium::class, $query->getLanguageId());
+
+        $this->populateStoryMediumParents($stories);
+
+        $this->populateStoryMediumChildren($stories, $query->getLanguageId());
+
+        return $story;
     }
 
     public function findOneForUpdate(StoryGetForUpdateQuery $query): StoryUpdate
@@ -197,7 +294,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
             ->from('sty_story', 'story')
         ;
 
-        if (true === in_array($storyClass, [StoryMedium::class, StoryUpdate::class])) {
+        if (true === in_array($storyClass, [StoryMedium::class, StoryUpdate::class, StoryFull::class])) {
             $qb->addSelect('story.title as story_title', 'story.extract as story_extract')
                 ->addSelect('story_language.id as story_language_id')
                 ->join('story', 'lng_language', 'story_language', $qb->expr()->eq('story_language.id', 'story.language_id'))
@@ -206,7 +303,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
             ;
         }
 
-        if (true === in_array($storyClass, [StoryMedium::class])) {
+        if (true === in_array($storyClass, [StoryMedium::class, StoryFull::class])) {
             $qb->addSelect('story.title_slug as story_title_slug', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
                 ->addSelect('story_language.title as story_language_title', 'story_language.locale as story_language_locale')
                 ->addSelect('u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.created_at as user_created_at')
@@ -216,24 +313,96 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
         }
     }
 
-    private function filterSearchQueryBuilderByStoryThemes(QueryBuilder $qb, array $storyThemeIds = [])
+    private function findChildren(string $parentId): Collection
     {
-        if (count($storyThemeIds) > 0) {
-            $subQb = $this->createQueryBuilder();
-            $subQb->select('story_theme_id')
-                ->from('sty_story_has_story_theme', 'storyHasStoryTheme')
-                ->where($subQb->expr()->eq('storyHasStoryTheme.story_id', 'story.id'))
-            ;
+        $qb = $this->createQueryBuilder();
 
-            $i = 0;
-            foreach ($storyThemeIds as $storyThemeId) {
-                $qb->andWhere($qb->expr()->in(':story_theme_id_'.$i, $subQb->getSQL()))
-                    ->setParameter('story_theme_id_'.$i, $storyThemeId)
-                ;
+        $this->createBaseQueryBuilder($qb, StoryMedium::class);
 
-                ++$i;
-            }
+        $qb->andWhere($qb->expr()->eq('story.parent_id', ':story_parent_id'))
+            ->setParameter('story_parent_id', $parentId)
+            ->orderBy('story.position', Criteria::ASC)
+        ;
+
+        $datas = $qb->execute()->fetchAllAssociative();
+
+        $stories = new ArrayCollection();
+
+        foreach ($datas as $data) {
+            $story = $this->populateMedium($data);
+            $stories->add($story);
         }
+
+        return $stories;
+    }
+
+    private function findParent(string $id): StoryMedium
+    {
+        $qb = $this->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, StoryMedium::class);
+
+        $qb->andWhere($qb->expr()->eq('story.id', ':story_id'))
+            ->setParameter('story_id', $id)
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            throw new StoryNoResultException();
+        }
+
+        return $this->populateMedium($data);
+    }
+
+    private function findPrevious(string $parentId, int $position): ?StoryMedium
+    {
+        $qb = $this->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, StoryMedium::class);
+
+        $qb->andWhere($qb->expr()->and(
+            $qb->expr()->eq('story.parent_id', ':story_parent_id'),
+            $qb->expr()->lt('story.position', ':story_position'),
+        ))
+            ->setParameter('story_parent_id', $parentId)
+            ->setParameter('story_position', $position)
+            ->orderBy('story.position', Criteria::DESC)
+            ->setMaxResults(1)
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            return null;
+        }
+
+        return $this->populateMedium($data);
+    }
+
+    private function findNext(string $parentId, int $position): ?StoryMedium
+    {
+        $qb = $this->createQueryBuilder();
+
+        $this->createBaseQueryBuilder($qb, StoryMedium::class);
+
+        $qb->andWhere($qb->expr()->andX(
+            $qb->expr()->eq('story.parent_id', ':story_parent_id'),
+            $qb->expr()->gt('story.position', ':story_position')
+        ))
+            ->setParameter('story_parent_id', $parentId)
+            ->setParameter('story_position', $position)
+            ->orderBy('story.position', Criteria::ASC)
+            ->setMaxResults(1)
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            return null;
+        }
+
+        return $this->populateMedium($data);
     }
 
     private function populateMedium(array $data): StoryMedium
@@ -361,5 +530,25 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
         $this->storyThemeRepository->populateStories($storyParents, StoryThemeMedium::class, $languageId);
 
         $this->populateStoryMediumParents($storyParents);
+    }
+
+    private function filterSearchQueryBuilderByStoryThemes(QueryBuilder $qb, array $storyThemeIds = [])
+    {
+        if (count($storyThemeIds) > 0) {
+            $subQb = $this->createQueryBuilder();
+            $subQb->select('story_theme_id')
+                ->from('sty_story_has_story_theme', 'storyHasStoryTheme')
+                ->where($subQb->expr()->eq('storyHasStoryTheme.story_id', 'story.id'))
+            ;
+
+            $i = 0;
+            foreach ($storyThemeIds as $storyThemeId) {
+                $qb->andWhere($qb->expr()->in(':story_theme_id_'.$i, $subQb->getSQL()))
+                    ->setParameter('story_theme_id_'.$i, $storyThemeId)
+                ;
+
+                ++$i;
+            }
+        }
     }
 }

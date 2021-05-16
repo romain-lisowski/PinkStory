@@ -21,4 +21,18 @@ abstract class AbstractDoctrineDBALRepository implements RepositoryInterface
     {
         return $this->entityManager->getConnection()->createQueryBuilder();
     }
+
+    protected function isInstanceOf(string $className, array $classNamesExpected): bool
+    {
+        foreach ($classNamesExpected as $classNameExpected) {
+            if (
+                $className === $classNameExpected
+                || true === is_subclass_of($className, $classNameExpected)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

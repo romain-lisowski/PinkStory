@@ -116,7 +116,7 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
                 ->setId(strval($data['language_id']))
             ;
 
-            if (true === in_array($languageClass, [LanguageMedium::class, LanguageFull::class, LanguageCurrent::class])) {
+            if (true === $this->isInstanceOf($languageClass, [LanguageMedium::class])) {
                 $language->setTitle(strval($data['language_title']))
                     ->setLocale(strval($data['language_locale']))
                 ;
@@ -132,7 +132,7 @@ final class LanguageDoctrineDBALRepository extends AbstractDoctrineDBALRepositor
             ->from('lng_language', 'language')
         ;
 
-        if (true === in_array($languageClass, [LanguageMedium::class, LanguageFull::class, LanguageCurrent::class])) {
+        if (true === $this->isInstanceOf($languageClass, [LanguageMedium::class])) {
             $qb->addSelect('language.title as language_title', 'language.locale as language_locale');
         }
     }

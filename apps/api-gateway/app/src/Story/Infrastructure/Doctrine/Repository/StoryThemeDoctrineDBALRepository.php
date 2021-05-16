@@ -100,7 +100,7 @@ final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALReposit
                         ->setId(strval($data['id']))
                     ;
 
-                    if (true === in_array($storyThemeClass, [StoryThemeMedium::class])) {
+                    if (true === $this->isInstanceOf($storyThemeClass, [StoryThemeMedium::class])) {
                         $storyTheme->setTitle(strval($data['title']))
                             ->setTitleSlug(strval($data['title_slug']))
                         ;
@@ -144,7 +144,7 @@ final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALReposit
                         ->setId(strval($data['id']))
                     ;
 
-                    if (true === in_array($storyThemeClass, [StoryThemeMedium::class])) {
+                    if (true === $this->isInstanceOf($storyThemeClass, [StoryThemeMedium::class])) {
                         $storyTheme->setTitle(strval($data['title']))
                             ->setTitleSlug(strval($data['title_slug']))
                         ;
@@ -164,7 +164,7 @@ final class StoryThemeDoctrineDBALRepository extends AbstractDoctrineDBALReposit
             ->from('sty_story_theme', 'storyTheme')
         ;
 
-        if (true === in_array($storyThemeClass, [StoryThemeMedium::class, StoryThemeFull::class])) {
+        if (true === $this->isInstanceOf($storyThemeClass, [StoryThemeMedium::class])) {
             $qb->addSelect('storyTheme.parent_id as parent_id')
                 ->addSelect('storyThemeTranslation.title as title', 'storyThemeTranslation.title_slug as title_slug')
                 ->join('storyTheme', 'sty_story_theme_translation', 'storyThemeTranslation', $qb->expr()->and(

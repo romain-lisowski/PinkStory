@@ -103,7 +103,7 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
                         ->setId(strval($data['id']))
                     ;
 
-                    if (true === in_array($storyImageClass, [StoryImageMedium::class])) {
+                    if (true === $this->isInstanceOf($storyImageClass, [StoryImageMedium::class])) {
                         $storyImage->setTitle(strval($data['title']))
                             ->setTitleSlug(strval($data['title_slug']))
                         ;
@@ -123,7 +123,7 @@ final class StoryImageDoctrineDBALRepository extends AbstractDoctrineDBALReposit
             ->from('sty_story_image', 'storyImage')
         ;
 
-        if (true === in_array($storyImageClass, [StoryImageMedium::class, StoryImageFull::class])) {
+        if (true === $this->isInstanceOf($storyImageClass, [StoryImageMedium::class])) {
             $qb->addSelect('storyImageTranslation.title as title', 'storyImageTranslation.title_slug as title_slug')
                 ->join('storyImage', 'sty_story_image_translation', 'storyImageTranslation', $qb->expr()->and(
                     $qb->expr()->eq('storyImageTranslation.story_image_id', 'storyImage.id'),

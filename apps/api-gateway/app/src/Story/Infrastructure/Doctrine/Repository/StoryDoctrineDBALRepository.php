@@ -294,7 +294,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
             ->from('sty_story', 'story')
         ;
 
-        if (true === in_array($storyClass, [StoryMedium::class, StoryUpdate::class, StoryFull::class])) {
+        if (true === $this->isInstanceOf($storyClass, [StoryMedium::class, StoryUpdate::class])) {
             $qb->addSelect('story.title as story_title', 'story.extract as story_extract')
                 ->addSelect('story_language.id as story_language_id')
                 ->join('story', 'lng_language', 'story_language', $qb->expr()->eq('story_language.id', 'story.language_id'))
@@ -303,7 +303,7 @@ final class StoryDoctrineDBALRepository extends AbstractDoctrineDBALRepository i
             ;
         }
 
-        if (true === in_array($storyClass, [StoryMedium::class, StoryFull::class])) {
+        if (true === $this->isInstanceOf($storyClass, [StoryMedium::class])) {
             $qb->addSelect('story.title_slug as story_title_slug', 'story.created_at as story_created_at', 'story.parent_id as story_parent_id', 'story.position as story_position')
                 ->addSelect('story_language.title as story_language_title', 'story_language.locale as story_language_locale')
                 ->addSelect('u.gender as user_gender', 'u.name as user_name', 'u.name_slug as user_name_slug', 'u.image_defined as user_image_defined', 'u.created_at as user_created_at')

@@ -3,29 +3,52 @@
 namespace App\Fixture\Story;
 
 use App\Fixture\User\UserFixture;
-use App\Story\Model\Entity\StoryRating;
+use App\Story\Domain\Model\StoryRating;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-final class StoryRatingFixture extends Fixture implements DependentFixtureInterface
+class StoryRatingFixture extends Fixture implements DependentFixtureInterface
 {
+    public const DATA = [
+        'story-first' => [
+            'story-rating-story-first-yannis' => [
+                'rate' => 4,
+                'user_reference' => 'user-yannis',
+            ],
+            'story-rating-story-first-romain' => [
+                'rate' => 5,
+                'user_reference' => 'user-romain',
+            ],
+            'story-rating-story-first-leslie' => [
+                'rate' => 5,
+                'user_reference' => 'user-leslie',
+            ],
+            'story-rating-story-first-juliette' => [
+                'rate' => 4,
+                'user_reference' => 'user-juliette',
+            ],
+            'story-rating-story-first-john' => [
+                'rate' => 5,
+                'user_reference' => 'user-john',
+            ],
+        ],
+    ];
+
     public function load(ObjectManager $manager)
     {
-        $storyRating = new StoryRating(4, $this->getReference('story-first'), $this->getReference('user-yannis'));
-        $manager->persist($storyRating);
+        foreach (self::DATA as $storyReference => $storyRatings) {
+            foreach ($storyRatings as $storyRatingReference => $data) {
+                $storyRating = (new StoryRating())
+                    ->setRate($data['rate'])
+                    ->setStory($this->getReference($storyReference))
+                    ->setUser($this->getReference($data['user_reference']))
+            ;
 
-        $storyRating = new StoryRating(5, $this->getReference('story-first'), $this->getReference('user-romain'));
-        $manager->persist($storyRating);
-
-        $storyRating = new StoryRating(5, $this->getReference('story-first'), $this->getReference('user-leslie'));
-        $manager->persist($storyRating);
-
-        $storyRating = new StoryRating(4, $this->getReference('story-second'), $this->getReference('user-yannis'));
-        $manager->persist($storyRating);
-
-        $storyRating = new StoryRating(4, $this->getReference('story-second'), $this->getReference('user-romain'));
-        $manager->persist($storyRating);
+                $manager->persist($storyRating);
+                $this->addReference($storyRatingReference, $storyRating);
+            }
+        }
 
         $manager->flush();
     }

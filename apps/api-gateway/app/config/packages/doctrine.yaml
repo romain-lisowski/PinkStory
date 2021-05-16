@@ -1,6 +1,10 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '13'
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -9,24 +13,24 @@ doctrine:
             App:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Model/Entity'
-                prefix: 'App\Model\Entity'
+                dir: '%kernel.project_dir%/src/Common/Domain/Model'
+                prefix: 'App\Common\Domain\Model'
                 alias: App
             App\Language:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Language/Model/Entity'
-                prefix: 'App\Language\Model\Entity'
+                dir: '%kernel.project_dir%/src/Language/Domain/Model'
+                prefix: 'App\Language\Domain\Model'
                 alias: AppLanguage
-            App\User:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/User/Model/Entity'
-                prefix: 'App\User\Model\Entity'
-                alias: AppUser
             App\Story:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Story/Model/Entity'
-                prefix: 'App\Story\Model\Entity'
+                dir: '%kernel.project_dir%/src/Story/Domain/Model'
+                prefix: 'App\Story\Domain\Model'
                 alias: AppStory
+            App\User:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/User/Domain/Model'
+                prefix: 'App\User\Domain\Model'
+                alias: AppUser

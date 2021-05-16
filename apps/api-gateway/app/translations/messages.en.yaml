@@ -1,54 +1,112 @@
-exception:
-    access_denied: Access denied.
-    child_depth: Item with parent referenced can't be linked.
-    error: An error occured.
-    image_upload: An error occured during image upload.
-    invalid_ssl_key: The SSL key is not valid.
-    position_update: An error occured during position update.
+exception: An error occured.
 
 file:
     exception:
         image_upload: An error occured during image upload.
-        image_delete: An error occured during image delete.
+        image_delete: An error occured during image deletion.
 
-form:
+model:
     exception:
-        invalid_form: The form is not valid.
+        child_depth: Depth limit reached.
+        position_update: An error occured during position update.
 
-story:
+repository:
     exception:
-        story_theme_depth: Only child theme can be linked.
+        no_result_exception: No result was found for query although at least one row was expected.
 
-user:
+request:
+    param_converter:
+        request_body:
+            exception:
+                request_body_param_conversion_failed: Some errors occured during request body conversion process.
+                request_body_param_missing_mandatory: Some mandatory params are missing.
+
+security:
     exception:
-        bad_credentials_exception: Bad credentials.
-        invalid_token: No token provided.
-        no_token_provided: No token provided.
-    validator:
-        email_match: The email adresses must match.
-        invalid_email: The email address is not valid.
-        password_match: The passwords must match.
-        password_strenght: The password is not complex enough.
-
-user_gender:
-    value:
-        undefined: Undefined
-        male: Man
-        female: Woman
-        other: Other
-
-user_role:
-    value:
-        role_god: God
-        role_admin: Admin
-        role_moderator: Moderator
-        role_editor: Editor
-        role_user: User
-
-user_status:
-    value:
-        activated: Activated
-        blocked: Blocked
+        access_denied: Access denied.
 
 validator:
-    exception: The validator reports errors.
+    exception:
+        validation_failed: Some errors occured during validation process.
+
+access_token:
+    repository:
+            no_result_exception: No access token was found for query although at least one was expected.
+    validator:
+        constraint:
+            bad_credentials: Bad credentials.
+
+language:
+    repository:
+        exception:
+            no_result_exception: No language was found for query although at least one was expected.
+    validator:
+        constraint:
+            language_not_found: This language doesn't exist.
+
+story:
+    repository:
+        exception:
+            no_result_exception: No story was found for query although at least one was expected.
+    validator:
+        constraint:
+            story_not_found: This story doesn't exist.
+            children_position_not_found: New position for each child needs to be specify.
+
+story_image:
+    repository:
+        exception:
+            no_result_exception: No story image was found for query although at least one was expected.
+    validator:
+        constraint:
+            story_image_not_found: This story image doesn't exist.
+
+story_rating:
+    repository:
+        exception:
+            no_result_exception: No story rating was found for query although at least one was expected.
+
+story_theme:
+    model:
+        exception:
+            child_depth: Only second level story theme can be linked.
+    repository:
+        exception:
+            no_result_exception: No story theme was found for query although at least one was expected.
+    validator:
+        constraint:
+            story_theme_not_found: This story theme doesn't exist.
+
+user:
+    field:
+        user_gender:
+            value:
+                undefined: Undefined
+                male: Man
+                female: Woman
+                other: Other
+        user_role:
+            value:
+                god: God
+                admin: Admin
+                moderator: Moderator
+                editor: Editor
+                user: User
+        user_status:
+            value:
+                activated: Activated
+                blocked: Blocked
+    repository:
+        exception:
+            no_result_exception: No user was found for query although at least one was expected.
+    security:
+        token_authenticator:
+            exception:
+                invalid_token: Invalid token provided.
+    validator:
+        constraint:
+            email_not_found: This email doesn't exist.
+            invalid_email: The email address is not valid.
+            invalid_email_validation_code: The email validation code is not valid.
+            password_strenght_min: The password is not complex enough.
+            secret_not_found: This secret doesn't exist.

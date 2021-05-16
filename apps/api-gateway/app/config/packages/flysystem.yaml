@@ -1,0 +1,7 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        image.storage:
+            adapter: 'local'
+            options:
+                directory: '%env(resolve:PROJECT_IMAGE_STORAGE_PATH)%'

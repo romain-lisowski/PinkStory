@@ -5,16 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     project_name: '%env(resolve:PROJECT_NAME)%'
-    app_secret: '%env(resolve:APP_SECRET)%'
     project_api_gateway_dsn: '%env(resolve:PROJECT_API_GATEWAY_DSN)%'
     project_front_web_dsn: '%env(resolve:PROJECT_FRONT_WEB_DSN)%'
-    project_file_manager_dsn: '%env(resolve:PROJECT_FILE_MANAGER_DSN)%'
-    project_file_manager_path: '%env(resolve:PROJECT_FILE_MANAGER_PATH)%'
-    project_file_manager_image_path: '%env(resolve:PROJECT_FILE_MANAGER_IMAGE_PATH)%'
-    jwt_private_key: '%env(resolve:JWT_PRIVATE_KEY)%'
-    jwt_public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
-    jwt_pass_phrase: '%env(resolve:JWT_PASS_PHRASE)%'
-    jwt_algorithm: '%env(resolve:JWT_ALGORITHM)%'
+    project_image_storage_dsn: '%env(resolve:PROJECT_IMAGE_STORAGE_DSN)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,37 +18,60 @@ services:
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src'
+        resource: '../src/'
         exclude:
             - '../src/Kernel.php'
-            - '../src/Command/*Command.php'
-            - '../src/*/Command/*Command.php'
-            - '../src/Model'
-            - '../src/*/Model'
-            - '../src/Exception'
-            - '../src/*/Exception'
-            - '../src/Event'
-            - '../src/*/Event'
+            - '../src/**/*Exception.php'
+            - '../src/*/Domain/Command/*Command.php'
+            - '../src/*/Domain/Event/*Event.php'
+            - '../src/*/Domain/Model'
+            - '../src/*/Query/Query/*Query.php'
+            - '../src/*/Query/Model'
+            - '../src/User/Infrastructure/Security/User.php'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Language\Action\:
-        resource: '../src/Language/Action'
+    App\Language\Presentation\Action\:
+        resource: '../src/Language/Presentation/Action'
+        tags: ['controller.service_arguments']
+    
+    App\Story\Presentation\Action\:
+        resource: '../src/Story/Presentation/Action'
         tags: ['controller.service_arguments']
 
-    App\Story\Action\:
-        resource: '../src/Story/Action'
-        tags: ['controller.service_arguments']
-
-    App\User\Action\:
-        resource: '../src/User/Action'
-        tags: ['controller.service_arguments']
-        
-    App\Mercure\Action\:
-        resource: '../src/Mercure/Action'
+    App\User\Presentation\Action\:
+        resource: '../src/User/Presentation/Action'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Migration\Command\:
-        resource: '../migrations/Command/'
+    _instanceof:
+        App\Common\Domain\Command\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+        App\Common\Domain\Event\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
+        App\Common\Query\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+
+    App\Common\Infrastructure\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    App\Common\Infrastructure\Request\ParamConverter\RequestBodyParamConverter:
+        tags: 
+            - { name: 'request.param_converter', converter: 'request_body' }
+
+    App\Common\Infrastructure\Validator\ValidationFailedExceptionNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 10 }
+
+    App\Language\Infrastructure\EventListener\RequestLanguageListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 20 }
+
+    App\Language\Infrastructure\EventListener\RequestUserLanguageListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

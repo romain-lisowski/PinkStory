@@ -4,49 +4,146 @@ namespace App\Fixture\Story;
 
 use App\Fixture\Language\LanguageFixture;
 use App\Fixture\User\UserFixture;
-use App\Story\Model\Entity\Story;
+use App\Story\Domain\Model\Story;
+use App\Story\Domain\Model\StoryHasStoryTheme;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Uid\Uuid;
 
-final class StoryFixture extends Fixture implements DependentFixtureInterface
+class StoryFixture extends Fixture implements DependentFixtureInterface
 {
+    public const DATA = [
+        'story-first' => [
+            'id' => '067d92b2-fd2a-4815-9d75-bf7dee31aec8',
+            'title' => 'First story',
+            'content' => 'Content of the first story',
+            'extract' => 'Extract of the first story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
+            'story_image_reference' => 'story-image-first',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-office',
+                'story-theme-threesome',
+                'story-theme-bdsm-domination',
+                'story-theme-extreme',
+            ],
+        ],
+        'story-second' => [
+            'id' => '5f2a7bdb-f9aa-4bb0-9b02-0f1b751d4d6d',
+            'title' => 'Second story',
+            'content' => 'Content of the second story',
+            'extract' => 'Extract of the second story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
+            'story_image_reference' => 'story-image-second',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-office',
+            ],
+            'children_reference' => [
+                'story-second-first',
+                'story-second-second',
+            ],
+        ],
+        'story-second-first' => [
+            'id' => '55476103-f142-4f38-bd33-4b5348ea9d2d',
+            'title' => 'First chapter of the second story',
+            'content' => 'Content of the first chapter of the second story',
+            'extract' => 'Extract of the first chapter of the second story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
+            'story_image_reference' => 'story-image-second',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-office',
+                'story-theme-oral-sex',
+                'story-theme-soft',
+            ],
+            'parent_reference' => 'story-second',
+        ],
+        'story-second-second' => [
+            'id' => 'c889cb01-0992-45cf-857e-ffeabb318b20',
+            'title' => 'Second chapter of the second story',
+            'content' => 'Content of the second chapter of the second story',
+            'extract' => 'Extract of the second chapter of the second story',
+            'user_reference' => 'user-john',
+            'language_reference' => 'language-english',
+            'story_image_reference' => 'story-image-third',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-home',
+                'story-theme-sodomy',
+                'story-theme-hard',
+            ],
+            'parent_reference' => 'story-second',
+        ],
+        'story-third' => [
+            'id' => 'a89d68e2-e0a4-4b31-b04c-d2b2ccb6857e',
+            'title' => 'Troisième histoire',
+            'content' => 'Contenu de la troisième histoire',
+            'extract' => 'Extrait de la troisième histoire',
+            'user_reference' => 'user-leslie',
+            'language_reference' => 'language-french',
+            'story_image_reference' => 'story-image-first',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-office',
+                'story-theme-threesome',
+                'story-theme-bdsm-domination',
+                'story-theme-extreme',
+            ],
+        ],
+        'story-fourth' => [
+            'id' => 'df3f4fdd-fe3c-40f0-8d5a-f98f00179a76',
+            'title' => 'Quatrième histoire',
+            'content' => 'Contenu de la quatrième histoire',
+            'extract' => 'Extrait de la quatrième histoire',
+            'user_reference' => 'user-leslie',
+            'language_reference' => 'language-french',
+            'story_themes_reference' => [
+                'story-theme-heterosexual',
+                'story-theme-home',
+                'story-theme-threesome',
+                'story-theme-bdsm-domination',
+                'story-theme-extreme',
+            ],
+        ],
+    ];
+
     public function load(ObjectManager $manager)
     {
-        $storyParent = new Story('Première histoire', 'Contenu de la première histoire', 'Extrait de la première histoire', $this->getReference('user-romain'), $this->getReference('language-french'), null, null, $this->getReference('story-image-first'));
-        $storyParent->addStoryTheme($this->getReference('story-theme-heterosexual'))
-            ->addStoryTheme($this->getReference('story-theme-office'))
-            ->addStoryTheme($this->getReference('story-theme-threesome'))
-            ->addStoryTheme($this->getReference('story-theme-bdsm-domination'))
-            ->addStoryTheme($this->getReference('story-theme-extreme'))
-        ;
-        $manager->persist($storyParent);
-        $this->addReference('story-first', $storyParent);
+        foreach (self::DATA as $storyReference => $data) {
+            $story = (new Story())
+                ->setId(Uuid::fromString($data['id'])->toRfc4122())
+                ->setTitle($data['title'])
+                ->setContent($data['content'])
+                ->setExtract($data['extract'])
+                ->setUser($this->getReference($data['user_reference']))
+                ->setLanguage($this->getReference($data['language_reference']))
+            ;
 
-        $storyParent = new Story('Deuxième histoire', 'Contenu de la deuxième histoire', 'Extrait de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), null, null, $this->getReference('story-image-second'));
-        $storyParent->addStoryTheme($this->getReference('story-theme-heterosexual'))
-            ->addStoryTheme($this->getReference('story-theme-office'))
-        ;
-        $manager->persist($storyParent);
-        $this->addReference('story-second', $storyParent);
+            if (false === empty($data['story_image_reference'])) {
+                $story->setStoryImage($this->getReference($data['story_image_reference']));
+            }
 
-        $storyChild = new Story('Premier chapitre de la deuxième histoire', 'Contenu du premier chapitre de la deuxième histoire', 'Extrait du premier chapitre de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), $storyParent, null, $this->getReference('story-image-second'));
-        $storyChild->addStoryTheme($this->getReference('story-theme-heterosexual'))
-            ->addStoryTheme($this->getReference('story-theme-office'))
-            ->addStoryTheme($this->getReference('story-theme-oral-sex'))
-            ->addStoryTheme($this->getReference('story-theme-soft'))
-        ;
-        $manager->persist($storyChild);
-        $this->addReference('story-second-first', $storyChild);
+            if (false === empty($data['parent_reference'])) {
+                $story->setParent($this->getReference($data['parent_reference']));
+            }
 
-        $storyChild = new Story('Deuxième chapitre de la deuxième histoire', 'Contenu du deuxième chapitre de la deuxième histoire', 'Extrait du deuxième chapitre de la deuxième histoire', $this->getReference('user-leslie'), $this->getReference('language-french'), $storyParent, null, $this->getReference('story-image-third'));
-        $storyChild->addStoryTheme($this->getReference('story-theme-heterosexual'))
-            ->addStoryTheme($this->getReference('story-theme-home'))
-            ->addStoryTheme($this->getReference('story-theme-sodomy'))
-            ->addStoryTheme($this->getReference('story-theme-hard'))
-        ;
-        $manager->persist($storyChild);
-        $this->addReference('story-second-second', $storyChild);
+            foreach ($data['story_themes_reference'] as $storyThemeReference) {
+                (new StoryHasStoryTheme())
+                    ->setStory($story)
+                    ->setStoryTheme($this->getReference($storyThemeReference))
+                ;
+            }
+
+            $manager->persist($story);
+            $this->addReference($storyReference, $story);
+
+            sleep(1); // to force different created at (use for testing)
+        }
 
         $manager->flush();
     }
@@ -55,9 +152,9 @@ final class StoryFixture extends Fixture implements DependentFixtureInterface
     {
         return [
             LanguageFixture::class,
-            UserFixture::class,
-            StoryImageFixture::class,
             StoryThemeFixture::class,
+            StoryImageFixture::class,
+            UserFixture::class,
         ];
     }
 }

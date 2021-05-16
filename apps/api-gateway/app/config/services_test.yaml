@@ -1,3 +1,6 @@
+parameters:
+    project_image_storage_path: '%env(resolve:PROJECT_IMAGE_STORAGE_PATH)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:

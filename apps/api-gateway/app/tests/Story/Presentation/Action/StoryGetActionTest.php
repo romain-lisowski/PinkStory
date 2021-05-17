@@ -10,6 +10,7 @@ use App\Fixture\Story\StoryFixture;
 use App\Fixture\Story\StoryImageFixture;
 use App\Fixture\Story\StoryRatingFixture;
 use App\Fixture\Story\StoryThemeFixture;
+use App\Fixture\User\AccessTokenFixture;
 use App\Fixture\User\UserFixture;
 use App\User\Domain\Model\UserGender;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,11 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-first',
+            'editable' => false,
+            'user_editable' => false,
+            'language_editable' => false,
+            'story_image_editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -47,10 +53,15 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-second',
+            'editable' => false,
+            'user_editable' => false,
+            'language_editable' => false,
+            'story_image_editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
-    public function testSucceededNoUserLoggedInButEnglishStory22(): void
+    public function testSucceededNoUserLoggedInButEnglishStory21(): void
     {
         // change uri
         self::$httpUri = '/story/'.StoryFixture::DATA['story-second-first']['id'];
@@ -58,6 +69,68 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-second-first',
+            'editable' => false,
+            'user_editable' => false,
+            'language_editable' => false,
+            'story_image_editable' => false,
+            'story_theme_editable' => false,
+        ]);
+    }
+
+    public function testSucceededSameUserLoggedInStory21(): void
+    {
+        // change uri
+        self::$httpUri = '/story/'.StoryFixture::DATA['story-second-first']['id'];
+
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
+        $this->checkSucceeded([], [
+            'language_reference' => UserFixture::DATA['user-john']['language_reference'],
+            'story_expected_reference' => 'story-second-first',
+            'editable' => true,
+            'user_editable' => true,
+            'language_editable' => false,
+            'story_image_editable' => false,
+            'story_theme_editable' => false,
+        ]);
+    }
+
+    public function testSucceededDifferentUserLoggedInButAdminStory21(): void
+    {
+        // change uri
+        self::$httpUri = '/story/'.StoryFixture::DATA['story-second-first']['id'];
+
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
+
+        $this->checkSucceeded([], [
+            'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
+            'story_expected_reference' => 'story-second-first',
+            'editable' => true,
+            'user_editable' => true,
+            'language_editable' => true,
+            'story_image_editable' => true,
+            'story_theme_editable' => true,
+        ]);
+    }
+
+    public function testSucceededDifferentUserLoggedInStory21(): void
+    {
+        // change uri
+        self::$httpUri = '/story/'.StoryFixture::DATA['story-second-first']['id'];
+
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-juliette']['id'];
+
+        $this->checkSucceeded([], [
+            'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
+            'story_expected_reference' => 'story-second-first',
+            'editable' => false,
+            'user_editable' => false,
+            'language_editable' => false,
+            'story_image_editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -106,7 +179,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
                 $exists = false;
 
                 foreach ($responseData['story']['children'] as $storyChildData) {
-                    if ($storyChildData['id'] === StoryFixture::DATA[$storyChildFixtureReference]['id']) {
+                    if (StoryFixture::DATA[$storyChildFixtureReference]['id'] === $storyChildData['id']) {
                         $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyChildFixtureReference, $storyChildData);
 
                         $exists = true;
@@ -116,7 +189,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
                 }
 
                 if (false === $exists) {
-                    $this->fail('Story child does not exist.');
+                    $this->fail('Story child ['.StoryFixture::DATA[$storyChildFixtureReference]['id'].'] does not exist.');
                 }
             }
         }
@@ -135,6 +208,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(StoryFixture::DATA[$storyFixtureReference]['title'])->lower()->toString(), $storyData['title_slug']);
         $this->assertEquals(StoryFixture::DATA[$storyFixtureReference]['extract'], $storyData['extract']);
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['created_at']));
+        $this->assertEquals($options['editable'], $storyData['editable']);
 
         // story rating informations
         if (false === empty(StoryRatingFixture::DATA[$storyFixtureReference])) {
@@ -153,14 +227,17 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['name'])->lower()->toString(), $storyData['user']['name_slug']);
         $this->assertFalse($storyData['user']['image_defined']);
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['user']['created_at']));
+        $this->assertEquals($options['user_editable'], $storyData['user']['editable']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['id'], $storyData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['title'], $storyData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['locale'], $storyData['user']['language']['locale']);
+        $this->assertEquals($options['language_editable'], $storyData['user']['language']['editable']);
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['id'], $storyData['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['title'], $storyData['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['locale'], $storyData['language']['locale']);
+        $this->assertEquals($options['language_editable'], $storyData['language']['editable']);
 
         // story image informations
         if (false === empty(StoryFixture::DATA[$storyFixtureReference]['story_image_reference'])) {
@@ -168,6 +245,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['id'], $storyData['story_image']['id']);
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'], $storyData['story_image']['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyData['story_image']['title_slug']);
+            $this->assertEquals($options['story_image_editable'], $storyData['story_image']['editable']);
         } else {
             $this->assertNull($storyData['story_image']);
         }
@@ -179,6 +257,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$i]]['id'], $storyThemeData['id']);
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$i]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$i]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
+            $this->assertEquals($options['story_theme_editable'], $storyThemeData['editable']);
         }
     }
 }

@@ -30,7 +30,13 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
 
     public function testSucceededSameUserLoggedIn(): void
     {
-        $this->checkSucceeded();
+        $this->checkSucceeded([], [
+            'editable' => true,
+            'user_editable' => true,
+            'language_editable' => false,
+            'story_image_editable' => false,
+            'story_theme_editable' => false,
+        ]);
     }
 
     public function testSucceededDifferentUserLoggedInButAdmin(): void
@@ -38,7 +44,13 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSucceeded();
+        $this->checkSucceeded([], [
+            'editable' => true,
+            'user_editable' => true,
+            'language_editable' => true,
+            'story_image_editable' => true,
+            'story_theme_editable' => true,
+        ]);
     }
 
     public function testSucceededDifferentUserLoggedInButModerator(): void
@@ -46,7 +58,13 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
-        $this->checkSucceeded();
+        $this->checkSucceeded([], [
+            'editable' => true,
+            'user_editable' => true,
+            'language_editable' => true,
+            'story_image_editable' => true,
+            'story_theme_editable' => true,
+        ]);
     }
 
     public function testFailedUnauthorized(): void
@@ -85,16 +103,20 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         $this->assertEquals(StoryFixture::DATA['story-first']['title'], $responseData['story']['title']);
         $this->assertEquals(StoryFixture::DATA['story-first']['extract'], $responseData['story']['extract']);
         $this->assertEquals(StoryFixture::DATA['story-first']['content'], $responseData['story']['content']);
+        $this->assertEquals($options['editable'], $responseData['story']['editable']);
 
         // user informations
         $this->assertEquals(UserFixture::DATA[StoryFixture::DATA['story-first']['user_reference']]['id'], $responseData['story']['user']['id']);
+        $this->assertEquals($options['user_editable'], $responseData['story']['user']['editable']);
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA['story-first']['language_reference']]['id'], $responseData['story']['language']['id']);
+        $this->assertEquals($options['language_editable'], $responseData['story']['language']['editable']);
 
         // story image informations
         if (false === empty(StoryFixture::DATA['story-first']['story_image_reference'])) {
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA['story-first']['story_image_reference']]['id'], $responseData['story']['story_image']['id']);
+            $this->assertEquals($options['story_image_editable'], $responseData['story']['story_image']['editable']);
         } else {
             $this->assertNull($responseData['story']['story_image']);
         }
@@ -102,11 +124,13 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         // story themes informations
         $this->assertCount(count(StoryFixture::DATA['story-first']['story_themes_reference']), $responseData['story']['story_themes']);
 
-        foreach ($responseData['story']['story_themes'] as $i => $storyThemeData) {
+        foreach (StoryFixture::DATA['story-first']['story_themes_reference'] as $storyThemeFixtureReference) {
             $exists = false;
 
-            foreach (StoryFixture::DATA['story-first']['story_themes_reference'] as $storyThemeFixtureReference) {
+            foreach ($responseData['story']['story_themes'] as $i => $storyThemeData) {
                 if (StoryThemeFixture::DATA[$storyThemeFixtureReference]['id'] === $storyThemeData['id']) {
+                    $this->assertEquals($options['story_theme_editable'], $storyThemeData['editable']);
+
                     $exists = true;
 
                     break;
@@ -114,7 +138,7 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
             }
 
             if (false === $exists) {
-                $this->fail('Story theme does not exist.');
+                $this->fail('Story theme ['.StoryThemeFixture::DATA[$storyThemeFixtureReference]['id'].'] does not exist.');
             }
         }
     }

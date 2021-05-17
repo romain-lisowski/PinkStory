@@ -42,11 +42,47 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 4,
-            'story_expected_reference' => [
-                'story-first',
-                'story-second',
-                'story-second-first',
-                'story-second-second',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -62,9 +98,27 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-french',
             'total_count' => 2,
-            'story_expected_reference' => [
-                'story-third',
-                'story-fourth',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-third',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-fourth',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -83,11 +137,47 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'total_count' => 4,
-            'story_expected_reference' => [
-                'story-first',
-                'story-second',
-                'story-second-first',
-                'story-second-second',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-first',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -103,13 +193,67 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
             'total_count' => 6,
-            'story_expected_reference' => [
-                'story-first',
-                'story-second',
-                'story-second-first',
-                'story-second-second',
-                'story-third',
-                'story-fourth',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-first',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
+                [
+                    'reference' => 'story-third',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
+                [
+                    'reference' => 'story-fourth',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
             ],
         ]);
     }
@@ -124,9 +268,27 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 4,
-            'story_expected_reference' => [
-                'story-second-first',
-                'story-second-second',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-second-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -140,9 +302,27 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 4,
-            'story_expected_reference' => [
-                'story-second',
-                'story-first',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -152,11 +332,47 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'language_reference' => 'language-english',
             'total_count' => 4,
-            'story_expected_reference' => [
-                'story-first',
-                'story-second-second',
-                'story-second-first',
-                'story-second',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -168,7 +384,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 0,
-            'story_expected_reference' => [],
+            'stories_expected' => [],
         ]);
     }
 
@@ -179,9 +395,27 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 2,
-            'story_expected_reference' => [
-                'story-first',
-                'story-second',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -193,9 +427,27 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 2,
-            'story_expected_reference' => [
-                'story-second-second',
-                'story-second-first',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
+                [
+                    'reference' => 'story-second-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -209,8 +461,17 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 2,
-            'story_expected_reference' => [
-                'story-second-second',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-second-second',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -225,8 +486,17 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 1,
-            'story_expected_reference' => [
-                'story-first',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => false,
+                        'user_editable' => false,
+                        'language_editable' => false,
+                        'story_image_editable' => false,
+                        'story_theme_editable' => false,
+                    ],
+                ],
             ],
         ]);
     }
@@ -244,9 +514,27 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         ], [
             'language_reference' => 'language-french',
             'total_count' => 2,
-            'story_expected_reference' => [
-                'story-first',
-                'story-third',
+            'stories_expected' => [
+                [
+                    'reference' => 'story-first',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
+                [
+                    'reference' => 'story-third',
+                    'editables' => [
+                        'editable' => true,
+                        'user_editable' => true,
+                        'language_editable' => true,
+                        'story_image_editable' => true,
+                        'story_theme_editable' => true,
+                    ],
+                ],
             ],
         ]);
     }
@@ -254,10 +542,10 @@ final class StorySearchActionTest extends AbstractStoryActionTest
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
         $this->assertEquals($options['total_count'], $responseData['stories_total']);
-        $this->assertCount(count($options['story_expected_reference']), $responseData['stories']);
+        $this->assertCount(count($options['stories_expected']), $responseData['stories']);
 
         foreach ($responseData['stories'] as $i => $storyData) {
-            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $options['story_expected_reference'][$i], $storyData);
+            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $options['stories_expected'][$i]['reference'], $options['stories_expected'][$i]['editables'], $storyData);
         }
     }
 
@@ -266,7 +554,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         // nothing to check
     }
 
-    private function checkProcessHasBeenSucceededTreatment(array $responseData = [], array $options = [], string $storyFixtureReference, array $storyData)
+    private function checkProcessHasBeenSucceededTreatment(array $responseData = [], array $options = [], string $storyFixtureReference, array $storyFixtureEditables, array $storyData)
     {
         // story informations
         $this->assertEquals(StoryFixture::DATA[$storyFixtureReference]['id'], $storyData['id']);
@@ -274,6 +562,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(StoryFixture::DATA[$storyFixtureReference]['title'])->lower()->toString(), $storyData['title_slug']);
         $this->assertEquals(StoryFixture::DATA[$storyFixtureReference]['extract'], $storyData['extract']);
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['created_at']));
+        $this->assertEquals($storyFixtureEditables['editable'], $storyData['editable']);
 
         // story rating informations
         if (false === empty(StoryRatingFixture::DATA[$storyFixtureReference])) {
@@ -292,14 +581,17 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['name'])->lower()->toString(), $storyData['user']['name_slug']);
         $this->assertFalse($storyData['user']['image_defined']);
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['user']['created_at']));
+        $this->assertEquals($storyFixtureEditables['user_editable'], $storyData['user']['editable']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['id'], $storyData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['title'], $storyData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['locale'], $storyData['user']['language']['locale']);
+        $this->assertEquals($storyFixtureEditables['language_editable'], $storyData['user']['language']['editable']);
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['id'], $storyData['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['title'], $storyData['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['locale'], $storyData['language']['locale']);
+        $this->assertEquals($storyFixtureEditables['language_editable'], $storyData['language']['editable']);
 
         // story image informations
         if (false === empty(StoryFixture::DATA[$storyFixtureReference]['story_image_reference'])) {
@@ -307,6 +599,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['id'], $storyData['story_image']['id']);
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'], $storyData['story_image']['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyData['story_image']['title_slug']);
+            $this->assertEquals($storyFixtureEditables['story_image_editable'], $storyData['story_image']['editable']);
         } else {
             $this->assertNull($storyData['story_image']);
         }
@@ -318,11 +611,12 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$j]]['id'], $storyThemeData['id']);
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
+            $this->assertEquals($storyFixtureEditables['story_theme_editable'], $storyThemeData['editable']);
         }
 
         // story parent/children informations
         if (false === empty(StoryFixture::DATA[$storyFixtureReference]['parent_reference'])) {
-            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, StoryFixture::DATA[$storyFixtureReference]['parent_reference'], $storyData['parent']);
+            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, StoryFixture::DATA[$storyFixtureReference]['parent_reference'], $storyFixtureEditables, $storyData['parent']);
         } elseif (false === empty(StoryFixture::DATA[$storyFixtureReference]['children_reference'])) {
             $this->assertEquals(count(StoryFixture::DATA[$storyFixtureReference]['children_reference']), $storyData['children_total']);
         } else {

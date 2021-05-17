@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Test\Language\Presentation\Action;
 
 use App\Fixture\Language\LanguageFixture;
+use App\Fixture\User\AccessTokenFixture;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,7 +25,39 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
 
     public function testSucceeded(): void
     {
-        $this->checkSucceeded();
+        $this->checkSucceeded([], [
+            'editable' => false,
+        ]);
+    }
+
+    public function testSucceededLogginAdmin(): void
+    {
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
+
+        $this->checkSucceeded([], [
+            'editable' => true,
+        ]);
+    }
+
+    public function testSucceededLogginModerator(): void
+    {
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
+
+        $this->checkSucceeded([], [
+            'editable' => true,
+        ]);
+    }
+
+    public function testSucceededLogginUser(): void
+    {
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
+        $this->checkSucceeded([], [
+            'editable' => false,
+        ]);
     }
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
@@ -37,6 +70,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
             $this->assertEquals($languageFixtures[$i]['id'], $data['id']);
             $this->assertEquals($languageFixtures[$i]['title'], $data['title']);
             $this->assertEquals($languageFixtures[$i]['locale'], $data['locale']);
+            $this->assertEquals($options['editable'], $data['editable']);
         }
     }
 

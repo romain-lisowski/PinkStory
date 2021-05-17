@@ -31,11 +31,13 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         $this->checkSucceeded([], [
             'language_reference' => 'language-english',
             'total_count' => 3,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-third',
                 'story-image-second',
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -47,11 +49,13 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         $this->checkSucceeded([], [
             'language_reference' => 'language-french',
             'total_count' => 3,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-third',
                 'story-image-second',
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -66,11 +70,13 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'total_count' => 3,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-third',
                 'story-image-second',
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -82,11 +88,13 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
             'total_count' => 3,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-third',
                 'story-image-second',
                 'story-image-first',
             ],
+            'editable' => true,
+            'story_theme_editable' => true,
         ]);
     }
 
@@ -99,9 +107,11 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 1,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -114,10 +124,12 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 2,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-third',
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -131,9 +143,11 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 1,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -150,9 +164,11 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         ], [
             'language_reference' => 'language-french',
             'total_count' => 1,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-first',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -166,9 +182,11 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 2,
-            'story_image_expected_reference' => [
+            'story_images_expected_reference' => [
                 'story-image-third',
             ],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
@@ -183,26 +201,30 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         ], [
             'language_reference' => 'language-english',
             'total_count' => 2,
-            'story_image_expected_reference' => [],
+            'story_images_expected_reference' => [],
+            'editable' => false,
+            'story_theme_editable' => false,
         ]);
     }
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
     {
         $this->assertEquals($options['total_count'], $responseData['story_images_total']);
-        $this->assertCount(count($options['story_image_expected_reference']), $responseData['story_images']);
+        $this->assertCount(count($options['story_images_expected_reference']), $responseData['story_images']);
 
         foreach ($responseData['story_images'] as $i => $storyImageData) {
-            $this->assertEquals(StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['id'], $storyImageData['id']);
-            $this->assertEquals(StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['translations'][$options['language_reference']]['title'], $storyImageData['title']);
-            $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyImageData['title_slug']);
+            $this->assertEquals(StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['id'], $storyImageData['id']);
+            $this->assertEquals(StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['translations'][$options['language_reference']]['title'], $storyImageData['title']);
+            $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyImageData['title_slug']);
+            $this->assertEquals($options['editable'], $storyImageData['editable']);
 
-            $this->assertCount(count(StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['story_themes_reference']), $storyImageData['story_themes']);
+            $this->assertCount(count(StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['story_themes_reference']), $storyImageData['story_themes']);
 
             foreach ($storyImageData['story_themes'] as $j => $storyThemeData) {
-                $this->assertEquals(StoryThemeFixture::DATA[StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['story_themes_reference'][$j]]['id'], $storyThemeData['id']);
-                $this->assertEquals(StoryThemeFixture::DATA[StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
-                $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[StoryImageFixture::DATA[$options['story_image_expected_reference'][$i]]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
+                $this->assertEquals(StoryThemeFixture::DATA[StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['story_themes_reference'][$j]]['id'], $storyThemeData['id']);
+                $this->assertEquals(StoryThemeFixture::DATA[StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
+                $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[StoryImageFixture::DATA[$options['story_images_expected_reference'][$i]]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
+                $this->assertEquals($options['story_theme_editable'], $storyThemeData['editable']);
             }
         }
     }

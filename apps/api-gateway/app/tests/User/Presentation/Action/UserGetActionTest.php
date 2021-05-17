@@ -36,8 +36,9 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
-            'editable' => true,
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
+            'editable' => true,
+            'language_editable' => false,
         ]);
     }
 
@@ -47,8 +48,9 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
         $this->checkSucceeded([], [
-            'editable' => true,
             'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
+            'editable' => true,
+            'language_editable' => true,
         ]);
     }
 
@@ -58,8 +60,9 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
         $this->checkSucceeded([], [
-            'editable' => true,
             'language_reference' => UserFixture::DATA['user-leslie']['language_reference'],
+            'editable' => true,
+            'language_editable' => true,
         ]);
     }
 
@@ -69,16 +72,18 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-juliette']['id'];
 
         $this->checkSucceeded([], [
-            'editable' => false,
             'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
+            'editable' => false,
+            'language_editable' => false,
         ]);
     }
 
     public function testSucceededNoUserLoggedInButEnglish(): void
     {
         $this->checkSucceeded([], [
-            'editable' => false,
             'language_reference' => 'language-english',
+            'editable' => false,
+            'language_editable' => false,
         ]);
     }
 
@@ -88,8 +93,9 @@ final class UserGetActionTest extends AbstractUserActionTest
         self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'].'?_locale=fr';
 
         $this->checkSucceeded([], [
-            'editable' => false,
             'language_reference' => 'language-french',
+            'editable' => false,
+            'language_editable' => false,
         ]);
     }
 
@@ -129,20 +135,23 @@ final class UserGetActionTest extends AbstractUserActionTest
         $this->assertEquals(UserFixture::DATA['user-john']['name'], $responseData['user']['name']);
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA['user-john']['name'])->lower()->toString(), $responseData['user']['name_slug']);
         $this->assertFalse($responseData['user']['image_defined']);
+        $this->assertTrue(new DateTime() > new DateTime($responseData['user']['created_at']));
+        $this->assertEquals($options['editable'], $responseData['user']['editable']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['id'], $responseData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['title'], $responseData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['locale'], $responseData['user']['language']['locale']);
-        $this->assertTrue(new DateTime() > new DateTime($responseData['user']['created_at']));
-        $this->assertEquals($options['editable'], $responseData['user']['editable']);
+        $this->assertEquals($options['language_editable'], $responseData['user']['language']['editable']);
+
         $this->assertCount(count(UserFixture::DATA['user-john']['reading_language_references']), $responseData['user']['reading_languages']);
 
-        foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
+        foreach (UserFixture::DATA['user-john']['reading_language_references'] as $readingLanguageReference) {
             $exists = false;
 
-            foreach (UserFixture::DATA['user-john']['reading_language_references'] as $readingLanguageReference) {
+            foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
                 if (LanguageFixture::DATA[$readingLanguageReference]['id'] === $readingLanguage['id']) {
                     $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['title'], $readingLanguage['title']);
                     $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['locale'], $readingLanguage['locale']);
+                    $this->assertEquals($options['language_editable'], $readingLanguage['editable']);
 
                     $exists = true;
 
@@ -151,7 +160,7 @@ final class UserGetActionTest extends AbstractUserActionTest
             }
 
             if (false === $exists) {
-                $this->fail('Reading language does not exist.');
+                $this->fail('Reading language ['.LanguageFixture::DATA[$readingLanguageReference]['id'].'] does not exist.');
             }
         }
     }

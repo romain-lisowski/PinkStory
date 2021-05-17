@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\User\Presentation\Action;
 
+use App\Fixture\User\AccessTokenFixture;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,13 +17,28 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
     {
         self::$httpMethod = Request::METHOD_GET;
         self::$httpUri = '/account/update';
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         parent::setUp();
     }
 
     public function testSucceeded(): void
     {
-        $this->checkSucceeded();
+        $this->checkSucceeded([], [
+            'editable' => true,
+            'language_editable' => false,
+        ]);
+    }
+
+    public function testSucceededAdmin(): void
+    {
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
+
+        $this->checkSucceeded([], [
+            'editable' => true,
+            'language_editable' => true,
+        ]);
     }
 
     public function testFailedUnauthorized(): void
@@ -37,14 +53,18 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$currentUser->getName(), $responseData['user']['name']);
         $this->assertEquals(self::$currentUser->getEmail(), $responseData['user']['email']);
         $this->assertFalse($responseData['user']['image_defined']);
+        $this->assertEquals($options['editable'], $responseData['user']['editable']);
         $this->assertEquals(self::$currentUser->getLanguage()->getId(), $responseData['user']['language']['id']);
+        $this->assertEquals($options['language_editable'], $responseData['user']['language']['editable']);
+
         $this->assertCount(self::$currentUser->getReadingLanguages()->count(), $responseData['user']['reading_languages']);
 
-        foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
+        foreach (self::$currentUser->getReadingLanguages() as $userReadingLanguage) {
             $exists = false;
 
-            foreach (self::$currentUser->getReadingLanguages() as $userReadingLanguage) {
+            foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
                 if ($userReadingLanguage->getId() === $readingLanguage['id']) {
+                    $this->assertEquals($options['language_editable'], $readingLanguage['editable']);
                     $exists = true;
 
                     break;
@@ -52,7 +72,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
             }
 
             if (false === $exists) {
-                $this->fail('Reading language does not exist.');
+                $this->fail('Reading language ['.$userReadingLanguage->getId().'] does not exist.');
             }
         }
     }

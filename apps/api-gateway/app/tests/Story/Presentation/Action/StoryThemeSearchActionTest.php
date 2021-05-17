@@ -28,6 +28,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     public function testSucceededNoLogginButEnglish(): void
     {
         $this->checkSucceeded([], [
+            'editable' => false,
             'language_reference' => 'language-english',
         ]);
     }
@@ -38,6 +39,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         self::$httpUri = self::$httpUri.'?_locale=fr';
 
         $this->checkSucceeded([], [
+            'editable' => false,
             'language_reference' => 'language-french',
         ]);
     }
@@ -51,6 +53,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
         $this->checkSucceeded([], [
+            'editable' => false,
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
         ]);
     }
@@ -61,6 +64,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
         $this->checkSucceeded([], [
+            'editable' => true,
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
         ]);
     }
@@ -91,6 +95,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
             $this->assertEquals(StoryThemeFixture::DATA[$storyThemeFixtureReferences[$i]]['id'], $storyThemeData['id']);
             $this->assertEquals(StoryThemeFixture::DATA[$storyThemeFixtureReferences[$i]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[$storyThemeFixtureReferences[$i]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
+            $this->assertEquals($options['editable'], $storyThemeData['editable']);
 
             if (false === empty($data['children_reference'])) {
                 $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $storyThemeData['children_reference'], $storyThemeData['children']);

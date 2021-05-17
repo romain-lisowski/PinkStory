@@ -34,8 +34,22 @@ final class AccountAccessTokenSearchActionTest extends AbstractAccessTokenAction
     {
         $this->assertCount(self::$currentUser->getAccessTokens()->count(), $responseData['access_tokens']);
 
-        foreach (self::$currentUser->getAccessTokens() as $accessToken) {
-            $this->assertEquals($accessToken->getId(), $responseData['access_tokens'][0]['id']);
+        foreach (self::$currentUser->getAccessTokens() as $accessTokenFixture) {
+            $exists = false;
+
+            foreach ($responseData['access_tokens'] as $accessToken) {
+                if ($accessTokenFixture->getId() === $accessToken['id']) {
+                    $this->assertTrue($accessToken['editable']);
+                    $this->assertEquals(self::$currentUser->getId(), $accessToken['user']['id']);
+                    $this->assertTrue($accessToken['user']['editable']);
+
+                    $exists = true;
+                }
+            }
+
+            if (false === $exists) {
+                $this->fail('Access token ['.$accessTokenFixture->getId().'] does not exist.');
+            }
         }
     }
 

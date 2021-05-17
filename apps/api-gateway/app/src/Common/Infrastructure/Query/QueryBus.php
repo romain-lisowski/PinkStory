@@ -6,6 +6,7 @@ namespace App\Common\Infrastructure\Query;
 
 use App\Common\Query\Query\QueryBusInterface;
 use App\Common\Query\Query\QueryInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
@@ -20,11 +21,15 @@ final class QueryBus implements QueryBusInterface
 
     public function dispatch(QueryInterface $query): array
     {
-        $envelope = $this->bus->dispatch($query);
+        try {
+            $envelope = $this->bus->dispatch($query);
 
-        // get the value that was returned by the last message handler
-        $handledStamp = $envelope->last(HandledStamp::class);
+            // get the value that was returned by the last message handler
+            $handledStamp = $envelope->last(HandledStamp::class);
 
-        return $handledStamp->getResult();
+            return $handledStamp->getResult();
+        } catch (HandlerFailedException $e) {
+            throw $e->getPrevious();
+        }
     }
 }

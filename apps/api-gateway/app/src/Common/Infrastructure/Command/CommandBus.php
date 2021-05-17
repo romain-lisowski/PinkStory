@@ -6,6 +6,7 @@ namespace App\Common\Infrastructure\Command;
 
 use App\Common\Domain\Command\CommandBusInterface;
 use App\Common\Domain\Command\CommandInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
@@ -20,11 +21,15 @@ final class CommandBus implements CommandBusInterface
 
     public function dispatch(CommandInterface $command): array
     {
-        $envelope = $this->bus->dispatch($command);
+        try {
+            $envelope = $this->bus->dispatch($command);
 
-        // get the value that was returned by the last message handler
-        $handledStamp = $envelope->last(HandledStamp::class);
+            // get the value that was returned by the last message handler
+            $handledStamp = $envelope->last(HandledStamp::class);
 
-        return $handledStamp->getResult();
+            return $handledStamp->getResult();
+        } catch (HandlerFailedException $e) {
+            throw $e->getPrevious();
+        }
     }
 }

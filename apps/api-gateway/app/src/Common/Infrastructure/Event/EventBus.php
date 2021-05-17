@@ -6,6 +6,7 @@ namespace App\Common\Infrastructure\Event;
 
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\Event\EventInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class EventBus implements EventBusInterface
@@ -19,6 +20,10 @@ final class EventBus implements EventBusInterface
 
     public function dispatch(EventInterface $event): void
     {
-        $this->bus->dispatch($event);
+        try {
+            $this->bus->dispatch($event);
+        } catch (HandlerFailedException $e) {
+            throw $e->getPrevious();
+        }
     }
 }

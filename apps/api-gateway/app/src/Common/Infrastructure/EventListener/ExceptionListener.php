@@ -8,7 +8,6 @@ use App\Common\Presentation\Response\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
 
 final class ExceptionListener
 {
@@ -27,10 +26,6 @@ final class ExceptionListener
 
         if ($e instanceof HttpExceptionInterface) {
             $statusCode = $e->getStatusCode();
-            $e = $e->getPrevious();
-        }
-
-        if ($e instanceof HandlerFailedException) {
             $e = $e->getPrevious();
         }
 

@@ -33,9 +33,6 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'editable' => true,
             'user_editable' => true,
-            'language_editable' => false,
-            'story_image_editable' => false,
-            'story_theme_editable' => false,
         ]);
     }
 
@@ -47,9 +44,6 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'editable' => true,
             'user_editable' => true,
-            'language_editable' => true,
-            'story_image_editable' => true,
-            'story_theme_editable' => true,
         ]);
     }
 
@@ -61,9 +55,6 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         $this->checkSucceeded([], [
             'editable' => true,
             'user_editable' => true,
-            'language_editable' => true,
-            'story_image_editable' => true,
-            'story_theme_editable' => true,
         ]);
     }
 
@@ -111,12 +102,10 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA['story-first']['language_reference']]['id'], $responseData['story']['language']['id']);
-        $this->assertEquals($options['language_editable'], $responseData['story']['language']['editable']);
 
         // story image informations
         if (false === empty(StoryFixture::DATA['story-first']['story_image_reference'])) {
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA['story-first']['story_image_reference']]['id'], $responseData['story']['story_image']['id']);
-            $this->assertEquals($options['story_image_editable'], $responseData['story']['story_image']['editable']);
         } else {
             $this->assertNull($responseData['story']['story_image']);
         }
@@ -129,8 +118,6 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
 
             foreach ($responseData['story']['story_themes'] as $i => $storyThemeData) {
                 if (StoryThemeFixture::DATA[$storyThemeFixtureReference]['id'] === $storyThemeData['id']) {
-                    $this->assertEquals($options['story_theme_editable'], $storyThemeData['editable']);
-
                     $exists = true;
 
                     break;

@@ -38,10 +38,8 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-first',
             'editable' => false,
+            'user_image_defined' => false,
             'user_editable' => false,
-            'language_editable' => false,
-            'story_image_editable' => false,
-            'story_theme_editable' => false,
         ]);
     }
 
@@ -54,10 +52,8 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-second',
             'editable' => false,
+            'user_image_defined' => false,
             'user_editable' => false,
-            'language_editable' => false,
-            'story_image_editable' => false,
-            'story_theme_editable' => false,
         ]);
     }
 
@@ -70,10 +66,8 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-second-first',
             'editable' => false,
+            'user_image_defined' => false,
             'user_editable' => false,
-            'language_editable' => false,
-            'story_image_editable' => false,
-            'story_theme_editable' => false,
         ]);
     }
 
@@ -89,10 +83,8 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'story_expected_reference' => 'story-second-first',
             'editable' => true,
+            'user_image_defined' => false,
             'user_editable' => true,
-            'language_editable' => false,
-            'story_image_editable' => false,
-            'story_theme_editable' => false,
         ]);
     }
 
@@ -108,10 +100,8 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
             'story_expected_reference' => 'story-second-first',
             'editable' => true,
+            'user_image_defined' => false,
             'user_editable' => true,
-            'language_editable' => true,
-            'story_image_editable' => true,
-            'story_theme_editable' => true,
         ]);
     }
 
@@ -127,10 +117,8 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
             'story_expected_reference' => 'story-second-first',
             'editable' => false,
+            'user_image_defined' => false,
             'user_editable' => false,
-            'language_editable' => false,
-            'story_image_editable' => false,
-            'story_theme_editable' => false,
         ]);
     }
 
@@ -225,21 +213,19 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->assertEquals(self::$container->get(TranslatorInterface::class)->trans(strtolower(UserGender::getTranslationPrefix().UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['gender']), [], null, LanguageFixture::DATA[$options['language_reference']]['locale']), $storyData['user']['gender_reading']);
         $this->assertEquals(UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['name'], $storyData['user']['name']);
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['name'])->lower()->toString(), $storyData['user']['name_slug']);
-        $this->assertFalse($storyData['user']['image_defined']);
+        $this->assertEquals($options['user_image_defined'], is_string($storyData['user']['image_url']));
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['user']['created_at']));
         $this->assertEquals($options['user_editable'], $storyData['user']['editable']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['id'], $storyData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['title'], $storyData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['locale'], $storyData['user']['language']['locale']);
         $this->assertIsString($storyData['user']['language']['image_url']);
-        $this->assertEquals($options['language_editable'], $storyData['user']['language']['editable']);
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['id'], $storyData['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['title'], $storyData['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['locale'], $storyData['language']['locale']);
         $this->assertIsString($storyData['language']['image_url']);
-        $this->assertEquals($options['language_editable'], $storyData['language']['editable']);
 
         // story image informations
         if (false === empty(StoryFixture::DATA[$storyFixtureReference]['story_image_reference'])) {
@@ -248,7 +234,6 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'], $storyData['story_image']['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyData['story_image']['title_slug']);
             $this->assertIsString($storyData['story_image']['image_url']);
-            $this->assertEquals($options['story_image_editable'], $storyData['story_image']['editable']);
         } else {
             $this->assertNull($storyData['story_image']);
         }
@@ -260,7 +245,6 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$i]]['id'], $storyThemeData['id']);
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$i]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$i]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
-            $this->assertEquals($options['story_theme_editable'], $storyThemeData['editable']);
         }
     }
 }

@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\User\Query\Model;
 
+use App\Common\Domain\Model\EditableInterface;
+use App\Common\Domain\Model\EditableTrait;
 use App\Common\Domain\Model\IdentifiableInterface;
 use App\Common\Domain\Model\IdentifiableTrait;
 use App\Common\Query\Model\AbstractModel;
 use App\User\Domain\Model\UserableInterface;
 use App\User\Domain\Model\UserInterface;
 
-final class AccessToken extends AbstractModel implements IdentifiableInterface, UserableInterface
+final class AccessToken extends AbstractModel implements IdentifiableInterface, UserableInterface, EditableInterface
 {
     use IdentifiableTrait;
+    use EditableTrait;
 
     private string $id;
     private User $user;

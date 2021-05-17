@@ -27,7 +27,6 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->checkSucceeded([], [
             'image_defined' => false,
             'editable' => true,
-            'language_editable' => false,
         ]);
     }
 
@@ -39,7 +38,6 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->checkSucceeded([], [
             'image_defined' => false,
             'editable' => true,
-            'language_editable' => true,
         ]);
     }
 
@@ -57,7 +55,6 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->assertEquals($options['image_defined'], is_string($responseData['user']['image_url']));
         $this->assertEquals($options['editable'], $responseData['user']['editable']);
         $this->assertEquals(self::$currentUser->getLanguage()->getId(), $responseData['user']['language']['id']);
-        $this->assertEquals($options['language_editable'], $responseData['user']['language']['editable']);
 
         $this->assertCount(self::$currentUser->getReadingLanguages()->count(), $responseData['user']['reading_languages']);
 
@@ -66,7 +63,6 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
 
             foreach ($responseData['user']['reading_languages'] as $readingLanguage) {
                 if ($userReadingLanguage->getId() === $readingLanguage['id']) {
-                    $this->assertEquals($options['language_editable'], $readingLanguage['editable']);
                     $exists = true;
 
                     break;

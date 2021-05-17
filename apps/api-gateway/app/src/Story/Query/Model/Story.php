@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Story\Query\Model;
 
+use App\Common\Domain\Model\EditableInterface;
+use App\Common\Domain\Model\EditableTrait;
 use App\Common\Domain\Model\IdentifiableInterface;
 use App\Common\Domain\Model\IdentifiableTrait;
 use App\Common\Query\Model\AbstractModel;
 
-class Story extends AbstractModel implements IdentifiableInterface
+class Story extends AbstractModel implements IdentifiableInterface, EditableInterface
 {
     use IdentifiableTrait;
+    use EditableTrait;
 
     private string $id;
 

@@ -25,9 +25,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
 
     public function testSucceeded(): void
     {
-        $this->checkSucceeded([], [
-            'editable' => false,
-        ]);
+        $this->checkSucceeded();
     }
 
     public function testSucceededLogginAdmin(): void
@@ -35,9 +33,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSucceeded([], [
-            'editable' => true,
-        ]);
+        $this->checkSucceeded();
     }
 
     public function testSucceededLogginModerator(): void
@@ -45,9 +41,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
-        $this->checkSucceeded([], [
-            'editable' => true,
-        ]);
+        $this->checkSucceeded();
     }
 
     public function testSucceededLogginUser(): void
@@ -55,9 +49,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
-            'editable' => false,
-        ]);
+        $this->checkSucceeded();
     }
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void
@@ -71,7 +63,6 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
             $this->assertEquals($languageFixtures[$i]['title'], $data['title']);
             $this->assertEquals($languageFixtures[$i]['locale'], $data['locale']);
             $this->assertIsString($data['image_url']);
-            $this->assertEquals($options['editable'], $data['editable']);
         }
     }
 

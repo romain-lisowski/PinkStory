@@ -45,42 +45,34 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -101,22 +93,18 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-third',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-fourth',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -140,42 +128,34 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -196,62 +176,50 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
                 [
                     'reference' => 'story-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
                 [
                     'reference' => 'story-second-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
                 [
                     'reference' => 'story-third',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
                 [
                     'reference' => 'story-fourth',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
             ],
@@ -271,22 +239,18 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-second-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -305,22 +269,18 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -335,42 +295,34 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -398,22 +350,18 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -430,22 +378,18 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
                 [
                     'reference' => 'story-second-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -464,12 +408,10 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-second-second',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -489,12 +431,10 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => false,
                         'user_editable' => false,
-                        'language_editable' => false,
-                        'story_image_editable' => false,
-                        'story_theme_editable' => false,
                     ],
                 ],
             ],
@@ -517,22 +457,18 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             'stories_expected' => [
                 [
                     'reference' => 'story-first',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
                 [
                     'reference' => 'story-third',
-                    'editables' => [
+                    'options' => [
+                        'user_image_defined' => false,
                         'editable' => true,
                         'user_editable' => true,
-                        'language_editable' => true,
-                        'story_image_editable' => true,
-                        'story_theme_editable' => true,
                     ],
                 ],
             ],
@@ -545,7 +481,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         $this->assertCount(count($options['stories_expected']), $responseData['stories']);
 
         foreach ($responseData['stories'] as $i => $storyData) {
-            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $options['stories_expected'][$i]['reference'], $options['stories_expected'][$i]['editables'], $storyData);
+            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, $options['stories_expected'][$i]['reference'], $options['stories_expected'][$i]['options'], $storyData);
         }
     }
 
@@ -554,7 +490,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         // nothing to check
     }
 
-    private function checkProcessHasBeenSucceededTreatment(array $responseData = [], array $options = [], string $storyFixtureReference, array $storyFixtureEditables, array $storyData)
+    private function checkProcessHasBeenSucceededTreatment(array $responseData = [], array $options = [], string $storyFixtureReference, array $storyFixtureOptions, array $storyData)
     {
         // story informations
         $this->assertEquals(StoryFixture::DATA[$storyFixtureReference]['id'], $storyData['id']);
@@ -562,7 +498,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         $this->assertEquals((new AsciiSlugger())->slug(StoryFixture::DATA[$storyFixtureReference]['title'])->lower()->toString(), $storyData['title_slug']);
         $this->assertEquals(StoryFixture::DATA[$storyFixtureReference]['extract'], $storyData['extract']);
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['created_at']));
-        $this->assertEquals($storyFixtureEditables['editable'], $storyData['editable']);
+        $this->assertEquals($storyFixtureOptions['editable'], $storyData['editable']);
 
         // story rating informations
         if (false === empty(StoryRatingFixture::DATA[$storyFixtureReference])) {
@@ -579,21 +515,19 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         $this->assertEquals(self::$container->get(TranslatorInterface::class)->trans(strtolower(UserGender::getTranslationPrefix().UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['gender']), [], null, LanguageFixture::DATA[$options['language_reference']]['locale']), $storyData['user']['gender_reading']);
         $this->assertEquals(UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['name'], $storyData['user']['name']);
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['name'])->lower()->toString(), $storyData['user']['name_slug']);
-        $this->assertFalse($storyData['user']['image_defined']);
+        $this->assertEquals($storyFixtureOptions['user_image_defined'], is_string($storyData['user']['image_url']));
         $this->assertLessThan(new \DateTime(), new \DateTime($storyData['user']['created_at']));
-        $this->assertEquals($storyFixtureEditables['user_editable'], $storyData['user']['editable']);
+        $this->assertEquals($storyFixtureOptions['user_editable'], $storyData['user']['editable']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['id'], $storyData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['title'], $storyData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['locale'], $storyData['user']['language']['locale']);
         $this->assertIsString($storyData['user']['language']['image_url']);
-        $this->assertEquals($storyFixtureEditables['language_editable'], $storyData['user']['language']['editable']);
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['id'], $storyData['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['title'], $storyData['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['locale'], $storyData['language']['locale']);
         $this->assertIsString($storyData['language']['image_url']);
-        $this->assertEquals($storyFixtureEditables['language_editable'], $storyData['language']['editable']);
 
         // story image informations
         if (false === empty(StoryFixture::DATA[$storyFixtureReference]['story_image_reference'])) {
@@ -602,7 +536,6 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'], $storyData['story_image']['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyData['story_image']['title_slug']);
             $this->assertIsString($storyData['story_image']['image_url']);
-            $this->assertEquals($storyFixtureEditables['story_image_editable'], $storyData['story_image']['editable']);
         } else {
             $this->assertNull($storyData['story_image']);
         }
@@ -614,12 +547,11 @@ final class StorySearchActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$j]]['id'], $storyThemeData['id']);
             $this->assertEquals(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'], $storyThemeData['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryThemeFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_themes_reference'][$j]]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyThemeData['title_slug']);
-            $this->assertEquals($storyFixtureEditables['story_theme_editable'], $storyThemeData['editable']);
         }
 
         // story parent/children informations
         if (false === empty(StoryFixture::DATA[$storyFixtureReference]['parent_reference'])) {
-            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, StoryFixture::DATA[$storyFixtureReference]['parent_reference'], $storyFixtureEditables, $storyData['parent']);
+            $this->checkProcessHasBeenSucceededTreatment($responseData, $options, StoryFixture::DATA[$storyFixtureReference]['parent_reference'], $storyFixtureOptions, $storyData['parent']);
         } elseif (false === empty(StoryFixture::DATA[$storyFixtureReference]['children_reference'])) {
             $this->assertEquals(count(StoryFixture::DATA[$storyFixtureReference]['children_reference']), $storyData['children_total']);
         } else {

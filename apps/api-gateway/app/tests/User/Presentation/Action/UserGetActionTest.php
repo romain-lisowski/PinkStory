@@ -39,7 +39,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'image_defined' => false,
             'editable' => true,
-            'language_editable' => false,
         ]);
     }
 
@@ -52,7 +51,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
             'image_defined' => false,
             'editable' => true,
-            'language_editable' => true,
         ]);
     }
 
@@ -65,7 +63,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => UserFixture::DATA['user-leslie']['language_reference'],
             'image_defined' => false,
             'editable' => true,
-            'language_editable' => true,
         ]);
     }
 
@@ -78,7 +75,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
             'image_defined' => false,
             'editable' => false,
-            'language_editable' => false,
         ]);
     }
 
@@ -88,7 +84,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => 'language-english',
             'image_defined' => false,
             'editable' => false,
-            'language_editable' => false,
         ]);
     }
 
@@ -103,7 +98,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => 'language-english',
             'image_defined' => true,
             'editable' => false,
-            'language_editable' => false,
         ]);
     }
 
@@ -116,7 +110,6 @@ final class UserGetActionTest extends AbstractUserActionTest
             'language_reference' => 'language-french',
             'image_defined' => false,
             'editable' => false,
-            'language_editable' => false,
         ]);
     }
 
@@ -162,7 +155,6 @@ final class UserGetActionTest extends AbstractUserActionTest
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['title'], $responseData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['locale'], $responseData['user']['language']['locale']);
         $this->assertIsString($responseData['user']['language']['image_url']);
-        $this->assertEquals($options['language_editable'], $responseData['user']['language']['editable']);
 
         $this->assertCount(count(UserFixture::DATA['user-john']['reading_language_references']), $responseData['user']['reading_languages']);
 
@@ -174,7 +166,6 @@ final class UserGetActionTest extends AbstractUserActionTest
                     $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['title'], $readingLanguage['title']);
                     $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['locale'], $readingLanguage['locale']);
                     $this->assertIsString($readingLanguage['image_url']);
-                    $this->assertEquals($options['language_editable'], $readingLanguage['editable']);
 
                     $exists = true;
 

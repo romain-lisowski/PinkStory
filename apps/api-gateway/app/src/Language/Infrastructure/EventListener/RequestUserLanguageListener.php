@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Language\Infrastructure\EventListener;
 
-use App\User\Infrastructure\Security\SecurityInterface;
+use App\User\Domain\Security\SecurityInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class RequestUserLanguageListener

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Infrastructure\Security;
 
+use App\User\Domain\Security\SecurityInterface;
 use App\User\Query\Model\UserCurrent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 

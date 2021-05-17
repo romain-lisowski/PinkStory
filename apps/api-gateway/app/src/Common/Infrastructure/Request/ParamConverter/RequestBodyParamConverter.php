@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Common\Infrastructure\Request\ParamConverter;
 
 use App\Language\Query\Model\Language;
-use App\User\Infrastructure\Security\SecurityInterface;
+use App\User\Domain\Security\SecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Infrastructure\Security;
+namespace App\User\Domain\Security;
 
 use App\User\Query\Model\UserCurrent;
 

@@ -7,13 +7,15 @@ namespace App\User\Presentation\Action;
 use App\Common\Domain\Command\CommandBusInterface;
 use App\Common\Presentation\Response\ResponderInterface;
 use App\User\Domain\Command\UserCreateCommand;
+use App\User\Domain\Model\UserRole;
+use App\User\Domain\Model\UserStatus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/signup", name="account_signup", methods={"POST"})
- * @ParamConverter("command", converter="request_body", options={"mapping": {"role" = "enum.App\User\Domain\Model\UserRole::USER", "status" = "enum.App\User\Domain\Model\UserStatus::ACTIVATED"}})
+ * @ParamConverter("command", converter="request_body")
  */
 final class AccountSignupAction
 {
@@ -28,6 +30,11 @@ final class AccountSignupAction
 
     public function __invoke(UserCreateCommand $command): Response
     {
+        $command
+            ->setRole(UserRole::USER)
+            ->setStatus(UserStatus::ACTIVATED)
+        ;
+
         $result = $this->commandBus->dispatch($command);
 
         return $this->responder->render($result);

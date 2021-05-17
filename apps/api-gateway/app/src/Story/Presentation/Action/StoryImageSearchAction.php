@@ -8,12 +8,13 @@ use App\Common\Presentation\Response\ResponderInterface;
 use App\Common\Query\Query\QueryBusInterface;
 use App\Story\Query\Query\StoryImageSearchQuery;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story-image/search", name="story_image_search", methods={"GET"})
- * @ParamConverter("query", converter="request_body", options={"mapping": {"language_id" = "request.current_language.id"}})
+ * @ParamConverter("query", converter="request_body")
  */
 final class StoryImageSearchAction
 {
@@ -26,8 +27,10 @@ final class StoryImageSearchAction
         $this->responder = $responder;
     }
 
-    public function __invoke(StoryImageSearchQuery $query): Response
+    public function __invoke(Request $request, StoryImageSearchQuery $query): Response
     {
+        $query->setLanguageId($request->get('current-language')->getId());
+
         $result = $this->queryBus->dispatch($query);
 
         return $this->responder->render($result);

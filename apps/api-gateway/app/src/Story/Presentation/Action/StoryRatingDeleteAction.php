@@ -7,6 +7,9 @@ namespace App\Story\Presentation\Action;
 use App\Common\Domain\Command\CommandBusInterface;
 use App\Common\Presentation\Response\ResponderInterface;
 use App\Story\Domain\Command\StoryRatingDeleteCommand;
+use App\Story\Domain\Model\Story;
+use App\User\Domain\Security\SecurityInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,22 +17,30 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story-rating/{story_id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="story_rating_delete", methods={"DELETE"})
- * @ParamConverter("command", converter="request_body", options={"mapping": {"story_id" = "request.attribute.story_id", "user_id" = "security.user.id"}})
+ * @ParamConverter("command", converter="request_body")
+ * @Entity("story", expr="repository.findOne(story_id)")
  * @IsGranted("ROLE_USER")
  */
 final class StoryRatingDeleteAction
 {
     private CommandBusInterface $commandBus;
     private ResponderInterface $responder;
+    private SecurityInterface $security;
 
-    public function __construct(CommandBusInterface $commandBus, ResponderInterface $responder)
+    public function __construct(CommandBusInterface $commandBus, ResponderInterface $responder, SecurityInterface $security)
     {
         $this->commandBus = $commandBus;
         $this->responder = $responder;
+        $this->security = $security;
     }
 
-    public function __invoke(StoryRatingDeleteCommand $command): Response
+    public function __invoke(StoryRatingDeleteCommand $command, Story $story): Response
     {
+        $command
+            ->setUserId($this->security->getUser()->getId())
+            ->setStoryId($story->getId())
+        ;
+
         $result = $this->commandBus->dispatch($command);
 
         return $this->responder->render($result);

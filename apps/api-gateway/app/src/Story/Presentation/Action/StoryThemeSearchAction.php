@@ -8,12 +8,13 @@ use App\Common\Presentation\Response\ResponderInterface;
 use App\Common\Query\Query\QueryBusInterface;
 use App\Story\Query\Query\StoryThemeSearchQuery;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story-theme/search", name="story_theme_search", methods={"GET"})
- * @ParamConverter("query", converter="request_body", options={"mapping": {"language_id" = "request.current_language.id"}})
+ * @ParamConverter("query", converter="request_body")
  */
 final class StoryThemeSearchAction
 {
@@ -26,8 +27,10 @@ final class StoryThemeSearchAction
         $this->responder = $responder;
     }
 
-    public function __invoke(StoryThemeSearchQuery $query): Response
+    public function __invoke(Request $request, StoryThemeSearchQuery $query): Response
     {
+        $query->setLanguageId($request->get('current-language')->getId());
+
         $result = $this->queryBus->dispatch($query);
 
         return $this->responder->render($result);

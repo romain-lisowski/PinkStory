@@ -223,7 +223,7 @@ class Language extends AbstractEntity implements ImageableInterface
         return $this;
     }
 
-    public function getImageBasePath(): string
+    public static function getImageBasePath(): string
     {
         return 'language';
     }

@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace App\Language\Query\Model;
 
-class LanguageMedium extends Language
+use App\Common\Domain\File\ImageableInterface;
+use App\Common\Domain\File\ImageableTrait;
+use App\Language\Domain\Model\Language as DomainLanguage;
+use Symfony\Component\Serializer\Annotation as Serializer;
+
+class LanguageMedium extends Language implements ImageableInterface
 {
+    use ImageableTrait;
+
     private string $title;
     private string $locale;
 
@@ -31,5 +38,13 @@ class LanguageMedium extends Language
         $this->locale = $locale;
 
         return $this;
+    }
+
+    /**
+     * @Serializer\Ignore()
+     */
+    public static function getImageBasePath(): string
+    {
+        return DomainLanguage::getImageBasePath();
     }
 }

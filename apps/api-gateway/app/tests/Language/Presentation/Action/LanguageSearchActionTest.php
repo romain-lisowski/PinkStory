@@ -70,6 +70,7 @@ final class LanguageSearchActionTest extends AbstractLanguageActionTest
             $this->assertEquals($languageFixtures[$i]['id'], $data['id']);
             $this->assertEquals($languageFixtures[$i]['title'], $data['title']);
             $this->assertEquals($languageFixtures[$i]['locale'], $data['locale']);
+            $this->assertIsString($data['image_url']);
             $this->assertEquals($options['editable'], $data['editable']);
         }
     }

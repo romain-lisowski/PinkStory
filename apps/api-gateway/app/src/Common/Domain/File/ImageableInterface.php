@@ -12,5 +12,9 @@ interface ImageableInterface
 
     public function getImagePath(bool $forced = false): ?string;
 
-    public function getImageBasePath(): string;
+    public static function getImageBasePath(): string;
+
+    public function getImageUrl(): ?string;
+
+    public function setImageUrl(string $baseUrl): self;
 }

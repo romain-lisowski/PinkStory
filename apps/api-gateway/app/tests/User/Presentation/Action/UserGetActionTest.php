@@ -37,6 +37,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
+            'image_defined' => false,
             'editable' => true,
             'language_editable' => false,
         ]);
@@ -49,6 +50,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
+            'image_defined' => false,
             'editable' => true,
             'language_editable' => true,
         ]);
@@ -61,6 +63,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-leslie']['language_reference'],
+            'image_defined' => false,
             'editable' => true,
             'language_editable' => true,
         ]);
@@ -73,6 +76,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
+            'image_defined' => false,
             'editable' => false,
             'language_editable' => false,
         ]);
@@ -82,6 +86,22 @@ final class UserGetActionTest extends AbstractUserActionTest
     {
         $this->checkSucceeded([], [
             'language_reference' => 'language-english',
+            'image_defined' => false,
+            'editable' => false,
+            'language_editable' => false,
+        ]);
+    }
+
+    public function testSucceededNoUserLoggedInButEnglishWithImage(): void
+    {
+        // set image to user
+        $user = $this->userRepository->findOne(UserFixture::DATA['user-john']['id']);
+        $user->setImageDefined(true);
+        $this->userRepository->flush();
+
+        $this->checkSucceeded([], [
+            'language_reference' => 'language-english',
+            'image_defined' => true,
             'editable' => false,
             'language_editable' => false,
         ]);
@@ -94,6 +114,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
         $this->checkSucceeded([], [
             'language_reference' => 'language-french',
+            'image_defined' => false,
             'editable' => false,
             'language_editable' => false,
         ]);
@@ -134,12 +155,13 @@ final class UserGetActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$container->get(TranslatorInterface::class)->trans(strtolower(UserGender::getTranslationPrefix().UserFixture::DATA['user-john']['gender']), [], null, LanguageFixture::DATA[$options['language_reference']]['locale']), $responseData['user']['gender_reading']);
         $this->assertEquals(UserFixture::DATA['user-john']['name'], $responseData['user']['name']);
         $this->assertEquals((new AsciiSlugger())->slug(UserFixture::DATA['user-john']['name'])->lower()->toString(), $responseData['user']['name_slug']);
-        $this->assertFalse($responseData['user']['image_defined']);
+        $this->assertEquals($options['image_defined'], is_string($responseData['user']['image_url']));
         $this->assertTrue(new DateTime() > new DateTime($responseData['user']['created_at']));
         $this->assertEquals($options['editable'], $responseData['user']['editable']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['id'], $responseData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['title'], $responseData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA['user-john']['language_reference']]['locale'], $responseData['user']['language']['locale']);
+        $this->assertIsString($responseData['user']['language']['image_url']);
         $this->assertEquals($options['language_editable'], $responseData['user']['language']['editable']);
 
         $this->assertCount(count(UserFixture::DATA['user-john']['reading_language_references']), $responseData['user']['reading_languages']);
@@ -151,6 +173,7 @@ final class UserGetActionTest extends AbstractUserActionTest
                 if (LanguageFixture::DATA[$readingLanguageReference]['id'] === $readingLanguage['id']) {
                     $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['title'], $readingLanguage['title']);
                     $this->assertEquals(LanguageFixture::DATA[$readingLanguageReference]['locale'], $readingLanguage['locale']);
+                    $this->assertIsString($readingLanguage['image_url']);
                     $this->assertEquals($options['language_editable'], $readingLanguage['editable']);
 
                     $exists = true;

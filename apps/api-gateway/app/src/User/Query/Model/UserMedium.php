@@ -4,17 +4,27 @@ declare(strict_types=1);
 
 namespace App\User\Query\Model;
 
+use App\Common\Domain\File\ImageableInterface;
+use App\Common\Domain\File\ImageableTrait;
 use App\Language\Query\Model\Language;
+use App\User\Domain\Model\User as DomainUser;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
-class UserMedium extends User
+class UserMedium extends User implements ImageableInterface
 {
+    use ImageableTrait;
+
     private string $gender;
     private string $genderReading;
     private string $name;
     private string $nameSlug;
-    private bool $imageDefined;
     private \DateTime $createdAt;
     private Language $language;
+
+    /**
+     * @Serializer\Ignore()
+     */
+    private bool $imageDefined;
 
     public function getGender(): string
     {
@@ -64,7 +74,7 @@ class UserMedium extends User
         return $this;
     }
 
-    public function getImageDefined(): bool
+    public function isImageDefined(): bool
     {
         return $this->imageDefined;
     }
@@ -98,5 +108,21 @@ class UserMedium extends User
         $this->language = $language;
 
         return $this;
+    }
+
+    /**
+     * @Serializer\Ignore()
+     */
+    public function hasImage(): bool
+    {
+        return $this->isImageDefined();
+    }
+
+    /**
+     * @Serializer\Ignore()
+     */
+    public static function getImageBasePath(): string
+    {
+        return DomainUser::getImageBasePath();
     }
 }

@@ -231,12 +231,14 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['id'], $storyData['user']['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['title'], $storyData['user']['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[UserFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['user_reference']]['language_reference']]['locale'], $storyData['user']['language']['locale']);
+        $this->assertIsString($storyData['user']['language']['image_url']);
         $this->assertEquals($options['language_editable'], $storyData['user']['language']['editable']);
 
         // language informations
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['id'], $storyData['language']['id']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['title'], $storyData['language']['title']);
         $this->assertEquals(LanguageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['language_reference']]['locale'], $storyData['language']['locale']);
+        $this->assertIsString($storyData['language']['image_url']);
         $this->assertEquals($options['language_editable'], $storyData['language']['editable']);
 
         // story image informations
@@ -245,6 +247,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['id'], $storyData['story_image']['id']);
             $this->assertEquals(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'], $storyData['story_image']['title']);
             $this->assertEquals((new AsciiSlugger())->slug(StoryImageFixture::DATA[StoryFixture::DATA[$storyFixtureReference]['story_image_reference']]['translations'][$options['language_reference']]['title'])->lower()->toString(), $storyData['story_image']['title_slug']);
+            $this->assertIsString($storyData['story_image']['image_url']);
             $this->assertEquals($options['story_image_editable'], $storyData['story_image']['editable']);
         } else {
             $this->assertNull($storyData['story_image']);

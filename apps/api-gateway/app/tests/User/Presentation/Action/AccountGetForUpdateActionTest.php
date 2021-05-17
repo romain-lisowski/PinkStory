@@ -25,6 +25,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
     public function testSucceeded(): void
     {
         $this->checkSucceeded([], [
+            'image_defined' => false,
             'editable' => true,
             'language_editable' => false,
         ]);
@@ -36,6 +37,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
         $this->checkSucceeded([], [
+            'image_defined' => false,
             'editable' => true,
             'language_editable' => true,
         ]);
@@ -52,7 +54,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         $this->assertEquals(self::$currentUser->getGender(), $responseData['user']['gender']);
         $this->assertEquals(self::$currentUser->getName(), $responseData['user']['name']);
         $this->assertEquals(self::$currentUser->getEmail(), $responseData['user']['email']);
-        $this->assertFalse($responseData['user']['image_defined']);
+        $this->assertEquals($options['image_defined'], is_string($responseData['user']['image_url']));
         $this->assertEquals($options['editable'], $responseData['user']['editable']);
         $this->assertEquals(self::$currentUser->getLanguage()->getId(), $responseData['user']['language']['id']);
         $this->assertEquals($options['language_editable'], $responseData['user']['language']['editable']);

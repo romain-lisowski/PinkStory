@@ -606,7 +606,7 @@ class User extends AbstractEntity implements UserInterface, UserableInterface, I
         return $this->isImageDefined();
     }
 
-    public function getImageBasePath(): string
+    public static function getImageBasePath(): string
     {
         return 'user';
     }

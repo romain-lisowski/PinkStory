@@ -38,9 +38,9 @@ final class StoryDeleteCommandHandler implements CommandHandlerInterface
         $this->storyRepository->remove($story);
         $this->storyRepository->flush();
 
-        $event = new StoryDeletedEvent(
-            $story->getId()
-        );
+        $event = (new StoryDeletedEvent())
+            ->setId($story->getId())
+        ;
 
         $this->validator->validate($event);
 

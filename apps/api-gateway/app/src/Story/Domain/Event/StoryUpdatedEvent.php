@@ -51,16 +51,10 @@ final class StoryUpdatedEvent implements EventInterface
      */
     private array $storyThemeIds;
 
-    public function __construct(string $id, string $title, string $titleSlug, string $content, string $extract, string $languageId, ?string $storyImageId = null, array $storyThemeIds = [])
+    public function __construct()
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->titleSlug = $titleSlug;
-        $this->content = $content;
-        $this->extract = $extract;
-        $this->languageId = $languageId;
-        $this->storyImageId = $storyImageId;
-        $this->storyThemeIds = $storyThemeIds;
+        $this->storyImageId = null;
+        $this->storyThemeIds = [];
     }
 
     public function getId(): string
@@ -68,9 +62,23 @@ final class StoryUpdatedEvent implements EventInterface
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getTitleSlug(): string
@@ -78,9 +86,23 @@ final class StoryUpdatedEvent implements EventInterface
         return $this->titleSlug;
     }
 
+    public function setTitleSlug(string $titleSlug): self
+    {
+        $this->titleSlug = $titleSlug;
+
+        return $this;
+    }
+
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
     }
 
     public function getExtract(): string
@@ -88,9 +110,23 @@ final class StoryUpdatedEvent implements EventInterface
         return $this->extract;
     }
 
+    public function setExtract(string $extract): self
+    {
+        $this->extract = $extract;
+
+        return $this;
+    }
+
     public function getLanguageId(): string
     {
         return $this->languageId;
+    }
+
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
     }
 
     public function getStoryImageId(): ?string
@@ -98,8 +134,22 @@ final class StoryUpdatedEvent implements EventInterface
         return $this->storyImageId;
     }
 
+    public function setStoryImageId(?string $storyImageId): self
+    {
+        $this->storyImageId = $storyImageId;
+
+        return $this;
+    }
+
     public function getStoryThemeIds(): array
     {
         return $this->storyThemeIds;
+    }
+
+    public function setStoryThemeIds(array $storyThemeIds): self
+    {
+        $this->storyThemeIds = $storyThemeIds;
+
+        return $this;
     }
 }

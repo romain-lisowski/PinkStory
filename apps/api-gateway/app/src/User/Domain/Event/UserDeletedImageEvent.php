@@ -15,13 +15,32 @@ final class UserDeletedImageEvent implements EventInterface
      */
     private string $id;
 
-    public function __construct(string $id)
-    {
-        $this->id = $id;
-    }
+    /**
+     * @Assert\NotBlank
+     */
+    private string $imagePath;
 
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getImagePath(): string
+    {
+        return $this->imagePath;
+    }
+
+    public function setImagePath(string $imagePath): self
+    {
+        $this->imagePath = $imagePath;
+
+        return $this;
     }
 }

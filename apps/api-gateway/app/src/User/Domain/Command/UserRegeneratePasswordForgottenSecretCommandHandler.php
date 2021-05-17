@@ -39,11 +39,11 @@ final class UserRegeneratePasswordForgottenSecretCommandHandler implements Comma
 
             $this->userRepository->flush();
 
-            $event = new UserRegeneratePasswordForgottenSecretEvent(
-                $user->getId(),
-                $user->getEmail(),
-                $user->getPasswordForgottenSecret()
-            );
+            $event = (new UserRegeneratePasswordForgottenSecretEvent())
+                ->setId($user->getId())
+                ->setEmail($user->getEmail())
+                ->setPasswordForgottenSecret($user->getPasswordForgottenSecret())
+            ;
 
             $this->validator->validate($event);
 

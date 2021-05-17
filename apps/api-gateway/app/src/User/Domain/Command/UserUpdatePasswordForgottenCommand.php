@@ -22,19 +22,27 @@ final class UserUpdatePasswordForgottenCommand implements CommandInterface
      */
     private string $secret;
 
-    public function __construct(string $password, string $secret)
-    {
-        $this->password = $password;
-        $this->secret = $secret;
-    }
-
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function getSecret(): string
     {
         return $this->secret;
+    }
+
+    public function setSecret(string $secret): self
+    {
+        $this->secret = $secret;
+
+        return $this;
     }
 }

@@ -17,25 +17,34 @@ final class UserUpdateImageCommand implements CommandInterface
     private string $id;
 
     /**
+     * @Assert\NotNull
      * @Assert\File(
      *      mimeTypes = {"image/jpeg", "image/png"},
      * )
      */
     private File $image;
 
-    public function __construct(string $id, File $image)
-    {
-        $this->id = $id;
-        $this->image = $image;
-    }
-
     public function getId(): string
     {
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getImage(): File
     {
         return $this->image;
+    }
+
+    public function setImage(File $image): self
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

@@ -46,7 +46,9 @@ final class AccountUpdatePasswordActionTest extends AbstractUserActionTest
 
     public function testFailedMissingPassword(): void
     {
-        $this->checkFailedMissingMandatory();
+        $this->checkFailedValidationFailed([], [
+            'password',
+        ]);
     }
 
     public function testFailedPasswordStrenght(): void

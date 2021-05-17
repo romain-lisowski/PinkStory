@@ -72,7 +72,9 @@ final class StoryRatingUpdateActionTest extends AbstractStoryRatingActionTest
 
     public function testFailedMissingRate(): void
     {
-        $this->checkFailedMissingMandatory();
+        $this->checkFailedValidationFailed([], [
+            'rate',
+        ]);
     }
 
     public function testFailedWrongRate(): void

@@ -59,16 +59,10 @@ final class UserCreateCommand implements CommandInterface
      */
     private string $languageId;
 
-    public function __construct(string $gender, string $name, string $email, string $password, ?File $image = null, string $role, string $status, string $languageId)
+    public function __construct()
     {
-        $this->gender = $gender;
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
-        $this->image = $image;
-        $this->role = $role;
-        $this->status = $status;
-        $this->languageId = $languageId;
+        // init values
+        $this->image = null;
     }
 
     public function getGender(): string
@@ -76,9 +70,23 @@ final class UserCreateCommand implements CommandInterface
         return $this->gender;
     }
 
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -86,9 +94,23 @@ final class UserCreateCommand implements CommandInterface
         return $this->email;
     }
 
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     public function getImage(): ?File
@@ -96,9 +118,23 @@ final class UserCreateCommand implements CommandInterface
         return $this->image;
     }
 
+    public function setImage(?File $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
     }
 
     public function getStatus(): string
@@ -106,8 +142,22 @@ final class UserCreateCommand implements CommandInterface
         return $this->status;
     }
 
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function getLanguageId(): string
     {
         return $this->languageId;
+    }
+
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
     }
 }

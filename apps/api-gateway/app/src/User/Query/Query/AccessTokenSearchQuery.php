@@ -15,13 +15,15 @@ final class AccessTokenSearchQuery implements QueryInterface
      */
     private string $userId;
 
-    public function __construct(string $userId)
-    {
-        $this->userId = $userId;
-    }
-
     public function getUserId(): string
     {
         return $this->userId;
+    }
+
+    public function setUserId(string $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 }

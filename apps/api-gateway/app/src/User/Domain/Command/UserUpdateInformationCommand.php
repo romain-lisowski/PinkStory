@@ -37,18 +37,16 @@ final class UserUpdateInformationCommand implements CommandInterface
      */
     private array $readingLanguageIds;
 
-    public function __construct(string $id, string $gender, string $name, string $languageId, array $readingLanguageIds)
-    {
-        $this->id = $id;
-        $this->gender = $gender;
-        $this->name = $name;
-        $this->languageId = $languageId;
-        $this->readingLanguageIds = $readingLanguageIds;
-    }
-
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getGender(): string
@@ -56,9 +54,23 @@ final class UserUpdateInformationCommand implements CommandInterface
         return $this->gender;
     }
 
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getLanguageId(): string
@@ -66,8 +78,22 @@ final class UserUpdateInformationCommand implements CommandInterface
         return $this->languageId;
     }
 
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
+    }
+
     public function getReadingLanguageIds(): array
     {
         return $this->readingLanguageIds;
+    }
+
+    public function setReadingLanguageIds(array $readingLanguageIds): self
+    {
+        $this->readingLanguageIds = $readingLanguageIds;
+
+        return $this;
     }
 }

@@ -74,16 +74,16 @@ final class StoryUpdateCommandHandler implements CommandHandlerInterface
 
             $this->storyRepository->flush();
 
-            $event = new StoryUpdatedEvent(
-                $story->getId(),
-                $story->getTitle(),
-                $story->getTitleSlug(),
-                $story->getContent(),
-                $story->getExtract(),
-                $story->getLanguage()->getId(),
-                (null !== $story->getStoryImage() ? $story->getStoryImage()->getId() : null),
-                StoryTheme::extractIds($story->getStoryThemes()->toArray())
-            );
+            $event = (new StoryUpdatedEvent())
+                ->setId($story->getId())
+                ->setTitle($story->getTitle())
+                ->setTitleSlug($story->getTitleSlug())
+                ->setContent($story->getContent())
+                ->setExtract($story->getExtract())
+                ->setLanguageId($story->getLanguage()->getId())
+                ->setStoryImageId(null !== $story->getStoryImage() ? $story->getStoryImage()->getId() : null)
+                ->setStoryThemeIds(StoryTheme::extractIds($story->getStoryThemes()->toArray()))
+            ;
 
             $this->validator->validate($event);
 

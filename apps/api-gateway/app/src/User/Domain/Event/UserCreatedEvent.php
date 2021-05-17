@@ -68,19 +68,11 @@ final class UserCreatedEvent implements EventInterface
      */
     private array $readingLanguageIds;
 
-    public function __construct(string $id, string $gender, string $name, string $email, string $emailValidationCode, string $password, ?string $imagePath, string $role, string $status, string $languageId, array $readingLanguageIds)
+    public function __construct()
     {
-        $this->id = $id;
-        $this->gender = $gender;
-        $this->name = $name;
-        $this->email = $email;
-        $this->emailValidationCode = $emailValidationCode;
-        $this->password = $password;
-        $this->imagePath = $imagePath;
-        $this->role = $role;
-        $this->status = $status;
-        $this->languageId = $languageId;
-        $this->readingLanguageIds = $readingLanguageIds;
+        // init values
+        $this->imagePath = null;
+        $this->readingLanguageIds = [];
     }
 
     public function getId(): string
@@ -88,9 +80,23 @@ final class UserCreatedEvent implements EventInterface
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getGender(): string
     {
         return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
     }
 
     public function getName(): string
@@ -98,9 +104,23 @@ final class UserCreatedEvent implements EventInterface
         return $this->name;
     }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 
     public function getEmailValidationCode(): string
@@ -108,9 +128,23 @@ final class UserCreatedEvent implements EventInterface
         return $this->emailValidationCode;
     }
 
+    public function setEmailValidationCode(string $emailValidationCode): self
+    {
+        $this->emailValidationCode = $emailValidationCode;
+
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     public function getImagePath(): ?string
@@ -118,9 +152,23 @@ final class UserCreatedEvent implements EventInterface
         return $this->imagePath;
     }
 
+    public function setImagePath(?string $imagePath): self
+    {
+        $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
     }
 
     public function getStatus(): string
@@ -128,13 +176,34 @@ final class UserCreatedEvent implements EventInterface
         return $this->status;
     }
 
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function getLanguageId(): string
     {
         return $this->languageId;
     }
 
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
+    }
+
     public function getReadingLanguageIds(): array
     {
         return $this->readingLanguageIds;
+    }
+
+    public function setReadingLanguageIds(array $readingLanguageIds): self
+    {
+        $this->readingLanguageIds = $readingLanguageIds;
+
+        return $this;
     }
 }

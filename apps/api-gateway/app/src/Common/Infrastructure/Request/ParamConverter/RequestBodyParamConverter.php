@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class RequestBodyParamConverter implements ParamConverterInterface
@@ -69,8 +68,6 @@ final class RequestBodyParamConverter implements ParamConverterInterface
             $request->attributes->set($configuration->getName(), $object);
 
             return true;
-        } catch (MissingConstructorArgumentsException $e) {
-            throw new RequestBodyParamMissingMandatoryException($e);
         } catch (\Throwable $e) {
             throw new RequestBodyParamConversionFailedException($e);
         }

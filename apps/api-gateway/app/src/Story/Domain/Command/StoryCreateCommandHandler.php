@@ -90,18 +90,18 @@ final class StoryCreateCommandHandler implements CommandHandlerInterface
             $this->storyRepository->persist($story);
             $this->storyRepository->flush();
 
-            $event = new StoryCreatedEvent(
-                $story->getId(),
-                $story->getTitle(),
-                $story->getTitleSlug(),
-                $story->getContent(),
-                $story->getExtract(),
-                $story->getUser()->getId(),
-                $story->getLanguage()->getId(),
-                (null !== $story->getParent() ? $story->getParent()->getId() : null),
-                (null !== $story->getStoryImage() ? $story->getStoryImage()->getId() : null),
-                StoryTheme::extractIds($story->getStoryThemes()->toArray())
-            );
+            $event = (new StoryCreatedEvent())
+                ->setId($story->getId())
+                ->setTitle($story->getTitle())
+                ->setTitleSlug($story->getTitleSlug())
+                ->setContent($story->getContent())
+                ->setExtract($story->getExtract())
+                ->setUserId($story->getUser()->getId())
+                ->setLanguageId($story->getLanguage()->getId())
+                ->setParentId(null !== $story->getParent() ? $story->getParent()->getId() : null)
+                ->setStoryImageId(null !== $story->getStoryImage() ? $story->getStoryImage()->getId() : null)
+                ->setStoryThemeIds(StoryTheme::extractIds($story->getStoryThemes()->toArray()))
+            ;
 
             $this->validator->validate($event);
 

@@ -66,19 +66,19 @@ final class UserCreateCommandHandler implements CommandHandlerInterface
             $this->userRepository->persist($user);
             $this->userRepository->flush();
 
-            $event = new UserCreatedEvent(
-                $user->getId(),
-                $user->getGender(),
-                $user->getName(),
-                $user->getEmail(),
-                $user->getEmailValidationCode(),
-                $user->getPassword(),
-                $user->getImagePath(),
-                $user->getRole(),
-                $user->getStatus(),
-                $user->getLanguage()->getId(),
-                Language::extractIds($user->getReadingLanguages()->toArray())
-            );
+            $event = (new UserCreatedEvent())
+                ->setId($user->getId())
+                ->setGender($user->getGender())
+                ->setName($user->getName())
+                ->setEmail($user->getEmail())
+                ->setEmailValidationCode($user->getEmailValidationCode())
+                ->setPassword($user->getPassword())
+                ->setImagePath($user->getImagePath())
+                ->setRole($user->getRole())
+                ->setStatus($user->getStatus())
+                ->setLanguageId($user->getLanguage()->getId())
+                ->setReadingLanguageIds(Language::extractIds($user->getReadingLanguages()->toArray()))
+            ;
 
             $this->validator->validate($event);
 

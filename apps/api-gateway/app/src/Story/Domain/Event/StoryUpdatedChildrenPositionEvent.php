@@ -20,10 +20,10 @@ final class StoryUpdatedChildrenPositionEvent implements EventInterface
      */
     private array $childrenIds;
 
-    public function __construct(string $id, array $childrenIds)
+    public function __construct()
     {
-        $this->id = $id;
-        $this->childrenIds = $childrenIds;
+        // init values
+        $this->childrenIds = [];
     }
 
     public function getId(): string
@@ -31,8 +31,22 @@ final class StoryUpdatedChildrenPositionEvent implements EventInterface
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getChildrenIds(): array
     {
         return $this->childrenIds;
+    }
+
+    public function setChildrenIds(array $childrenIds): self
+    {
+        $this->childrenIds = $childrenIds;
+
+        return $this;
     }
 }

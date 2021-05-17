@@ -39,7 +39,9 @@ final class AccountUpdateImageActionTest extends AbstractUserActionTest
 
     public function testFailedMissingImage(): void
     {
-        $this->checkFailedMissingMandatory();
+        $this->checkFailedValidationFailed([], [
+            'image',
+        ]);
     }
 
     protected function checkProcessHasBeenSucceeded(array $responseData = [], array $options = []): void

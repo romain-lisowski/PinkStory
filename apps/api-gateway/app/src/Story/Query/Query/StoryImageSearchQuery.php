@@ -31,12 +31,12 @@ final class StoryImageSearchQuery implements QueryInterface, PaginableInterface
      */
     private int $offset;
 
-    public function __construct(string $languageId, array $storyThemeIds = [], int $limit = PaginableInterface::LIMIT, int $offset = PaginableInterface::OFFSET)
+    public function __construct()
     {
-        $this->languageId = $languageId;
-        $this->storyThemeIds = $storyThemeIds;
-        $this->limit = $limit;
-        $this->offset = $offset;
+        // init values
+        $this->storyThemeIds = [];
+        $this->limit = PaginableInterface::LIMIT;
+        $this->offset = PaginableInterface::OFFSET;
     }
 
     public function getLanguageId(): string
@@ -44,9 +44,23 @@ final class StoryImageSearchQuery implements QueryInterface, PaginableInterface
         return $this->languageId;
     }
 
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
+    }
+
     public function getStoryThemeIds(): array
     {
         return $this->storyThemeIds;
+    }
+
+    public function setStoryThemeIds(array $storyThemeIds): self
+    {
+        $this->storyThemeIds = $storyThemeIds;
+
+        return $this;
     }
 
     public function getLimit(): int
@@ -54,8 +68,22 @@ final class StoryImageSearchQuery implements QueryInterface, PaginableInterface
         return $this->limit;
     }
 
+    public function setLimit(int $limit): self
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
     public function getOffset(): int
     {
         return $this->offset;
+    }
+
+    public function setOffset(int $offset): self
+    {
+        $this->offset = $offset;
+
+        return $this;
     }
 }

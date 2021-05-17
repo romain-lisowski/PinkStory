@@ -28,16 +28,16 @@ final class UserRegeneratePasswordForgottenSecretEvent implements EventInterface
      */
     private string $passwordForgottenSecret;
 
-    public function __construct(string $id, string $email, string $passwordForgottenSecret)
-    {
-        $this->id = $id;
-        $this->email = $email;
-        $this->passwordForgottenSecret = $passwordForgottenSecret;
-    }
-
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -45,8 +45,22 @@ final class UserRegeneratePasswordForgottenSecretEvent implements EventInterface
         return $this->email;
     }
 
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getPasswordForgottenSecret(): string
     {
         return $this->passwordForgottenSecret;
+    }
+
+    public function setPasswordForgottenSecret(string $passwordForgottenSecret): self
+    {
+        $this->passwordForgottenSecret = $passwordForgottenSecret;
+
+        return $this;
     }
 }

@@ -21,19 +21,27 @@ final class StoryGetQuery implements QueryInterface
      */
     private string $languageId;
 
-    public function __construct(string $id, string $languageId)
-    {
-        $this->id = $id;
-        $this->languageId = $languageId;
-    }
-
     public function getId(): string
     {
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getLanguageId(): string
     {
         return $this->languageId;
+    }
+
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
     }
 }

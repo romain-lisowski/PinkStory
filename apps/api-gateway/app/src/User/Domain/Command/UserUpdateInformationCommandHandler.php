@@ -55,13 +55,13 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
 
             $this->userRepository->flush();
 
-            $event = new UserUpdatedInformationEvent(
-                $user->getId(),
-                $user->getGender(),
-                $user->getName(),
-                $user->getLanguage()->getId(),
-                Language::extractIds($user->getReadingLanguages()->toArray())
-            );
+            $event = (new UserUpdatedInformationEvent())
+                ->setId($user->getId())
+                ->setGender($user->getGender())
+                ->setName($user->getName())
+                ->setLanguageId($user->getLanguage()->getId())
+                ->setReadingLanguageIds(Language::extractIds($user->getReadingLanguages()->toArray()))
+            ;
 
             $this->validator->validate($event);
 

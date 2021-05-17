@@ -39,8 +39,10 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
 
     public function testFailedMissingEmail(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'password' => UserFixture::DATA['user-pinkstory']['password'],
+        ], [
+            'email',
         ]);
     }
 
@@ -66,8 +68,10 @@ final class AccessTokenCreateActionTest extends AbstractAccessTokenActionTest
 
     public function testFailedMissingPassword(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'email' => self::$defaultUser->getEmail(),
+        ], [
+            'password',
         ]);
     }
 

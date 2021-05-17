@@ -41,7 +41,9 @@ final class AccountRegeneratePasswordForgottenSecretActionTest extends AbstractU
 
     public function testFailedMissingEmail(): void
     {
-        $this->checkFailedMissingMandatory();
+        $this->checkFailedValidationFailed([], [
+            'email',
+        ]);
     }
 
     public function testFailedEmailNotFound(): void

@@ -21,19 +21,27 @@ final class StoryRatingDeleteCommand implements CommandInterface
      */
     private string $userId;
 
-    public function __construct(string $storyId, string $userId)
-    {
-        $this->storyId = $storyId;
-        $this->userId = $userId;
-    }
-
     public function getStoryId(): string
     {
         return $this->storyId;
     }
 
+    public function setStoryId(string $storyId): self
+    {
+        $this->storyId = $storyId;
+
+        return $this;
+    }
+
     public function getUserId(): string
     {
         return $this->userId;
+    }
+
+    public function setUserId(string $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 }

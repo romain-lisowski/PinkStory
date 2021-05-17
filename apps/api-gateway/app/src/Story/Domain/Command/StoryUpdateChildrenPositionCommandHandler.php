@@ -45,10 +45,10 @@ final class StoryUpdateChildrenPositionCommandHandler implements CommandHandlerI
 
             $this->storyRepository->flush();
 
-            $event = new StoryUpdatedChildrenPositionEvent(
-                $story->getId(),
-                $story->extractChildrenPositionedIds()
-            );
+            $event = (new StoryUpdatedChildrenPositionEvent())
+                ->setId($story->getId())
+                ->setChildrenIds($story->extractChildrenPositionedIds())
+            ;
 
             $this->validator->validate($event);
 

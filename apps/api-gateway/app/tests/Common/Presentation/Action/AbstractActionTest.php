@@ -120,25 +120,6 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedMissingMandatory(array $requestContent = [], array $processOptions = []): void
-    {
-        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
-            'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
-        ], json_encode($requestContent));
-
-        // check http response
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $responseData = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals('request_body_param_missing_mandatory_exception', $responseData['exception']['type']);
-
-        // get fresh users
-        $this->entityManager->refresh(self::$defaultUser);
-        $this->refreshCurrentUser();
-
-        // check process has been stopped
-        $this->checkProcessHasBeenStopped($responseData, $processOptions);
-    }
-
     protected function checkFailedValidationFailed(array $requestContent = [], array $invalidFields = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [

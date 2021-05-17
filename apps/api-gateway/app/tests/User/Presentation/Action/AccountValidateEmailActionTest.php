@@ -43,7 +43,9 @@ final class AccountValidateEmailActionTest extends AbstractUserActionTest
 
     public function testFailedMissingCode(): void
     {
-        $this->checkFailedMissingMandatory();
+        $this->checkFailedValidationFailed([], [
+            'code',
+        ]);
     }
 
     public function testFailedWrongCodeFormat(): void

@@ -60,17 +60,16 @@ final class StorySearchQuery implements QueryInterface, PaginableInterface
      */
     private int $offset;
 
-    public function __construct(string $languageId, array $readingLanguageIds = [], array $storyThemeIds = [], ?string $userId = null, string $type = self::TYPE_MIXED, string $order = self::ORDER_POPULAR, string $sort = Criteria::DESC, int $limit = PaginableInterface::LIMIT, int $offset = PaginableInterface::OFFSET)
+    public function __construct()
     {
-        $this->languageId = $languageId;
-        $this->readingLanguageIds = $readingLanguageIds;
-        $this->storyThemeIds = $storyThemeIds;
-        $this->userId = $userId;
-        $this->type = $type;
-        $this->order = $order;
-        $this->sort = $sort;
-        $this->limit = $limit;
-        $this->offset = $offset;
+        // init values
+        $this->storyThemeIds = [];
+        $this->userId = null;
+        $this->type = self::TYPE_MIXED;
+        $this->order = self::ORDER_POPULAR;
+        $this->sort = Criteria::DESC;
+        $this->limit = PaginableInterface::LIMIT;
+        $this->offset = PaginableInterface::OFFSET;
     }
 
     public function getLanguageId(): string
@@ -78,9 +77,23 @@ final class StorySearchQuery implements QueryInterface, PaginableInterface
         return $this->languageId;
     }
 
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
+    }
+
     public function getReadingLanguageIds(): array
     {
         return $this->readingLanguageIds;
+    }
+
+    public function setReadingLanguageIds(array $readingLanguageIds): self
+    {
+        $this->readingLanguageIds = $readingLanguageIds;
+
+        return $this;
     }
 
     public function getStoryThemeIds(): array
@@ -88,9 +101,23 @@ final class StorySearchQuery implements QueryInterface, PaginableInterface
         return $this->storyThemeIds;
     }
 
+    public function setStoryThemeIds(array $storyThemeIds): self
+    {
+        $this->storyThemeIds = $storyThemeIds;
+
+        return $this;
+    }
+
     public function getUserId(): ?string
     {
         return $this->userId;
+    }
+
+    public function setUserId(string $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 
     public function getType(): string
@@ -98,9 +125,23 @@ final class StorySearchQuery implements QueryInterface, PaginableInterface
         return $this->type;
     }
 
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function getOrder(): string
     {
         return $this->order;
+    }
+
+    public function setOrder(string $order): self
+    {
+        $this->order = $order;
+
+        return $this;
     }
 
     public function getSort(): string
@@ -108,13 +149,34 @@ final class StorySearchQuery implements QueryInterface, PaginableInterface
         return $this->sort;
     }
 
+    public function setSort(string $sort): self
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
+
     public function getLimit(): int
     {
         return $this->limit;
     }
 
+    public function setLimit(int $limit): self
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
     public function getOffset(): int
     {
         return $this->offset;
+    }
+
+    public function setOffset(int $offset): self
+    {
+        $this->offset = $offset;
+
+        return $this;
     }
 }

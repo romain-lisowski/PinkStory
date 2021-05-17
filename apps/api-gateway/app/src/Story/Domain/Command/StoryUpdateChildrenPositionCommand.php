@@ -20,19 +20,27 @@ final class StoryUpdateChildrenPositionCommand implements CommandInterface
      */
     private array $childrenIds;
 
-    public function __construct(string $id, array $childrenIds)
-    {
-        $this->id = $id;
-        $this->childrenIds = $childrenIds;
-    }
-
     public function getId(): string
     {
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getChildrenIds(): array
     {
         return $this->childrenIds;
+    }
+
+    public function setChildrenIds(array $childrenIds): self
+    {
+        $this->childrenIds = $childrenIds;
+
+        return $this;
     }
 }

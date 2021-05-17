@@ -67,10 +67,12 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 
     public function testFailedMissingGender(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'name' => self::$userData['name'],
             'language_id' => self::$userData['language_id'],
             'reading_language_ids' => self::$userData['reading_language_ids'],
+        ], [
+            'gender',
         ]);
     }
 
@@ -88,19 +90,23 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 
     public function testFailedMissingName(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'language_id' => self::$userData['language_id'],
             'reading_language_ids' => self::$userData['reading_language_ids'],
+        ], [
+            'name',
         ]);
     }
 
     public function testFailedMissingLanguage(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'reading_language_ids' => self::$userData['reading_language_ids'],
+        ], [
+            'language_id',
         ]);
     }
 
@@ -130,10 +136,12 @@ final class AccountUpdateInformationActionTest extends AbstractUserActionTest
 
     public function testFailedMissingReadingLanguages(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'language_id' => self::$userData['language_id'],
+        ], [
+            'reading_language_ids',
         ]);
     }
 

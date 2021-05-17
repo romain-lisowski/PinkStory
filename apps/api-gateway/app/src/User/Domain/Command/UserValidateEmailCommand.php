@@ -21,19 +21,27 @@ final class UserValidateEmailCommand implements CommandInterface
      */
     private string $code;
 
-    public function __construct(string $id, string $code)
-    {
-        $this->id = $id;
-        $this->code = $code;
-    }
-
     public function getId(): string
     {
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
     }
 }

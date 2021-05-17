@@ -46,15 +46,11 @@ final class StoryUpdateCommand implements CommandInterface
      */
     private array $storyThemeIds;
 
-    public function __construct(string $id, string $title, string $content, string $extract, string $languageId, ?string $storyImageId = null, array $storyThemeIds = [])
+    public function __construct()
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->content = $content;
-        $this->extract = $extract;
-        $this->languageId = $languageId;
-        $this->storyImageId = $storyImageId;
-        $this->storyThemeIds = $storyThemeIds;
+        // init values
+        $this->storyImageId = null;
+        $this->storyThemeIds = [];
     }
 
     public function getId(): string
@@ -62,9 +58,23 @@ final class StoryUpdateCommand implements CommandInterface
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getContent(): string
@@ -72,9 +82,23 @@ final class StoryUpdateCommand implements CommandInterface
         return $this->content;
     }
 
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     public function getExtract(): string
     {
         return $this->extract;
+    }
+
+    public function setExtract(string $extract): self
+    {
+        $this->extract = $extract;
+
+        return $this;
     }
 
     public function getLanguageId(): string
@@ -82,13 +106,34 @@ final class StoryUpdateCommand implements CommandInterface
         return $this->languageId;
     }
 
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
+    }
+
     public function getStoryImageId(): ?string
     {
         return $this->storyImageId;
     }
 
+    public function setStoryImageId(?string $storyImageId): self
+    {
+        $this->storyImageId = $storyImageId;
+
+        return $this;
+    }
+
     public function getStoryThemeIds(): array
     {
         return $this->storyThemeIds;
+    }
+
+    public function setStoryThemeIds(array $storyThemeIds): self
+    {
+        $this->storyThemeIds = $storyThemeIds;
+
+        return $this;
     }
 }

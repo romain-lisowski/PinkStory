@@ -54,10 +54,10 @@ final class StoryRatingDeleteCommandHandler implements CommandHandlerInterface
             $this->storyRatingRepository->remove($storyRating);
             $this->storyRatingRepository->flush();
 
-            $event = new StoryRatingDeletedEvent(
-                $story->getId(),
-                $user->getId(),
-            );
+            $event = (new StoryRatingDeletedEvent())
+                ->setStoryId($story->getId())
+                ->setUserId($user->getId())
+            ;
 
             $this->validator->validate($event);
 

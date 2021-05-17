@@ -47,7 +47,9 @@ final class AccountUpdateEmailActionTest extends AbstractUserActionTest
 
     public function testFailedMissingEmail(): void
     {
-        $this->checkFailedMissingMandatory();
+        $this->checkFailedValidationFailed([], [
+            'email',
+        ]);
     }
 
     public function testFailedWrongFormatEmail(): void

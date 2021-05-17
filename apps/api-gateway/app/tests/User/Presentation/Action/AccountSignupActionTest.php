@@ -65,11 +65,13 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
     public function testFailedMissingGender(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
             'language_id' => self::$userData['language_id'],
+        ], [
+            'gender',
         ]);
     }
 
@@ -88,21 +90,25 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
     public function testFailedMissingName(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
             'language_id' => self::$userData['language_id'],
+        ], [
+            'name',
         ]);
     }
 
     public function testFailedMissingEmail(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'password' => self::$userData['password'],
             'language_id' => self::$userData['language_id'],
+        ], [
+            'email',
         ]);
     }
 
@@ -147,11 +153,13 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
     public function testFailedMissingPassword(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'language_id' => self::$userData['language_id'],
+        ], [
+            'password',
         ]);
     }
 
@@ -170,11 +178,13 @@ final class AccountSignupActionTest extends AbstractUserActionTest
 
     public function testFailedMissingLanguage(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
+        ], [
+            'language_id',
         ]);
     }
 

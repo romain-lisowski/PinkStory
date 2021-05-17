@@ -51,16 +51,12 @@ final class StoryCreateCommand implements CommandInterface
      */
     private array $storyThemeIds;
 
-    public function __construct(string $title, string $content, string $extract, string $userId, string $languageId, ?string $parentId = null, ?string $storyImageId = null, array $storyThemeIds = [])
+    public function __construct()
     {
-        $this->title = $title;
-        $this->content = $content;
-        $this->extract = $extract;
-        $this->userId = $userId;
-        $this->languageId = $languageId;
-        $this->parentId = $parentId;
-        $this->storyImageId = $storyImageId;
-        $this->storyThemeIds = $storyThemeIds;
+        // init values
+        $this->parentId = null;
+        $this->storyImageId = null;
+        $this->storyThemeIds = [];
     }
 
     public function getTitle(): string
@@ -68,9 +64,23 @@ final class StoryCreateCommand implements CommandInterface
         return $this->title;
     }
 
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
     }
 
     public function getExtract(): string
@@ -78,9 +88,23 @@ final class StoryCreateCommand implements CommandInterface
         return $this->extract;
     }
 
+    public function setExtract(string $extract): self
+    {
+        $this->extract = $extract;
+
+        return $this;
+    }
+
     public function getUserId(): string
     {
         return $this->userId;
+    }
+
+    public function setUserId(string $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 
     public function getLanguageId(): string
@@ -88,9 +112,23 @@ final class StoryCreateCommand implements CommandInterface
         return $this->languageId;
     }
 
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
+    }
+
     public function getParentId(): ?string
     {
         return $this->parentId;
+    }
+
+    public function setParentId(?string $parentId): self
+    {
+        $this->parentId = $parentId;
+
+        return $this;
     }
 
     public function getStoryImageId(): ?string
@@ -98,8 +136,22 @@ final class StoryCreateCommand implements CommandInterface
         return $this->storyImageId;
     }
 
+    public function setStoryImageId(?string $storyImageId): self
+    {
+        $this->storyImageId = $storyImageId;
+
+        return $this;
+    }
+
     public function getStoryThemeIds(): array
     {
         return $this->storyThemeIds;
+    }
+
+    public function setStoryThemeIds(array $storyThemeIds): self
+    {
+        $this->storyThemeIds = $storyThemeIds;
+
+        return $this;
     }
 }

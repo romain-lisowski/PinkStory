@@ -30,16 +30,16 @@ final class StoryRatingUpdateCommand implements CommandInterface
      */
     private int $rate;
 
-    public function __construct(string $storyId, string $userId, int $rate)
-    {
-        $this->storyId = $storyId;
-        $this->userId = $userId;
-        $this->rate = $rate;
-    }
-
     public function getStoryId(): string
     {
         return $this->storyId;
+    }
+
+    public function setStoryId(string $storyId): self
+    {
+        $this->storyId = $storyId;
+
+        return $this;
     }
 
     public function getUserId(): string
@@ -47,8 +47,22 @@ final class StoryRatingUpdateCommand implements CommandInterface
         return $this->userId;
     }
 
+    public function setUserId(string $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
     public function getRate(): int
     {
         return $this->rate;
+    }
+
+    public function setRate(int $rate): self
+    {
+        $this->rate = $rate;
+
+        return $this;
     }
 }

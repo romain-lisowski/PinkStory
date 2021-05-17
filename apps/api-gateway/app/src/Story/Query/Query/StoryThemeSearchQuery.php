@@ -15,13 +15,15 @@ final class StoryThemeSearchQuery implements QueryInterface
      */
     private string $languageId;
 
-    public function __construct(string $languageId)
-    {
-        $this->languageId = $languageId;
-    }
-
     public function getLanguageId(): string
     {
         return $this->languageId;
+    }
+
+    public function setLanguageId(string $languageId): self
+    {
+        $this->languageId = $languageId;
+
+        return $this;
     }
 }

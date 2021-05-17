@@ -44,10 +44,10 @@ final class UserUpdatePasswordCommandHandler implements CommandHandlerInterface
 
         $this->userRepository->flush();
 
-        $event = new UserUpdatedPasswordEvent(
-            $user->getId(),
-            $user->getPassword()
-        );
+        $event = (new UserUpdatedPasswordEvent())
+            ->setId($user->getId())
+            ->setPassword($user->getPassword())
+        ;
 
         $this->validator->validate($event);
 

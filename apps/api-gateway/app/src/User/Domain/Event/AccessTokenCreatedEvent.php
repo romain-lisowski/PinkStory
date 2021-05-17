@@ -21,19 +21,27 @@ final class AccessTokenCreatedEvent implements EventInterface
      */
     private string $userId;
 
-    public function __construct(string $id, string $userId)
-    {
-        $this->id = $id;
-        $this->userId = $userId;
-    }
-
     public function getId(): string
     {
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getUserId(): string
     {
         return $this->userId;
+    }
+
+    public function setUserId(string $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 }

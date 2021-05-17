@@ -56,10 +56,10 @@ final class AccessTokenCreateCommandHandler implements CommandHandlerInterface
             $this->accessTokenRepository->persist($accessToken);
             $this->accessTokenRepository->flush();
 
-            $event = new AccessTokenCreatedEvent(
-                $accessToken->getId(),
-                $accessToken->getUser()->getId()
-            );
+            $event = (new AccessTokenCreatedEvent())
+                ->setId($accessToken->getId())
+                ->setUserId($accessToken->getUser()->getId())
+            ;
 
             $this->validator->validate($event);
 

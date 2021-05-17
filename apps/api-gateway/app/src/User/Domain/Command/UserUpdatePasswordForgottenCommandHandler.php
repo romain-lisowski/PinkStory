@@ -42,10 +42,10 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
 
             $this->userRepository->flush();
 
-            $event = new UserUpdatedPasswordForgottenEvent(
-                $user->getId(),
-                $user->getPassword()
-            );
+            $event = (new UserUpdatedPasswordForgottenEvent())
+                ->setId($user->getId())
+                ->setPassword($user->getPassword())
+            ;
 
             $this->validator->validate($event);
 

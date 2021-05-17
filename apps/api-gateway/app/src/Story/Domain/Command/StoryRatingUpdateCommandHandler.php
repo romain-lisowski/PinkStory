@@ -67,11 +67,11 @@ final class StoryRatingUpdateCommandHandler implements CommandHandlerInterface
 
             $this->storyRepository->flush();
 
-            $event = new StoryRatingUpdatedEvent(
-                $story->getId(),
-                $user->getId(),
-                $storyRating->getRate()
-            );
+            $event = (new StoryRatingUpdatedEvent())
+                ->setStoryId($story->getId())
+                ->setUserId($user->getId())
+                ->setRate($storyRating->getRate())
+            ;
 
             $this->validator->validate($event);
 

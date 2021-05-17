@@ -38,9 +38,9 @@ final class AccessTokenDeleteCommandHandler implements CommandHandlerInterface
         $this->accessTokenRepository->remove($accessToken);
         $this->accessTokenRepository->flush();
 
-        $event = new AccessTokenDeletedEvent(
-            $accessToken->getId()
-        );
+        $event = (new AccessTokenDeletedEvent())
+            ->setId($accessToken->getId())
+        ;
 
         $this->validator->validate($event);
 

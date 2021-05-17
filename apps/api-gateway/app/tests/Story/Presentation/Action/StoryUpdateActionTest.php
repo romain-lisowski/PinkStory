@@ -169,45 +169,53 @@ final class StoryUpdateActionTest extends AbstractStoryActionTest
 
     public function testFailedMissingTitle(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'content' => self::$storyData['content'],
             'extract' => self::$storyData['extract'],
             'language_id' => self::$storyData['language_id'],
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ], [
+            'title',
         ]);
     }
 
     public function testFailedMissingContent(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'title' => self::$storyData['title'],
             'extract' => self::$storyData['extract'],
             'language_id' => self::$storyData['language_id'],
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ], [
+            'content',
         ]);
     }
 
     public function testFailedMissingExtract(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'title' => self::$storyData['title'],
             'content' => self::$storyData['content'],
             'language_id' => self::$storyData['language_id'],
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ], [
+            'extract',
         ]);
     }
 
     public function testFailedMissingLanguage(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'title' => self::$storyData['title'],
             'content' => self::$storyData['content'],
             'extract' => self::$storyData['extract'],
             'story_image_id' => self::$storyData['story_image_id'],
             'story_theme_ids' => self::$storyData['story_theme_ids'],
+        ], [
+            'language_id',
         ]);
     }
 

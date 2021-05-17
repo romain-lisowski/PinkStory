@@ -28,16 +28,16 @@ final class UserUpdatedEmailEvent implements EventInterface
      */
     private string $emailValidationCode;
 
-    public function __construct(string $id, string $email, string $emailValidationCode)
-    {
-        $this->id = $id;
-        $this->email = $email;
-        $this->emailValidationCode = $emailValidationCode;
-    }
-
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -45,8 +45,22 @@ final class UserUpdatedEmailEvent implements EventInterface
         return $this->email;
     }
 
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getEmailValidationCode(): string
     {
         return $this->emailValidationCode;
+    }
+
+    public function setEmailValidationCode(string $emailValidationCode): self
+    {
+        $this->emailValidationCode = $emailValidationCode;
+
+        return $this;
     }
 }

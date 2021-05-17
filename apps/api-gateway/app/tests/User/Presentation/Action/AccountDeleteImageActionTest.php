@@ -50,6 +50,7 @@ final class AccountDeleteImageActionTest extends AbstractUserActionTest
         // check event has been dispatched
         $this->assertCount(1, $this->asyncTransport->get());
         $this->assertEquals(self::$currentUser->getId(), $this->asyncTransport->get()[0]->getMessage()->getId());
+        $this->assertEquals(self::$currentUser->getImagePath(true), $this->asyncTransport->get()[0]->getMessage()->getImagePath());
     }
 
     protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void

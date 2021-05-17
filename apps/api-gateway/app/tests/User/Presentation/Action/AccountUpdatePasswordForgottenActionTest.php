@@ -44,8 +44,10 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
 
     public function testFailedMissingPassword(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'secret' => self::$defaultUser->getPasswordForgottenSecret(),
+        ], [
+            'password',
         ]);
     }
 
@@ -61,8 +63,10 @@ final class AccountUpdatePasswordForgottenActionTest extends AbstractUserActionT
 
     public function testFailedMissingSecret(): void
     {
-        $this->checkFailedMissingMandatory([
+        $this->checkFailedValidationFailed([
             'password' => self::$userData['password'],
+        ], [
+            'secret',
         ]);
     }
 

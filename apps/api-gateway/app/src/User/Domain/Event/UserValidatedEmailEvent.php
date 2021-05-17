@@ -22,19 +22,27 @@ final class UserValidatedEmailEvent implements EventInterface
      */
     private string $email;
 
-    public function __construct(string $id, string $email)
-    {
-        $this->id = $id;
-        $this->email = $email;
-    }
-
     public function getId(): string
     {
         return $this->id;
     }
 
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }

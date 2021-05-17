@@ -7,6 +7,7 @@ namespace App\Common\Infrastructure\Request\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -28,7 +29,7 @@ final class RequestBodyParamConverter implements ParamConverterInterface
 
             return true;
         } catch (\Throwable $e) {
-            throw new RequestBodyParamConversionFailedException($e);
+            throw new BadRequestHttpException(null, $e);
         }
 
         return false;

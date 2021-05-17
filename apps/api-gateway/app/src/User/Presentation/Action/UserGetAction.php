@@ -8,7 +8,6 @@ use App\Common\Presentation\Response\ResponderInterface;
 use App\Common\Query\Query\QueryBusInterface;
 use App\User\Domain\Model\User;
 use App\User\Query\Query\UserGetQuery;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/user/{id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="user_get", methods={"GET"})
  * @ParamConverter("query", converter="request_body")
- * @Entity("user", expr="repository.findOne(id)")
+ * @ParamConverter("user", converter="entity", options={"expr": "repository.findOne(id)"})
  */
 final class UserGetAction
 {

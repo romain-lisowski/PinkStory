@@ -14,12 +14,6 @@ repository:
     exception:
         no_result_exception: No result was found for query although at least one row was expected.
 
-request:
-    param_converter:
-        request_body:
-            exception:
-                request_body_param_conversion_failed: Some errors occured during request body conversion process.
-
 security:
     exception:
         access_denied: Access denied.

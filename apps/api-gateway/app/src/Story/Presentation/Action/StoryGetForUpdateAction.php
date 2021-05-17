@@ -8,7 +8,6 @@ use App\Common\Presentation\Response\ResponderInterface;
 use App\Common\Query\Query\QueryBusInterface;
 use App\Story\Domain\Model\Story;
 use App\Story\Query\Query\StoryGetForUpdateQuery;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/story/update/{id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="story_update_get", methods={"GET"})
  * @ParamConverter("query", converter="request_body")
- * @Entity("story", expr="repository.findOne(id)")
+ * @ParamConverter("story", converter="entity", options={"expr": "repository.findOne(id)"})
  * @IsGranted("ROLE_USER")
  */
 final class StoryGetForUpdateAction

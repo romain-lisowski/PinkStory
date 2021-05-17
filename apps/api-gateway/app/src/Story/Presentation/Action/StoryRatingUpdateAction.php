@@ -9,7 +9,6 @@ use App\Common\Presentation\Response\ResponderInterface;
 use App\Story\Domain\Command\StoryRatingUpdateCommand;
 use App\Story\Domain\Model\Story;
 use App\User\Domain\Security\SecurityInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/story-rating/{story_id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="story_rating_update", methods={"PATCH"})
  * @ParamConverter("command", converter="request_body")
- * @Entity("story", expr="repository.findOne(story_id)")
+ * @ParamConverter("story", converter="entity", options={"expr": "repository.findOne(story_id)"})
  * @IsGranted("ROLE_USER")
  */
 final class StoryRatingUpdateAction

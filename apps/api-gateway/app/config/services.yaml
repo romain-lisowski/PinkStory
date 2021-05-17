@@ -62,11 +62,17 @@ services:
 
     App\Common\Infrastructure\Request\ParamConverter\RequestBodyParamConverter:
         tags: 
-            - { name: 'request.param_converter', converter: 'request_body' }
+            - { name: request.param_converter, converter: request_body }
+
+    App\Common\Infrastructure\Request\ParamConverter\EntityParamConverter:
+        arguments:
+            $expressionLanguage: '@sensio_framework_extra.security.expression_language.default'
+        tags: 
+            - { name: request.param_converter, converter: entity }
 
     App\Common\Infrastructure\Validator\ValidationFailedExceptionNormalizer:
         tags:
-            - { name: 'serializer.normalizer', priority: 10 }
+            - { name: serializer.normalizer, priority: 10 }
 
     App\Language\Infrastructure\EventListener\RequestLanguageListener:
         tags:

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Infrastructure\EventListener;
 
-use App\Common\Domain\Repository\NoResultException;
 use App\Common\Presentation\Response\ResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -33,10 +32,6 @@ final class ExceptionListener
 
         if ($e instanceof HandlerFailedException) {
             $e = $e->getPrevious();
-        }
-
-        if ($e instanceof NoResultException) {
-            $statusCode = Response::HTTP_NOT_FOUND;
         }
 
         $response = $this->responder->render(['exception' => $e]);

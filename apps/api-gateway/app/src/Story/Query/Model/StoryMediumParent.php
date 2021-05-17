@@ -6,12 +6,13 @@ namespace App\Story\Query\Model;
 
 final class StoryMediumParent extends StoryMedium
 {
-    private int $childrenTotal = 0;
+    private int $childrenTotal;
 
     public function __construct()
     {
         parent::__construct();
 
+        // init values
         $this->childrenTotal = 0;
     }
 

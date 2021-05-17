@@ -73,7 +73,7 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
      * @ORM\ManyToOne(targetEntity="App\Story\Domain\Model\Story", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private ?Story $parent = null;
+    private ?Story $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\Story", mappedBy="parent", cascade={"remove"})
@@ -83,13 +83,13 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
     /**
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    private ?int $position = null;
+    private ?int $position;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Story\Domain\Model\StoryImage", inversedBy="stories")
      * @ORM\JoinColumn(name="story_image_id", referencedColumnName="id")
      */
-    private ?StoryImage $storyImage = null;
+    private ?StoryImage $storyImage;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryHasStoryTheme", mappedBy="story", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -106,6 +106,9 @@ class Story extends AbstractEntity implements UserableInterface, LanguageableInt
         parent::__construct();
 
         // init values
+        $this->parent = null;
+        $this->position = null;
+        $this->storyImage = null;
         $this->children = new ArrayCollection();
         $this->storyHasStoryThemes = new ArrayCollection();
         $this->storyRatings = new ArrayCollection();

@@ -13,6 +13,7 @@ final class StoryImageFull extends StoryImageMedium
 
     public function __construct()
     {
+        // init values
         $this->storyThemes = new ArrayCollection();
     }
 

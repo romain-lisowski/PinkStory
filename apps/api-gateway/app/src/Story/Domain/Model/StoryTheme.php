@@ -32,7 +32,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
      * @ORM\ManyToOne(targetEntity="App\Story\Domain\Model\StoryTheme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private ?StoryTheme $parent = null;
+    private ?StoryTheme $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryTheme", mappedBy="parent", cascade={"remove"})
@@ -42,7 +42,7 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
     /**
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    private ?int $position = null;
+    private ?int $position;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Story\Domain\Model\StoryThemeTranslation", mappedBy="storyTheme", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -64,6 +64,8 @@ class StoryTheme extends AbstractEntity implements TranslatableInterface, Positi
         parent::__construct();
 
         // init values
+        $this->parent = null;
+        $this->position = null;
         $this->children = new ArrayCollection();
         $this->storyThemeTranslations = new ArrayCollection();
         $this->storyHasStoryThemes = new ArrayCollection();

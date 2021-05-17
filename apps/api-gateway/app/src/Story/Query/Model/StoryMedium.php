@@ -32,6 +32,7 @@ class StoryMedium extends Story implements UserableInterface
 
     public function __construct()
     {
+        // init values
         $this->rates = [];
         $this->storyRatingsTotal = 0;
         $this->rate = null;

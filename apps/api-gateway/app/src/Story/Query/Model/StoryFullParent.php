@@ -15,6 +15,7 @@ final class StoryFullParent extends StoryFull
     {
         parent::__construct();
 
+        // init values
         $this->children = new ArrayCollection();
     }
 
@@ -32,9 +33,9 @@ final class StoryFullParent extends StoryFull
         return $this;
     }
 
-    public function addChild(Story $story): self
+    public function addChild(Story $child): self
     {
-        $this->children[] = $story;
+        $this->children[] = $child;
 
         return $this;
     }

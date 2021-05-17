@@ -14,6 +14,7 @@ class UserFull extends UserMedium
 
     public function __construct()
     {
+        // init values
         $this->readingLanguages = new ArrayCollection();
     }
 

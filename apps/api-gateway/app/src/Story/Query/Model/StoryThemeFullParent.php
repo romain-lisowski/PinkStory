@@ -13,6 +13,7 @@ final class StoryThemeFullParent extends StoryThemeFull
 
     public function __construct()
     {
+        // init values
         $this->children = new ArrayCollection();
     }
 

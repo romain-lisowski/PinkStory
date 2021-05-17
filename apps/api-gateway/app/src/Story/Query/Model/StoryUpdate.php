@@ -23,6 +23,7 @@ class StoryUpdate extends Story implements UserableInterface
 
     public function __construct()
     {
+        // init values
         $this->storyImage = null;
         $this->storyThemes = new ArrayCollection();
     }

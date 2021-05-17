@@ -14,6 +14,7 @@ final class StoryFullChild extends StoryFull
     {
         parent::__construct();
 
+        // init values
         $this->previous = null;
         $this->next = null;
     }
@@ -23,9 +24,9 @@ final class StoryFullChild extends StoryFull
         return $this->parent;
     }
 
-    public function setParent(Story $story): self
+    public function setParent(Story $parent): self
     {
-        $this->parent = $story;
+        $this->parent = $parent;
 
         return $this;
     }
@@ -35,9 +36,9 @@ final class StoryFullChild extends StoryFull
         return $this->previous;
     }
 
-    public function setPrevious(?Story $story): self
+    public function setPrevious(?Story $previous): self
     {
-        $this->previous = $story;
+        $this->previous = $previous;
 
         return $this;
     }
@@ -47,9 +48,9 @@ final class StoryFullChild extends StoryFull
         return $this->next;
     }
 
-    public function setNext(?Story $story): self
+    public function setNext(?Story $next): self
     {
-        $this->next = $story;
+        $this->next = $next;
 
         return $this;
     }

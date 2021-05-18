@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Story\Query\Model;
 
+use App\Common\Domain\Model\EditableInterface;
+use App\Common\Domain\Model\EditableTrait;
 use App\Language\Query\Model\Language;
 use App\User\Domain\Model\UserableInterface;
 use App\User\Domain\Model\UserInterface;
@@ -12,8 +14,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-class StoryMedium extends Story implements UserableInterface
+class StoryMedium extends Story implements UserableInterface, EditableInterface
 {
+    use EditableTrait;
+
     private string $title;
     private string $titleSlug;
     private string $extract;

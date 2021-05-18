@@ -9,6 +9,9 @@ model:
     exception:
         child_depth: Depth limit reached.
         position_update: An error occured during position update.
+    validator:
+        constraint:
+            entity_not_found: No entity was found.
 
 repository:
     exception:

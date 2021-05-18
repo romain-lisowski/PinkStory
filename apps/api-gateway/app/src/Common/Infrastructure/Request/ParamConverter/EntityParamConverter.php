@@ -17,12 +17,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class EntityParamConverter implements ParamConverterInterface
 {
     private ManagerRegistry $registry;
-    private ExpressionLanguage $expressionLanguage;
+    private ExpressionLanguage $language;
 
-    public function __construct(ManagerRegistry $registry, ExpressionLanguage $expressionLanguage)
+    public function __construct(ManagerRegistry $registry, ExpressionLanguage $language)
     {
         $this->registry = $registry;
-        $this->expressionLanguage = $expressionLanguage;
+        $this->language = $language;
     }
 
     public function apply(Request $request, ParamConverter $configuration): bool
@@ -34,7 +34,7 @@ final class EntityParamConverter implements ParamConverterInterface
 
             $repository = $this->registry->getManagerForClass($configuration->getClass())->getRepository($configuration->getClass());
 
-            $object = $this->expressionLanguage->evaluate($options['expr'], array_merge($request->attributes->all(), ['repository' => $repository]));
+            $object = $this->language->evaluate($options['expr'], array_merge($request->attributes->all(), ['repository' => $repository]));
 
             $request->attributes->set($configuration->getName(), $object);
 

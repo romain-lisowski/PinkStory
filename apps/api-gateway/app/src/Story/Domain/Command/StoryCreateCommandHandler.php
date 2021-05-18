@@ -12,20 +12,15 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
-use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Story\Domain\Event\StoryCreatedEvent;
 use App\Story\Domain\Model\Story;
 use App\Story\Domain\Model\StoryTheme;
 use App\Story\Domain\Model\StoryThemeDepthException;
-use App\Story\Domain\Repository\StoryImageNoResultException;
 use App\Story\Domain\Repository\StoryImageRepositoryInterface;
-use App\Story\Domain\Repository\StoryNoResultException;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
-use App\Story\Domain\Repository\StoryThemeNoResultException;
 use App\Story\Domain\Repository\StoryThemeRepositoryInterface;
 use App\Story\Query\Model\Story as QueryStory;
-use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
 final class StoryCreateCommandHandler implements CommandHandlerInterface
@@ -110,33 +105,13 @@ final class StoryCreateCommandHandler implements CommandHandlerInterface
             return [
                 'story' => (new QueryStory())->setId($story->getId()),
             ];
-        } catch (UserNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('user_id', 'user.validator.constraint.user_not_found'),
-            ]);
-        } catch (LanguageNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),
-            ]);
-        } catch (StoryNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('parent_id', 'story.validator.constraint.story_not_found'),
-            ]);
-        } catch (StoryThemeDepthException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('story_theme_ids', $e->getMessage()),
-            ]);
         } catch (ChildDepthException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('parent_id', $e->getMessage()),
             ]);
-        } catch (StoryImageNoResultException $e) {
+        } catch (StoryThemeDepthException $e) {
             throw new ValidationFailedException([
-                new ConstraintViolation('story_image_id', 'story_image.validator.constraint.story_image_not_found'),
-            ]);
-        } catch (StoryThemeNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('story_theme_ids', 'story_theme.validator.constraint.story_theme_not_found'),
+                new ConstraintViolation('story_theme_ids', $e->getMessage()),
             ]);
         }
     }

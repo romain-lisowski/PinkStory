@@ -6,11 +6,8 @@ namespace App\User\Domain\Command;
 
 use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
-use App\Common\Domain\Validator\ConstraintViolation;
-use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\User\Domain\Event\UserUpdatedPasswordForgottenEvent;
-use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\User\Domain\Security\UserPasswordEncoderInterface;
 
@@ -31,31 +28,25 @@ final class UserUpdatePasswordForgottenCommandHandler implements CommandHandlerI
 
     public function __invoke(UserUpdatePasswordForgottenCommand $command): array
     {
-        try {
-            $this->validator->validate($command);
+        $this->validator->validate($command);
 
-            $user = $this->userRepository->findOneByActivePasswordForgottenSecret($command->getSecret());
+        $user = $this->userRepository->findOneByActivePasswordForgottenSecret($command->getSecret());
 
-            $user->updatePassword($command->getPassword(), $this->passwordEncoder);
+        $user->updatePassword($command->getPassword(), $this->passwordEncoder);
 
-            $this->validator->validate($user);
+        $this->validator->validate($user);
 
-            $this->userRepository->flush();
+        $this->userRepository->flush();
 
-            $event = (new UserUpdatedPasswordForgottenEvent())
-                ->setId($user->getId())
-                ->setPassword($user->getPassword())
-            ;
+        $event = (new UserUpdatedPasswordForgottenEvent())
+            ->setId($user->getId())
+            ->setPassword($user->getPassword())
+        ;
 
-            $this->validator->validate($event);
+        $this->validator->validate($event);
 
-            $this->eventBus->dispatch($event);
+        $this->eventBus->dispatch($event);
 
-            return [];
-        } catch (UserNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('secret', 'user.validator.constraint.secret_not_found'),
-            ]);
-        }
+        return [];
     }
 }

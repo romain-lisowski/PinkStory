@@ -8,13 +8,9 @@ use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
-use App\Common\Domain\Validator\ConstraintViolation;
-use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Language\Domain\Model\Language;
-use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
-use App\Language\Domain\Repository\ReadingLanguageNoResultException;
 use App\User\Domain\Event\UserUpdatedInformationEvent;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
@@ -37,45 +33,35 @@ final class UserUpdateInformationCommandHandler implements CommandHandlerInterfa
 
     public function __invoke(UserUpdateInformationCommand $command): array
     {
-        try {
-            $this->validator->validate($command);
+        $this->validator->validate($command);
 
-            $user = $this->userRepository->findOne($command->getId());
+        $user = $this->userRepository->findOne($command->getId());
 
-            $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
+        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
-            $language = $this->languageRepository->findOne($command->getLanguageId());
+        $language = $this->languageRepository->findOne($command->getLanguageId());
 
-            $user->updateGender($command->getGender());
-            $user->updateName($command->getName());
-            $user->updateLanguage($language);
-            $user->updateReadingLanguages($command->getReadingLanguageIds(), $this->languageRepository);
+        $user->updateGender($command->getGender());
+        $user->updateName($command->getName());
+        $user->updateLanguage($language);
+        $user->updateReadingLanguages($command->getReadingLanguageIds(), $this->languageRepository);
 
-            $this->validator->validate($user);
+        $this->validator->validate($user);
 
-            $this->userRepository->flush();
+        $this->userRepository->flush();
 
-            $event = (new UserUpdatedInformationEvent())
-                ->setId($user->getId())
-                ->setGender($user->getGender())
-                ->setName($user->getName())
-                ->setLanguageId($user->getLanguage()->getId())
-                ->setReadingLanguageIds(Language::extractIds($user->getReadingLanguages()->toArray()))
-            ;
+        $event = (new UserUpdatedInformationEvent())
+            ->setId($user->getId())
+            ->setGender($user->getGender())
+            ->setName($user->getName())
+            ->setLanguageId($user->getLanguage()->getId())
+            ->setReadingLanguageIds(Language::extractIds($user->getReadingLanguages()->toArray()))
+        ;
 
-            $this->validator->validate($event);
+        $this->validator->validate($event);
 
-            $this->eventBus->dispatch($event);
+        $this->eventBus->dispatch($event);
 
-            return [];
-        } catch (ReadingLanguageNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('reading_language_ids', 'language.validator.constraint.language_not_found'),
-            ]);
-        } catch (LanguageNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),
-            ]);
-        }
+        return [];
     }
 }

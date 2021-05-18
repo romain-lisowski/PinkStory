@@ -8,14 +8,11 @@ use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
-use App\Common\Domain\Validator\ConstraintViolation;
-use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Story\Domain\Event\StoryRatingUpdatedEvent;
 use App\Story\Domain\Model\StoryRating;
 use App\Story\Domain\Repository\StoryRatingRepositoryInterface;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
-use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
 final class StoryRatingUpdateCommandHandler implements CommandHandlerInterface
@@ -39,49 +36,43 @@ final class StoryRatingUpdateCommandHandler implements CommandHandlerInterface
 
     public function __invoke(StoryRatingUpdateCommand $command): array
     {
-        try {
-            $this->validator->validate($command);
+        $this->validator->validate($command);
 
-            $story = $this->storyRepository->findOne($command->getStoryId());
+        $story = $this->storyRepository->findOne($command->getStoryId());
 
-            $user = $this->userRepository->findOne($command->getUserId());
+        $user = $this->userRepository->findOne($command->getUserId());
 
-            $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
+        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
-            $storyRating = $this->storyRatingRepository->findOneByStoryAndUser($story->getId(), $user->getId());
+        $storyRating = $this->storyRatingRepository->findOneByStoryAndUser($story->getId(), $user->getId());
 
-            $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $storyRating);
+        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $storyRating);
 
-            if (null === $storyRating) {
-                $storyRating = (new StoryRating())
-                    ->setStory($story)
-                    ->setUser($user)
-                ;
-
-                $this->entityManager->persist($storyRating);
-            }
-
-            $storyRating->updateRate($command->getRate());
-
-            $this->validator->validate($storyRating);
-
-            $this->storyRepository->flush();
-
-            $event = (new StoryRatingUpdatedEvent())
-                ->setStoryId($story->getId())
-                ->setUserId($user->getId())
-                ->setRate($storyRating->getRate())
+        if (null === $storyRating) {
+            $storyRating = (new StoryRating())
+                ->setStory($story)
+                ->setUser($user)
             ;
 
-            $this->validator->validate($event);
-
-            $this->eventBus->dispatch($event);
-
-            return [];
-        } catch (UserNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('user_id', 'user.validator.constraint.user_not_found'),
-            ]);
+            $this->entityManager->persist($storyRating);
         }
+
+        $storyRating->updateRate($command->getRate());
+
+        $this->validator->validate($storyRating);
+
+        $this->storyRepository->flush();
+
+        $event = (new StoryRatingUpdatedEvent())
+            ->setStoryId($story->getId())
+            ->setUserId($user->getId())
+            ->setRate($storyRating->getRate())
+        ;
+
+        $this->validator->validate($event);
+
+        $this->eventBus->dispatch($event);
+
+        return [];
     }
 }

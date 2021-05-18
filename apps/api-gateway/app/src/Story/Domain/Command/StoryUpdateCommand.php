@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Story\Domain\Command;
 
 use App\Common\Domain\Command\CommandInterface;
+use App\Common\Infrastructure\Validator\Constraint as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class StoryUpdateCommand implements CommandInterface
@@ -12,6 +13,10 @@ final class StoryUpdateCommand implements CommandInterface
     /**
      * @Assert\NotBlank
      * @Assert\Uuid
+     * @AppAssert\Entity(
+     *      entityClass = "App\Story\Domain\Model\Story",
+     *      message = "story.validator.constraint.story_not_found"
+     * )
      */
     private string $id;
 
@@ -33,16 +38,28 @@ final class StoryUpdateCommand implements CommandInterface
     /**
      * @Assert\NotBlank
      * @Assert\Uuid
+     * @AppAssert\Entity(
+     *      entityClass = "App\Language\Domain\Model\Language",
+     *      message = "language.validator.constraint.language_not_found"
+     * )
      */
     private string $languageId;
 
     /**
      * @Assert\Uuid
+     * @AppAssert\Entity(
+     *      entityClass = "App\Story\Domain\Model\StoryImage",
+     *      message = "story_image.validator.constraint.story_image_not_found"
+     * )
      */
     private ?string $storyImageId;
 
     /**
      * @Assert\NotNull
+     * @AppAssert\Entity(
+     *      entityClass = "App\Story\Domain\Model\StoryTheme",
+     *      message = "story_theme.validator.constraint.story_theme_not_found"
+     * )
      */
     private array $storyThemeIds;
 

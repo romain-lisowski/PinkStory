@@ -11,15 +11,12 @@ use App\Common\Domain\Security\AuthorizationCheckerInterface;
 use App\Common\Domain\Validator\ConstraintViolation;
 use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
-use App\Language\Domain\Repository\LanguageNoResultException;
 use App\Language\Domain\Repository\LanguageRepositoryInterface;
 use App\Story\Domain\Event\StoryUpdatedEvent;
 use App\Story\Domain\Model\StoryTheme;
 use App\Story\Domain\Model\StoryThemeDepthException;
-use App\Story\Domain\Repository\StoryImageNoResultException;
 use App\Story\Domain\Repository\StoryImageRepositoryInterface;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
-use App\Story\Domain\Repository\StoryThemeNoResultException;
 use App\Story\Domain\Repository\StoryThemeRepositoryInterface;
 
 final class StoryUpdateCommandHandler implements CommandHandlerInterface
@@ -90,21 +87,9 @@ final class StoryUpdateCommandHandler implements CommandHandlerInterface
             $this->eventBus->dispatch($event);
 
             return [];
-        } catch (LanguageNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('language_id', 'language.validator.constraint.language_not_found'),
-            ]);
         } catch (StoryThemeDepthException $e) {
             throw new ValidationFailedException([
                 new ConstraintViolation('story_theme_ids', $e->getMessage()),
-            ]);
-        } catch (StoryImageNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('story_image_id', 'story_image.validator.constraint.story_image_not_found'),
-            ]);
-        } catch (StoryThemeNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('story_theme_ids', 'story_theme.validator.constraint.story_theme_not_found'),
             ]);
         }
     }

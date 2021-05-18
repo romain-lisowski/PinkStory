@@ -30,6 +30,7 @@ access_token:
             no_result_exception: No access token was found for query although at least one was expected.
     validator:
         constraint:
+            access_token_not_found: This access token doesn't exist.
             bad_credentials: Bad credentials.
 
 language:
@@ -106,3 +107,4 @@ user:
             invalid_email_validation_code: The email validation code is not valid.
             password_strenght_min: The password is not complex enough.
             secret_not_found: This secret doesn't exist.
+            user_not_found: This user doesn't exist.

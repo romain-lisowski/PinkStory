@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Domain\Command;
 
 use App\Common\Domain\Command\CommandInterface;
+use App\Common\Infrastructure\Validator\Constraint as AppAssert;
 use App\User\Infrastructure\Validator\Constraint as AppUserAssert;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -56,6 +57,10 @@ final class UserCreateCommand implements CommandInterface
     /**
      * @Assert\NotBlank
      * @Assert\Uuid
+     * @AppAssert\Entity(
+     *      entityClass = "App\Language\Domain\Model\Language",
+     *      message = "language.validator.constraint.language_not_found"
+     * )
      */
     private string $languageId;
 

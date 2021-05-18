@@ -8,13 +8,10 @@ use App\Common\Domain\Command\CommandHandlerInterface;
 use App\Common\Domain\Event\EventBusInterface;
 use App\Common\Domain\Model\EditableInterface;
 use App\Common\Domain\Security\AuthorizationCheckerInterface;
-use App\Common\Domain\Validator\ConstraintViolation;
-use App\Common\Domain\Validator\ValidationFailedException;
 use App\Common\Domain\Validator\ValidatorInterface;
 use App\Story\Domain\Event\StoryRatingDeletedEvent;
 use App\Story\Domain\Repository\StoryRatingRepositoryInterface;
 use App\Story\Domain\Repository\StoryRepositoryInterface;
-use App\User\Domain\Repository\UserNoResultException;
 use App\User\Domain\Repository\UserRepositoryInterface;
 
 final class StoryRatingDeleteCommandHandler implements CommandHandlerInterface
@@ -38,36 +35,30 @@ final class StoryRatingDeleteCommandHandler implements CommandHandlerInterface
 
     public function __invoke(StoryRatingDeleteCommand $command): array
     {
-        try {
-            $this->validator->validate($command);
+        $this->validator->validate($command);
 
-            $story = $this->storyRepository->findOne($command->getStoryId());
+        $story = $this->storyRepository->findOne($command->getStoryId());
 
-            $user = $this->userRepository->findOne($command->getUserId());
+        $user = $this->userRepository->findOne($command->getUserId());
 
-            $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
+        $this->authorizationChecker->isGranted(EditableInterface::UPDATE, $user);
 
-            $storyRating = $this->storyRatingRepository->findOneByStoryAndUser($story->getId(), $user->getId());
+        $storyRating = $this->storyRatingRepository->findOneByStoryAndUser($story->getId(), $user->getId());
 
-            $this->authorizationChecker->isGranted(EditableInterface::DELETE, $storyRating);
+        $this->authorizationChecker->isGranted(EditableInterface::DELETE, $storyRating);
 
-            $this->storyRatingRepository->remove($storyRating);
-            $this->storyRatingRepository->flush();
+        $this->storyRatingRepository->remove($storyRating);
+        $this->storyRatingRepository->flush();
 
-            $event = (new StoryRatingDeletedEvent())
-                ->setStoryId($story->getId())
-                ->setUserId($user->getId())
-            ;
+        $event = (new StoryRatingDeletedEvent())
+            ->setStoryId($story->getId())
+            ->setUserId($user->getId())
+        ;
 
-            $this->validator->validate($event);
+        $this->validator->validate($event);
 
-            $this->eventBus->dispatch($event);
+        $this->eventBus->dispatch($event);
 
-            return [];
-        } catch (UserNoResultException $e) {
-            throw new ValidationFailedException([
-                new ConstraintViolation('user_id', 'user.validator.constraint.user_not_found'),
-            ]);
-        }
+        return [];
     }
 }

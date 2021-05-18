@@ -40,6 +40,22 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'editable' => false,
             'user_image_defined' => false,
             'user_editable' => false,
+            'current_story_rating_expected' => null,
+        ]);
+    }
+
+    public function testSucceededSameUserLoggedInStory1(): void
+    {
+        // change user logged in
+        self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
+
+        $this->checkSucceeded([], [
+            'language_reference' => 'language-english',
+            'story_expected_reference' => 'story-first',
+            'editable' => true,
+            'user_image_defined' => false,
+            'user_editable' => true,
+            'current_story_rating_expected' => 5,
         ]);
     }
 
@@ -54,6 +70,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'editable' => false,
             'user_image_defined' => false,
             'user_editable' => false,
+            'current_story_rating_expected' => null,
         ]);
     }
 
@@ -68,6 +85,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'editable' => false,
             'user_image_defined' => false,
             'user_editable' => false,
+            'current_story_rating_expected' => null,
         ]);
     }
 
@@ -85,6 +103,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'editable' => true,
             'user_image_defined' => false,
             'user_editable' => true,
+            'current_story_rating_expected' => null,
         ]);
     }
 
@@ -102,6 +121,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'editable' => true,
             'user_image_defined' => false,
             'user_editable' => true,
+            'current_story_rating_expected' => null,
         ]);
     }
 
@@ -119,6 +139,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
             'editable' => false,
             'user_image_defined' => false,
             'user_editable' => false,
+            'current_story_rating_expected' => null,
         ]);
     }
 
@@ -180,6 +201,17 @@ final class StoryGetActionTest extends AbstractStoryActionTest
                     $this->fail('Story child ['.StoryFixture::DATA[$storyChildFixtureReference]['id'].'] does not exist.');
                 }
             }
+        }
+
+        // current story rating informations
+        if (null !== $options['current_story_rating_expected']) {
+            $this->assertEquals($options['current_story_rating_expected'], $responseData['current_story_rating']['rate']);
+            $this->assertTrue($responseData['current_story_rating']['editable']);
+            $this->assertEquals(StoryFixture::DATA[$options['story_expected_reference']]['id'], $responseData['current_story_rating']['story']['id']);
+            $this->assertEquals(self::$currentUser->getId(), $responseData['current_story_rating']['user']['id']);
+            $this->assertTrue($responseData['current_story_rating']['user']['editable']);
+        } else {
+            $this->assertNull($responseData['current_story_rating']);
         }
     }
 

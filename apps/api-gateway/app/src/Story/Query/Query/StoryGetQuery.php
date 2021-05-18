@@ -21,6 +21,11 @@ final class StoryGetQuery implements QueryInterface
      */
     private string $languageId;
 
+    /**
+     * @Assert\Uuid
+     */
+    private ?string $userId;
+
     public function getId(): string
     {
         return $this->id;
@@ -41,6 +46,18 @@ final class StoryGetQuery implements QueryInterface
     public function setLanguageId(string $languageId): self
     {
         $this->languageId = $languageId;
+
+        return $this;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(?string $userId): self
+    {
+        $this->userId = $userId;
 
         return $this;
     }

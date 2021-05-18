@@ -8,6 +8,7 @@ use App\Common\Presentation\Response\ResponderInterface;
 use App\Common\Query\Query\QueryBusInterface;
 use App\Story\Domain\Model\Story;
 use App\Story\Query\Query\StoryGetQuery;
+use App\User\Domain\Security\SecurityInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +23,13 @@ final class StoryGetAction
 {
     private QueryBusInterface $queryBus;
     private ResponderInterface $responder;
+    private SecurityInterface $security;
 
-    public function __construct(QueryBusInterface $queryBus, ResponderInterface $responder)
+    public function __construct(QueryBusInterface $queryBus, ResponderInterface $responder, SecurityInterface $security)
     {
         $this->queryBus = $queryBus;
         $this->responder = $responder;
+        $this->security = $security;
     }
 
     public function __invoke(Request $request, StoryGetQuery $query, Story $story): Response
@@ -34,6 +37,7 @@ final class StoryGetAction
         $query
             ->setId($story->getId())
             ->setLanguageId($request->get('current-language')->getId())
+            ->setUserId(null !== $this->security->getUser() ? $this->security->getUser()->getId() : null)
         ;
 
         $result = $this->queryBus->dispatch($query);

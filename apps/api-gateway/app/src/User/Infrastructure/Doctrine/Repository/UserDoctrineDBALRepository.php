@@ -13,6 +13,7 @@ use App\Language\Query\Repository\LanguageRepositoryInterface;
 use App\User\Domain\Model\UserGender;
 use App\User\Domain\Model\UserStatus;
 use App\User\Domain\Repository\UserNoResultException;
+use App\User\Query\Model\User;
 use App\User\Query\Model\UserCurrent;
 use App\User\Query\Model\UserFull;
 use App\User\Query\Model\UserUpdate;
@@ -72,6 +73,30 @@ final class UserDoctrineDBALRepository extends AbstractDoctrineDBALRepository im
         $this->languageRepository->populateUserReadingLanguages($user, LanguageMedium::class);
 
         return $user;
+    }
+
+    public function findOneLite(string $id): User
+    {
+        $qb = $this->createQueryBuilder();
+
+        $qb->select('u.id as user_id')
+            ->from('usr_user', 'u')
+            ->where($qb->expr()->and(
+                $qb->expr()->eq('u.status', ':user_status'),
+                $qb->expr()->eq('u.id', ':user_id')
+            ))->setParameters([
+                'user_status' => UserStatus::ACTIVATED,
+                'user_id' => $id,
+            ])
+        ;
+
+        $data = $qb->execute()->fetchAssociative();
+
+        if (false === $data) {
+            throw new UserNoResultException();
+        }
+
+        return (new User())->setId(strval($data['user_id']));
     }
 
     public function findOneForUpdate(UserGetForUpdateQuery $query): UserUpdate

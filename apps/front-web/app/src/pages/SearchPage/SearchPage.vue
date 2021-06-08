@@ -13,6 +13,7 @@
         </div>
       </template>
     </CategoryBlock>
+
     <div class="mx-8">
       <StoryList :with-story-list-order="true" :with-loading-overlay="false" />
     </div>

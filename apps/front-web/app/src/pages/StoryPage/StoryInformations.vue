@@ -1,4 +1,4 @@
-<template>
+<template v-if="story">
   <div class="flex flex-col items-center">
     <p class="text-3xl md:text-5xl font-bold">{{ t('informations') }}</p>
     <div class="flex flex-wrap justify-evenly gap-8 mt-6">
@@ -13,7 +13,7 @@
           <div class="flex flex-col pr-6 border-r-2">
             <span class="text-base md:text-lg">{{ t('reader-reviews') }}</span>
             <span class="text-xl md:text-2xl font-bold">{{
-              storyRateFormatted
+              story.rate ? `${props.story.rate} / 5` : '-'
             }}</span>
           </div>
           <div v-if="story.parent" class="flex flex-col pl-6">
@@ -40,7 +40,7 @@
           <div class="flex flex-col pr-6 border-r-2">
             <span class="text-base md:text-lg">{{ t('registration') }}</span>
             <span class="text-xl md:text-2xl font-bold">{{
-              createdAtFormatted
+              dayJs(story.created_at).format('DD/MM/YYYY HH[h]mm')
             }}</span>
           </div>
           <div class="flex flex-col pl-6">
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import dayJs from 'dayjs'
 
@@ -65,15 +64,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    const storyRateFormatted = computed(() => {
-      return props.story.rate ? `${props.story.rate} / 5` : '-'
-    })
-
-    const createdAtFormatted = computed(() => {
-      return dayJs(props.story.created_at).format('DD/MM/YYYY HH[h]mm')
-    })
-
+  setup() {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -86,7 +77,7 @@ export default {
         },
       },
     })
-    return { storyRateFormatted, createdAtFormatted, t }
+    return { dayJs, t }
   },
 }
 </script>

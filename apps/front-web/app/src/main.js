@@ -23,5 +23,4 @@ createApp(App)
   .component('font-awesome-icon', FontAwesomeIcon)
   .component('font-awesome-layers', FontAwesomeLayers)
   .component('font-awesome-layers-text', FontAwesomeLayersText)
-
   .mount('#app')

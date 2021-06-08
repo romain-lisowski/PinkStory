@@ -1,9 +1,10 @@
-<template>
+<template v-if="story">
   <li
     class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-6 pb-10 sm:pb-8 xl:pb-4 p-4 rounded-2xl cursor-pointer"
   >
     <a>
       <img
+        v-if="story.story_image"
         class="w-full h-48 sm:h-64 object-cover object-top rounded-2xl opacity-90"
         :src="story.story_image.image_url"
       />

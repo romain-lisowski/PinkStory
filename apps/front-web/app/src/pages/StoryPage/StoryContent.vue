@@ -1,4 +1,4 @@
-<template>
+<template v-if="story">
   <div class="w-5/6 lg:w-3/4 pt-12">
     <p
       class="text-justify font-thin text-base sm:text-lg lg:text-xl tracking-wide leading-relaxed"
@@ -9,7 +9,7 @@
       >{{ t('categories') }} :
       <span
         class="text-base sm:text-lg lg:text-xl font-normal text-accent-highlight"
-        >{{ data.storyCategories }}</span
+        >{{ story.story_themes.map((theme) => theme.title).join(', ') }}</span
       >
     </span>
 
@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -67,18 +66,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    const data = reactive({})
-    onMounted(() => {
-      data.storyCategories = computed(() => {
-        let themes = []
-        if (props.story.story_themes) {
-          themes = props.story.story_themes.map((theme) => theme.title)
-        }
-        return themes.join(', ')
-      })
-    })
-
+  setup() {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -90,7 +78,7 @@ export default {
       },
     })
 
-    return { data, t }
+    return { t }
   },
 }
 </script>

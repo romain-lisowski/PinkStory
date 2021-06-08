@@ -33,9 +33,6 @@ import { useI18n } from 'vue-i18n'
 
 export default {
   setup() {
-    const storyContentPlaceHolder =
-      '<h3>Nouvelle histoire !</h3><p>Commencez à écrire une nouvelle histoire érotique fictive ou réelle ...</p>'
-
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -47,7 +44,7 @@ export default {
       },
     })
 
-    return { storyContentPlaceHolder, t }
+    return { t }
   },
 }
 </script>

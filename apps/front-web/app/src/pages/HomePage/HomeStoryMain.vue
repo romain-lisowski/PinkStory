@@ -1,6 +1,7 @@
-<template>
+<template v-if="story">
   <div id="main" class="relative mb-12 sm:mb-20">
     <div
+      v-if="story.story_image"
       class="absolute inset-0 left-auto w-full md:w-4/5 lg:w-3/4 bg-center bg-cover opacity-50"
       :style="{
         'background-image': `url(${story.story_image.image_url})`,
@@ -20,14 +21,14 @@
       >
         18+
         <span class="mx-2 font-normal">|</span>
-        {{ storyCreatedAtFormatted }}
+        {{ dayJs(story.created_at).format('DD/MM/YYYY HH[h]mm') }}
         <span class="mx-2 font-normal">|</span>
-        <span>{{ story.user.name }}</span>
+        <span v-if="story.user">{{ story.user.name }}</span>
         <span v-if="story.user && story.user.gender === 'FEMALE'">&#9792;</span
         ><span v-else class="font-medium">&#9794;</span>
       </p>
       <p class="mt-2 text-xl sm:text-3xl xl:text-4xl text-left text-accent">
-        {{ storyCategories }}
+        {{ story.story_themes.map((theme) => theme.title).join(', ') }}
       </p>
 
       <UiRatingStars :rating="story.rate" class="mt-2" />
@@ -53,7 +54,6 @@
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
 import useApiStorySearch from '@/composition/api/story/useApiStorySearch'
-import { computed } from 'vue'
 import dayJs from 'dayjs'
 import { useStore } from 'vuex'
 
@@ -80,19 +80,11 @@ export default {
     })
 
     if (!error.value) {
+      // array destructuring
       ;[story] = response.value.stories
     }
 
-    const storyCategories = computed(() => {
-      const themes = story.story_themes.map((theme) => theme.title)
-      return themes.join(', ')
-    })
-
-    const storyCreatedAtFormatted = computed(() => {
-      return dayJs(story.created_at).format('DD/MM/YYYY HH[h]mm')
-    })
-
-    return { story, storyCategories, storyCreatedAtFormatted, t }
+    return { story, dayJs, t }
   },
 }
 </script>

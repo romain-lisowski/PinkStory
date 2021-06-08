@@ -7,7 +7,7 @@
         t('reader-reviews')
       }}</span>
       <span class="mt-1 md:mt-0 text-base sm:text-2xl lg:text-4xl font-bold"
-        >{{ storyRateFormatted }}
+        >{{ story.rate ? `${props.story.rate} / 5` : '-' }}
       </span>
     </li>
     <li class="flex flex-col px-2 sm:px-8 border-r">
@@ -23,7 +23,7 @@
         t('first-publication')
       }}</span>
       <span class="mt-1 md:mt-0 text-base sm:text-2xl lg:text-4xl font-bold">{{
-        createdAtFormatted
+        dayJs(story.created_at).format('DD/MM/YYYY HH[h]mm')
       }}</span>
     </li>
   </ul>
@@ -31,7 +31,6 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import dayJs from 'dayjs'
 
 export default {
@@ -42,15 +41,7 @@ export default {
       default: () => ({ rate: 0, content: '', created_at: null }),
     },
   },
-  setup(props) {
-    const storyRateFormatted = computed(() => {
-      return props.story.rate ? `${props.story.rate} / 5` : '-'
-    })
-
-    const createdAtFormatted = computed(() => {
-      return dayJs(props.story.created_at).format('DD/MM/YYYY HH[h]mm')
-    })
-
+  setup() {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -62,7 +53,7 @@ export default {
       },
     })
 
-    return { storyRateFormatted, createdAtFormatted, t }
+    return { dayJs, t }
   },
 }
 </script>

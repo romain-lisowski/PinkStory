@@ -1,4 +1,4 @@
-<template>
+<template v-if="story">
   <div class="relative h-128 sm:h-256 lg:h-screen">
     <div
       class="absolute w-full h-128 sm:h-256 lg:h-screen bg-center bg-cover"
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -47,12 +46,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    const data = reactive({})
-    data.imageUrl = computed(() => {
-      return props.story.story_image.image_url
-    })
-
+  setup() {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -62,7 +56,7 @@ export default {
       },
     })
 
-    return { data, t }
+    return { t }
   },
 }
 </script>

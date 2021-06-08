@@ -104,7 +104,9 @@ class UserGetActionTest extends AbstractUserActionTest
     public function testSucceededNoUserLoggedInButFrench(): void
     {
         // change locale
-        self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'].'?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         $this->checkSucceeded(null, [
             'language_reference' => 'language-french',

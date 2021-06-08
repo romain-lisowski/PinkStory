@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/update-password", name="account_update_password", methods={"PATCH"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  * @IsGranted("ROLE_USER")
  */
 final class AccountUpdatePasswordAction

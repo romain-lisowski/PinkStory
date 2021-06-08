@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/update", name="account_update_get", methods={"GET"})
- * @ParamConverter("query", converter="request_body")
+ * @ParamConverter("query", converter="request_data")
  * @IsGranted("ROLE_USER")
  */
 final class AccountGetForUpdateAction

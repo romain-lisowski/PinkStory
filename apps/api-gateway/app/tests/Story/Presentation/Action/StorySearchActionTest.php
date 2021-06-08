@@ -36,10 +36,13 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglish(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'order' => StorySearchQuery::ORDER_CREATED_AT,
             'sort' => Criteria::ASC,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 4,
             'stories_expected' => [
@@ -82,12 +85,13 @@ final class StorySearchActionTest extends AbstractStoryActionTest
     public function testSucceededNoLogginButFrench(): void
     {
         // change locale
-        self::$httpUri = self::$httpUri.'?_locale=fr';
-
-        $this->checkSucceeded([
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
             'order' => StorySearchQuery::ORDER_CREATED_AT,
             'sort' => Criteria::ASC,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
             'total_count' => 2,
             'stories_expected' => [
@@ -114,15 +118,16 @@ final class StorySearchActionTest extends AbstractStoryActionTest
     public function testSucceededLogginEnglish(): void
     {
         // change locale (force to test user setting override)
-        self::$httpUri = self::$httpUri.'?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+            'order' => StorySearchQuery::ORDER_CREATED_AT,
+            'sort' => Criteria::ASC,
+        ]);
 
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([
-            'order' => StorySearchQuery::ORDER_CREATED_AT,
-            'sort' => Criteria::ASC,
-        ], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'total_count' => 4,
             'stories_expected' => [
@@ -167,10 +172,13 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'order' => StorySearchQuery::ORDER_CREATED_AT,
             'sort' => Criteria::ASC,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
             'total_count' => 6,
             'stories_expected' => [
@@ -228,12 +236,15 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch1(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'order' => StorySearchQuery::ORDER_CREATED_AT,
             'sort' => Criteria::ASC,
             'limit' => 2,
             'offset' => 2,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 4,
             'stories_expected' => [
@@ -259,11 +270,14 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch2(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'order' => StorySearchQuery::ORDER_CREATED_AT,
             'limit' => 2,
             'offset' => 2,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 4,
             'stories_expected' => [
@@ -331,9 +345,12 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch4(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'user_id' => UserFixture::DATA['user-leslie']['id'],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 0,
             'stories_expected' => [],
@@ -342,9 +359,12 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch5(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'type' => StorySearchQuery::TYPE_PARENT,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 2,
             'stories_expected' => [
@@ -370,9 +390,12 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch6(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'type' => StorySearchQuery::TYPE_CHILD,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 2,
             'stories_expected' => [
@@ -398,11 +421,14 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch7(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'user_id' => UserFixture::DATA['user-john']['id'],
             'type' => StorySearchQuery::TYPE_CHILD,
             'limit' => 1,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 2,
             'stories_expected' => [
@@ -420,12 +446,15 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch8(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-office']['id'],
                 StoryThemeFixture::DATA['story-theme-threesome']['id'],
             ],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 1,
             'stories_expected' => [
@@ -446,12 +475,15 @@ final class StorySearchActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-office']['id'],
                 StoryThemeFixture::DATA['story-theme-threesome']['id'],
             ],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
             'total_count' => 2,
             'stories_expected' => [

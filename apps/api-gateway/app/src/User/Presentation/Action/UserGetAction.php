@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/user/{id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="user_get", methods={"GET"})
- * @ParamConverter("query", converter="request_body")
+ * @ParamConverter("query", converter="request_data")
  * @ParamConverter("user", converter="entity", options={"expr": "repository.findOne(id)"})
  */
 final class UserGetAction

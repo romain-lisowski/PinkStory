@@ -165,6 +165,11 @@ abstract class AbstractActionTest extends WebTestCase
 
     abstract protected function checkProcessHasBeenStopped(array $responseData = [], array $options = []): void;
 
+    protected function httpBuild(string $baseUrl, array $data = []): string
+    {
+        return $baseUrl.'?'.http_build_query($data);
+    }
+
     private function refreshCurrentUser()
     {
         if (null !== self::$httpAuthorizationToken) {

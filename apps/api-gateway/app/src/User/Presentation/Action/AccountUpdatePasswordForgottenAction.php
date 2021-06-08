@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/update-password-forgotten", name="account_update_password_forgotten", methods={"PATCH"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  */
 final class AccountUpdatePasswordForgottenAction
 {

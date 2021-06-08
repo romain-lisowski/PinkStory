@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/account/regenerate-email-validation-code", name="account_regenerate_email_validation_code", methods={"PATCH"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  * @IsGranted("ROLE_USER")
  */
 final class AccountRegenerateEmailValidationCodeAction

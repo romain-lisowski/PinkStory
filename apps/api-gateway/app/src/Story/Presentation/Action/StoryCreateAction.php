@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story", name="story_create", methods={"POST"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  * @IsGranted("ROLE_USER")
  */
 final class StoryCreateAction

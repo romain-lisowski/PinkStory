@@ -36,7 +36,9 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
     public function testSucceededNoLogginButFrench(): void
     {
         // change locale
-        self::$httpUri = '/user-gender/search?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
@@ -46,7 +48,9 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
     public function testSucceededLogginEnglish(): void
     {
         // change locale (force to test user setting override)
-        self::$httpUri = '/user-gender/search?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];

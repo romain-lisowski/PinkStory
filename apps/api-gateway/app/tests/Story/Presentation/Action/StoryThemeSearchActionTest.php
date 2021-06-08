@@ -35,7 +35,9 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     public function testSucceededNoLogginButFrench(): void
     {
         // change locale
-        self::$httpUri = self::$httpUri.'?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
@@ -45,7 +47,9 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
     public function testSucceededLogginEnglish(): void
     {
         // change locale (force to test user setting override)
-        self::$httpUri = self::$httpUri.'?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];

@@ -8,7 +8,7 @@
     <a
       class="absolute top-0 right-0 py-8 px-12 z-20 text-3xl cursor-pointer"
       @click="onClickCloseAuthPanel"
-      ><font-awesome-icon icon="times" class="h-8"
+      ><ui-font-awesome-icon icon="times" class="h-8"
     /></a>
 
     <div

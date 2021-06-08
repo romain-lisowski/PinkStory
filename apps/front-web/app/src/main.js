@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@/plugins/font-awesome'
+import { UiFontAwesomeIcon } from '@/plugins/font-awesome'
 import {
   FontAwesomeLayers,
   FontAwesomeLayersText,
@@ -20,7 +20,7 @@ createApp(App)
   .use(router)
   .use(store)
   .use(i18n)
-  .component('font-awesome-icon', FontAwesomeIcon)
+  .component('ui-font-awesome-icon', UiFontAwesomeIcon)
   .component('font-awesome-layers', FontAwesomeLayers)
   .component('font-awesome-layers-text', FontAwesomeLayersText)
   .mount('#app')

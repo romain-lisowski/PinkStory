@@ -12,7 +12,7 @@ import {
   faQuoteRight,
   faHeading,
 } from '@fortawesome/free-solid-svg-icons'
-import FontAwesomeIcon from '@/components/lib/FontAwesomeIcon.vue'
+import UiFontAwesomeIcon from '@/components/ui/UiFontAwesomeIcon.vue'
 
 library.add(faTimes)
 library.add(faBars)
@@ -26,4 +26,4 @@ library.add(faUnderline)
 library.add(faQuoteRight)
 library.add(faHeading)
 
-export { FontAwesomeIcon }
+export { UiFontAwesomeIcon }

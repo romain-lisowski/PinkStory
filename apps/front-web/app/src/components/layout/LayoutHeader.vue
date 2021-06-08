@@ -7,11 +7,11 @@
       <a
         class="flex justify-end py-4 pr-8 cursor-pointer"
         @click="openMenu = !openMenu"
-        ><font-awesome-icon icon="times" class="h-8"
+        ><ui-font-awesome-icon icon="times" class="h-8"
       /></a>
 
-      <ul class="text-center font-bold">
-        <li @click="openMenu = !openMenu">
+      <ul class="text-center font-bold" @click="openMenu = !openMenu">
+        <li>
           <router-link
             :to="{ name: 'Home' }"
             class="p-4 block"
@@ -21,7 +21,7 @@
             >{{ t('discover') }}</router-link
           >
         </li>
-        <li @click="openMenu = !openMenu">
+        <li>
           <router-link
             :to="{ name: 'Search' }"
             class="p-4 block"
@@ -33,7 +33,7 @@
             >{{ t('search') }}</router-link
           >
         </li>
-        <li @click="openMenu = !openMenu">
+        <li v-show="isLoggedIn">
           <router-link
             :to="{ name: 'Write' }"
             class="p-4 block"
@@ -45,7 +45,7 @@
             >{{ t('write') }}</router-link
           >
         </li>
-        <li v-show="isLoggedIn" @click="openMenu = !openMenu">
+        <li v-show="isLoggedIn">
           <router-link
             :to="{ name: 'User' }"
             :class="
@@ -58,7 +58,16 @@
             {{ t('settings') }}
           </router-link>
         </li>
-        <li v-show="isLoggedIn">
+        <li v-if="!isLoggedIn">
+          <a
+            class="p-4 block hover:bg-accent rounded-lg cursor-pointer"
+            :class="inactiveMenuClasses"
+            @click="openAuthPanel = true"
+          >
+            {{ t('sign-in') }}
+          </a>
+        </li>
+        <li v-else>
           <a class="p-4 block hover:bg-accent cursor-pointer" @click="logout">
             {{ t('logout') }}
           </a>
@@ -73,7 +82,7 @@
         class="ml-6 md:ml-0 pt-2 lg:hidden text-2xl cursor-pointer"
         @click="openMenu = !openMenu"
       >
-        <font-awesome-icon icon="bars" class="h-8"
+        <ui-font-awesome-icon icon="bars" class="h-8"
       /></a>
 
       <router-link
@@ -83,7 +92,7 @@
         PinkStory
       </router-link>
 
-      <nav v-show="isLoggedIn" class="hidden lg:block">
+      <nav class="hidden lg:block">
         <ul class="flex items-center justify-center tracking-wide">
           <li>
             <router-link
@@ -107,7 +116,7 @@
               >{{ t('search') }}</router-link
             >
           </li>
-          <li class="pl-2">
+          <li v-show="isLoggedIn" class="pl-2">
             <router-link
               :to="{ name: 'Write' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
@@ -119,7 +128,7 @@
               >{{ t('write') }}</router-link
             >
           </li>
-          <li class="pl-2">
+          <li v-show="isLoggedIn" class="pl-2">
             <router-link
               :to="{ name: 'User' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
@@ -132,7 +141,16 @@
               {{ t('settings') }}
             </router-link>
           </li>
-          <li class="pl-2">
+          <li v-if="!isLoggedIn" class="pl-2">
+            <a
+              class="p-2 px-4 block font-bold border-2 rounded-lg cursor-pointer"
+              :class="inactiveMenuClasses"
+              @click="openAuthPanel = true"
+            >
+              {{ t('sign-in') }}
+            </a>
+          </li>
+          <li v-else class="pl-2">
             <a
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
               @click="logout"
@@ -167,16 +185,6 @@
         >
       </button>
 
-      <a
-        v-else
-        class="p-3 cursor-pointer block mt-4 lg:inline-block lg:mt-0 rounded-lg"
-        @click="openAuthPanel = true"
-      >
-        <font-awesome-icon
-          icon="book"
-          class="-mt-2 lg:mt-0 -ml-6 sm:ml-0 mr-3 sm:mr-6 md:mr-2 lg:-mr-2 w-6 sm:w-8 text-accent"
-        />
-      </a>
       <Auth
         :open-auth-panel="openAuthPanel"
         @close-auth-panel="openAuthPanel = false"
@@ -251,6 +259,7 @@ export default {
           write: 'Ecrire une histoire',
           settings: 'Préférences',
           logout: 'Déconnexion',
+          'sign-in': 'Connexion',
         },
       },
     })

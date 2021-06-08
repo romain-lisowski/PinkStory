@@ -19,7 +19,7 @@
           v-if="story.previous"
           :to="{ name: 'Story', params: { storyId: story.previous.id } }"
         >
-          <font-awesome-icon
+          <ui-font-awesome-icon
             icon="chevron-left"
             class="h-8 text-2xl mr-1 md:mr-4"
           />
@@ -46,7 +46,7 @@
               {{ story.next.title }}
             </span>
           </span>
-          <font-awesome-icon
+          <ui-font-awesome-icon
             icon="chevron-right"
             class="h-8 text-2xl ml-1 md:ml-2"
           />

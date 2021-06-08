@@ -173,8 +173,8 @@
         @click="openAuthPanel = true"
       >
         <font-awesome-icon
-          icon="venus-mars"
-          class="-mt-2 lg:mt-2 -ml-6 sm:ml-0 mr-3 sm:mr-6 md:mr-2 lg:-mr-2 w-10 sm:w-12 text-4xl text-accent"
+          icon="book"
+          class="-mt-2 lg:mt-0 -ml-6 sm:ml-0 mr-3 sm:mr-6 md:mr-2 lg:-mr-2 w-6 sm:w-8 text-accent"
         />
       </a>
       <Auth

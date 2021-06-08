@@ -2,7 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faTimes,
   faBars,
-  faVenusMars,
+  faBook,
   faHeart,
   faChevronLeft,
   faChevronRight,
@@ -16,7 +16,7 @@ import FontAwesomeIcon from '@/components/lib/FontAwesomeIcon.vue'
 
 library.add(faTimes)
 library.add(faBars)
-library.add(faVenusMars)
+library.add(faBook)
 library.add(faHeart)
 library.add(faChevronLeft)
 library.add(faChevronRight)

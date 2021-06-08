@@ -30,7 +30,7 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
 
     public function testSucceededSameUserLoggedIn(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'editable' => true,
             'user_editable' => true,
         ]);
@@ -41,7 +41,7 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'editable' => true,
             'user_editable' => true,
         ]);
@@ -52,7 +52,7 @@ final class StoryGetForUpdateActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'editable' => true,
             'user_editable' => true,
         ]);

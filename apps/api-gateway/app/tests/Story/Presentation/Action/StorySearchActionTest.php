@@ -289,7 +289,7 @@ final class StorySearchActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoLogginButEnglishSearch3(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 4,
             'stories_expected' => [

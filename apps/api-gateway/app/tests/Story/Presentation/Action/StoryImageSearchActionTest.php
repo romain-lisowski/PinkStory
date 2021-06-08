@@ -28,7 +28,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 
     public function testSucceededNoSearchNoLogginButEnglish(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 3,
             'story_images_expected_reference' => [
@@ -44,7 +44,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         // change locale
         self::$httpUri = self::$httpUri.'?_locale=fr';
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
             'total_count' => 3,
             'story_images_expected_reference' => [
@@ -63,7 +63,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'total_count' => 3,
             'story_images_expected_reference' => [
@@ -79,7 +79,7 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
             'total_count' => 3,
             'story_images_expected_reference' => [

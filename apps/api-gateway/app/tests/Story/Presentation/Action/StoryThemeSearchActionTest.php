@@ -27,7 +27,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
 
     public function testSucceededNoLogginButEnglish(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
         ]);
     }
@@ -37,7 +37,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         // change locale
         self::$httpUri = self::$httpUri.'?_locale=fr';
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
         ]);
     }
@@ -50,7 +50,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
         ]);
     }
@@ -60,7 +60,7 @@ final class StoryThemeSearchActionTest extends AbstractStoryThemeActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
         ]);
     }

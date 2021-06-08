@@ -24,7 +24,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
 
     public function testSucceeded(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'image_defined' => false,
             'editable' => true,
         ]);
@@ -35,7 +35,7 @@ final class AccountGetForUpdateActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'image_defined' => false,
             'editable' => true,
         ]);

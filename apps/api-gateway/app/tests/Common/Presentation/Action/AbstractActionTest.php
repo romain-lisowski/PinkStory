@@ -66,11 +66,11 @@ abstract class AbstractActionTest extends WebTestCase
         parent::tearDown();
     }
 
-    protected function checkSucceeded(array $requestContent = [], array $processOptions = []): void
+    protected function checkSucceeded(?array $requestContent = null, array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
-        ], json_encode($requestContent));
+        ], (null !== $requestContent ? json_encode($requestContent) : null));
 
         // check http response
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -84,9 +84,9 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenSucceeded($responseData, $processOptions);
     }
 
-    protected function checkFailedUnauthorized(array $requestContent = [], array $processOptions = []): void
+    protected function checkFailedUnauthorized(?array $requestContent = null, array $processOptions = []): void
     {
-        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], json_encode($requestContent));
+        $this->client->request(static::$httpMethod, static::$httpUri, [], [], [], (null !== $requestContent ? json_encode($requestContent) : null));
 
         // check http response
         $this->assertEquals(401, $this->client->getResponse()->getStatusCode());
@@ -101,11 +101,11 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedAccessDenied(array $requestContent = [], array $processOptions = []): void
+    protected function checkFailedAccessDenied(?array $requestContent = null, array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
-        ], json_encode($requestContent));
+        ], (null !== $requestContent ? json_encode($requestContent) : null));
 
         // check http response
         $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
@@ -120,11 +120,11 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedValidationFailed(array $requestContent = [], array $invalidFields = [], array $processOptions = []): void
+    protected function checkFailedValidationFailed(?array $requestContent = null, array $invalidFields = [], array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
-        ], json_encode($requestContent));
+        ], (null !== $requestContent ? json_encode($requestContent) : null));
 
         // check http response
         $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
@@ -143,11 +143,11 @@ abstract class AbstractActionTest extends WebTestCase
         $this->checkProcessHasBeenStopped($responseData, $processOptions);
     }
 
-    protected function checkFailedNotFound(array $requestContent = [], array $processOptions = []): void
+    protected function checkFailedNotFound(?array $requestContent = null, array $processOptions = []): void
     {
         $this->client->request(static::$httpMethod, static::$httpUri, [], [], [
             'HTTP_AUTHORIZATION' => null !== static::$httpAuthorizationToken ? 'Bearer '.static::$httpAuthorizationToken : '',
-        ], json_encode($requestContent));
+        ], (null !== $requestContent ? json_encode($requestContent) : null));
 
         // check http response
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());

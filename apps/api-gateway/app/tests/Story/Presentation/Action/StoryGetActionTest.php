@@ -34,7 +34,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
 
     public function testSucceededNoUserLoggedInButEnglishStory1(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-first',
             'editable' => false,
@@ -49,7 +49,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-first',
             'editable' => true,
@@ -64,7 +64,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         // change uri
         self::$httpUri = '/story/'.StoryFixture::DATA['story-second']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-second',
             'editable' => false,
@@ -79,7 +79,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         // change uri
         self::$httpUri = '/story/'.StoryFixture::DATA['story-second-first']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'story_expected_reference' => 'story-second-first',
             'editable' => false,
@@ -97,7 +97,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'story_expected_reference' => 'story-second-first',
             'editable' => true,
@@ -115,7 +115,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
             'story_expected_reference' => 'story-second-first',
             'editable' => true,
@@ -133,7 +133,7 @@ final class StoryGetActionTest extends AbstractStoryActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-juliette']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
             'story_expected_reference' => 'story-second-first',
             'editable' => false,

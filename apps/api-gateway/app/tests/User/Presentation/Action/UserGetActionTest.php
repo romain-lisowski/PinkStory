@@ -19,7 +19,7 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  * @coversNothing
  */
-final class UserGetActionTest extends AbstractUserActionTest
+class UserGetActionTest extends AbstractUserActionTest
 {
     protected function setUp(): void
     {
@@ -35,7 +35,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
             'image_defined' => false,
             'editable' => true,
@@ -47,7 +47,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-yannis']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-yannis']['language_reference'],
             'image_defined' => false,
             'editable' => true,
@@ -59,7 +59,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-leslie']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-leslie']['language_reference'],
             'image_defined' => false,
             'editable' => true,
@@ -71,7 +71,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-juliette']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-juliette']['language_reference'],
             'image_defined' => false,
             'editable' => false,
@@ -80,7 +80,7 @@ final class UserGetActionTest extends AbstractUserActionTest
 
     public function testSucceededNoUserLoggedInButEnglish(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'image_defined' => false,
             'editable' => false,
@@ -94,7 +94,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         $user->setImageDefined(true);
         $this->userRepository->flush();
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'image_defined' => true,
             'editable' => false,
@@ -106,7 +106,7 @@ final class UserGetActionTest extends AbstractUserActionTest
         // change locale
         self::$httpUri = '/user/'.UserFixture::DATA['user-john']['id'].'?_locale=fr';
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
             'image_defined' => false,
             'editable' => false,

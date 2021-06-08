@@ -28,7 +28,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
 
     public function testSucceededNoLogginButEnglish(): void
     {
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
         ]);
     }
@@ -38,7 +38,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         // change locale
         self::$httpUri = '/user-gender/search?_locale=fr';
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
         ]);
     }
@@ -51,7 +51,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-john']['language_reference'],
         ]);
     }
@@ -61,7 +61,7 @@ final class UserGenderSearchActionTest extends AbstractUserActionTest
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-pinkstory']['id'];
 
-        $this->checkSucceeded([], [
+        $this->checkSucceeded(null, [
             'language_reference' => UserFixture::DATA['user-pinkstory']['language_reference'],
         ]);
     }

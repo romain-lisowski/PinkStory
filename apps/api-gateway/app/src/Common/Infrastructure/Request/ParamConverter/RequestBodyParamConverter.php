@@ -23,7 +23,9 @@ final class RequestBodyParamConverter implements ParamConverterInterface
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         try {
-            $object = $this->serializer->deserialize($request->getContent(), $configuration->getClass(), JsonEncoder::FORMAT);
+            $content = false === empty($request->getContent()) ? $request->getContent() : json_encode([]);
+
+            $object = $this->serializer->deserialize($content, $configuration->getClass(), JsonEncoder::FORMAT);
 
             $request->attributes->set($configuration->getName(), $object);
 

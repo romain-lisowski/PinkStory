@@ -112,7 +112,7 @@ final class StoryUpdateChildrenPositionActionTest extends AbstractStoryActionTes
 
     public function testFailedMissingChildren(): void
     {
-        $this->checkFailedValidationFailed([], [
+        $this->checkFailedValidationFailed(null, [
             'children_ids',
         ]);
     }

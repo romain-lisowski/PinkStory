@@ -43,7 +43,7 @@ final class AccountValidateEmailActionTest extends AbstractUserActionTest
 
     public function testFailedMissingCode(): void
     {
-        $this->checkFailedValidationFailed([], [
+        $this->checkFailedValidationFailed(null, [
             'code',
         ]);
     }

@@ -1,45 +1,21 @@
 import { reactive, toRefs } from 'vue'
-// import store from './store.js'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
-export default (
-  method,
-  uri,
-  queryParams = null,
-  formParams = null,
-  jwt = null
-) => {
+export default (method, uri, body = null, jwt = null) => {
   const state = reactive({ response: null, error: null, isLoading: false })
 
-  /**
-   * Transform array parameter of URLSearchParams into multiple entries
-   * ex: {arrayEx: [a, b, c]} -> arrayEx[]=a&arrayEx[]=b&arrayEx[]=c
-   */
-  const transformArraySearchParams = (queryParams, searchParams) => {
-    Object.keys(queryParams).forEach((queryParamKey) => {
-      if (Array.isArray(queryParams[queryParamKey])) {
-        queryParams[queryParamKey].forEach((p) => {
-          searchParams.append(`${queryParamKey}[]`, p)
-        })
-        searchParams.delete(queryParamKey)
-      }
-    })
+  const defaultSearchParams = (method) => {
+    const searchParams = new URLSearchParams()
 
-    return searchParams
-  }
-
-  const getSearchParams = (method, queryParams) => {
-    const searchParams = queryParams
-      ? new URLSearchParams(queryParams)
-      : new URLSearchParams()
-
-    if (queryParams) {
-      transformArraySearchParams(queryParams, searchParams)
+    if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(method)) {
+      throw new Error('Method invalid', method)
     }
 
     if (method === 'POST' || method === 'PATCH') {
       searchParams.append('_method', 'POST')
+    } else {
+      searchParams.append('_method', 'GET')
     }
 
     searchParams.append('_locale', 'fr')
@@ -47,54 +23,36 @@ export default (
     return searchParams.toString()
   }
 
-  const getUrlWithSearchParams = (method, uri, queryParams) => {
-    const url = new URL(`${baseUrl}/${uri}`)
-
-    url.search = getSearchParams(method, queryParams)
-    return url
-  }
-
-  const getFormData = (formParams) => {
-    let formData = null
-
-    if (formParams && Object.keys(formParams).length > 0) {
-      formData = new FormData()
-      Object.keys(formParams).forEach((formParamKey) => {
-        formData.append(formParamKey, formParams[formParamKey])
-        console.log(formParamKey, formParams[formParamKey])
-      })
+  // Create URL and add default search params
+  const urlWithDefaultSearchParams = (method, uri) => {
+    if (typeof uri !== 'string') {
+      throw new Error('URI must be a string', uri)
     }
 
-    return formData
-  }
-
-  const getHeaders = (jwtParam) => {
-    return { Authorization: jwtParam ? `Bearer ${jwtParam}` : null }
+    const url = new URL(`${baseUrl}/${uri}`)
+    url.search = defaultSearchParams(method)
+    return url
   }
 
   const fetchData = async () => {
     state.isLoading = true
 
-    if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(method)) {
-      throw new Error('Method invalid', method)
+    const url = urlWithDefaultSearchParams(method, uri)
+    const options = {
+      method,
+      headers: { Authorization: jwt ? `Bearer ${jwt}` : null },
     }
 
-    if (typeof uri !== 'string') {
-      throw new Error('Uri must be a string', uri)
+    if (body !== null) {
+      options.body = JSON.stringify(body)
     }
 
     try {
-      const res = await fetch(
-        getUrlWithSearchParams(method, uri, queryParams),
-        {
-          method,
-          body: getFormData(formParams),
-          headers: getHeaders(jwt),
-        }
-      )
+      const res = await fetch(url, options)
       state.response = await res.json()
     } catch (errors) {
-      state.error = errors
+      state.error = await errors
+      console.error(errors)
     } finally {
       state.isLoading = false
     }

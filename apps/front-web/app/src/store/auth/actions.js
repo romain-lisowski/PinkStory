@@ -6,7 +6,7 @@ export default {
     const { response, error } = await useApiUserLogin(this, { email, password })
 
     if (!error.value) {
-      const jwt = response.value.token
+      const jwt = response.value.access_token.id
       dispatch('fetchCurrentUser', jwt)
     } else {
       commit('SET_JWT', null)

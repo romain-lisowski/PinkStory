@@ -10,8 +10,7 @@ export default async (store, params = {}, withLoadingOverlay = true) => {
 
   const { response, error, isLoading, fetchData } = useFetch(
     'GET',
-    'story/search',
-    queryParams
+    'story/search'
   )
 
   if (withLoadingOverlay) {

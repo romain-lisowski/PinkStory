@@ -4,8 +4,7 @@ import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 export default async (store, { email, password }) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'POST',
-    'account/login',
-    null,
+    'access-token',
     { email, password }
   )
 

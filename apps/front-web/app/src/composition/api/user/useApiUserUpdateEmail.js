@@ -5,7 +5,6 @@ export default async (store, { jwt, newEmail }) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-email',
-    null,
     {
       'email[first]': newEmail,
       'email[second]': newEmail,

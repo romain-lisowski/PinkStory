@@ -7,7 +7,6 @@ export default async (store, { jwt, name }) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-information',
-    null,
     {
       name,
       language_id: languages[1].id,

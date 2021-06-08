@@ -5,7 +5,6 @@ export default async (store, { jwt, image }) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-image',
-    null,
     { image },
     jwt
   )

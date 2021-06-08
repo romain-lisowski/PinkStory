@@ -8,7 +8,6 @@ export default async (
   const { response, error, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-password',
-    null,
     {
       old_password: passwordOld,
       'password[first]': passwordNew,

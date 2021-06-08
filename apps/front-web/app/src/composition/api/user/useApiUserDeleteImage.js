@@ -6,7 +6,6 @@ export default async (store, { jwt }) => {
     'DELETE',
     'account/delete-image',
     null,
-    null,
     jwt
   )
 

@@ -8,7 +8,6 @@ export default async (
   const { response, error, isLoading, fetchData } = useFetch(
     'POST',
     'account/signup',
-    null,
     {
       name: pseudo,
       gender,

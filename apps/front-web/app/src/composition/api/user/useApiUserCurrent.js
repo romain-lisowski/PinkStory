@@ -6,7 +6,6 @@ export default async (store, jwt) => {
     'GET',
     'account',
     null,
-    null,
     jwt
   )
 

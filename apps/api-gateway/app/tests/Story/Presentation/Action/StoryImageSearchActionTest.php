@@ -42,7 +42,9 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
     public function testSucceededNoSearchNoLogginButFrench(): void
     {
         // change locale
-        self::$httpUri = self::$httpUri.'?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
@@ -58,7 +60,9 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
     public function testSucceededNoSearchLogginEnglish(): void
     {
         // change locale (force to test user setting override)
-        self::$httpUri = self::$httpUri.'?_locale=fr';
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
 
         // change user logged in
         self::$httpAuthorizationToken = AccessTokenFixture::DATA['access-token-john']['id'];
@@ -92,11 +96,14 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 
     public function testSucceededSearchEnglish(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-bdsm-domination']['id'],
             ],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 1,
             'story_images_expected_reference' => [
@@ -107,11 +114,14 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 
     public function testSucceededSearch2English(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-extreme']['id'],
             ],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 2,
             'story_images_expected_reference' => [
@@ -123,12 +133,15 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 
     public function testSucceededSearch3English(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-bdsm-domination']['id'],
                 StoryThemeFixture::DATA['story-theme-extreme']['id'],
             ],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 1,
             'story_images_expected_reference' => [
@@ -140,14 +153,15 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
     public function testSucceededSearch4French(): void
     {
         // change locale
-        self::$httpUri = '/story-image/search?_locale=fr';
-
-        $this->checkSucceeded([
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-bdsm-domination']['id'],
                 StoryThemeFixture::DATA['story-theme-extreme']['id'],
             ],
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-french',
             'total_count' => 1,
             'story_images_expected_reference' => [
@@ -158,12 +172,15 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 
     public function testSucceededSearch5English(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-extreme']['id'],
             ],
             'limit' => 1,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 2,
             'story_images_expected_reference' => [
@@ -174,13 +191,16 @@ final class StoryImageSearchActionTest extends AbstractStoryImageActionTest
 
     public function testSucceededSearch6English(): void
     {
-        $this->checkSucceeded([
+        // change uri
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
             'story_theme_ids' => [
                 StoryThemeFixture::DATA['story-theme-extreme']['id'],
             ],
             'limit' => 1,
             'offset' => 2,
-        ], [
+        ]);
+
+        $this->checkSucceeded(null, [
             'language_reference' => 'language-english',
             'total_count' => 2,
             'story_images_expected_reference' => [],

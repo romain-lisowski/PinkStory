@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story/update-children-position/{id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="story_update_children_position", methods={"PATCH"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  * @ParamConverter("story", converter="entity", options={"expr": "repository.findOne(id)"})
  * @IsGranted("ROLE_USER")
  */

@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story/search", name="story_search", methods={"GET"})
- * @ParamConverter("query", converter="request_body")
+ * @ParamConverter("query", converter="request_data")
  */
 final class StorySearchAction
 {

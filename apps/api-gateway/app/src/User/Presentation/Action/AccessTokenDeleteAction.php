@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/access-token/{id<[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>}", name="access_token_delete", methods={"DELETE"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  * @ParamConverter("accessToken", converter="entity", options={"expr": "repository.findOne(id)"})
  * @IsGranted("ROLE_USER")
  */

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/story-image/search", name="story_image_search", methods={"GET"})
- * @ParamConverter("query", converter="request_body")
+ * @ParamConverter("query", converter="request_data")
  */
 final class StoryImageSearchAction
 {

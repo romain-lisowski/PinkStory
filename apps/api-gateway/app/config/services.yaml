@@ -60,9 +60,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
-    App\Common\Infrastructure\Request\ParamConverter\RequestBodyParamConverter:
+    App\Common\Infrastructure\Request\ParamConverter\RequestDataParamConverter:
         tags: 
-            - { name: request.param_converter, converter: request_body }
+            - { name: request.param_converter, converter: request_data }
 
     App\Common\Infrastructure\Request\ParamConverter\EntityParamConverter:
         arguments:

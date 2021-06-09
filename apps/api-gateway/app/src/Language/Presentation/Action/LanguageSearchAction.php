@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/language/search", name="language_search", methods={"GET"})
- * @ParamConverter("query", converter="request_body")
+ * @ParamConverter("query", converter="request_data")
  */
 final class LanguageSearchAction
 {

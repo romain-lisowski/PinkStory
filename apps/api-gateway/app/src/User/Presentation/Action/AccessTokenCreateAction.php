@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/access-token", name="access_token_create", methods={"POST"})
- * @ParamConverter("command", converter="request_body")
+ * @ParamConverter("command", converter="request_data")
  */
 final class AccessTokenCreateAction
 {

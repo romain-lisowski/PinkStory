@@ -91,7 +91,6 @@ export default {
     watch(
       () => [data.password, data.passwordConfirm],
       () => {
-        console.log('validate')
         validatePasswordsMatching()
       }
     )

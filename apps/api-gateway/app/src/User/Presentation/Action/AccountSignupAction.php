@@ -10,6 +10,7 @@ use App\User\Domain\Command\UserCreateCommand;
 use App\User\Domain\Model\UserRole;
 use App\User\Domain\Model\UserStatus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,11 +29,12 @@ final class AccountSignupAction
         $this->responder = $responder;
     }
 
-    public function __invoke(UserCreateCommand $command): Response
+    public function __invoke(Request $request, UserCreateCommand $command): Response
     {
         $command
             ->setRole(UserRole::USER)
             ->setStatus(UserStatus::ACTIVATED)
+            ->setLanguageId($request->get('current-language')->getId())
         ;
 
         $result = $this->commandBus->dispatch($command);

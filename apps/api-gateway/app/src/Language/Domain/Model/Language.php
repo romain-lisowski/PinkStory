@@ -38,6 +38,7 @@ class Language extends AbstractEntity implements ImageableInterface
     /**
      * @ORM\Column(name="locale", type="string", unique=true)
      * @Assert\NotBlank
+     * @Assert\Language
      */
     private string $locale;
 

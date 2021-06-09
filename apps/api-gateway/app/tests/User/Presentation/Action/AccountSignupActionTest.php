@@ -28,7 +28,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         'name' => 'Test',
         'email' => 'test@pinkstory.io',
         'password' => '@Password2!',
-        'language_id' => LanguageFixture::DATA['language-french']['id'],
     ];
 
     protected function setUp(): void
@@ -40,18 +39,38 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         parent::setUp();
     }
 
-    public function testSucceededWithoutImage(): void
+    public function testSucceededEnglishWithoutImage(): void
     {
         $this->checkSucceeded([
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
-        ], ['should_have_image_defined' => false]);
+        ], [
+            'should_have_image_defined' => false,
+            'language_id' => LanguageFixture::DATA['language-english']['id'],
+        ]);
     }
 
-    public function testSucceededWithImage(): void
+    public function testSucceededFrenchWithoutImage(): void
+    {
+        // change locale
+        self::$httpUri = $this->httpBuild(self::$httpUri, [
+            '_locale' => 'fr',
+        ]);
+
+        $this->checkSucceeded([
+            'gender' => self::$userData['gender'],
+            'name' => self::$userData['name'],
+            'email' => self::$userData['email'],
+            'password' => self::$userData['password'],
+        ], [
+            'should_have_image_defined' => false,
+            'language_id' => LanguageFixture::DATA['language-french']['id'],
+        ]);
+    }
+
+    public function testSucceededEnglishWithImage(): void
     {
         $this->checkSucceeded([
             'gender' => self::$userData['gender'],
@@ -59,8 +78,10 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
             'image' => (new DataUriNormalizer())->normalize(new File(__DIR__.'/../../../image/test.jpg'), ''),
-            'language_id' => self::$userData['language_id'],
-        ], ['should_have_image_defined' => true]);
+        ], [
+            'should_have_image_defined' => true,
+            'language_id' => LanguageFixture::DATA['language-english']['id'],
+        ]);
     }
 
     public function testFailedMissingGender(): void
@@ -69,7 +90,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'gender',
         ]);
@@ -82,7 +102,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'gender',
         ]);
@@ -94,7 +113,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'gender' => self::$userData['gender'],
             'email' => self::$userData['email'],
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'name',
         ]);
@@ -106,7 +124,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -119,7 +136,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'name' => self::$userData['name'],
             'email' => 'email',
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -132,7 +148,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'name' => self::$userData['name'],
             'email' => 'email@email.em',
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -145,7 +160,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'name' => self::$userData['name'],
             'email' => 'hello@pinkstory.io',
             'password' => self::$userData['password'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'email',
         ]);
@@ -157,7 +171,6 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'gender' => self::$userData['gender'],
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
-            'language_id' => self::$userData['language_id'],
         ], [
             'password',
         ]);
@@ -170,47 +183,8 @@ final class AccountSignupActionTest extends AbstractUserActionTest
             'name' => self::$userData['name'],
             'email' => self::$userData['email'],
             'password' => 'password',
-            'language_id' => self::$userData['language_id'],
         ], [
             'password',
-        ]);
-    }
-
-    public function testFailedMissingLanguage(): void
-    {
-        $this->checkFailedValidationFailed([
-            'gender' => self::$userData['gender'],
-            'name' => self::$userData['name'],
-            'email' => self::$userData['email'],
-            'password' => self::$userData['password'],
-        ], [
-            'language_id',
-        ]);
-    }
-
-    public function testFailedWrongFormatLanguage(): void
-    {
-        $this->checkFailedValidationFailed([
-            'gender' => self::$userData['gender'],
-            'name' => self::$userData['name'],
-            'email' => self::$userData['email'],
-            'password' => self::$userData['password'],
-            'language_id' => 'language_id',
-        ], [
-            'language_id',
-        ]);
-    }
-
-    public function testFailedNonExistentLanguage(): void
-    {
-        $this->checkFailedValidationFailed([
-            'gender' => self::$userData['gender'],
-            'name' => self::$userData['name'],
-            'email' => self::$userData['email'],
-            'password' => self::$userData['password'],
-            'language_id' => Uuid::v4()->toRfc4122(),
-        ], [
-            'language_id',
         ]);
     }
 
@@ -234,9 +208,9 @@ final class AccountSignupActionTest extends AbstractUserActionTest
         $this->assertEquals($options['should_have_image_defined'], $user->isImageDefined());
         $this->assertEquals(UserRole::USER, $user->getRole());
         $this->assertEquals(UserStatus::ACTIVATED, $user->getStatus());
-        $this->assertEquals(self::$userData['language_id'], $user->getLanguage()->getId());
+        $this->assertEquals($options['language_id'], $user->getLanguage()->getId());
         $this->assertCount(1, $user->getUserHasReadingLanguages());
-        $this->assertEquals(self::$userData['language_id'], $user->getUserHasReadingLanguages()->first()->getLanguage()->getId());
+        $this->assertEquals($options['language_id'], $user->getUserHasReadingLanguages()->first()->getLanguage()->getId());
 
         // check image has been uploaded
         if (true === $options['should_have_image_defined']) {

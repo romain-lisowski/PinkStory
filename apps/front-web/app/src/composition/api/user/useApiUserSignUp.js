@@ -1,19 +1,15 @@
 import useFetch from '@/composition/api/useFetch'
 import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 
-export default async (
-  store,
-  { pseudo, gender, email, password, passwordConfirm }
-) => {
+export default async (store, { name, gender, email, password }) => {
   const { response, error, isLoading, fetchData } = useFetch(
     'POST',
     'account/signup',
     {
-      name: pseudo,
       gender,
+      name,
       email,
-      'password[first]': password,
-      'password[second]': passwordConfirm,
+      password,
     }
   )
 

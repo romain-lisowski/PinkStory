@@ -51,7 +51,7 @@ export default {
       messages: {
         fr: {
           'update-informations': 'Informations',
-          pseudo: 'Pseudo',
+          name: 'Pseudo',
           update: 'Modifier',
         },
       },

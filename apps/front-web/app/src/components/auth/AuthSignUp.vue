@@ -5,10 +5,10 @@
     </p>
 
     <input
-      v-model="pseudo"
-      :placeholder="t('pseudo')"
+      v-model="name"
+      :placeholder="t('name')"
       type="text"
-      name="pseudo"
+      name="name"
       class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
 
@@ -46,7 +46,8 @@
     />
 
     <button
-      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent bg-opacity-100 rounded-lg"
+      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent rounded-lg"
+      :class="activeSubmit ? activeSubmitClasses : inactiveSubmitClasses"
       type="submit"
     >
       {{ t('submit') }}
@@ -63,7 +64,7 @@
 
 <script>
 import useApiUserSignUp from '@/composition/api/user/useApiUserSignUp'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import genderTypes from '@/enums/genderTypes'
 import { useStore } from 'vuex'
@@ -74,29 +75,59 @@ export default {
     const store = useStore()
 
     const data = reactive({
+      activeSubmit: false,
       genders: genderTypes,
-      pseudo: null,
+      name: null,
       gender: genderTypes.UNDEFINED,
       email: null,
       password: null,
       passwordConfirm: null,
     })
 
+    const validatePasswordsMatching = () => {
+      data.activeSubmit = data.password === data.passwordConfirm
+    }
+
+    watch(
+      () => [data.password, data.passwordConfirm],
+      () => {
+        console.log('validate')
+        validatePasswordsMatching()
+      }
+    )
+
     const onClickDisplayLoginBlock = () => {
       context.emit('display-login-block')
     }
 
     const processForm = () => {
-      useApiUserSignUp(store, { ...data })
+      useApiUserSignUp(store, {
+        name: data.name,
+        gender: data.gender,
+        email: data.email,
+        password: data.password,
+      })
       onClickDisplayLoginBlock()
     }
+
+    const activeSubmitClasses = [
+      'cursor-pointer',
+      'opacity-100',
+      'bg-opacity-100',
+    ]
+
+    const inactiveSubmitClasses = [
+      'cursor-not-allowed',
+      'opacity-50',
+      'bg-opacity-50',
+    ]
 
     const { t } = useI18n({
       locale: 'fr',
       messages: {
         fr: {
           'sign-up': 'Inscription',
-          pseudo: 'Pseudo',
+          name: 'Pseudo',
           gender: 'Genre',
           email: 'Email',
           password: 'Mot de passe',
@@ -113,6 +144,8 @@ export default {
 
     return {
       ...toRefs(data),
+      activeSubmitClasses,
+      inactiveSubmitClasses,
       processForm,
       onClickDisplayLoginBlock,
       t,

@@ -33,10 +33,10 @@ export default {
   },
   methods: {
     async fetchStoryThemes() {
-      const { response, error } = await useApiStoryThemeSearch(this.$store)
+      const apiStoryThemeSearchData = await useApiStoryThemeSearch(this.$store)
 
-      if (!error.value) {
-        this.categoryLists = response.value.story_themes
+      if (!apiStoryThemeSearchData.error.value) {
+        this.categoryLists = apiStoryThemeSearchData.response.value.story_themes
       }
     },
   },

@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     async searchStories() {
-      const { response, error } = await useApiStorySearch(
+      const apiStorySearchData = await useApiStorySearch(
         this.$store,
         {
           order: this.localSearchOrder,
@@ -111,9 +111,9 @@ export default {
         this.withLoadingOverlay
       )
 
-      if (!error.value) {
-        this.stories = response.value.stories
-        this.nbResults = response.value.stories_total
+      if (!apiStorySearchData.error.value) {
+        this.stories = apiStorySearchData.response.value.stories
+        this.nbResults = apiStorySearchData.response.value.stories_total
       }
     },
   },

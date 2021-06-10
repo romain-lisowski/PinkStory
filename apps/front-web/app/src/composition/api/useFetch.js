@@ -3,12 +3,19 @@ import { reactive, toRefs } from 'vue'
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default (method, uri, body = null, jwt = null) => {
-  const state = reactive({ response: null, error: null, isLoading: false })
+  const data = reactive({
+    ok: null,
+    response: null,
+    error: null,
+    formViolations: [],
+    isLoading: false,
+  })
 
-  const fetchData = async () => {
-    state.isLoading = true
+  const getUrl = () => {
+    return new URL(`${baseUrl}/${uri}?_locale=fr`)
+  }
 
-    const url = new URL(`${baseUrl}/${uri}?_locale=fr`)
+  const getOptions = () => {
     const options = {
       method,
       headers: { Authorization: jwt ? `Bearer ${jwt}` : null },
@@ -19,16 +26,41 @@ export default (method, uri, body = null, jwt = null) => {
       options.body = JSON.stringify(body)
     }
 
-    try {
-      const res = await fetch(url, options)
-      state.response = await res.json()
-    } catch (errors) {
-      state.error = await errors
-      console.error(errors)
-    } finally {
-      state.isLoading = false
+    return options
+  }
+
+  // format array of form field violations
+  const addFormViolations = async () => {
+    if (
+      'exception' in data.response &&
+      'violations' in data.response.exception
+    ) {
+      data.response.exception.violations.forEach((violation) => {
+        data.formViolations.push({
+          field: violation.property_path,
+          message: violation.message,
+        })
+      })
     }
   }
 
-  return { ...toRefs(state), fetchData }
+  const fetchData = async () => {
+    data.isLoading = true
+
+    try {
+      const res = await fetch(getUrl(), getOptions())
+      data.ok = res.ok
+      data.response = await res.json()
+
+      if (!data.ok) {
+        await addFormViolations()
+      }
+    } catch (e) {
+      data.error = await e
+    } finally {
+      data.isLoading = false
+    }
+  }
+
+  return { ...toRefs(data), fetchData }
 }

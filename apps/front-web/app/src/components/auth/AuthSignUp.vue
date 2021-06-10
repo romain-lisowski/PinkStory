@@ -45,8 +45,22 @@
       class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
 
+    <ul
+      v-if="formViolations"
+      class="mt-5 p-4 text-primary bg-accent bg-opacity-100 rounded-lg"
+    >
+      <li v-for="formViolation in formViolations" :key="formViolation">
+        {{
+          formViolation.field.charAt(0).toUpperCase() +
+          formViolation.field.slice(1)
+        }}
+        :
+        {{ formViolation.message }}
+      </li>
+    </ul>
+
     <button
-      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent rounded-lg"
+      class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent bg-opacity-100 rounded-lg"
       :class="activeSubmit ? activeSubmitClasses : inactiveSubmitClasses"
       type="submit"
     >
@@ -55,7 +69,7 @@
 
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="onClickDisplayLoginBlock"
+      @click="displayLoginBlock"
     >
       {{ t('sign-in') }}
     </a>
@@ -82,6 +96,7 @@ export default {
       email: null,
       password: null,
       passwordConfirm: null,
+      formViolations: null,
     })
 
     const validatePasswordsMatching = () => {
@@ -95,18 +110,24 @@ export default {
       }
     )
 
-    const onClickDisplayLoginBlock = () => {
+    const displayLoginBlock = () => {
       context.emit('display-login-block')
     }
 
-    const processForm = () => {
-      useApiUserSignUp(store, {
+    const processForm = async () => {
+      const apiUserSignUpData = await useApiUserSignUp(store, {
         name: data.name,
         gender: data.gender,
         email: data.email,
         password: data.password,
       })
-      onClickDisplayLoginBlock()
+
+      if (apiUserSignUpData.ok.value) {
+        displayLoginBlock()
+      } else {
+        data.formViolations = apiUserSignUpData.formViolations.value
+        console.log(data.formViolations)
+      }
     }
 
     const activeSubmitClasses = [
@@ -126,13 +147,13 @@ export default {
       messages: {
         fr: {
           'sign-up': 'Inscription',
+          'sign-in': 'Déjà inscrit ?',
           name: 'Pseudo',
           gender: 'Genre',
           email: 'Email',
           password: 'Mot de passe',
           confirm: 'Confirmer votre mot de passe',
           submit: "S'inscrire",
-          'sign-in': 'Déjà inscrit ?',
           UNDEFINED: 'Non défini',
           MALE: 'Homme',
           FEMALE: 'Femme',
@@ -146,7 +167,7 @@ export default {
       activeSubmitClasses,
       inactiveSubmitClasses,
       processForm,
-      onClickDisplayLoginBlock,
+      displayLoginBlock,
       t,
     }
   },

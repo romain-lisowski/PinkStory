@@ -3,14 +3,14 @@ export default {
     return state.jwt
   },
 
-  getUserLoggedIn: ({ state }) => {
-    return state.userLoggedIn
+  getCurrentUser: ({ state }) => {
+    return state.currentUser
   },
 
-  isLoggedIn: ({ state }) => {
+  isSignedIn: ({ state }) => {
     return (
-      typeof state.userLoggedIn === 'object' &&
-      state.userLoggedIn !== null &&
+      typeof state.currentUser === 'object' &&
+      state.currentUser !== null &&
       state.jwt !== 'undefined'
     )
   },

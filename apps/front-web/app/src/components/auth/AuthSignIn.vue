@@ -20,6 +20,8 @@
       class="mt-5 p-4 text-primary bg-primary bg-opacity-100 opacity-100 rounded-md"
     />
 
+    <FormViolations :form-violations="formViolations" />
+
     <button
       class="mt-8 py-4 text-primary text-lg font-light bg-accent bg-opacity-100 tracking-wide rounded-lg"
       type="submit"
@@ -28,7 +30,7 @@
     </button>
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="onClickDisplaySignUpBlock"
+      @click="showSignUp"
     >
       {{ t('sign-up') }}
     </a>
@@ -36,26 +38,44 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import FormViolations from '@/components/form/FormViolations.vue'
+import useApiUserSignIn from '@/composition/api/user/useApiUserSignIn'
+import { reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
 export default {
-  emits: ['display-sign-up-block'],
+  components: {
+    FormViolations,
+  },
+  emits: ['show-sign-up'],
   setup(props, context) {
     const store = useStore()
-    const email = ref(null)
-    const password = ref(null)
+    const data = reactive({
+      email: null,
+      password: null,
+      formViolations: null,
+    })
 
-    const processForm = () => {
-      store.dispatch('auth/login', {
-        email: email.value,
-        password: password.value,
+    const processForm = async () => {
+      const apiUserSignInFetch = await useApiUserSignIn(store, {
+        email: data.email,
+        password: data.password,
       })
+
+      if (apiUserSignInFetch.ok.value) {
+        store.dispatch(
+          'auth/signIn',
+          apiUserSignInFetch.response.value.access_token.id
+        )
+      } else {
+        data.formViolations = apiUserSignInFetch.error.value.formViolations
+        store.dispatch('auth/signOut')
+      }
     }
 
-    const onClickDisplaySignUpBlock = () => {
-      context.emit('display-sign-up-block')
+    const showSignUp = () => {
+      context.emit('show-sign-up')
     }
 
     const { t } = useI18n({
@@ -71,7 +91,7 @@ export default {
       },
     })
 
-    return { email, password, processForm, onClickDisplaySignUpBlock, t }
+    return { ...toRefs(data), processForm, showSignUp, t }
   },
 }
 </script>

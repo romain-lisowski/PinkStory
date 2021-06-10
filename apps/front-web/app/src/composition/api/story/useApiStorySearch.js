@@ -8,15 +8,12 @@ export default async (store, params = {}, withLoadingOverlay = true) => {
     delete queryParams.categoryIds
   }
 
-  const { response, error, isLoading, fetchData } = useFetch(
-    'GET',
-    'story/search'
-  )
+  const { ok, response, isLoading, fetchData } = useFetch('GET', 'story/search')
 
   if (withLoadingOverlay) {
     useLoadingOverlay(store, isLoading)
   }
 
   await fetchData()
-  return { response, error }
+  return { ok, response }
 }

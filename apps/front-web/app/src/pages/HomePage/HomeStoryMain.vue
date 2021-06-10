@@ -73,15 +73,15 @@ export default {
     })
 
     let story = {}
-    const apiStorySearchData = await useApiStorySearch(store, {
+    const apiStorySearchFetch = await useApiStorySearch(store, {
       order: 'ORDER_POPULAR',
       sort: 'ASC',
       limit: 1,
     })
 
-    if (!apiStorySearchData.error.value) {
+    if (apiStorySearchFetch.ok.value) {
       // array destructuring
-      ;[story] = apiStorySearchData.response.value.stories
+      ;[story] = apiStorySearchFetch.response.value.stories
     }
 
     return { story, dayJs, t }

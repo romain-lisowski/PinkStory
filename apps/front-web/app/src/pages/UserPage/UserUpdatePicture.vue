@@ -4,8 +4,8 @@
       {{ t('update-profile-picture') }}
     </p>
     <div class="flex justify-center my-4">
-      <span v-if="userLoggedIn.image" class="relative">
-        <img class="h-40 w-40 rounded-full" :src="userLoggedIn.image" />
+      <span v-if="currentUser.image" class="relative">
+        <img class="h-40 w-40 rounded-full" :src="currentUser.image" />
         <button
           class="mt-2 text-accent underline"
           @click="deleteProfilePicture"
@@ -17,7 +17,7 @@
       <span
         v-else
         class="h-40 w-40 flex items-center justify-center text-4xl font-bold bg-accent bg-opacity-100 rounded-full"
-        >{{ userLoggedIn.name[0].toUpperCase() }}</span
+        >{{ currentUser.name[0].toUpperCase() }}</span
       >
     </div>
     <form class="flex flex-col" @submit.prevent="processForm">
@@ -49,8 +49,8 @@ export default {
     const store = useStore()
     const uploadProfilePicture = ref(null)
 
-    const userLoggedIn = computed(() => {
-      return store.state.auth.state.userLoggedIn
+    const currentUser = computed(() => {
+      return store.state.auth.state.currentUser
     })
 
     const uploadUserImageChanged = (event) => {
@@ -86,7 +86,7 @@ export default {
     })
 
     return {
-      userLoggedIn,
+      currentUser,
       uploadProfilePicture,
       uploadUserImageChanged,
       deleteProfilePicture,

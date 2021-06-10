@@ -30,7 +30,7 @@ import { useStore } from 'vuex'
 export default {
   setup() {
     const store = useStore()
-    const email = ref(store.state.auth.state.userLoggedIn.email)
+    const email = ref(store.state.auth.state.currentUser.email)
 
     const processForm = async () => {
       const jwt = store.getters['auth/getJwt']

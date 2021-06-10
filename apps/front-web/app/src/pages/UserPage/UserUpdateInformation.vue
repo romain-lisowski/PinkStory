@@ -31,8 +31,8 @@ import { useI18n } from 'vue-i18n'
 export default {
   setup() {
     const store = useStore()
-    const name = ref(store.state.auth.state.userLoggedIn.name)
-    const language = ref(store.state.auth.state.userLoggedIn.language)
+    const name = ref(store.state.auth.state.currentUser.name)
+    const language = ref(store.state.auth.state.currentUser.language)
 
     const processForm = async () => {
       const jwt = store.getters['auth/getJwt']

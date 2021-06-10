@@ -33,7 +33,7 @@
             >{{ t('search') }}</router-link
           >
         </li>
-        <li v-show="isLoggedIn">
+        <li v-show="isSignedIn">
           <router-link
             :to="{ name: 'Write' }"
             class="p-4 block"
@@ -45,7 +45,7 @@
             >{{ t('write') }}</router-link
           >
         </li>
-        <li v-show="isLoggedIn">
+        <li v-show="isSignedIn">
           <router-link
             :to="{ name: 'User' }"
             :class="
@@ -58,7 +58,7 @@
             {{ t('settings') }}
           </router-link>
         </li>
-        <li v-if="!isLoggedIn">
+        <li v-if="!isSignedIn">
           <a
             class="p-4 block hover:bg-accent rounded-lg cursor-pointer"
             :class="inactiveMenuClasses"
@@ -68,8 +68,8 @@
           </a>
         </li>
         <li v-else>
-          <a class="p-4 block hover:bg-accent cursor-pointer" @click="logout">
-            {{ t('logout') }}
+          <a class="p-4 block hover:bg-accent cursor-pointer" @click="signOut">
+            {{ t('signOut') }}
           </a>
         </li>
       </ul>
@@ -116,7 +116,7 @@
               >{{ t('search') }}</router-link
             >
           </li>
-          <li v-show="isLoggedIn" class="pl-2">
+          <li v-show="isSignedIn" class="pl-2">
             <router-link
               :to="{ name: 'Write' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
@@ -128,7 +128,7 @@
               >{{ t('write') }}</router-link
             >
           </li>
-          <li v-show="isLoggedIn" class="pl-2">
+          <li v-show="isSignedIn" class="pl-2">
             <router-link
               :to="{ name: 'User' }"
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
@@ -141,7 +141,7 @@
               {{ t('settings') }}
             </router-link>
           </li>
-          <li v-if="!isLoggedIn" class="pl-2">
+          <li v-if="!isSignedIn" class="pl-2">
             <a
               class="p-2 px-4 block font-bold border-2 rounded-lg cursor-pointer"
               :class="inactiveMenuClasses"
@@ -153,16 +153,16 @@
           <li v-else class="pl-2">
             <a
               class="p-2 px-4 block font-bold rounded-lg cursor-pointer"
-              @click="logout"
+              @click="signOut"
             >
-              {{ t('logout') }}
+              {{ t('signOut') }}
             </a>
           </li>
         </ul>
       </nav>
 
       <button
-        v-if="isLoggedIn"
+        v-if="isSignedIn"
         class="relative group mr-6 md:mr-0 lg:ml-auto flex-shrink-0 flex items-center justify-center bg-opacity-100 border-opacity-50"
       >
         <span
@@ -170,18 +170,18 @@
           >1</span
         >
         <span
-          v-if="userLoggedIn.image"
+          v-if="currentUser.image"
           class="p-1/2 md:p-1 group-hover:bg-accent border-2 border-accent group-hover:border-opacity-0 rounded-2xl md:rounded-3xl"
         >
           <img
             class="w-8 md:w-12 h-8 md:h-12 rounded-xl md:rounded-2xl"
-            :src="userLoggedIn.image"
+            :src="currentUser.image"
           />
         </span>
         <span
           v-else
           class="w-10 sm:w-12 h-10 sm:h-12 flex items-center justify-center font-bold bg-accent bg-opacity-100 rounded-full"
-          >{{ userLoggedIn.name[0].toUpperCase() }}</span
+          >{{ currentUser.name[0].toUpperCase() }}</span
         >
       </button>
 
@@ -225,26 +225,26 @@ export default {
       'hover:text-primary-inverse',
     ]
 
-    const isLoggedIn = computed(() => {
-      return store.getters['auth/isLoggedIn']
+    const isSignedIn = computed(() => {
+      return store.getters['auth/isSignedIn']
     })
-    const userLoggedIn = computed(() => {
-      return store.getters['auth/getUserLoggedIn']
+    const currentUser = computed(() => {
+      return store.getters['auth/getCurrentUser']
     })
     const currentPageUri = computed(() => {
       return route.path
     })
 
-    watch(isLoggedIn, (value) => {
+    watch(isSignedIn, (value) => {
       if (value && openAuthPanel.value) {
         openAuthPanel.value = false
       }
     })
 
-    const logout = () => {
+    const signOut = () => {
       openAuthPanel.value = false
       openMenu.value = false
-      store.dispatch('auth/logout')
+      store.dispatch('auth/signOut')
       if (route.path !== '/') {
         router.push({ name: 'Home' })
       }
@@ -258,7 +258,7 @@ export default {
           search: 'Rechercher',
           write: 'Ecrire une histoire',
           settings: 'Préférences',
-          logout: 'Déconnexion',
+          signOut: 'Déconnexion',
           'sign-in': 'Connexion',
         },
       },
@@ -269,10 +269,10 @@ export default {
       openMenu,
       activeMenuClasses,
       inactiveMenuClasses,
-      isLoggedIn,
-      userLoggedIn,
+      isSignedIn,
+      currentUser,
       currentPageUri,
-      logout,
+      signOut,
       t,
     }
   },

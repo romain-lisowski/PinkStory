@@ -12,33 +12,33 @@
     /></a>
 
     <div
-      :class="!displaySignUp ? '' : 'translate-y-full'"
+      :class="!showSignUp ? '' : 'translate-y-full'"
       class="flex items-center justify-center absolute w-full h-screen transform transition-transform duration-300 ease-out"
     >
-      <AuthLogin
+      <AuthSignIn
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-sign-up-block="displaySignUp = true"
+        @show-sign-up="showSignUp = true"
       />
     </div>
     <div
-      :class="displaySignUp ? 'translate-y-full' : ''"
+      :class="showSignUp ? 'translate-y-full' : ''"
       class="flex items-center justify-center absolute bottom-100 w-full h-screen transform transition-transform duration-300 ease-out"
     >
       <AuthSignUp
         class="p-8 w-4/5 sm:w-2/3 lg:3/4 xl:w-1/3 bg-primary-inverse bg-opacity-5 rounded-xl"
-        @display-login-block="displaySignUp = false"
+        @show-sign-in="showSignUp = false"
       />
     </div>
   </div>
 </template>
 
 <script>
-import AuthLogin from '@/components/auth/AuthLogin.vue'
+import AuthSignIn from '@/components/auth/AuthSignIn.vue'
 import AuthSignUp from '@/components/auth/AuthSignUp.vue'
 
 export default {
   components: {
-    AuthLogin,
+    AuthSignIn,
     AuthSignUp,
   },
   props: {
@@ -50,12 +50,12 @@ export default {
   emits: ['close-auth-panel'],
   data() {
     return {
-      displaySignUp: false,
+      showSignUp: false,
     }
   },
   methods: {
     onClickCloseAuthPanel() {
-      this.displaySignUp = false
+      this.showSignUp = false
       this.$emit('close-auth-panel')
     },
   },

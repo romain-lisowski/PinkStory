@@ -2,7 +2,7 @@ import useFetch from '@/composition/api/useFetch'
 import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 
 export default async (store, { jwt, image }) => {
-  const { response, error, isLoading, fetchData } = useFetch(
+  const { ok, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-image',
     { image },
@@ -11,5 +11,5 @@ export default async (store, { jwt, image }) => {
 
   useLoadingOverlay(store, isLoading)
   await fetchData()
-  return { response, error }
+  return { ok }
 }

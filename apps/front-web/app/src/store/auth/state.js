@@ -5,16 +5,16 @@ try {
   localStorage.removeItem('jwt')
 }
 
-let userLoggedIn = null
+let currentUser = null
 try {
-  userLoggedIn = JSON.parse(localStorage.getItem('userLoggedIn'))
+  currentUser = JSON.parse(localStorage.getItem('currentUser'))
 } catch (e) {
-  localStorage.removeItem('userLoggedIn')
+  localStorage.removeItem('currentUser')
 }
 
 export default {
   state: {
     jwt,
-    userLoggedIn,
+    currentUser,
   },
 }

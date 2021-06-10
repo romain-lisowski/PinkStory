@@ -45,19 +45,7 @@
       class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
 
-    <ul
-      v-if="formViolations"
-      class="mt-5 p-4 text-primary bg-accent bg-opacity-100 rounded-lg"
-    >
-      <li v-for="formViolation in formViolations" :key="formViolation">
-        {{
-          formViolation.field.charAt(0).toUpperCase() +
-          formViolation.field.slice(1)
-        }}
-        :
-        {{ formViolation.message }}
-      </li>
-    </ul>
+    <FormViolations :form-violations="formViolations" />
 
     <button
       class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent bg-opacity-100 rounded-lg"
@@ -69,7 +57,7 @@
 
     <a
       class="block mt-8 text-xl hover:underline cursor-pointer"
-      @click="displayLoginBlock"
+      @click="showSignIn"
     >
       {{ t('sign-in') }}
     </a>
@@ -77,6 +65,7 @@
 </template>
 
 <script>
+import FormViolations from '@/components/form/FormViolations.vue'
 import useApiUserSignUp from '@/composition/api/user/useApiUserSignUp'
 import { reactive, toRefs, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -84,7 +73,10 @@ import genderTypes from '@/enums/genderTypes'
 import { useStore } from 'vuex'
 
 export default {
-  emits: ['display-login-block'],
+  components: {
+    FormViolations,
+  },
+  emits: ['show-sign-in'],
   setup(props, context) {
     const store = useStore()
 
@@ -99,34 +91,22 @@ export default {
       formViolations: null,
     })
 
-    const validatePasswordsMatching = () => {
-      data.activeSubmit = data.password === data.passwordConfirm
-    }
-
-    watch(
-      () => [data.password, data.passwordConfirm],
-      () => {
-        validatePasswordsMatching()
-      }
-    )
-
-    const displayLoginBlock = () => {
-      context.emit('display-login-block')
+    const showSignIn = () => {
+      context.emit('show-sign-in')
     }
 
     const processForm = async () => {
-      const apiUserSignUpData = await useApiUserSignUp(store, {
+      const apiUserSignUpFetch = await useApiUserSignUp(store, {
         name: data.name,
         gender: data.gender,
         email: data.email,
         password: data.password,
       })
 
-      if (apiUserSignUpData.ok.value) {
-        displayLoginBlock()
+      if (apiUserSignUpFetch.ok.value) {
+        showSignIn()
       } else {
-        data.formViolations = apiUserSignUpData.formViolations.value
-        console.log(data.formViolations)
+        data.formViolations = apiUserSignUpFetch.error.value.formViolations
       }
     }
 
@@ -141,6 +121,13 @@ export default {
       'opacity-50',
       'bg-opacity-50',
     ]
+
+    watch(
+      () => [data.password, data.passwordConfirm],
+      () => {
+        data.activeSubmit = data.password === data.passwordConfirm
+      }
+    )
 
     const { t } = useI18n({
       locale: 'fr',
@@ -167,7 +154,7 @@ export default {
       activeSubmitClasses,
       inactiveSubmitClasses,
       processForm,
-      displayLoginBlock,
+      showSignIn,
       t,
     }
   },

@@ -5,7 +5,7 @@ export default async (
   store,
   { jwt, passwordOld, passwordNew, passwordNewConfirm }
 ) => {
-  const { response, error, isLoading, fetchData } = useFetch(
+  const { ok, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-password',
     {
@@ -18,5 +18,5 @@ export default async (
 
   useLoadingOverlay(store, isLoading)
   await fetchData()
-  return { response, error }
+  return { ok }
 }

@@ -51,9 +51,9 @@ export default {
   },
   methods: {
     async fetchStory(storyId) {
-      const { response, error } = await useApiStoryGet(this.$store, storyId)
-      if (!error.value) {
-        this.story = response.value.story
+      const apiStoryGetFetch = await useApiStoryGet(this.$store, storyId)
+      if (apiStoryGetFetch.ok.value) {
+        this.story = apiStoryGetFetch.response.value.story
       }
     },
   },

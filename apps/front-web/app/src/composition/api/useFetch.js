@@ -30,13 +30,14 @@ export default (method, uri, body = null, jwt = null) => {
   }
 
   // format array of form field violations
-  const addFormViolations = async () => {
+  const addFormViolations = () => {
     if (
       'exception' in data.response &&
       'violations' in data.response.exception
     ) {
+      data.error.formViolations = []
       data.response.exception.violations.forEach((violation) => {
-        data.formViolations.push({
+        data.error.formViolations.push({
           field: violation.property_path,
           message: violation.message,
         })
@@ -53,10 +54,11 @@ export default (method, uri, body = null, jwt = null) => {
       data.response = await res.json()
 
       if (!data.ok) {
-        await addFormViolations()
+        throw new Error('Bad response from server')
       }
     } catch (e) {
       data.error = await e
+      addFormViolations()
     } finally {
       data.isLoading = false
     }

@@ -4,7 +4,7 @@ import useApiLanguageSearch from '@/composition/api/language/useApiLanguageSearc
 
 export default async (store, { jwt, name }) => {
   const { languages } = await useApiLanguageSearch(store)
-  const { response, error, isLoading, fetchData } = useFetch(
+  const { ok, isLoading, fetchData } = useFetch(
     'PATCH',
     'account/update-information',
     {
@@ -16,5 +16,5 @@ export default async (store, { jwt, name }) => {
 
   useLoadingOverlay(store, isLoading)
   await fetchData()
-  return { response, error }
+  return { ok }
 }

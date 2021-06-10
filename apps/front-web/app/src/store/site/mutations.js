@@ -1,9 +1,11 @@
 export default {
   IS_ADULT(state) {
     state.isAdult = true
+    localStorage.setItem('isAdult', true)
   },
   SET_THEME(state, theme) {
     state.theme = theme
+    localStorage.setItem('theme', JSON.stringify(theme))
   },
   ADD_SEARCH_CATEGORY({ state }, categoryId) {
     state.searchCategoryIds.push(categoryId)

@@ -18,7 +18,7 @@ export default {
     theme,
     refreshSearchCategory: false,
     searchCategoryIds: [],
-    searchOrder: '',
+    searchOrder: null,
     showLoadingOverlay: false,
   },
 }

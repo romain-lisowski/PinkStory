@@ -1,11 +1,9 @@
 export default {
   isAdult({ commit }) {
     commit('IS_ADULT')
-    localStorage.setItem('isAdult', true)
   },
-  updateTheme({ commit }, { theme }) {
+  setTheme({ commit }, { theme }) {
     commit('SET_THEME', theme)
-    localStorage.setItem('theme', JSON.stringify(theme))
   },
   toggleSearchCategory({ state, dispatch, commit }, categoryId) {
     if (!state.state.searchCategoryIds.includes(categoryId)) {

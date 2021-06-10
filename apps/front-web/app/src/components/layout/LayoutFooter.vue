@@ -55,14 +55,14 @@ export default {
 
     const setThemeLight = () => {
       activeTheme.value = 'light'
-      store.dispatch('site/updateTheme', { theme: 'light' })
+      store.dispatch('site/setTheme', { theme: 'light' })
       document.documentElement.classList.add('theme-light')
       document.documentElement.classList.remove('theme-dark')
     }
 
     const setThemeDark = () => {
       activeTheme.value = 'dark'
-      store.dispatch('site/updateTheme', { theme: 'dark' })
+      store.dispatch('site/setTheme', { theme: 'dark' })
       document.documentElement.classList.add('theme-dark')
       document.documentElement.classList.remove('theme-light')
     }
@@ -77,7 +77,7 @@ export default {
         setThemeLight()
       }
       activeTheme.value = 'auto'
-      store.dispatch('site/updateTheme', { theme: 'auto' })
+      store.dispatch('site/setTheme', { theme: 'auto' })
     }
 
     const initTheme = () => {

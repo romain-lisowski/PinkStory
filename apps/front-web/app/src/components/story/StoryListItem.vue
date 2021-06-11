@@ -19,10 +19,10 @@
           >&#9792;</span
         ><span v-else>&#9794;</span>
         <span class="mx-2 font-normal">|</span>
-        <span>{{ createdAtFormatted }}</span>
+        <span>{{ dayJs(story.created_at).format('DD/MM/YYYY HH[h]mm') }}</span>
       </span>
       <span class="block mt-1 text-lg sm:text-xl text-accent">
-        {{ storyCategories }}
+        {{ story.story_themes.map((theme) => theme.title).join(', ') }}
       </span>
       <span class="flex justify-start mt-1">
         <UiRatingStars :rating="story.rate" />
@@ -34,7 +34,6 @@
 <script>
 import UiRatingStars from '@/components/ui/UiRatingStars.vue'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import dayJs from 'dayjs'
 
 export default {
@@ -47,15 +46,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    const createdAtFormatted = computed(() => {
-      return dayJs(props.story.created_at).format('DD/MM/YYYY HH[h]mm')
-    })
-
-    const storyCategories = computed(() => {
-      const themes = props.story.story_themes.map((theme) => theme.title)
-      return themes.join(', ')
-    })
+  setup() {
     const { t } = useI18n({
       locale: 'fr',
       messages: {
@@ -65,7 +56,7 @@ export default {
         },
       },
     })
-    return { createdAtFormatted, storyCategories, t }
+    return { dayJs, t }
   },
 }
 </script>

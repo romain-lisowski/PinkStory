@@ -2,7 +2,7 @@ import useFetch from '@/composition/api/useFetch'
 import useLoadingOverlay from '@/composition/api/useLoadingOverlay'
 
 export default async (store, { email, password }) => {
-  const { ok, response, error, isLoading, fetchData } = useFetch(
+  const { ok, response, error, loading, fetchData } = useFetch(
     'POST',
     'access-token',
     {
@@ -11,7 +11,7 @@ export default async (store, { email, password }) => {
     }
   )
 
-  useLoadingOverlay(store, isLoading)
+  useLoadingOverlay(store, loading)
   await fetchData()
   return { ok, response, error }
 }

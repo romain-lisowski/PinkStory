@@ -1,7 +1,7 @@
 import { watch } from 'vue'
 
-export default (store, isLoading) => {
-  watch(isLoading, (value) => {
+export default (store, loading) => {
+  watch(loading, (value) => {
     if (value) {
       store.dispatch('site/showLoadingOverlay')
     } else {

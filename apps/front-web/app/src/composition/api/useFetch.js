@@ -1,15 +1,12 @@
-import { reactive, toRefs } from 'vue'
+import { ref } from 'vue'
 
 const baseUrl = process.env.VUE_APP_API_URL
 
 export default (method, uri, body = null, jwt = null) => {
-  const data = reactive({
-    ok: null,
-    response: null,
-    error: null,
-    formViolations: [],
-    isLoading: false,
-  })
+  const ok = ref(null)
+  const response = ref(null)
+  const error = ref(null)
+  const loading = ref(false)
 
   const getUrl = () => {
     return new URL(`${baseUrl}/${uri}?_locale=fr`)
@@ -32,12 +29,12 @@ export default (method, uri, body = null, jwt = null) => {
   // format array of form field violations
   const addFormViolations = () => {
     if (
-      'exception' in data.response &&
-      'violations' in data.response.exception
+      'exception' in response.value &&
+      'violations' in response.value.exception
     ) {
-      data.error.formViolations = []
-      data.response.exception.violations.forEach((violation) => {
-        data.error.formViolations.push({
+      error.value.formViolations = []
+      response.value.exception.violations.forEach((violation) => {
+        error.value.formViolations.push({
           field: violation.property_path,
           message: violation.message,
         })
@@ -46,23 +43,23 @@ export default (method, uri, body = null, jwt = null) => {
   }
 
   const fetchData = async () => {
-    data.isLoading = true
+    loading.value = true
 
     try {
       const res = await fetch(getUrl(), getOptions())
-      data.ok = res.ok
-      data.response = await res.json()
+      ok.value = res.ok
+      response.value = await res.json()
 
-      if (!data.ok) {
+      if (!ok.value) {
         throw new Error('Bad response from server')
       }
     } catch (e) {
-      data.error = await e
+      error.value = await e
       addFormViolations()
     } finally {
-      data.isLoading = false
+      loading.value = false
     }
   }
 
-  return { ...toRefs(data), fetchData }
+  return { ok, response, error, loading, fetchData }
 }

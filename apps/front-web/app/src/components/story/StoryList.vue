@@ -35,10 +35,6 @@ export default {
     StoryListItem,
   },
   props: {
-    withStoryListOrder: {
-      type: Boolean,
-      default: true,
-    },
     searchOrder: {
       type: String,
       default: 'ORDER_POPULAR',
@@ -54,6 +50,10 @@ export default {
     searchCategoryIds: {
       type: Array,
       default: () => [],
+    },
+    withStoryListOrder: {
+      type: Boolean,
+      default: true,
     },
     withLoadingOverlay: {
       type: Boolean,

@@ -45,7 +45,7 @@
       class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     />
 
-    <FormViolations :form-violations="formViolations" />
+    <FormErrorList v-if="showFormError" :form-violations="formViolations" />
 
     <button
       class="mt-8 py-4 text-lg text-primary font-light tracking-wide bg-accent bg-opacity-100 rounded-lg"
@@ -65,31 +65,29 @@
 </template>
 
 <script>
-import FormViolations from '@/components/form/FormViolations.vue'
+import FormErrorList from '@/components/form/FormErrorList.vue'
 import useApiUserSignUp from '@/composition/api/user/useApiUserSignUp'
-import { reactive, toRefs, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import genderTypes from '@/enums/genderTypes'
 import { useStore } from 'vuex'
 
 export default {
   components: {
-    FormViolations,
+    FormErrorList,
   },
   emits: ['show-sign-in'],
   setup(props, context) {
     const store = useStore()
-
-    const data = reactive({
-      activeSubmit: false,
-      genders: genderTypes,
-      name: null,
-      gender: genderTypes.UNDEFINED,
-      email: null,
-      password: null,
-      passwordConfirm: null,
-      formViolations: null,
-    })
+    const genders = genderTypes
+    const name = ref(null)
+    const gender = ref(genderTypes.UNDEFINED)
+    const email = ref(null)
+    const password = ref(null)
+    const passwordConfirm = ref(null)
+    const activeSubmit = ref(false)
+    const showFormError = ref(false)
+    const formViolations = ref([])
 
     const showSignIn = () => {
       context.emit('show-sign-in')
@@ -97,37 +95,38 @@ export default {
 
     const processForm = async () => {
       const apiUserSignUpFetch = await useApiUserSignUp(store, {
-        name: data.name,
-        gender: data.gender,
-        email: data.email,
-        password: data.password,
+        name: name.value,
+        gender: gender.value,
+        email: email.value,
+        password: password.value,
       })
 
       if (apiUserSignUpFetch.ok.value) {
+        showFormError.value = false
         showSignIn()
       } else {
-        data.formViolations = apiUserSignUpFetch.error.value.formViolations
+        showFormError.value = true
+        formViolations.value = apiUserSignUpFetch.error.value.formViolations
       }
     }
+
+    watch(
+      () => [password.value, passwordConfirm.value],
+      () => {
+        activeSubmit.value = password.value === passwordConfirm.value
+      }
+    )
 
     const activeSubmitClasses = [
       'cursor-pointer',
       'opacity-100',
       'bg-opacity-100',
     ]
-
     const inactiveSubmitClasses = [
       'cursor-not-allowed',
       'opacity-50',
       'bg-opacity-50',
     ]
-
-    watch(
-      () => [data.password, data.passwordConfirm],
-      () => {
-        data.activeSubmit = data.password === data.passwordConfirm
-      }
-    )
 
     const { t } = useI18n({
       locale: 'fr',
@@ -150,7 +149,15 @@ export default {
     })
 
     return {
-      ...toRefs(data),
+      genders,
+      activeSubmit,
+      name,
+      gender,
+      email,
+      password,
+      passwordConfirm,
+      showFormError,
+      formViolations,
       activeSubmitClasses,
       inactiveSubmitClasses,
       processForm,

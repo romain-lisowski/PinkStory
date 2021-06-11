@@ -20,7 +20,7 @@
       class="mt-5 p-4 text-primary bg-primary bg-opacity-100 opacity-100 rounded-md"
     />
 
-    <FormViolations :form-violations="formViolations" />
+    <FormErrorList v-if="showFormError" :form-violations="formViolations" />
 
     <button
       class="mt-8 py-4 text-primary text-lg font-light bg-accent bg-opacity-100 tracking-wide rounded-lg"
@@ -38,38 +38,39 @@
 </template>
 
 <script>
-import FormViolations from '@/components/form/FormViolations.vue'
+import FormErrorList from '@/components/form/FormErrorList.vue'
 import useApiUserSignIn from '@/composition/api/user/useApiUserSignIn'
-import { reactive, toRefs } from 'vue'
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
 export default {
   components: {
-    FormViolations,
+    FormErrorList,
   },
   emits: ['show-sign-up'],
   setup(props, context) {
     const store = useStore()
-    const data = reactive({
-      email: null,
-      password: null,
-      formViolations: null,
-    })
+    const email = ref(null)
+    const password = ref(null)
+    const showFormError = ref(false)
+    const formViolations = ref([])
 
     const processForm = async () => {
       const apiUserSignInFetch = await useApiUserSignIn(store, {
-        email: data.email,
-        password: data.password,
+        email: email.value,
+        password: password.value,
       })
 
       if (apiUserSignInFetch.ok.value) {
+        showFormError.value = false
         store.dispatch(
           'auth/signIn',
           apiUserSignInFetch.response.value.access_token.id
         )
       } else {
-        data.formViolations = apiUserSignInFetch.error.value.formViolations
+        showFormError.value = true
+        formViolations.value = apiUserSignInFetch.error.value.formViolations
         store.dispatch('auth/signOut')
       }
     }
@@ -91,7 +92,15 @@ export default {
       },
     })
 
-    return { ...toRefs(data), processForm, showSignUp, t }
+    return {
+      email,
+      password,
+      showFormError,
+      formViolations,
+      processForm,
+      showSignUp,
+      t,
+    }
   },
 }
 </script>

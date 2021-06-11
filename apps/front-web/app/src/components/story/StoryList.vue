@@ -106,7 +106,7 @@ export default {
           order: this.localSearchOrder,
           sort: this.searchSort,
           limit: this.searchLimit,
-          categoryIds: this.localSearchCategoryIds,
+          story_theme_ids: this.localSearchCategoryIds,
         },
         this.withLoadingOverlay
       )

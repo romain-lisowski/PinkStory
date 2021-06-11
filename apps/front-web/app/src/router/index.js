@@ -64,7 +64,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // Check if route requires authentification
+  // check if route requires authentification
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.getters['auth/isSignedIn']) {
       next({ name: 'Home' })

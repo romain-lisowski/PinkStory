@@ -9,10 +9,10 @@
         :placeholder="t('new-email')"
         type="email"
         name="email"
-        class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
+        class="mt-5 p-4 rounded-md bg-primary bg-opacity-100 opacity-100"
       />
       <button
-        class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
+        class="mt-8 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
         {{ t('update') }}
@@ -35,7 +35,7 @@ export default {
     const processForm = async () => {
       const jwt = store.getters['auth/getJwt']
       await useApiUserUpdateEmail(store, { jwt, email: email.value })
-      store.dispatch('auth/fetchCurrentUser', jwt)
+      store.dispatch('auth/signIn', jwt)
     }
 
     const { t } = useI18n({

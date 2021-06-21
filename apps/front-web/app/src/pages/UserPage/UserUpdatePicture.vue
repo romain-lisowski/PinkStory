@@ -24,11 +24,11 @@
       <input
         type="file"
         name="picture"
-        class="my-5 p-3 rounded-md bg-primary bg-opacity-100 opacity-100"
+        class="mt-5 p-4 rounded-md bg-primary bg-opacity-100 opacity-100"
         @change="uploadUserImageChanged"
       />
       <button
-        class="mt-3 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
+        class="mt-8 py-4 text-lg font-light tracking-wide text-primary bg-accent bg-opacity-100 rounded-lg"
         type="submit"
       >
         {{ t('update') }}
@@ -62,7 +62,7 @@ export default {
     const deleteProfilePicture = async () => {
       const jwt = store.getters['auth/getJwt']
       await useApiUserDeleteImage(store, { jwt })
-      store.dispatch('auth/fetchCurrentUser', jwt)
+      store.dispatch('auth/signIn', jwt)
     }
     const processForm = async () => {
       const jwt = store.getters['auth/getJwt']
@@ -70,7 +70,7 @@ export default {
         jwt,
         image: uploadProfilePicture.value,
       })
-      store.dispatch('auth/fetchCurrentUser', jwt)
+      store.dispatch('auth/signIn', jwt)
     }
 
     const { t } = useI18n({

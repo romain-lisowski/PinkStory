@@ -14,17 +14,15 @@ export default (method, uri, params = null, jwt = null) => {
    * {arr: [a, b, c]} -> arr[]=a&arr[]=b&arr[]=c
    */
   const addParamsToUrlSearchParams = (urlSearchParams, params) => {
-    if (params) {
-      Object.keys(params).forEach((paramKey) => {
-        if (Array.isArray(params[paramKey])) {
-          params[paramKey].forEach((param) => {
-            urlSearchParams.append(`${paramKey}[]`, param)
-          })
-        } else {
-          urlSearchParams.append(paramKey, params[paramKey])
-        }
-      })
-    }
+    Object.keys(params).forEach((paramKey) => {
+      if (Array.isArray(params[paramKey])) {
+        params[paramKey].forEach((param) => {
+          urlSearchParams.append(`${paramKey}[]`, param)
+        })
+      } else {
+        urlSearchParams.append(paramKey, params[paramKey])
+      }
+    })
 
     return urlSearchParams
   }
@@ -39,7 +37,7 @@ export default (method, uri, params = null, jwt = null) => {
     urlSearchParams.append('_locale', 'fr')
 
     // On a GET request, params are query string params
-    if (method === 'GET') {
+    if (method === 'GET' && params) {
       addParamsToUrlSearchParams(urlSearchParams, params)
     }
 

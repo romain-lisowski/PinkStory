@@ -35,6 +35,7 @@
 <script>
 import AuthSignIn from '@/components/auth/AuthSignIn.vue'
 import AuthSignUp from '@/components/auth/AuthSignUp.vue'
+import { ref } from 'vue'
 
 export default {
   components: {
@@ -48,16 +49,15 @@ export default {
     },
   },
   emits: ['close-auth-panel'],
-  data() {
-    return {
-      showSignUp: false,
+  setup(props, context) {
+    const showSignUp = ref(false)
+
+    const onClickCloseAuthPanel = () => {
+      showSignUp.value = false
+      context.emit('close-auth-panel')
     }
-  },
-  methods: {
-    onClickCloseAuthPanel() {
-      this.showSignUp = false
-      this.$emit('close-auth-panel')
-    },
+
+    return { showSignUp, onClickCloseAuthPanel }
   },
 }
 </script>

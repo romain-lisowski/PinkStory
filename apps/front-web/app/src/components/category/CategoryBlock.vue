@@ -18,28 +18,22 @@
 <script>
 import CategoryList from '@/components/category/CategoryList.vue'
 import useApiStoryThemeSearch from '@/composition/api/storyTheme/useApiStoryThemeSearch'
+import { useStore } from 'vuex'
 
 export default {
   components: {
     CategoryList,
   },
-  data() {
-    return {
-      categoryLists: [],
-    }
-  },
-  created() {
-    this.fetchStoryThemes()
-  },
-  methods: {
-    async fetchStoryThemes() {
-      const apiStoryThemeSearchFetch = await useApiStoryThemeSearch(this.$store)
+  async setup() {
+    const store = useStore()
+    let categoryLists = null
 
-      if (apiStoryThemeSearchFetch.ok.value) {
-        this.categoryLists =
-          apiStoryThemeSearchFetch.response.value.story_themes
-      }
-    },
+    const apiStoryThemeSearchFetch = await useApiStoryThemeSearch(store)
+    if (apiStoryThemeSearchFetch.ok.value) {
+      categoryLists = apiStoryThemeSearchFetch.response.value.story_themes
+    }
+
+    return { categoryLists }
   },
 }
 </script>

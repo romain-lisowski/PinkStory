@@ -16,7 +16,11 @@
       v-model="gender"
       class="mt-5 p-4 text-primary rounded-md bg-primary bg-opacity-100 opacity-100"
     >
-      <option v-for="(gender, index) in genders" :key="index" :value="gender">
+      <option
+        v-for="(gender, index) in genderTypes"
+        :key="index"
+        :value="gender"
+      >
         {{ t(gender) }}
       </option>
     </select>
@@ -79,7 +83,6 @@ export default {
   emits: ['show-sign-in'],
   setup(props, context) {
     const store = useStore()
-    const genders = genderTypes
     const name = ref(null)
     const gender = ref(genderTypes.UNDEFINED)
     const email = ref(null)
@@ -149,7 +152,7 @@ export default {
     })
 
     return {
-      genders,
+      genderTypes,
       activeSubmit,
       name,
       gender,

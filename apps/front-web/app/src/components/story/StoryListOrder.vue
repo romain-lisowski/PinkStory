@@ -39,7 +39,7 @@ export default {
   setup() {
     const store = useStore()
     const activeOrder = ref(
-      store.state.site.state.searchOrder || 'ORDER_POPULAR'
+      store.getters['site/getSearchOrder'] || 'ORDER_POPULAR'
     )
     const activeClasses = ['text-primary', 'bg-accent', 'border-accent']
 

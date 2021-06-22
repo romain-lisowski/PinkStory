@@ -27,7 +27,8 @@
 import StoryListOrder from '@/components/story/StoryListOrder.vue'
 import StoryListItem from '@/components/story/StoryListItem.vue'
 import useApiStorySearch from '@/composition/api/story/useApiStorySearch'
-import { mapGetters } from 'vuex'
+import { useStore } from 'vuex'
+import { computed, ref, watch } from 'vue'
 
 export default {
   components: {
@@ -39,17 +40,9 @@ export default {
       type: String,
       default: 'ORDER_POPULAR',
     },
-    searchSort: {
-      type: String,
-      default: 'DESC',
-    },
     searchLimit: {
       type: Number,
       default: 6,
-    },
-    searchCategoryIds: {
-      type: Array,
-      default: () => [],
     },
     withStoryListOrder: {
       type: Boolean,
@@ -68,54 +61,53 @@ export default {
       default: null,
     },
   },
-  data() {
-    return {
-      stories: [],
-      nbResults: 0,
-      localSearchOrder: this.searchOrder,
-      localSearchCategoryIds: this.searchCategoryIds,
-    }
-  },
-  computed: {
-    ...mapGetters({
-      storeSearchOrder: 'site/getSearchOrder',
-      storeSearchCategoryIds: 'site/getSearchCategoryIds',
-      refreshingSearchCategory: 'site/refreshingSearchCategory',
-    }),
-  },
-  watch: {
-    storeSearchOrder(value) {
-      if (value) {
-        this.localSearchOrder = value
-        this.searchStories()
-      }
-    },
-    refreshingSearchCategory() {
-      this.localSearchCategoryIds = this.storeSearchCategoryIds
-      this.searchStories()
-    },
-  },
-  created() {
-    this.searchStories()
-  },
-  methods: {
-    async searchStories() {
+  async setup(props) {
+    const store = useStore()
+    const stories = ref(null)
+    const nbResults = ref(0)
+
+    const storeSearchOrder = computed(() => {
+      return store.getters['site/getSearchOrder']
+    })
+    const storeSearchCategoryIds = computed(() => {
+      return store.getters['site/getSearchCategoryIds']
+    })
+    const refreshingSearchCategory = computed(() => {
+      return store.getters['site/refreshingSearchCategory']
+    })
+
+    const searchStories = async () => {
       const apiStorySearchFetch = await useApiStorySearch(
-        this.$store,
+        store,
         {
-          order: this.localSearchOrder,
-          sort: this.searchSort,
-          limit: this.searchLimit,
-          story_theme_ids: this.localSearchCategoryIds,
+          order: storeSearchOrder.value,
+          sort: 'DESC',
+          limit: props.searchLimit,
+          story_theme_ids: storeSearchCategoryIds.value,
         },
-        this.withLoadingOverlay
+        props.withLoadingOverlay
       )
 
       if (apiStorySearchFetch.ok.value) {
-        this.stories = apiStorySearchFetch.response.value.stories
-        this.nbResults = apiStorySearchFetch.response.value.stories_total
+        stories.value = apiStorySearchFetch.response.value.stories
+        nbResults.value = apiStorySearchFetch.response.value.stories_total
       }
-    },
+    }
+
+    watch(storeSearchOrder, () => {
+      searchStories()
+    })
+
+    watch(refreshingSearchCategory, () => {
+      searchStories()
+    })
+
+    searchStories()
+
+    return {
+      stories,
+      nbResults,
+    }
   },
 }
 </script>

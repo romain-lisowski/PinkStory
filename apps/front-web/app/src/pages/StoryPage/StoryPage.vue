@@ -11,7 +11,6 @@
         <StoryList
           :with-story-list-order="false"
           :search-order="'ORDER_POPULAR'"
-          :search-sort="'DESC'"
           :with-loading-overlay="false"
         />
       </div>
